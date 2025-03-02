@@ -1,0 +1,79 @@
+#+title: 36 Valid Sudoku
+
+* Thinking - 
+three things to check 
+1. row 
+2. column 
+3. 3x3 box
+
+* Take away
+1. Use memset to initialize the array, not {0};
+2. Col-- > j, Row-- > i 3. Understand bitset
+
+* Code
+#+BEGIN_SRC cpp
+class Solution
+{
+public:
+    bool isValidSudoku(vector<vector<char>> &board)
+    {
+        if (board.size() != 9 || board[0].size() != 9) {
+            return false;
+        }
+
+        // Use memset to initialize the array, not {0};
+        int col[9][9], row[9][9], box[9][9];
+        memset(row, 0, sizeof(row));
+        memset(col, 0, sizeof(col));
+        memset(box, 0, sizeof(box));
+
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                if (board[i][j] == '.') {
+                    continue;
+                }
+                int num = board[i][j] - '1'; // Convert '1'-'9' → 0-8
+                int boxIndex = 3 * (i / 3) + j / 3;
+
+                // NOTE: Col --> j, Row --> i
+                if (col[j][num] || row[i][num] || box[boxIndex][num]) {
+                    return false;
+                }
+                col[j][num] = row[i][num] = box[boxIndex][num] = 1;
+            }
+        }
+        return true;
+    }
+};
+#+END_SRC
+
+* Bitset
+#+BEGIN_SRC cpp
+#include <vector>
+#include <bitset>
+
+class Solution {
+public:
+    bool isValidSudoku(std::vector<std::vector<char>>& board) {
+        std::bitset<9> row[9], col[9], box[9];
+
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                if (board[i][j] == '.') continue;
+
+                int num = board[i][j] - '1'; // Convert '1'-'9' to 0-8
+                int boxIndex = 3 * (i / 3) + j / 3;
+
+                // Check if num already exists
+                if (row[i][num] || col[j][num] || box[boxIndex][num]) {
+                    return false;
+                }
+
+                // Set the bit to mark the number as seen
+                row[i][num] = col[j][num] = box[boxIndex][num] = 1;
+            }
+        }
+        return true;
+    }
+};
+#+END_SRC
