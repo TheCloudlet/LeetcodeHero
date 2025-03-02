@@ -1,0 +1,104 @@
+#+title: 128 Longest Consecutive Sequence
+
+* Thinking
+
+Solution:
+1. Sorting --> O(nlonn)
+2. Disjoint set --> O(n) worst case
+3. Hashset <-- I didn't think of this
+
+* Code
+** Sorting
+- Time: O(nlogn)
+- memory: O(1)
+
+#+BEGIN_SRC cpp
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        if (nums.empty()) {
+            return 0;
+        }
+        vector<int> sortedVec = nums;
+        std::sort(sortedVec.begin(), sortedVec.end());
+
+        int maxLen = 1, curLen = 1; // WRONG: I set to 0 to init
+        int prev = INT_MIN;
+        for (const auto &curr : sortedVec) {
+            if (prev == curr) {
+                continue;
+            } else if (prev + 1== curr) {
+                ++curLen;
+            } else {
+                maxLen = std::max(maxLen, curLen);
+                curLen = 1;
+            }
+            prev = curr;
+        }
+        return std::max(maxLen, curLen); // WRONG: I return maxLen directly
+    }
+};
+#+END_SRC
+
+** Set ==> Same as sorting, more memory used
+- Time: O(nlongn)
+- Memory: O(n)
+
+#+BEGIN_SRC cpp
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        if (nums.empty()) {
+            return 0;
+        }
+        std::set<int> numSet(nums.begin(), nums.end()); // directly use construtor
+
+        int maxLen = 1, len = 1;
+        int prev = INT_MIN;
+        for (const int &curr : numSet) {
+            if (prev == curr) {
+                continue;
+            } else if (prev + 1 == curr) {
+                len++;
+            } else {
+                maxLen = std::max(len, maxLen);
+                len = 1;
+            }
+            prev = curr;
+        }
+        return std::max(len, maxLen);
+    }
+};
+#+END_SRC
+
+** Unordered_map <-- *Optimal*
+- Time: O(n)
+- Space: O(n)
+
+#+BEGIN_SRC cpp
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        if (nums.empty()) {
+            return 0;
+        }
+        std::unordered_set<int> numSet(nums.begin(), nums.end());
+        int maxLen = 0;
+        for (const auto &i : numSet) {
+            // Only start counting if `i-1` is NOT in the set
+            if (!numSet.count(i - 1)) { // <-- key point
+                int len = 1;
+                int n = i + 1;
+                while (numSet.count(n)) {
+                    len++;
+                    n++;
+                }
+                maxLen = std::max(maxLen, len);
+            }
+        }
+        return maxLen;
+    }
+};
+#+END_SRC
+
+** Disjoint Set 
