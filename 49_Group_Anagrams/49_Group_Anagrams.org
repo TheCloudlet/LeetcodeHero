@@ -1,0 +1,46 @@
+#+title: 49 Group Anagrams
+
+* Key Take-aways
+1. think of using ~move~ semantics
+2. Structural binding: ~auto &[key, groupList]~
+  - Why
+    Instead of:
+
+    #+BEGIN_SRC cpp
+    for (auto it = group.begin(); it != group.end(); ++it) {
+        std::string key = it->first;
+        std::vector<std::string> groupList = it->second;
+        ret.push_back(groupList);
+    }
+    #+END_SRC
+
+    We can directly bind to key and groupList:
+
+    #+BEGIN_SRC cpp
+    for (auto &[key, groupList] : group) {
+        ret.push_back(groupList);
+    }
+    #+END_SRC
+
+* Code
+#+BEGIN_SRC cpp
+class Solution {
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        std::unordered_map<string, vector<string>> anagramGroups;
+
+        for (const auto &s : strs) {
+            string sortedStr = s;
+            std::sort(sortedStr.begin(), sortedStr.end()); // Sort characters
+            anagramGroups[sortedStr].push_back(s); // Group words by sorted version
+        }
+
+        vector<vector<string>> result;
+        for (auto &[sortedStr, groupedWords] : anagramGroups) {
+            result.push_back(std::move(groupedWords)); // Move to avoid unnecessary copying
+        }
+
+        return result;
+    }
+};
+#+END_SRC
