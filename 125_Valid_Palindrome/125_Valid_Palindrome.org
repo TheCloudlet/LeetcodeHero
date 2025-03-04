@@ -1,0 +1,66 @@
+#+title: 125 Valid Palindrome
+
+* Take away
+- isalnum: check if the character is alphanumeric
+- isalpha
+- isdigit
+- tolower: convert the character to lowercase
+- toupper: convert the character to uppercase
+
+* Code
+** First attempt
+#+BEGIN_SRC cpp
+class Solution {
+public:
+    bool isPalindrome(string s) {
+        string alphabet;
+        alphabet.reserve(s.size());
+        for (const auto &ch : s) {
+            if ((ch >= 'a' && ch <= 'z') || 
+                (ch >= '0' && ch <= '9')) {
+                alphabet.push_back(ch);
+            } else if (ch >= 'A' && ch <= 'Z') {
+                alphabet.push_back(ch - 'A' + 'a');
+            }
+        }
+
+        int l = 0, r = alphabet.size() - 1;
+        while (l < r) {
+            if (alphabet[l] != alphabet[r]) {
+                return false;
+            }
+            l++;
+            r--;
+        }
+        return true;
+    }
+};
+#+END_SRC
+
+** Improvement
+- Inplace
+- Time: O(n)
+- Space: O(1)
+
+#+BEGIN_SRC cpp
+class Solution {
+public:
+    bool isPalindrome(string s) {
+        int l = 0, r = s.size() - 1;
+        while (l < r) {
+            while (l < r && !isalnum(s[l])) {
+                ++l;
+            }
+            while (l < r && !isalnum(s[r])) {
+                --r;
+            }
+            if (tolower(s[l]) != tolower(s[r])) {
+                return false;
+            }
+            ++l;
+            --r;
+        }
+        return true;
+    }
+};
+#+END_SRC
