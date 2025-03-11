@@ -1,0 +1,33 @@
+#+title: 011 Container With Most Water
+
+* Thinking
+- Divide and Conquer?
+  Time: O(nlogn)
+
+- Two pointers
+  Time: O(n)
+
+* Code
+Althought I did it one time pass, I didn't have a very solid feeling
+
+#+BEGIN_SRC cpp
+class Solution {
+public:
+    int maxArea(vector<int>& heights) {
+        int maxArea = 0;
+        int l = 0, r = heights.size() - 1;
+        int maxL = 0, maxR = 0;
+        while (l < r) {
+            maxL = std::max(maxL, heights[l]);
+            maxR = std::max(maxR, heights[r]);
+            maxArea = std::max(maxArea, std::min(maxL, maxR) * (r - l));
+            if (maxL < maxR) {
+                while (l < r && heights[l] <= maxL) ++l;
+            } else {
+                while (l < r && heights[r] <= maxR) --r;
+            }
+        }
+        return maxArea;
+    }
+};
+#+END_SRC
