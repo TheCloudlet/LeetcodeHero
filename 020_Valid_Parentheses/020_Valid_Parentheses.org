@@ -1,0 +1,115 @@
+#+title: 020 Valid Parentheses
+
+* Input and output
+Must be ()[]{}
+
+* Thinking process
+We use stack for this
+1. Tokenize input to enum
+2. use stack to push
+3. when we want to pop, empty, invalid
+4. when we pop, not match, invalid
+5. when we finish, stack not empty, invalid
+
+* Key take away
+1. Use =unordered_map= to store matching pairs
+2. How to initialize =unordered_map= with list of pairs
+3. Check valid input with a =unordered_set=
+
+* Code
+#+BEGIN_SRC cpp
+class Solution {
+public:
+    bool isValid(string s) {
+        enum {
+            LEFT_PAREN,
+            RIGHT_PAREN,
+            LEFT_BRACKET,
+            RIGHT_BRACKET,
+            LEFT_BRACE,
+            RIGHT_BRACE,
+        };
+        std::stack<int> stack;
+        std::vector<int> token;
+
+        for (const char &c : s) {
+            switch(c) {
+                case '(':
+                    token.push_back(LEFT_PAREN);
+                    break;
+                case ')':
+                    token.push_back(RIGHT_PAREN);
+                    break;
+                case '[':
+                    token.push_back(LEFT_BRACKET);
+                    break;
+                case ']':
+                    token.push_back(RIGHT_BRACKET);
+                    break;
+                case '{':
+                    token.push_back(LEFT_BRACE);
+                    break;
+                case '}':
+                    token.push_back(RIGHT_BRACE);
+                    break;
+                default:
+                    return false;
+            }
+        }
+
+        for (const int &i : token) {
+            if (i == LEFT_PAREN || i == LEFT_BRACKET || i == LEFT_BRACE) {
+                stack.push(i);
+            } else {
+                if (stack.empty()) {
+                    return false;
+                }
+                int top = stack.top();
+                stack.pop();
+                if (top != i - 1) {
+                    return false; // hacky
+                                  // I thought about using enum to do this
+                }
+            }
+        }
+        if (!stack.empty()) {
+            return false;
+        }
+        return true;
+    }
+};
+#+END_SRC
+
+* Enhanced Code
+
+#+BEGIN_SRC cpp
+class Solution {
+public:
+    bool isValid(string s) {
+        std::stack<char> stack;
+        std::unordered_map<char, char> matching = {
+            {')', '('}, {']', '['}, {'}', '{'}
+        };
+        // this part is not necessary
+        // because maching will only contain these
+        // std::unordered_set<char> allowed = {'(', ')', '[', ']', '{', '}'};
+
+        for (const char &c : s) {
+            if (allowed.find(c) == allowed.end()) {
+                return false;  // 🚨 Reject invalid characters immediately
+            }
+            
+            if (matching.count(c)) {  // If it's a closing bracket
+                if (stack.empty() || stack.top() != matching[c]) {
+                    return false;
+                }
+                stack.pop();
+            } else {  // It's an opening bracket
+                stack.push(c);
+            }
+        }
+        return stack.empty();
+    }
+};
+
+#+END_SRC
