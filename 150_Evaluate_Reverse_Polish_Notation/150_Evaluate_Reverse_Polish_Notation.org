@@ -1,0 +1,119 @@
+#+title: 150 Evaluate Reverse Polish Notation
+
+:stack:
+
+* Thinking
+Super simple question, just use stacks.
+
+* Key takeaways
+- Switch can only work with integers
+
+- use std::stoi with try and catch
+
+- unordered_set Is Unnecessary
+  Use a Direct String Check Instead
+
+- unordered_set Is Unnecessary
+  Use a Direct String Check Instead
+
+- Check valid string
+  Before doing ~std::stoi~, check valid string
+#+BEGIN_SRC cpp
+bool isInteger(const std::string& s) {
+    return !s.empty() && std::all_of(s.begin(), s.end(), ::isdigit);
+}
+#+END_SRC
+
+* Dry run
+#+BEGIN_SRC text
+tokens = ["4", "13", "5", "/", "+"]
+1. push(4)  [4]
+2. push(13) [4, 13]
+3. push(5)  [4, 13, 5]
+4. eval 13/5=2, push(2) [4, 2]
+5. eval 4+2=6, push(6) [6]
+result = 6
+#+END_SRC
+
+* Code
+** Inital try
+#+BEGIN_SRC cpp
+#include <cassert>
+
+class Solution {
+public:
+    int evalRPN(vector<string>& tokens) {
+        std::stack<int> operand;
+        std::unordered_set<std::string> op = {"+", "-", "*", "/"};
+        for (const auto &s: tokens) {
+            if (op.find(s) != op.end()) {
+                assert(!operand.empty());
+                int op2 = operand.top();
+                operand.pop();
+                assert(!operand.empty());
+                int op1 = operand.top();
+                operand.pop();
+                if (s == "+") {
+                    operand.push(op1 + op2);
+                } else if (s == "-") {
+                    operand.push(op1 - op2);
+                } else if (s == "*") {
+                    operand.push(op1 * op2);
+                } else if (s == "/") {
+                    assert(op2 != 0);
+                    operand.push(op1 / op2);
+                }
+            } else {
+                operand.push(std::stoi(s));
+            }
+        }
+        assert(operand.size() == 1);
+        return operand.top();
+    }
+};
+#+END_SRC
+
+** Improved
+#+BEGIN_SRC cpp
+#include <iostream>
+#include <vector>
+#include <stack>
+#include <stdexcept>
+
+class Solution {
+public:
+    int evalRPN(std::vector<std::string>& tokens) {
+        std::stack<int> operand;
+
+        for (const auto &s: tokens) {
+            if (s == "+" || s == "-" || s == "*" || s == "/") {
+                if (operand.size() < 2) {
+                    throw std::invalid_argument("Invalid RPN expression: insufficient operands");
+                }
+                int op2 = operand.top(); operand.pop();
+                int op1 = operand.top(); operand.pop();
+
+                if (s == "+") operand.push(op1 + op2);
+                else if (s == "-") operand.push(op1 - op2);
+                else if (s == "*") operand.push(op1 * op2);
+                else {  // Division case
+                    if (op2 == 0) throw std::runtime_error("Division by zero error");
+                    operand.push(op1 / op2);
+                }
+            } else {
+                try {
+                    operand.push(std::stoi(s));
+                } catch (const std::exception& e) {
+                    throw std::invalid_argument("Invalid token in RPN expression: " + s);
+                }
+            }
+        }
+
+        if (operand.size() != 1) {
+            throw std::invalid_argument("Invalid RPN expression: leftover operands");
+        }
+
+        return operand.top();
+    }
+};
+#+END_SRC
