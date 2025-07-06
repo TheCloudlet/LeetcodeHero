@@ -1,1 +1,15 @@
 #+title: Leetcode Hero
+
+This is all about my trials, errors and fails for all interviews.
+
+
+* To write
+
+- [X] Rotate matrix 90 degree
+- [ ] Topological sort (2 ways)
+  - 207, 210, 269, 1136, 310
+- [ ] About cpp inheritance... and system designs
+- [ ] About binary tree insertion and level and AVL tree.
+- [ ] Implement GPU handler
+- [ ] Implement LRU
+- [ ] Implement Shared-Ptr class
