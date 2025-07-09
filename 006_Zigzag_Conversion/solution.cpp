@@ -57,3 +57,6 @@ public:
     return result;
   }
 };
+
+// 但其實我們可以直接用 std::vector<string>
+// 每一個 row 做一個 string。Iterate 完以後再 Concat 就可以了
