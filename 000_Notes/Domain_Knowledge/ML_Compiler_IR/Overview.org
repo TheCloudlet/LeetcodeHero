@@ -1,0 +1,108 @@
+#+title: ML Compiler Overview
+
+* 目標與主題
+這份筆記聚焦於 ML Compiler 在 GPU 架構下的整體編譯流程，對比 NVIDIA 與 AMD 在 Compiler 架構中的差異，涵蓋以下主題：
+- Tensor Graph → IR → GPU kernel 的整體 Compiler stack
+- MLIR, HLO, LLVM IR, PTX, SASS, hsaco 等格式與流程
+- CUDA vs ROCm 的分工與底層差異
+
+
+* 高階架構圖
+#+begin_example
+┌─────────────────────────────────────────────────────────────────────────┐
+│          Python Code: TensorFlow / PyTorch (Model, Train)               │
+└─────────────────────────────────────────────────────────────────────────┘
+                                  ↓
+               +----------------------------------------+
+               |      Tensor Graph (Static/Dynamic)     |
+               +----------------------------------------+
+                                  ↓
+             +--------------------------------------------+
+             |    Frontend IR Builders (Graph → IR)       |
+             |  • XLA (for TensorFlow)                    |
+             |  • TorchScript / FX / TVM IR (for PyTorch) |
+             |  • MLIR (unified compiler infra)           |
+             +--------------------------------------------+
+                                  ↓
+             +--------------------------------------------+
+             |       Core Intermediate Representation     |
+             |  • HLO IR (XLA)                            |
+             |  • MLIR Dialects (tf, mhlo, linalg, gpu)   |
+             +--------------------------------------------+
+                                  ↓
+             ★ Enter Machine Learning Compiler (ML Compiler)
+┌──────────────────────────────────────────────────────────────────────────┐
+│                    Middle IR & Graph Optimization                        │
+│  • HLO (High Level Optimizer)                                            │
+│  • MLIR (Tensor, Linalg, GPU Dialects)                                   │
+│  • Graph-level Optimization: fusion, tiling, layout transform            │
+└──────────────────────────────────────────────────────────────────────────┘
+                                  ↓
+                    Target Lowering to Backend Compiler
+
+      NVIDIA Path                                 AMD Path
+ ───────────────────────────          ─────────────────────────────
+| LLVM NVPTX Backend        |        | LLVM AMDGPU Backend         |
+| Generate → PTX            |        | Generate → LLVM IR (gfxN)   |
+| JIT → SASS (GPU ISA)      |        | Final → .hsaco (GPU binary) |
+ ───────────────────────────          ─────────────────────────────
+
+           ↓                                        ↓
+   CUDA Runtime / Driver                   ROCm Runtime / Driver
+(Memory allocation, kernel launch)     (Memory allocation, kernel launch)
+
+           ↓                                        ↓
+     GPU Kernel Launch                         GPU Kernel Launch
+   (Threads/Blocks/Grids)                  (Threads/Blocks/Grids)
+#+end_example
+
+* NVIDIA Compiler Stack
+- 前端:
+  - PyTorch / TF 等框架將模型轉成計算圖（GraphDef / TorchScript）
+  - Graph → HLO（XLA）或 MLIR
+- 中端:
+  - XLA / MLIR 做 op fusion, layout transform 等優化
+  - LLVM IR（或 Triton IR）生成
+- 後端:
+  - LLVM NVPTX backend 產生 PTX
+  - PTX 傳遞給 CUDA driver → SASS（runtime JIT）
+  - GPU 執行 kernel（block/grid/thread 配置由 driver 控制）
+
+**常見檔案格式：**
+| 層級  | 檔案類型  | 說明                           |
+|-------+----------+--------------------------------|
+| 中間碼 | `.ptx`   | LLVM-like GPU IR               |
+| 二進位 | `.cubin` | compiled binary, JIT or static |
+| 執行碼 | SASS     | 真正在 SM 上執行的機器指令         |
+
+* AMD Compiler Stack (ROCm)
+- 前端:
+  - TensorFlow / PyTorch 同樣經過 MLIR / HLO 優化
+- 中端:
+  - MLIR / LLVM 中間碼會轉成 GPU-specific layout
+- 後端:
+  - 產生 LLVM IR → Amdgpu backend → `.hsaco` 檔
+  - ROCm runtime 載入 `.hsaco` 並在 GPU 執行
+
+**對應檔案格式：**
+| 層級  | 檔案類型              | 說明                            |
+|-------+----------------------+---------------------------------|
+| 中間碼 | LLVM IR              | ROCm 支援直接轉 LLVM             |
+| 二進位 | `.hsaco`             | HSA Code Object, 等價於 `.cubin` |
+| 執行碼 | ISA (gfx9, gfx11...) | AMD 組語層指令                   |
+
+* 關鍵差異與觀察
+| 項目             | NVIDIA (CUDA)      | AMD (ROCm)        |
+|------------------+--------------------+-------------------|
+| 中間 IR          | PTX                | LLVM IR           |
+| Driver 編譯      | PTX → SASS         | LLVM IR → ISA     |
+| kernel binary    | .cubin (封裝 SASS) | .hsaco            |
+| backend compiler | NVCC + NVPTX       | Clang-ROCm        |
+| profiling 工具   | Nsight, nvprof     | rocprof, rocminfo |
+| 專屬 library     | cuBLAS, cuDNN      | rocBLAS, MIOpen   |
+
+* 延伸閱讀與實驗方向
+- 使用 `TF_XLA_FLAGS=--xla_dump_to=...` 觀察 HLO IR 輸出
+- 用 `nvcc -ptx`, `cuobjdump --dump-sass` 檢查實際生成的機器碼
+- 使用 `mlir-opt`, `mlir-translate` 操作 MLIR dialect
+- 分析一段 kernel 對應的 GPU block/thread mapping 設計
