@@ -1,0 +1,74 @@
+#+Title: MLIR to LLVM IR Lowering Overview
+
+* Introduction
+MLIR (Multi-Level Intermediate Representation) is a compiler infrastructure designed to facilitate the representation and transformation of code at multiple levels of abstraction. It supports a rich set of dialects for different domains and lowers progressively to lower-level dialects until it can be translated into LLVM IR for final code generation.
+
+* MLIR Lowering Path
+
+| Level       | Dialects                                    |
+|-------------+---------------------------------------------|
+| High-Level  | =tf=, =mhlo=, =linalg=, =affine=            |
+| Mid-Level   | =std=, =scf=, =memref=                      |
+| Low-Level   | =LLVM dialect=                              |
+
+* Lowering Steps
+
+1. *Legalization and Conversion*
+   - Each dialect must be transformed into legal operations for the target dialect.
+   - Example: =linalg.matmul= → SCF loops + =memref.load= / =store=
+
+2. *Type Conversion*
+   - MLIR types (e.g., =tensor=, =memref=) are lowered to LLVM-compatible types (e.g., =ptr=, =i32=).
+
+3. *Control Flow Conversion*
+   - Structured loops (SCF) are converted to CFG-style control flow (LLVM dialect).
+
+4. *Memory Management Conversion*
+   - =memref.alloc= / =dealloc= lowered to =malloc= / =free= (or target ABI-specific calls).
+
+5. *Final LLVM Dialect to LLVM IR*
+   - MLIR's LLVM dialect operations are directly translated into LLVM IR.
+   - The result is a =.ll= or =.bc= file which can be further optimized or compiled into machine code using LLVM backend.
+
+* Example Flow
+
+#+begin_src mlir
+// MLIR Linalg Dialect
+%0 = linalg.matmul ins(%A, %B : memref<32x32>, memref<32x32>) outs(%C : memref<32x32>)
+#+end_src
+
+#+begin_src mlir
+// SCF Dialect + MemRef
+scf.for %i = 0 to 32 step 1 {
+  scf.for %j = 0 to 32 step 1 {
+    scf.for %k = 0 to 32 step 1 {
+      %a = memref.load %A[%i, %k]
+      %b = memref.load %B[%k, %j]
+      %c = memref.load %C[%i, %j]
+      %r = addf %a, mulf %b, %c
+      memref.store %r, %C[%i, %j]
+    }
+  }
+}
+#+end_src
+
+#+begin_src mlir
+// LLVM Dialect
+llvm.func @main() {
+  %a = llvm.load %ptrA
+  ...
+  llvm.store %val, %ptrC
+}
+#+end_src
+
+#+begin_src llvm
+; LLVM IR
+%a = load float, float* %ptrA
+...
+store float %val, float* %ptrC
+#+end_src
+
+* References
+- https://mlir.llvm.org/docs/Dialects/LLVM/
+- https://mlir.llvm.org/docs/Tutorials/Toy/
+- https://mlir.llvm.org/docs/ConversionToLLVMDialect/
