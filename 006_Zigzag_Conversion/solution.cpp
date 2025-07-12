@@ -28,6 +28,7 @@ public:
     }
     int numChar = s.size();
     std::string result;
+    // NOTE: please change `i` to `row` for clarity
     for (int i = 0; i < numRows; ++i) { // outer iter
       const int last = numRows - 1;
       if (0 == i) { // first row
