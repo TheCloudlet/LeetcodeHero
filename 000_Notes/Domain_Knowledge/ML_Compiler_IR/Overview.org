@@ -9,51 +9,54 @@
 
 * 高階架構圖
 #+begin_example
-┌─────────────────────────────────────────────────────────────────────────┐
-│          Python Code: TensorFlow / PyTorch (Model, Train)               │
-└─────────────────────────────────────────────────────────────────────────┘
-                                  ↓
-               +----------------------------------------+
-               |      Tensor Graph (Static/Dynamic)     |
-               +----------------------------------------+
-                                  ↓
-             +--------------------------------------------+
-             |    Frontend IR Builders (Graph → IR)       |
-             |  • XLA (for TensorFlow)                    |
-             |  • TorchScript / FX / TVM IR (for PyTorch) |
-             |  • MLIR (unified compiler infra)           |
-             +--------------------------------------------+
-                                  ↓
-             +--------------------------------------------+
-             |       Core Intermediate Representation     |
-             |  • HLO IR (XLA)                            |
-             |  • MLIR Dialects (tf, mhlo, linalg, gpu)   |
-             +--------------------------------------------+
-                                  ↓
-             ★ Enter Machine Learning Compiler (ML Compiler)
-┌──────────────────────────────────────────────────────────────────────────┐
-│                    Middle IR & Graph Optimization                        │
-│  • HLO (High Level Optimizer)                                            │
-│  • MLIR (Tensor, Linalg, GPU Dialects)                                   │
-│  • Graph-level Optimization: fusion, tiling, layout transform            │
-└──────────────────────────────────────────────────────────────────────────┘
-                                  ↓
-                    Target Lowering to Backend Compiler
-
-      NVIDIA Path                                 AMD Path
- ───────────────────────────          ─────────────────────────────
-| LLVM NVPTX Backend        |        | LLVM AMDGPU Backend         |
-| Generate → PTX            |        | Generate → LLVM IR (gfxN)   |
-| JIT → SASS (GPU ISA)      |        | Final → .hsaco (GPU binary) |
- ───────────────────────────          ─────────────────────────────
-
-           ↓                                        ↓
-   CUDA Runtime / Driver                   ROCm Runtime / Driver
-(Memory allocation, kernel launch)     (Memory allocation, kernel launch)
-
-           ↓                                        ↓
-     GPU Kernel Launch                         GPU Kernel Launch
-   (Threads/Blocks/Grids)                  (Threads/Blocks/Grids)
++--------------------------------------------------------------+
+|      Python Code: TensorFlow / PyTorch (Model, Train)       |
++--------------------------------------------------------------+
+                              |
+                              v
++--------------------------------------------------------------+
+|                      Tensor Graph                            |
+|          - Static (TensorFlow) / Dynamic (PyTorch)           |
++--------------------------------------------------------------+
+                              |
+                              v
++--------------------------------------------------------------+
+|              Frontend IR Builders (Graph → IR)              |
+|   - XLA (TF) / TorchScript / FX / TVM / MLIR (unified IR)   |
++--------------------------------------------------------------+
+                              |
+                              v
++--------------------------------------------------------------+
+|             Core Intermediate Representation (IR)           |
+|      - HLO (XLA) / MLIR Dialects (tf, mhlo, linalg...)      |
++--------------------------------------------------------------+
+                              |
+                              v
++--------------------------------------------------------------+
+|        Machine Learning Compiler (Middle IR Optim)          |
+|    - Graph Optimizations: fusion, tiling, layout, schedule  |
++--------------------------------------------------------------+
+                              |
+                              v
++------------------------+          +---------------------------+
+|     NVIDIA Backend     |          |       AMD Backend         |
+|------------------------|          |---------------------------|
+|  MLIR → LLVM NVPTX     |          |  MLIR → LLVM AMDGPU       |
+|  LLVM IR → PTX         |          |  LLVM IR (gfx)            |
+|  JIT PTX → SASS        |          |  CodeGen → .hsaco         |
++------------------------+          +---------------------------+
+         |                                      |
+         v                                      v
++------------------------+          +-----------------------------+
+|  CUDA Runtime / Driver |          |     ROCm Runtime / Driver   |
+|  - Memory alloc, JIT   |          |  - Memory alloc, launcher   |
++------------------------+          +-----------------------------+
+         |                                      |
+         v                                      v
++------------------------+          +-----------------------------+
+|    GPU Kernel Launch   |          |      GPU Kernel Launch      |
+|  - Threads / Blocks    |          |    - Grid / Wavefront       |
++------------------------+          +-----------------------------+
 #+end_example
 
 * NVIDIA Compiler Stack
