@@ -1,33 +1,37 @@
-// Objective:
-// 1. Rule of 3 / rule of 5
-// 2. System design
-// 3. Template
+// Objectives:
+// 1. Practice the Rule of 3 and Rule of 5 in C++
+// 2. Explore small-scale system design for resource ownership
+// 3. Use templates to support generic types (T)
+//
+// Reference:
+// - https://en.cppreference.com/w/cpp/memory/shared_ptr.html
+// - https://en.cppreference.com/w/cpp/language/rule_of_three.html
+// - https://en.cppreference.com/w/cpp/atomic/atomic.html
+
+#include <memory>
 
 template <typename T> class MySharedPtr {
 private:
   T *ptr;
-  int *ref_count;
+  std::atomic<int> *ref_count;
 
   void release() {
-    if (ref_count) {
-      --(*ref_count);
-      if (*ref_count == 0) {
-        delete ptr;
-        delete ref_count;
-      }
+    if (ref_count && ref_count->fetch_sub(1, std::memory_order_acq_rel) == 1) {
+      delete ptr;
+      delete ref_count;
     }
   }
 
 public:
   MySharedPtr() : ptr(nullptr), ref_count(nullptr) {}
 
-  explicit MySharedPtr(T *p) : ptr(p), ref_count(new int(1)) {}
+  explicit MySharedPtr(T *p) : ptr(p), ref_count(new std::atomic<int>(1)) {}
 
   // Copy constructor
   MySharedPtr(const MySharedPtr &other)
       : ptr(other.ptr), ref_count(other.ref_count) {
     if (ref_count) {
-      ++(*ref_count);
+      ref_count->fetch_add(1, std::memory_order_relaxed); // atomic++
     }
   }
 
@@ -41,7 +45,7 @@ public:
       ptr = other.ptr;
       ref_count = other.ref_count;
       if (ref_count) {
-        ++(*ref_count);
+        ref_count->fetch_add(1, std::memory_order_relaxed); // atomic++
       }
     }
     return *this;
@@ -68,12 +72,12 @@ public:
 
   ~MySharedPtr() { release(); }
 
-  // Access
+  // Observers
   T &operator*() const { return *ptr; }
 
   T *operator->() const { return ptr; }
 
   T *get() const { return ptr; }
 
-  int use_count() const { return ref_count ? *ref_count : 0; }
+  int use_count() const { return ref_count ? ref_count->load() : 0; }
 };
