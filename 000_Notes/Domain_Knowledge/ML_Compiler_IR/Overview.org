@@ -109,3 +109,8 @@
 - 用 `nvcc -ptx`, `cuobjdump --dump-sass` 檢查實際生成的機器碼
 - 使用 `mlir-opt`, `mlir-translate` 操作 MLIR dialect
 - 分析一段 kernel 對應的 GPU block/thread mapping 設計
+
+* Possible bottle neck
+TODO
+* How to adjust or opt.
+TODO
