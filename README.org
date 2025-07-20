@@ -14,9 +14,11 @@ This is all about my trials, errors and fails for all interviews.
 - [ ] Implement GPU handler
 - [ ] Implement LRU
 
-- [-] Master binary search
-   - [X] 704	Binary Search	Easy	基本查值與 while (left <= right) 模式
-   - [X] 35	Search Insert Position	Easy	找邊界（Lower Bound）
-   - [ ] 852	Peak Index in a Mountain Array	Easy	二分搜尋中值但非直接比大小
-   - [X] 278	First Bad Version	Easy	最小滿足條件的 Binary Search
-   - [X] 34	Find First and Last Position of Element	Medium	左右邊界雙重搜尋練習
+- [X] Master binary search
+  - [ ] Write note for binary search
+  - [ ] Do leetcode 004
+  - [X] 704	Binary Search	Easy	基本查值與 while (left <= right) 模式
+  - [X] 35	Search Insert Position	Easy	找邊界（Lower Bound）
+  - [X] 852	Peak Index in a Mountain Array	Easy	二分搜尋中值但非直接比大小
+  - [X] 278	First Bad Version	Easy	最小滿足條件的 Binary Search
+  - [X] 34	Find First and Last Position of Element	Medium	左右邊界雙重搜尋練習
