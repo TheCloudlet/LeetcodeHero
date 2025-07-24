@@ -1,50 +1,49 @@
 #+title: Coding Interview 流程總整理
 
-* 1. Plan Your Code（思考與規劃）
+Reference:
+- [[How to Solve ANY Coding Interview Question in 6 Steps][https://www.youtube.com/watch?v=Q4C3ZRJLnac]]
 
-- Clarify the problem
-  - 釐清題目需求與限制條件
-  - 詢問資料範圍、是否為有序、是否有重複等特性
-  - 舉一個或兩個 input/output 範例
-    例如：
-    Input: [1, 2, 3], target = 5
-    Output: false
+* 1. Repeat the question
+- Buys you time to think
+- 確認題目理解正確
+- 可以用自己的話重述題目
+- 確認輸入與輸出格式
 
-- Explain your approach
-  - 說出最直接或最笨的做法 (Brute force)
-  - 描述演算法邏輯與步驟
-  - 初步寫下 algorithm outline，例如：
-    1. sort array
-    2. loop through
-    3. use binary search
-  - 指出預期時間複雜度與空間使用
+* 2. Ask clarifying questions
+*Asking the clarifying questions already hints you the solution*
+- Elimiate the tools that you don't need
+- O(N)
+- 有哪些邊界條件？
+- 輸入是否有保證？（例如排序、唯一性）
+- 有時間或空間上的限制嗎？
+- 是否可以使用額外的 library 或資料結構？
 
-* 2. Write Your Code（開始實作）
+* 3. Work through examples
+- Understance shape of the data input and output
+- Test Driven Mindset
+- 手動跑幾個例子，理解題目邏輯
+- 包含 edge cases（空輸入、極端值）
+- 用例子驗證初步想法是否合理
 
-- 邊寫邊講解
-  - 口語化說明每一步寫的意圖與對應的演算法邏輯
-  - 例如：「這裡我初始化 left, right 來做 binary search」
+* 4. Brainstorm multiple solutions
+- Think of multiple ways to solve the problem instead of just one
+- This demonstrates your problem-solving skills and ability to push for an optimal solution
+- Discuss strategies:
+  - Fastest
+  - Space-efficient
+  - Readable
+  - Quick to implement
+- Remember trade-offs between speed and space
+- Brute-force solution
+- Optimized solutions (using hash maps, two pointers, recursion, DP, etc.)
+- Compare the time and space complexity of each solution
 
-- 若卡住，標記 TODO 並往下繼續
-  - 例如：「這裡 index 有點難抓，我先留下 TODO，等一下回來改」
+* 5. Implement solution
+- This should take the less time
+- if stuck go back to example
+- 保持 code 清晰易讀，命名具意義
 
-* 3. Explain & Improve（說明與優化）
-
-- Run test cases
-  - 測試正常輸入、邊界輸入（空 array、最大最小值）
-  - 口頭模擬程式執行過程，確認邏輯正確
-
-- 講解複雜度
-  - 時間複雜度 O(log n)，空間複雜度 O(1)
-  - 提到有沒有可優化之處
-
-- 問面試官意見
-  - Would you like me to optimize this?
-  - Should I consider follow-up like rotated input?
-
-* Tips 小提醒
-
-- 想不到最佳解時，先講 Brute force 是合理起點
-- 寫完後用口語帶一次程式邏輯
-- 主動處理 edge case，表現出資深思維
-- 保持講話節奏與邏輯清晰，像在教一個 junior engineer
+* 6. Test code (line by line)
+- 用手動 trace 的方式逐行檢查
+- 測試各種情況（正常、錯誤、邊界）
+- 確保程式能正確處理所有輸入
