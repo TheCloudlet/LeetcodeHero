@@ -20,6 +20,9 @@ This is all about my trials, errors and fails for all interviews.
 
 - Missing tools
   - Monotonic stack
+    - [ ] 084 Largest Rectangle in Histogram
+    - [ ] 042 Trapping Rain Water
+    - [ ] 739 Daily Temperatures
   - Dynamic programming
   - Trie
   - Union find
