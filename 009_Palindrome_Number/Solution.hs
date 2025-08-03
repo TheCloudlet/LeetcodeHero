@@ -1,12 +1,11 @@
 -- | Leetcode 9. Palindrome Number
-
 isPalindrome :: Int -> Bool
-isPalindrome a = s == reverse s where
-  s = show a
+isPalindrome a = s == reverse s
+  where
+    s = show a
 
 main :: IO ()
-main = do
-  print $ isPalindrome (-121)      -- False
-  print $ isPalindrome 121         -- True
-  print $ isPalindrome 0           -- True
-  print $ isPalindrome 12345654321 -- True
+main = mapM_ printResult testCases
+  where
+    testCases = [-121, 121, 0, 12345654321]
+    printResult n = putStrLn $ show n ++ " -> " ++ show (isPalindrome n)
