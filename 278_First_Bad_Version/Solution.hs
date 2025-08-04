@@ -19,9 +19,10 @@ firstBadVersion isBadVersion n = go 0 n -- keep `n` explicit for readability
       | left >= right = left
       | not (isBadVersion mid) = go (mid + 1) right
       | otherwise = go left mid
-      where mid = left + (right - left) `div` 2
+      where
+        mid = left + (right - left) `div` 2
 
-main :: IO()
+main :: IO ()
 main = do
-  print $ firstBadVersion (>= 5) 10  -- output: 5
-  print $ firstBadVersion even 10            -- output: 0
+  print $ firstBadVersion (>= 5) 10 -- output: 5
+  print $ firstBadVersion even 10 -- output: 0

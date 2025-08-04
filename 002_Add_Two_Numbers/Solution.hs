@@ -14,10 +14,10 @@ addTwoNumbers l1 l2 = go l1 l2 0
       let total = x + y + carry
           digit = total `mod` 10
           newCarry = total `div` 10
-      in LCons digit (go xs ys newCarry)
+       in LCons digit (go xs ys newCarry)
 
-main :: IO()
+main :: IO ()
 main = do
-  let l1 = fromStdList ([2,3,6] :: [Int])
-  let l2 = fromStdList ([5,9,7] :: [Int])
+  let l1 = fromStdList ([2, 3, 6] :: [Int])
+  let l2 = fromStdList ([5, 9, 7] :: [Int])
   print $ toStdList $ addTwoNumbers l1 l2

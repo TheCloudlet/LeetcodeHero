@@ -1,10 +1,11 @@
 module LinkedList
-  ( LinkedList(..)
-  , fromStdList
-  , toStdList
-  ) where
+  ( LinkedList (..),
+    fromStdList,
+    toStdList,
+  )
+where
 
-data LinkedList a = LNil | LCons a (LinkedList a) deriving Show
+data LinkedList a = LNil | LCons a (LinkedList a) deriving (Show)
 
 instance Foldable LinkedList where
   foldr _ z LNil = z

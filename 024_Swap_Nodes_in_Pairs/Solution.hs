@@ -20,12 +20,14 @@ toList (Node x rest) = x : toList rest
 
 -- Try it
 main :: IO ()
-main = mapM_ print
-  [ toList $ swapPairs $ fromList []
-  , toList $ swapPairs $ fromList [1]
-  , toList $ swapPairs $ fromList [1,2]
-  , toList $ swapPairs $ fromList [1,2,3]
-  , toList $ swapPairs $ fromList [1,2,3,4]
-  , toList $ swapPairs $ fromList [10,20,30,40,50]
-  , toList $ swapPairs $ fromList [9,8,7,6,5,4]
-  ]
+main =
+  mapM_
+    print
+    [ toList $ swapPairs $ fromList [],
+      toList $ swapPairs $ fromList [1],
+      toList $ swapPairs $ fromList [1, 2],
+      toList $ swapPairs $ fromList [1, 2, 3],
+      toList $ swapPairs $ fromList [1, 2, 3, 4],
+      toList $ swapPairs $ fromList [10, 20, 30, 40, 50],
+      toList $ swapPairs $ fromList [9, 8, 7, 6, 5, 4]
+    ]
