@@ -11,7 +11,7 @@
 
 numTrees :: Int -> Int
 numTrees 0 = 1
-numTrees n = sum [ numTrees i * numTrees (n - i - 1) | i <- [0 .. n - 1]]
+numTrees n = sum [numTrees i * numTrees (n - i - 1) | i <- [0 .. n - 1]]
 
 {-
 -- Optional: Top-down memoized version using lazy infinite list
@@ -29,4 +29,4 @@ numTrees n = catalan !! n
 -}
 
 main :: IO ()
-main = mapM_ (print . numTrees) [0..5]
+main = mapM_ (print . numTrees) [0 .. 5]
