@@ -114,3 +114,107 @@
 TODO
 * How to adjust or opt.
 TODO
+
+
+
+// RISC-V
+// Manual``
+// register --> pc,
+
+
+// if () {
+} else {
+}
+
+eq %1 %2
+...
+..
+..
+..
+
+jump tag:
+
+
+// malloc a --> b
+
+mmap() <-- C
+
+for (int i; i < N; i++) {
+        // read ...
+        //
+}
+
+
+|----------|----------|-----------|-----------|
+
+m1
+<---------->
+            <-->op
+                 <---------->
+
+
+<---------->
+  <---------->
+    <---------->
+      <---------->
+        <---------->
+                    <--> op
+                      <--> op2 ... 3
+
+// register num--
+// brach prediction
+
+
+pass:
+  --> Val Propagation
+
+  int a = 5
+  b = a --> 5
+  c = b --> 5
+
+  VHDL
+
+     c (9)
+     |
+     b (9)
+   |   |
+a(5)   z(4)
+
+
+a (next->partition:b[0])
+
+              a              --> 100,0000
+            a1  a2           // db a1--b  a2--c <-- lookup
+           /      |
+          /        \
+        b[0]  b[1] b[2]         c
+       b1  b2      c1 c2
+
+b --> a.a1.b
+
+// 25hr --> 15min
+
+
+// Phase 1:  string --``> hash liner probing hash fuction + hash probing
+
+25hour 10 hour
+
+// Phase 2,3:
+// generate-for   [0..1024] * [0..1024] 2^20
+// VHDL-->Verilog
+// 10hour --> 15
+
+C++:
+C89 C99 C++11 ~ C++17
+
+lambda [&]()
+
+if (int a = xxx; a < 3) {
+
+}
+
+for_each(it.)
+
+// partital specialization
+//
+//
