@@ -1,5 +1,8 @@
 // Leetcode 146. LRU Cache
 //
+// @tag: neetcode150
+// @difficulty: midium
+//
 // Use doubly-linked list + hash map
 // Time: O(1) for both get and put
 
