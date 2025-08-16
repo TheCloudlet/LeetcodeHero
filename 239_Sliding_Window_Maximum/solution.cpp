@@ -1,5 +1,6 @@
 // Leetcode 239. Sliding Window Maximum
-// @tag: sliding-window, monotonic-queue
+// @tag: sliding-window
+// @tag: monotonic-queue
 // @difficulty: hard
 
 #include <cassert>
