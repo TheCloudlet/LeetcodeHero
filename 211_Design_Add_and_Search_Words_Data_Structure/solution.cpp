@@ -1,5 +1,5 @@
 // Leetcode 211. Design Add and Search Words Data Structure
-// @tag: trie
+// @tag: needcode150, trie
 // @difficulty: medium
 
 #include <memory>
