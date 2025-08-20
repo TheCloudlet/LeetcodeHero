@@ -25,17 +25,17 @@ twoSum nums target = go nums (reverse nums)
   where
     go [] _ = []
     go _ [] = []
-    go (l : ls) (r : rs)
-      -- WARNING: the following line will cause testcase 2 to fail.
-      -- Should use index instead.
-      | l >= r = []
+    go ((li, l) : ls) ((ri, r) : rs)
+      -- CORRECTED GUARD: Compare indices (`li`, `ri`), not values (`l`, `r`).
+      -- This correctly determines if the pointers have crossed.
+      | li >= ri = []
       | otherwise =
           let currentSum = l + r
            in case compare currentSum target of
-                LT -> go ls (r : rs)
-                GT -> go (l : ls) rs
-                -- skip ALL duplicates of l and r to continue the search
-                EQ -> [l, r] : go (dropWhile (== l) ls) (dropWhile (== r) rs)
+                LT -> go ls ((ri, r) : rs)
+                GT -> go ((li, l) : ls) rs
+                -- When a match is found, skip all duplicates of the *values*.
+                EQ -> [l, r] : go (dropWhile ((== l) . snd) ls) (dropWhile ((== r) . snd) rs)
 
 main :: IO ()
 main = do
