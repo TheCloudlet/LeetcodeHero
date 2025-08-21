@@ -18,10 +18,34 @@ removeNthFromEnd lst n
           -- error on empty lists
           front ++ drop 1 back
 
+removeNthFromEnd' :: [a] -> Int -> [a]
+removeNthFromEnd' [] _ = []
+removeNthFromEnd' initialList n
+  | n <= 0 = initialList
+  | otherwise =
+      -- This list is used to check if 'n' is larger than the list length.
+      -- If we can drop (n-1) elements and the result is empty, 'n' is too large.
+      let boundaryCheckList = drop (n - 1) initialList
+       in if null boundaryCheckList
+            then initialList
+            else traverseAndRemove initialList (drop 1 boundaryCheckList)
+  where
+    -- Helper function that uses two list "pointers" to find the correct node.
+    traverseAndRemove :: [a] -> [a] -> [a]
+    traverseAndRemove [] _ = []
+    -- Base Case: The fast pointer is empty, so the slow pointer's head
+    -- is the element to remove. We return the slow pointer's tail.
+    traverseAndRemove (_ : slowTail) [] = slowTail
+    -- Recursive Step: Prepend the slow pointer's head to the result of
+    -- traversing the rest of both lists. This rebuilds the front of the list.
+    traverseAndRemove (head : slowTail) (_ : fastTail) = head : traverseAndRemove slowTail fastTail
+
+-- Should not be reached with this logic, but makes the function total.
+
 -- Helper function to print test case results neatly.
 printTest :: (Show a, Eq a) => String -> [a] -> Int -> [a] -> IO ()
 printTest caseName inputList n expected = do
-  let actual = removeNthFromEnd inputList n
+  let actual = removeNthFromEnd' inputList n
   putStrLn $ "--- " ++ caseName ++ " ---"
   putStrLn $ "Input:  list = " ++ show inputList ++ ", n = " ++ show n
   putStrLn $ "Output: " ++ show actual
