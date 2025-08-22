@@ -4,6 +4,7 @@ module Solution where
 
 rotateRight :: [a] -> Int -> [a]
 rotateRight [] _ = []
+rotateRight [x] _ = [x]  -- Single element optimization
 rotateRight lst k =
   let lstLen = length lst
       rotateOffset = lstLen - k `mod` lstLen
