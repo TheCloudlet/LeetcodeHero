@@ -12,6 +12,9 @@
  *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
+
+#include <cstddef>
+
 class Solution {
 public:
   ListNode *rotateRight(ListNode *head, int k) {
@@ -20,7 +23,7 @@ public:
     }
     ListNode **indirect = &head;
     ListNode *tail = head;
-    size_t listLength = 0;
+    std::size_t listLength = 0;
 
     // Chain the linked list to a circular linked list
     while (tail->next) {
@@ -39,8 +42,8 @@ public:
     indirect = &tail->next;
 
     // Calculate rotation point and move to new head position:
-    size_t rotationOffset = listLength - k % listLength;
-    for (size_t pos = 0; pos < rotationOffset; ++pos) {
+    std::size_t rotationOffset = listLength - k % listLength;
+    for (std::size_t pos = 0; pos < rotationOffset; ++pos) {
       indirect = &(*indirect)->next;
     }
 
