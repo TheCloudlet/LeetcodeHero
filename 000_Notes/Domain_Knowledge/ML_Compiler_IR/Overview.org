@@ -218,3 +218,6 @@ for_each(it.)
 // partital specialization
 //
 //
+
+
+* This job is to profile compare NVIDIA / AMD find bottleneck. Propose 
