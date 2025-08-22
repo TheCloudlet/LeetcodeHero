@@ -15,8 +15,8 @@
 class Solution {
 public:
   ListNode *rotateRight(ListNode *head, int k) {
-    if (!head) {
-      return nullptr;
+    if (!head || !head->next) {
+      return head;
     }
     ListNode **indirect = &head;
     ListNode *tail = head;
@@ -28,6 +28,13 @@ public:
       ++listLength;
     }
     ++listLength; // Count the last node
+
+    // OPTIMIZATION: This early return skips making the list circular - safe
+    // since no rotation needed
+    if (k % listLength == 0) {
+      return head;
+    }
+
     tail->next = (*indirect);
     indirect = &tail->next;
 
