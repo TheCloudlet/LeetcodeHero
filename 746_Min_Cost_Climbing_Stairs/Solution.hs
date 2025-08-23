@@ -27,8 +27,8 @@ minCostClimbingStairsMemo cost = last minCost
 --
 --  It's like a circular definition in a spreadsheet, e.g., cell A1 = B1 + C1,
 --  and cell B1 = A1 + D1. The calculation can never complete.
-minCostClimbingStairs_HangingAttempt :: [Int] -> Int
-minCostClimbingStairs_HangingAttempt cost =
+minCostClimbingStairsHangingAttempt :: [Int] -> Int
+minCostClimbingStairsHangingAttempt cost =
   -- This part of the logic is also incorrect. The final answer should be the
   -- minimum of the last two costs calculated, not just the last one.
   minCost !! length cost
