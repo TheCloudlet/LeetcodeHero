@@ -1,5 +1,5 @@
 // Leetcode 70. Climbing Stairs
-// @tag: dp
+// @tag: dp, neetcode150
 // @difficulty: easy
 
 // NOTE: There should be multiple ways to solve this problem
