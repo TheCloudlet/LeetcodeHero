@@ -2,6 +2,14 @@
 
 module Solution where
 
+import Data.List (foldl')
+import Text.ParserCombinators.ReadPrec (step)
+
+rob :: [Int] -> Int
+rob value = snd $ foldl' step (0, 0) value
+  where
+    step (prev1, prev2) currentValue = (prev2, max (prev1 + currentValue) prev2)
+
 -- | Correct! But not efficient.
 -- `!!` operation is O(n), so in total this function is O(n^2).
 robMemo :: [Int] -> Int
