@@ -8,7 +8,8 @@ import Text.ParserCombinators.ReadPrec (step)
 rob :: [Int] -> Int
 rob value = snd $ foldl' step (0, 0) value
   where
-    step (prev1, prev2) currentValue = (prev2, max (prev1 + currentValue) prev2)
+    -- prev2: dp[i-2], prev1: dp[i-1]
+    step (prev2, prev1) currValue = (prev1, max (prev2 + currValue) prev1)
 
 -- | Correct! But not efficient.
 -- `!!` operation is O(n), so in total this function is O(n^2).
