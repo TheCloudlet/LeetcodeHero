@@ -60,7 +60,73 @@ private:
 #endif
 
 // Solution 2: Dynamic Programming (2D array)
+//
+// Example:
+// index: 0 1 2 3 4 5
+//      " a a a b b a "
+//
+// Step 1. Create a table
+// Step 2. Diagnal self is palindromic string
+//
+//   | 0 1 2 3 4 5 <-- ending position
+// --+---------------
+// 0 | 1 2
+// 1 |   1 2
+// 2 |     1 0
+// 3 |       1 2
+// 4 |         1 0
+// 5 |           1
+// ^
+// | starting position
+//
+//
+// Step 3: starting looping
+//    [start, end] is palindromic if (1) s[start] == s[end]
+//                                   (2) [start + 1, end - 1] is palindromic
 #if defined(SOLUTION_2)
+
+#include <cstddef>
+#include <vector>
+
+class Solution {
+public:
+  std::string longestPalindrome(std::string s) {
+    std::size_t n = s.size();
+    if (n < 2) {
+      return s;
+    }
+    std::size_t maxStartPos = 0;
+    std::size_t maxLen = 1; // Initialize to 1 for single char
+
+    // dp[i][j] stores whether s[i..j] is a palindrome
+    std::vector<std::vector<bool>> dp(n, std::vector<bool>(n, false));
+
+    for (std::size_t offset = 0; offset < n; ++offset) {
+      for (std::size_t startPos = 0; startPos < n; ++startPos) {
+        // Calculate current lenth
+        std::size_t endPos = startPos + offset;
+        if (endPos >= n) {
+          continue;
+        }
+
+        if (offset == 0) {
+          dp[startPos][endPos] = true;
+        } else if (offset == 1) {
+          dp[startPos][endPos] = (s[startPos] == s[endPos]);
+        } else {
+          dp[startPos][endPos] = (s[startPos] == s[endPos]) &&
+                                 dp[startPos + 1][endPos - 1] == true;
+        }
+
+        if (dp[startPos][endPos] && offset + 1 > maxLen) {
+          maxLen = currLen;
+          maxStartPos = startPos;
+        }
+      }
+    }
+    return std::string(s, maxStartPos, maxLen);
+  }
+};
 #endif
 
 // Solution 3: Manacher's Algorithm
