@@ -25,7 +25,7 @@ public:
   std::string longestPalindrome(std::string s) {
     std::size_t longestLen = 0;
     std::size_t longestStartPos = 0;
-    for (std::size_t pos = 0; pos < const_cast<std::size_t>(s.size()); ++pos) {
+    for (std::size_t pos = 0; pos < s.size(); ++pos) {
       // odd
       const auto [oddStartPos, oddLen] = expandAroundCenter(s, pos, pos);
       if (oddLen > longestLen) {
@@ -46,12 +46,14 @@ private:
   std::pair<std::size_t, std::size_t> expandAroundCenter(const std::string &s,
                                                          std::size_t left,
                                                          std::size_t right) {
-    while (left >= 0 && right < s.size() && s[left] == s[right]) {
-      --left;
-      ++right;
+    int l = static_cast<int>(left);
+    int r = static_cast<int>(right);
+    while (l >= 0 && r < s.size() && s[l] == s[r]) {
+      --l;
+      ++r;
     }
-    const std::size_t leftPos = left + 1;
-    const std::size_t rightPos = right - 1;
+    const std::size_t leftPos = l + 1;
+    const std::size_t rightPos = r - 1;
     return {leftPos, rightPos - leftPos + 1};
   }
 };
