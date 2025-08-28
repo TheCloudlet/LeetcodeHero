@@ -101,32 +101,31 @@ buildLayer strArr n layerKMinus2 k =
     | i <- [0 .. n - k]
     ]
 
--- Style guide: Use lowerCamelCase for functions
-longestPalindromeConcise :: String -> String
-longestPalindromeConcise s
+longestPalindrome2 :: String -> String
+longestPalindrome2 s
   | n <= 1 = s
-  | otherwise =
-      let strArr = listArray (0, n - 1) s
-          l1 = layer1 n
-          l2 = layer2 strArr n
+  | otherwise = take finalLen (drop finalStart s)
+    where
+      n = length s
+      strArr = listArray (0, n - 1) s
+      l1 = layer1 n
+      l2 = layer2 strArr n
 
-          initialBest =
-            case find snd (Map.toList l2) of
-              Just (start, _) -> (2, start)
-              Nothing -> (1, 0)
+      initialBest =
+        case find snd (Map.toList l2) of
+          Just (start, _) -> (start, 2) -- (start, length)
+          Nothing -> (0, 1)             -- (start, length)
 
-          go k layerKMinus1 layerKMinus2 bestSoFar
-            | k > n = bestSoFar
-            | otherwise =
-                let currLayer = buildLayer strArr n layerKMinus2 k
+      go k layerKMinus2 layerKMinus1 bestSoFar
+        | k > n = bestSoFar
+        | otherwise =
+            let currLayer = buildLayer strArr n layerKMinus2 k
+                (bestStart, bestLen) = bestSoFar
 
-                    updatedBest = case find snd (Map.toList currLayer) of
-                      Just (start, _) -> (k, start)
-                      Nothing -> bestSoFar
-                 in -- Pass parameters in the correct order
-                    go (k + 1) currLayer layerKMinus1 updatedBest
+                updatedBest = case find snd (Map.toList currLayer) of
+                  Just (start, _) ->
+                    if k > bestLen then (start, k) else bestSoFar
+                  Nothing -> bestSoFar
+             in go (k + 1) layerKMinus1 currLayer updatedBest
 
-          (finalStart, finalLen) = go 3 l2 l1 initialBest
-       in take finalLen (drop finalStart s)
-  where
-    n = length s
+      (finalStart, finalLen) = go 3 l1 l2 initialBest
