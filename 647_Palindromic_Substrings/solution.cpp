@@ -1,10 +1,10 @@
 // Leetcode 647. Palindromic Substrings
-// @tag: dynamic-programming, string, neetcode
+// @tag: dp, string, neetcode150
 // @difficulty: medium
 
 #include <string>
-#include <vector>
 #include <utility> // For std::pair and std::move
+#include <vector>
 
 class Solution {
 public:
@@ -55,7 +55,8 @@ private:
   // This is now a pure function with no side effects.
   // It is marked const because it doesn't modify the object's state.
   std::pair<std::vector<bool>, int>
-  buildLayer(const std::string &s, int k, const std::vector<bool> &layerKMinus2) const {
+  buildLayer(const std::string &s, int k,
+             const std::vector<bool> &layerKMinus2) const {
     int n = s.size();
     std::vector<bool> currentLayer(n - k + 1, false);
     int count = 0;
