@@ -15,17 +15,23 @@ public:
 
     std::vector<bool> layerKMinus2(n, true);
     int palindromeCount = n;
+    int prevLayerCount = 0;
 
     std::vector<bool> layerKMinus1(n - 1, false);
     for (int pos = 0; pos < n - 1; ++pos) {
       if (s[pos] == s[pos + 1]) {
         layerKMinus1[pos] = true;
         ++palindromeCount;
+        ++prevLayerCount;
       }
     }
 
     for (int k = 3; k <= n; ++k) {
       int currentLayerCount = buildLayer(s, k, layerKMinus2, layerKMinus1);
+      if (currentLayerCount == 0 && prevLayerCount == 0) {
+        break; // Early break optimization
+      }
+      prevLayerCount = currentLayerCount;
       palindromeCount += currentLayerCount;
     }
     return palindromeCount;
