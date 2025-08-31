@@ -1,4 +1,6 @@
 // Leetcode 3. Longest Substring Without Repeating Characters
+// @tag: hashtalble, string, sliding-window
+// @difficulty: medium
 //
 // Solution
 // Two pointers
