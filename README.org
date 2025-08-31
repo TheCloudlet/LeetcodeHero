@@ -1,30 +1,18 @@
-#+title: Leetcode Hero
+#+title: LeetCode Hero
 
-This is all about my trials, errors and fails for all interviews.
+_From Zero to Leetcode Hero_
 
+Welcome to LeetCode Hero, a repository that documents my *journey of mastering algorithms* and data structures. This project serves as both a personal learning journal and a professional portfolio of my solutions, implemented in Modern C++ and Haskell.
 
-* To write
+** My Approach
+- *Modern C++:* Solutions in C++ are written to reflect clean, efficient, and production-ready code, mirroring my professional work as a compiler engineer.
+- *Haskell:* Solutions in Haskell are an exploration of functional programming paradigms, used to tackle problems from a different perspective and for mental training.
 
-- [X] Rotate matrix 90 degree
-- [X] Topological sort (2 ways)
-  - 207, 210, 269, 1136, 310
-- [X] Implement Shared-Ptr class
-- [ ] About cpp inheritance... and system designs
-- [ ] About binary tree insertion and level and AVL tree.
-- [ ] Implement GPU handler
-- [ ] Implement LRU
+** Repository Structure
+Each problem is contained in its own directory, named with its LeetCode number and title for easy navigation (e.g., =001_Two_Sum=). Explanations are added for some solutions as I refine my understanding.
 
-- [X] Master binary search
-  - [ ] Write note for binary search
-  - [ ] Do leetcode 004
+** Progress Tracker
+This section tracks my progress through various topics and concepts.
 
-- Missing tools
-  - Monotonic stack
-    - [ ] 084 Largest Rectangle in Histogram
-    - [ ] 042 Trapping Rain Water
-    - [ ] 739 Daily Temperatures
-  - Dynamic programming
-  - Trie
-  - Union find
-  - Bit manipulation
-  - Game theroy
+** About Me
+Feel free to check out my other projects on my [[https://github.com/TheCloudlet][GitHub Profile]].
