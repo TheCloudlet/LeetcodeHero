@@ -2,10 +2,12 @@
 
 module Solution where
 
+import qualified Data.Array as Array
 import Data.List (foldl')
 import qualified Data.Set as Set
 import Text.Printf (printf)
 
+-- Set Solution
 canPartition :: [Int] -> Bool
 canPartition nums =
   let sumAll = sum nums
@@ -19,6 +21,29 @@ updateSums :: Set.Set Int -> Int -> Set.Set Int
 updateSums acc num =
   let newSums = Set.map (+ num) acc
    in Set.union acc newSums
+
+-- DP solution
+canPartitionDP :: [Int] -> Bool
+canPartitionDP nums =
+  let totalSum = sum nums
+      (target, remainder) = totalSum `divMod` 2
+      initialDP = Array.listArray (0, target) (True : repeat False) :: Array.Array Int Bool
+      finalDP = foldl' updateDP initialDP nums
+   in remainder == 0 && (finalDP Array.! target)
+
+updateDP :: Array.Array Int Bool -> Int -> Array.Array Int Bool
+updateDP dp num =
+  -- For each possible sum i from target down to num:
+  -- - Check if we can achieve (i - num) with previous numbers
+  -- - If yes, then adding 'num' gives us sum i
+  -- - Iterate backwards to avoid using the same number twice
+  dp
+    Array.// [ (i, True)
+             | i <- [target, target - 1 .. num],
+               dp Array.! (i - num)
+             ]
+  where
+    target = snd (Array.bounds dp)
 
 -- =============================================================================
 -- TESTING FRAMEWORK
@@ -62,6 +87,6 @@ main = do
   putStrLn "Running tests for Partition Equal Subset Sum ..."
   putStrLn "-----------------------------------------"
   putStrLn "Testing canPartition:"
-  mapM_ (runPartitionTest canPartition) testCases
+  mapM_ (runPartitionTest canPartitionDP) testCases
   putStrLn "-----------------------------------------"
   putStrLn "Tests complete."
