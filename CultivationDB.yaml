@@ -50,7 +50,7 @@ problems:
     title: "Zigzag Conversion"
     link: "./006_Zigzag_Conversion"
     leetcode-difficulty: medium
-    topics: [vector, stirng]
+    topics: [vector, string]
     status: L3_MASTERED
     refinement_focus: "Updown traverse and push to vector"
 
@@ -91,7 +91,7 @@ problems:
     link: "./012_Integer_to_Roman"
     leetcode-difficulty: medium
     topics: [array]
-    status: L3_STRUGGLE
+    status: L2_STRUGGLE
     refinement_focus: "Transform roman to (value, string) pair and decode greedy"
 
   - id: 13
@@ -100,7 +100,7 @@ problems:
     leetcode-difficulty: medium
     topics: [array]
     status: L2_STRUGGLE
-    refinement focus: "Need to peek next, to know current is `+` or `-`"
+    refinement_focus: "Need to peek next, to know current is + or -"
 
   - id: 14
     title: "Longest Common Prefix"
@@ -129,7 +129,7 @@ problems:
   - id: 17
     title: "Letter Combinations of a Phone Number"
     link: "./017_Letter_Combinations_of_a_Phone_Number"
-    leetcode-difficulty:
+    leetcode-difficulty: medium
     topics: [hashtable, backtracking, string]
     status: L3_MASTERED
     refinement_focus: "Write a good helper pure function"
@@ -157,6 +157,30 @@ problems:
     topics: [stack, string]
     status: L2_STRUGGLE
     refinement_focus: "I know the stack solution, but I cannot execute it fluently and elegantly"
+
+  - id: 24
+    title: "Swap Nodes in Pairs"
+    link: "./024_Swap_Nodes_in_Pairs"
+    leetcode-difficulty: medium
+    topics: [linked-list, indirect-pointer, recursion]
+    status: L2_STRUGGLE
+    refinement_focus: "While loop or helper recursion"
+
+  - id: 34
+    title: "Find First and Last Position of Element in Sorted Array"
+    link: "./034_Find_First_and_Last_Position_of_Element_in_Sorted_Array"
+    leetcode-difficulty: medium
+    topics: [binary-search, array, sorting]
+    status: L2_STRUGGLE
+    refinement_focus: "lower_bound and upper_bound"
+
+  - id: 35
+    title: "Search Insert Position"
+    link: "./035_Search_Insert_Position"
+    leetcode-difficulty: easy
+    topics: [binary-search, array, sorting]
+    status: L3_MASTERED
+    refinement_focus: "lower_bound"
 
 #  - id:
 #    title: ""
