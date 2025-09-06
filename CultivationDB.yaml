@@ -26,7 +26,7 @@ problems:
     title: "Add Two Numbers"
     link: "./002_Add_Two_Numbers"
     leetcode-difficulty: medium
-    topics: [linked-list, neetcode150]
+    topics: [linked-list, indirect-pointer, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: "Indirect-pointer and sum/carry"
 
@@ -101,6 +101,62 @@ problems:
     topics: [array]
     status: L2_STRUGGLE
     refinement focus: "Need to peek next, to know current is `+` or `-`"
+
+  - id: 14
+    title: "Longest Common Prefix"
+    link: "./014_Longest_Common_Prefix"
+    leetcode-difficulty: easy
+    topics: [array]
+    status: L3_MASTERED
+    refinement_focus: "The clean solution is to take the first string as golden"
+
+  - id: 15
+    title: "3 Sum"
+    link: "./015_3Sum"
+    leetcode-difficulty: medium
+    topics: [two-pointer]
+    status: L2_STRUGGLE
+    refinement_focus: "Dupicates handling is tricky"
+
+  - id: 16
+    title: "3 Sum Closest"
+    link: "./016_3Sum_Closest"
+    leetcode-difficulty: medium
+    topics: [two-pointer, array, sorting]
+    status: L2_STRUGGLE
+    refinement_focus: "Same as 015_3Sum, but need to track closest value"
+
+  - id: 17
+    title: "Letter Combinations of a Phone Number"
+    link: "./017_Letter_Combinations_of_a_Phone_Number"
+    leetcode-difficulty:
+    topics: [hashtable, backtracking, string]
+    status: L3_MASTERED
+    refinement_focus: "Write a good helper pure function"
+
+  - id: 18
+    title: "4 Sum"
+    link: "./014_4Sum"
+    leetcode-difficulty: medium
+    topics: [k-sum, two-pointer, array, sorting]
+    status: L2_STRUGGLE
+    refinement_focus: "generalizing k-sum function"
+
+  - id: 19
+    title: "Remove Nth Node From End of List"
+    link: "./019_Remove_Nth_Node_From_End_of_List"
+    leetcode-difficulty: medium
+    topics: [fast-and-slow-pointer, linked-list, indirect-pointer]
+    status: L2_STRUGGLE
+    refinement_focus: "Indirect-pointer and fast/slow pointer"
+
+  - id: 20
+    title: "Valid Parentheses"
+    link: "./020_Valid_Parentheses"
+    leetcode-difficulty: easy
+    topics: [stack, string]
+    status: L2_STRUGGLE
+    refinement_focus: "I know the stack solution, but I cannot execute it fluently and elegantly"
 
 #  - id:
 #    title: ""
