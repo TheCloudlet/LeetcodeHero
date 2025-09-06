@@ -38,13 +38,13 @@ problems:
     status: L3_MASTERED
     refinement_focus: "通常這種題目 While 的使用是關鍵"
 
-  - id: 4
-    title: "004_Median_of_Two_Sorted_Arrays"
-    link: "./004_Median_of_Two_Sorted_Arrays"
-    leetcode-difficulty:
-    topics: []
-    status:
-    refinement_focus: ""
+  - id: 5
+    title: "005_Longest_Palindromic_Substring"
+    link: "./005_Longest_Palindromic_Substring"
+    leetcode-difficulty: medium
+    topics: [iteration, dp, manachers-algorithm, neetcode150]
+    status: L2_STRUGGLE
+    refinement_focus: "Two solutions: Expand, DP, or Manacher's algorithm"
 
 #  - id:
 #    title: ""
