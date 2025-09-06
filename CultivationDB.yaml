@@ -1,0 +1,55 @@
+# Google 衝刺修煉數據庫
+# 狀態定義 (Status Definition):
+#   L1_FORGOT: (忘) - 必須重學
+#   L2_STRUGGLE: (解) - 磕磕絆絆，不夠熟
+#   L3_MASTERED: (定) - 20分鐘內零 Bug 秒殺 + 邊界全清
+#
+# Entry template:
+#  - id:
+#    title: ""
+#    link: "./"
+#    leetcode-difficulty:
+#    topics: []
+#    status:
+#    refinement_focus: ""
+
+problems:
+  - id: 1
+    title: "Two Sum"
+    link: ./001_Two_Sum/
+    leetcode-difficulty: easy
+    topics: [hashtable, array, neetcode150]
+    status: L3_MASTERED
+    refinement_focus: "Try to use single pass solution"
+
+  - id: 2
+    title: "Add Two Numbers"
+    link: "./002_Add_Two_Numbers"
+    leetcode-difficulty: medium
+    topics: [linked-list, neetcode150]
+    status: L2_STRUGGLE
+    refinement_focus: "Indirect-pointer and sum/carry"
+
+  - id: 3
+    title: "003_Longest_Substring_Without_Repeating_Characters"
+    link: "./003_Longest_Substring_Without_Repeating_Characters"
+    leetcode-difficulty: medium
+    topics: [hashtable, sliding-window, string]
+    status: L3_MASTERED
+    refinement_focus: "通常這種題目 While 的使用是關鍵"
+
+  - id: 4
+    title: "004_Median_of_Two_Sorted_Arrays"
+    link: "./004_Median_of_Two_Sorted_Arrays"
+    leetcode-difficulty:
+    topics: []
+    status:
+    refinement_focus: ""
+
+#  - id:
+#    title: ""
+#    link: "./"
+#    leetcode-difficulty:
+#    topics: []
+#    status:
+#    refinement_focus: ""
