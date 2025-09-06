@@ -2,6 +2,8 @@
 // @tag: dp, neetcode150
 // @difficulty: medium
 
+// NOTE: For different solutions, please refer to haskell solution
+
 #include <vector>
 
 class Solution {
