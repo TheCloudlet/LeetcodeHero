@@ -31,7 +31,7 @@ problems:
     refinement_focus: "Indirect-pointer and sum/carry"
 
   - id: 3
-    title: "003_Longest_Substring_Without_Repeating_Characters"
+    title: "Longest Substring Without Repeating Characters"
     link: "./003_Longest_Substring_Without_Repeating_Characters"
     leetcode-difficulty: medium
     topics: [hashtable, sliding-window, string]
@@ -39,12 +39,84 @@ problems:
     refinement_focus: "通常這種題目 While 的使用是關鍵"
 
   - id: 5
-    title: "005_Longest_Palindromic_Substring"
+    title: "Longest Palindromic Substring"
     link: "./005_Longest_Palindromic_Substring"
     leetcode-difficulty: medium
-    topics: [iteration, dp, manachers-algorithm, neetcode150]
+    topics: [iteration, dp, manachers-algorithm, string, neetcode150]
     status: L2_STRUGGLE
-    refinement_focus: "Two solutions: Expand, DP, or Manacher's algorithm"
+    refinement_focus: "Expand, DP, or Manacher's algorithm"
+
+  - id: 6
+    title: "Zigzag Conversion"
+    link: "./006_Zigzag_Conversion"
+    leetcode-difficulty: medium
+    topics: [vector, stirng]
+    status: L3_MASTERED
+    refinement_focus: "Updown traverse and push to vector"
+
+  - id: 7
+    title: "Reverse Integer"
+    link: "./007_Reverse_Integer"
+    leetcode-difficulty: medium
+    topics: [integer, signed, boundary]
+    status: L2_STRUGGLE
+    refinement_focus: "The key is boundary + minus"
+
+  - id: 8
+    title: "String to Integer"
+    link: "./008_String_to_Integer"
+    leetcode-difficulty: medium
+    topics: [parsing, stoi, boundary, signed, overflow]
+    status: L3_MASTERED
+    refinement_focus: "boundary + minus"
+
+  - id: 9
+    title: "Palindrome Number"
+    link: "./009_Palindrome_Number"
+    leetcode-difficulty: easy
+    topics: [iteration]
+    status: L3_MASTERED
+    refinement_focus: "std::to_string while"
+
+  - id: 11
+    title: "Container With Most Water"
+    link: "./011_Container_With_Most_Water"
+    leetcode-difficulty: medium
+    topics: [two-pointer, monotonic-stack]
+    status: L2_STRUGGLE
+    refinement_focus: "I'm not familar with the two-pointer solution"
+
+  - id: 12
+    title: "Integer to Roman"
+    link: "./012_Integer_to_Roman"
+    leetcode-difficulty: medium
+    topics: [array]
+    status: L3_STRUGGLE
+    refinement_focus: "Transform roman to (value, string) pair and decode greedy"
+
+  - id: 13
+    title: "Roman to Integer"
+    link: "./013 Roman to Integer"
+    leetcode-difficulty: medium
+    topics: [array]
+    status: L2_STRUGGLE
+    refinement focus: "Need to peek next, to know current is `+` or `-`"
+
+#  - id:
+#    title: ""
+#    link: "./"
+#    leetcode-difficulty:
+#    topics: []
+#    status:
+#    refinement_focus: ""
+
+  - id: 647
+    title: "Palindromic Substrings"
+    link: "./647_Palindromic_Substrings"
+    leetcode-difficulty: medium
+    topics: [dp, string, neetcode150]
+    status: L1_FORGOT
+    refinement_focus: "Very similar to 005_Longest_Palindromic_Substring"
 
 #  - id:
 #    title: ""
