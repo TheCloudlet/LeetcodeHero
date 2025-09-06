@@ -34,7 +34,7 @@ problems:
     title: "Longest Substring Without Repeating Characters"
     link: "./003_Longest_Substring_Without_Repeating_Characters"
     leetcode-difficulty: medium
-    topics: [hashtable, sliding-window, string]
+    topics: [hashtable, sliding-window, string, neetcode150]
     status: L3_MASTERED
     refinement_focus: "通常這種題目 While 的使用是關鍵"
 
@@ -82,9 +82,9 @@ problems:
     title: "Container With Most Water"
     link: "./011_Container_With_Most_Water"
     leetcode-difficulty: medium
-    topics: [two-pointer, monotonic-stack]
+    topics: [two-pointer, array, greedy, neetcode150]
     status: L2_STRUGGLE
-    refinement_focus: "I'm not familar with the two-pointer solution"
+    refinement_focus: "find the smallest of the two sides, and move the pointer"
 
   - id: 12
     title: "Integer to Roman"
@@ -114,7 +114,7 @@ problems:
     title: "3 Sum"
     link: "./015_3Sum"
     leetcode-difficulty: medium
-    topics: [two-pointer]
+    topics: [two-pointer, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: "Dupicates handling is tricky"
 
@@ -146,7 +146,7 @@ problems:
     title: "Remove Nth Node From End of List"
     link: "./019_Remove_Nth_Node_From_End_of_List"
     leetcode-difficulty: medium
-    topics: [fast-and-slow-pointer, linked-list, indirect-pointer]
+    topics: [fast-and-slow-pointer, linked-list, indirect-pointer, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: "Indirect-pointer and fast/slow pointer"
 
@@ -154,7 +154,7 @@ problems:
     title: "Valid Parentheses"
     link: "./020_Valid_Parentheses"
     leetcode-difficulty: easy
-    topics: [stack, string]
+    topics: [stack, string, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: "I know the stack solution, but I cannot execute it fluently and elegantly"
 
@@ -181,6 +181,118 @@ problems:
     topics: [binary-search, array, sorting]
     status: L3_MASTERED
     refinement_focus: "lower_bound"
+
+  - id: 36
+    title: "Valid Sudoku"
+    link: "./036_Valid_Sudoku"
+    leetcode-difficulty: medium
+    topics: [hashset, matrix, simulation, neetcode150]
+    status: L3_MASTERED
+    refinement_focus: "HashSet"
+
+  - id: 42
+    title: "Trapping Rain Water"
+    link: "./042_Trapping_Rain_Water"
+    leetcode-difficulty: hard
+    topics: [two-pointer, monotonic-stack, array, neetcode150]
+    status: L2_STRUGGLE
+    refinement_focus: "next-greater-element or two-pointer"
+
+  - id: 48
+    title: "Rotate Image"
+    link: "./048_Rotate_Image"
+    leetcode-difficulty: medium
+    topics: [matrix]
+    status: L3_MASTERED
+    refinement_focus: "Transpose + Reverse"
+
+  - id: 49
+    title: "Group Anagrams"
+    link: "./049_Group_Anagrams"
+    leetcode-difficulty: medium
+    topics: [hash-table, string, sorting, neetcode150]
+    status: L3_MASTERED
+    refinement_focus: "Sorting"
+
+  - id: 56
+    title: "Merge Intervals"
+    link: "./056_Merge_Intervals"
+    leetcode-difficulty: medium
+    topics: [array, sorting, neetcode150]
+    status: L2_STRUGGLE
+    refinement_focus: "Sorting + Iterate and Merge"
+
+  - id: 61
+    title: "Rotate List"
+    link: "./061_Rotate_List"
+    leetcode-difficulty: medium
+    topics: [linked-list, two-pointer, indirect-pointer]
+    status: L3_MASTERED
+    refinement_focus: "Make the list circular first. There are optimiazations like if k == length, do nothing"
+
+  - id: 70
+    title: "Climbing Stairs"
+    link: "./070_Climbing_Stairs"
+    leetcode-difficulty: easy
+    topics: [dp, math, neetcode150]
+    status: L3_MASTERED
+    refinement_focus: "Fibonacci, bottom-up DP, top-down DP, or even math"
+
+  - id: 91
+    title: "Decode Ways"
+    link: "./091_Decode_Ways"
+    leetcode-difficulty: medium
+    topics: [dp, string, backtracking, neetcode150]
+    status: L2_STRUGGLE
+    refinement_focus: "dp[i] means ways to decode s[0..i-1]. Also, we need to handle 1 digit and 2 digit separately"
+
+  - id: 96
+    title: "Unique Binary Search Trees"
+    link: "./096_Unique_Binary_Search_Trees"
+    leetcode-difficulty: medium
+    topics: [dp, math, neetcode150]
+    status: L2_STRUGGLE
+    refinement_focus: "dp[n] means number of unique BST that can be built with n nodes. dp[n] = sum of dp[i-1]*dp[n-i] for i in [1..n]. Catalan number"
+
+  - id: 125
+    title: "Valid Palindrome"
+    link: "./125_Valid_Palindrome"
+    leetcode-difficulty: easy
+    topics: [two-pointer, string, neetcode150]
+    status: L3_MASTERED
+    refinement_focus: "isalnum() and tolower()"
+
+  - id: 128
+    title: "Longest Consecutive Sequence"
+    link: "./128_Longest_Consecutive_Sequence"
+    leetcode-difficulty: medium
+    topics: [hashset, array, neetcode150]
+    status: L2_STRUGGLE
+    refinement_focus: "sort is O(n log n), use HashSet to achieve O(n). Check only sequence starters"
+
+  - id: 139
+    title: "Word Break"
+    link: "./139_Word_Break"
+    leetcode-difficulty: medium
+    topics: [dp, string, neetcode150]
+    status: L2_STRUGGLE
+    refinement_focus: "Not absolutely sure I can get this right during interview, but I know the idea. ip[i] means s[i..end] can be segmented. Need a helper function isPrefix and a recursive function with memo"
+
+  - id: 146
+    title: "LRU Cache"
+    link: "./146_LRU_Cache"
+    leetcode-difficulty: medium
+    topics: [design, linked-list, hashtable, neetcode150]
+    status: L2_STRUGGLE
+    refinement_focus: "Always practice. Use std::list + std::unordered_map. please understand why use list"
+
+  - id: 150
+    title: "Evaluate Reverse Polish Notation"
+    link: "./150_Evaluate_Reverse_Polish_Notation"
+    leetcode-difficulty: medium
+    topics: [stack, array, neetcode150]
+    status: L3_MASTERED
+    refinement_focus: "Edge case are tricky, but the idea is straightforward. Alwasy think when the input is invalid"
 
 #  - id:
 #    title: ""
