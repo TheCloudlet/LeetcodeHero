@@ -294,6 +294,54 @@ problems:
     status: L3_MASTERED
     refinement_focus: "Edge case are tricky, but the idea is straightforward. Alwasy think when the input is invalid"
 
+  - id: 152
+    title: "Maximum Product Subarray"
+    link: "./152_Maximum_Product_Subarray"
+    leetcode-difficulty: medium
+    topics: [dp, array, neetcode150]
+    status: L1_FORGOT
+    refinement_focus: "The dp logic is not straightforward. The key is the remember three conditions: positve, negative, zero. Using DP to find max positive and min negative"
+
+  - id: 155
+    title: "Min Stack"
+    link: "./155_Min_Stack"
+    leetcode-difficulty: medium
+    topics: [stack, design, neetcode150]
+    status: L1_FORGOT
+    refinement_focus: "The key is to use two stacks, one for normal stack, one for min stack"
+
+  - id: 167
+    title: "Two Sum II - Input Array Is Sorted"
+    link: "./167_Two_Sum_II_Input_Array_Is_Sorted"
+    leetcode-difficulty: easy
+    topics: [two-pointer, array, neetcode150]
+    status: L3_MASTERED
+    refinement_focus: "trivial two-pointer"
+
+  - id: 198
+    title: "House Robber"
+    link: "./198_House_Robber"
+    leetcode-difficulty: medium
+    topics: [dp, array, neetcode150]
+    status: L2_STRUGGLE
+    refinement_focus: "dp[i] means max amount can be robbed from house[0..i]. dp[i] = max(dp[i-1], dp[i-2]+nums[i]). Use foldl to optimize space"
+
+  - id: 207
+    title: "Course Schedule"
+    link: "./207_Course_Schedule"
+    leetcode-difficulty: medium
+    topics: [graph, bfs, dfs, topological-sort, neetcode150]
+    status: L1_FORGOT
+    refinement_focus: "BFS or DFS coloring to detect cycle. Or use Kahn's algorithm to do topological sort"
+
+  - id: 210
+    title: "Course Schedule II"
+    link: "./210_Course_Schedule_II"
+    leetcode-difficulty: medium
+    topics: [graph, bfs, dfs, topological-sort, neetcode150]
+    status: L1_FORGOT
+    refinement_focus: "FIXME: to add"
+
 #  - id:
 #    title: ""
 #    link: "./"
