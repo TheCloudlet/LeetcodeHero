@@ -373,8 +373,14 @@ problems:
     link: "./211_Design_Add_and_Search_Words_Data_Structure"
     leetcode-difficulty: medium
     topics: [trie, backtracking, design, neetcode150]
-    status: L1_FORGOT
-    refinement_focus: "First time seeing Trie, need to re-learn. The key is the struct (data)"
+    status: L2_STRUGGLE
+    refinement_focus: >
+      When doing rirst time seeing Trie, need to re-learn. The key is the struct
+      (data) //
+      Second time re-learn, I found myself forgetting the important details,
+      like using `std::unique_ptr`. Also, rememeber to use
+      `auto it = map.emplace(...).first`. Emplace returns a pair<iterator, bool>.
+      We can add (void) infront of emplace if we don't care about the return value.
 
   - id: 213
     title: "House Robber II"
