@@ -17,45 +17,68 @@ Welcome to LeetCode Hero, a repository that documents my _journey of mastering a
 
 Each problem is contained in its own directory, named with its LeetCode number and title for easy navigation (e.g., `001_Two_Sum`). Explanations are added for some solutions as I refine my understanding.
 
-## Progress Tracker
-
-This section tracks my progress through various topics and concepts.
-
 ## About Me
 
 Feel free to check out my other projects on my [GitHub Profile](https://github.com/TheCloudlet).
 
-# 雲雲的「禪定飛升」衝刺計畫 (姐姐監督版)
+______________________________________________________________________
 
-## 階段一：【覺知】(The Diagnostic) - 妳現在的唯一功課
+## Progress Tracker
 
-這一步不容妥協。妳必須先看清自己。
+This section tracks my progress through various topics and concepts. This blueprint defines the cultivation path to Google (supervised by Sister).
 
-- [x] **任務：** 建立並完成妳的 `CultivationDB.yaml` 數據庫。
-- [ ] **要求：** 必須將妳過去做過的所有 61 道題，一題不漏地加入。
-  - status: 13/61
-- [ ] **核心：** 誠實地將每一題標記為 `L1_FORGOT`, `L2_STRUGGLE`, 或 `L3_MASTERED`。
-- [ ] **關鍵功課 (赤裸挑戰)：** 必須填寫 `refinement_focus` 欄位。這是在逼妳「承認」妳的弱點，是治妳「慌」的關鍵。
+### Phase 1: The Diagnostic (The Awareness Pass)
+
+This step is non-negotiable. We must see the truth first.
+
+- **Task:** Build and complete the `CultivationDB.yaml` database.
+- **Requirement:** Log all original 61 problems (from the legacy `ls.log`).
+  - [x] All 61 problems logged.
+- **Core Mission:** Honestly tag every problem as `L1_FORGOT`, `L2_STRUGGLE`, or `L3_MASTERED`.
+- **Key Challenge (Psychological Nudity):** The `refinement_focus` field *must* be filled out. This forces the admission of weakness and is the cure for the "I feel awful" panic.
 
 ______________________________________________________________________
 
-## 階段二：【精煉】(The Refinement) - 妳的日常訓練
+### Phase 2: The Triage (The "Debt List") - \[PRIORITY: ACTIVE\]
 
-這不是階段一「之後」才做，而是「同時」進行。妳在診斷出 `L2` 題目的**同時**，就要開始這個訓練。
+This is the task we discussed on Sept 6-7. Phase 1 (Diagnosis) revealed a clear "Debt List" of forgotten critical topics. This is your immediate homework.
 
-這就是姐姐針對妳「知道怎麼解，但寫不漂亮」這個「心魔」開的藥方：
+- **Mission:** Attack the **L1_FORGOT List**. Treat these 10 problems as "new" and re-learn them from scratch.
 
-- [ ] **任務：** 針對所有 `L2_STRUGGLE` 的題目，執行「限時精煉」。
-- [ ] **規矩 (The Rule)：**
-  1. 打開一個**空白頁面**。
-  1. 設定 **25 分鐘** 計時器。
-  1. 開始解題（不准看舊答案）。
-  1. 時間到，立刻停筆。
-  1. **自我 Code Review (羞恥挑戰)：** 打開妳的新舊答案對比，大聲說出妳新 Code 裡 3 個「不漂亮」或「錯誤」的地方。
+- **Goal:** Convert all 10 of these from `L1` to at least `L2_STRUGGLE` by mid-September.
+
+- **The Debt List (The 7 "L1_FORGOT" entries from YAML):**
+
+  - [ ] `207` (Course Schedule I) - (Kahn's / Topological Sort)
+  - [ ] `210` (Course Schedule II) - (Graph Cycle Check)
+  - [ ] `211` (Design Add/Search Trie) - (Trie Data Structure)
+  - [ ] `152` (Max Product Subarray)
+  - [ ] `155` (Min Stack)
+  - [ ] `239` (Sliding Window Max) - (Monotonic Queue)
+  - [ ] `416` (Partition Equal Subset Sum) - (Knapsack DP)
+
+- **The 2 Missing Problems (The "New Debt"):**
+
+  - [ ] `004` (Median of Two Sorted Arrays) - (Hard Binary Search)
+  - [ ] `556` (Next Greater Element III)
 
 ______________________________________________________________________
 
-## 階段三：【補完】(The Gap Filling) - (鎖定中 🔒)
+### Phase 3: The Refinement (The "L2 Drill")
 
-- [ ] 妳在找的「新規劃」（例如：主攻 Trees、猛攻 Advanced Graph）在這裡。
-- [ ] **解鎖條件：** 妳必須先完成【階段一】。等妳的 YAML 完成了，姐姐才能從數據裡看到妳真正的「洞」在哪裡，然後才能幫妳制訂這個階段的計畫。
+This is the "core" training. This is the medicine for the "I know the solution, but my code isn't beautiful" demon.
+
+- [ ] **Task:** Execute timed drills for the entire **L2_STRUGGLE List** (the ~30 problems you logged).
+- **The Rules (The Bomb Disposal Drill):**
+  1. Open a **blank page** (no peeking at old solutions).
+  1. Set a **25-minute timer**.
+  1. Begin implementation.
+  1. **Timer stops, pencils down.** (Stop coding).
+  1. **Self Code Review (The Shame Challenge):** Open your new (ugly/buggy) code next to your old solution. Aloud, identify 3 things that are not "production-ready" or "elegant."
+
+______________________________________________________________________
+
+### Phase 4: The Gap Filling (New Knowledge) - \[LOCKED 🔒\]
+
+- [ ] **Task:** Attack all new, un-solved problems (like the rest of the **Neetcode 150 Trees** you wanted to do).
+- **Unlock Condition:** This phase only begins *after* Phase 2 (The Debt List) is 100% complete. We must fix our known debt before we acquire new knowledge.
