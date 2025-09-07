@@ -1,48 +1,65 @@
+// Leetcode 207. Course Schedule
+// @tags: graph, dfs, bfs, topological_sort, neetcode150
+// @difficulty: medium
+
+// Solution 1: DFS with coloring
 // NOTE:
-// 1. Loop decttion
-// 2. Lamda function
-
-#include <functional>
+// 1.  Helper fucntion can be
+//     `std::function<bool(int)> dfs = [&](int u) -> bool { ... }`
+//     this is a total functional programming style.
+#if defined(DFS_COLORING)
 #include <vector>
+#include <cassert>
 
-// Create an ajacent list and check whether we have loop
 class Solution {
 public:
-    bool canFinish(int numCourses,
-                   std::vector<std::vector<int>>& prerequisites) {
-        std::vector<std::vector<int>> adj(numCourses);
-
-        // Transfer prerequisites to adjacent list
-        for (const auto &pair : prerequisites) {
-            auto a = pair.at(0);
-            auto b = pair.at(1);
-            adj[b].emplace_back(a);
-        }
-
-        std::vector<int> state(numCourses); // 0: not visited, 1: visiting
-                                            // 2: visisted
-        std::function<bool(int)> dfs = [&](int u) -> bool {
-            if (state[u] == 1) {
-                return true; // cound a cycle
-            }
-            if (state[u] == 2) {
-                return false;
-            }
-            state[u] = 1; // mark as visiting
-            for (const int &v : adj[u]) {
-                if (dfs(v)) {
-                    return true;
-                }
-            }
-            state[u] = 2; // mark as visited
-            return false;
-        };
-
-        for (int i = 0; i < numCourses; ++i) {
-            if (dfs(i)) {
-                return false;
-            }
-        }
-        return true;
+  bool canFinish(int numCourses,
+                 const std::vector<std::vector<int>> &prerequisites) {
+    // Initialize adjacency list with proper size
+    std::vector<std::vector<int>> adjVec(numCourses);
+    for (const auto &pair : prerequisites) {
+      int course = pair[0];
+      int prerequisite = pair[1];
+      adjVec[prerequisite].push_back(course);
     }
+
+    std::vector<DFSColor> colors(numCourses, DFSColor::unvisited);
+
+    // Check each course for cycles
+    for (int node = 0; node < numCourses; ++node) {
+      if (colors[node] == DFSColor::unvisited) {
+        if (!dfsHelper(adjVec, colors, node)) {
+          return false; // Found cycle
+        }
+      }
+    }
+    return true;
+  }
+
+private:
+  enum class DFSColor { unvisited, visiting, visited };
+
+  bool dfsHelper(const std::vector<std::vector<int>> &adjVec,
+                 std::vector<DFSColor> &colors, int currNode) {
+    colors[currNode] = DFSColor::visiting;
+
+    for (const auto &neighbor : adjVec[currNode]) {
+      if (colors[neighbor] == DFSColor::visiting) {
+        return false; // Found cycle
+      }
+      if (colors[neighbor] == DFSColor::unvisited &&
+          !dfsHelper(adjVec, colors, neighbor)) {
+        return false;
+      }
+    }
+
+    colors[currNode] = DFSColor::visited;
+    return true;
+  }
 };
+#endif
+
+// Solution 2: Khan's Algorithm (BFS with coloring)
+#if defined(KHAN_ALGO)
+// The soluiton can be found in Course Schedule II (Leetcode 210)
+#endif

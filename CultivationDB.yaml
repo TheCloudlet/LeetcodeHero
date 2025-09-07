@@ -357,8 +357,11 @@ problems:
     link: "./207_Course_Schedule"
     leetcode-difficulty: medium
     topics: [graph, bfs, dfs, topological-sort, neetcode150]
-    status: L1_FORGOT
-    refinement_focus: "BFS or DFS coloring to detect cycle. Or use Kahn's algorithm to do topological sort"
+    status: L2_STRUGGLE
+    refinement_focus: |
+      BFS or DFS coloring to detect cycle. Or use Kahn's algorithm to do topological sort.
+
+      2nd time re-learn. I use enum-class to define colors. And get it almost right
 
   - id: 210
     title: "Course Schedule II"
@@ -374,13 +377,10 @@ problems:
     leetcode-difficulty: medium
     topics: [trie, backtracking, design, neetcode150]
     status: L2_STRUGGLE
-    refinement_focus: >
-      When doing rirst time seeing Trie, need to re-learn. The key is the struct
-      (data) //
-      Second time re-learn, I found myself forgetting the important details,
-      like using `std::unique_ptr`. Also, rememeber to use
-      `auto it = map.emplace(...).first`. Emplace returns a pair<iterator, bool>.
-      We can add (void) infront of emplace if we don't care about the return value.
+    refinement_focus: |
+      When doing rirst time seeing Trie, need to re-learn. The key is the struct (data)
+
+      Second time re-learn, I found myself forgetting the important details, like using `std::unique_ptr`. Also, rememeber to use `auto it = map.emplace(...).first`. Emplace returns a pair<iterator, bool>. We can add (void) infront of emplace if we don't care about the return value.
 
   - id: 213
     title: "House Robber II"
@@ -437,7 +437,7 @@ problems:
     topics: [graph, bfs, tree, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: "Peel off the leaves layer by layer until 1 or 2 nodes left"
-  
+
   - id: 322
     title: "Coin Change"
     link: "./322_Coin_Change"
