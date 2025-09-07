@@ -1,17 +1,43 @@
-# Google 衝刺修煉數據庫
-# 狀態定義 (Status Definition):
-#   L1_FORGOT: (忘) - 必須重學
-#   L2_STRUGGLE: (解) - 磕磕絆絆，不夠熟
-#   L3_MASTERED: (定) - 20分鐘內零 Bug 秒殺 + 邊界全清
+# =============================================================================
+# LeetCode Hero - Cultivation Progress Database
+# =============================================================================
+# This database tracks your mastery level and progress on LeetCode problems
+# for technical interview preparation, particularly focused on Google-style
+# algorithmic challenges.
 #
-# Entry template:
+# STATUS DEFINITIONS:
+# -------------------
+# L1_FORGOT    (忘) - Problem completely forgotten, requires re-learning from scratch
+# L2_STRUGGLE  (解) - Can solve but with difficulty, not interview-ready yet
+# L3_MASTERED  (定) - Can solve within 20 minutes, bug-free, handling all edge cases
+#
+# FIELD DESCRIPTIONS:
+# -------------------
+# id:                  LeetCode problem number
+# title:               Official problem title from LeetCode
+# link:                Relative path to your solution folder
+# leetcode-difficulty: Official difficulty (easy/medium/hard)
+# topics:              Algorithm/data structure tags for categorization
+# status:              Your current mastery level (L1_FORGOT/L2_STRUGGLE/L3_MASTERED)
+# refinement_focus:    Specific areas to improve or key insights to remember
+#
+# TOPIC TAGS:
+# -----------
+# Common tags include: hashtable, hashset, array, linked-list, stack, queue,
+# binary-search, two-pointer, sliding-window, dp, backtracking, graph, tree,
+# sorting, string, math, greedy, neetcode150
+#
+# ENTRY TEMPLATE:
+# ---------------
 #  - id:
 #    title: ""
 #    link: "./"
 #    leetcode-difficulty:
-#    topics: []
+#    topics:
 #    status:
 #    refinement_focus: ""
+#
+# =============================================================================
 
 problems:
   - id: 1
@@ -97,7 +123,7 @@ problems:
   - id: 13
     title: "Roman to Integer"
     link: "./013 Roman to Integer"
-    leetcode-difficulty: medium
+    leetcode-difficulty: easy
     topics: [array]
     status: L2_STRUGGLE
     refinement_focus: "Need to peek next, to know current is + or -"
@@ -136,7 +162,7 @@ problems:
 
   - id: 18
     title: "4 Sum"
-    link: "./014_4Sum"
+    link: "./018_4Sum"
     leetcode-difficulty: medium
     topics: [k-sum, two-pointer, array, sorting]
     status: L2_STRUGGLE
@@ -210,7 +236,7 @@ problems:
     title: "Group Anagrams"
     link: "./049_Group_Anagrams"
     leetcode-difficulty: medium
-    topics: [hash-table, string, sorting, neetcode150]
+    topics: [hashtable, string, sorting, neetcode150]
     status: L3_MASTERED
     refinement_focus: "Sorting"
 
@@ -340,28 +366,148 @@ problems:
     leetcode-difficulty: medium
     topics: [graph, bfs, dfs, topological-sort, neetcode150]
     status: L1_FORGOT
-    refinement_focus: "FIXME: to add"
+    refinement_focus: "Now forget how to trace the path"
 
-#  - id:
-#    title: ""
-#    link: "./"
-#    leetcode-difficulty:
-#    topics: []
-#    status:
-#    refinement_focus: ""
+  - id: 211
+    title: "Design Add and Search Words Data Structure"
+    link: "./211_Design_Add_and_Search_Words_Data_Structure"
+    leetcode-difficulty: medium
+    topics: [trie, backtracking, design, neetcode150]
+    status: L1_FORGOT
+    refinement_focus: "First time seeing Trie, need to re-learn. The key is the struct (data)"
+
+  - id: 213
+    title: "House Robber II"
+    link: "./213_House_Robber_II"
+    leetcode-difficulty: medium
+    topics: [dp, circular, array, neetcode150]
+    status: L2_STRUGGLE
+    refinement_focus: "Arranged in circle. Two cases: rob house[0..n-2] or house[1..n-1]"
+
+  - id: 217
+    title: "Contains Duplicate"
+    link: "./217_Contains_Duplicate"
+    leetcode-difficulty: easy
+    topics: [hashset, array, neetcode150]
+    status: L3_MASTERED
+    refinement_focus: "HashSet"
+
+  - id: 238
+    title: "Product of Array Except Self"
+    link: "./238_Product_of_Array_Except_Self"
+    leetcode-difficulty: medium
+    topics: [array, prefix-sum, neetcode150]
+    status: L2_STRUGGLE
+    refinement_focus: "Prefix and Suffix product arrays, or use output array as prefix product array to save space"
+
+  - id: 239
+    title: "Sliding Window Maximum"
+    link: "./239_Sliding_Window_Maximum"
+    leetcode-difficulty: hard
+    topics: [monotonic-queue, array, sliding-window, neetcode150]
+    status: L1_FORGOT
+    refinement_focus: "Really need to re-learn monotonic queue. "
+
+  - id: 278
+    title: "First Bad Version"
+    link: "./278_First_Bad_Version"
+    leetcode-difficulty: easy
+    topics: [binary-search, neetcode150]
+    status: L3_MASTERED
+    refinement_focus: "Just standard [start, end) binary search to change the predicate"
+
+  - id: 300
+    title: "Longest Increasing Subsequence"
+    link: "./300_Longest_Increasing_Subsequence"
+    leetcode-difficulty: medium
+    topics: [dp, binary-search, neetcode150]
+    status: L2_STRUGGLE
+    refinement_focus: "DP O(n^2) or Binary Search O(n log n). Binary search is never practiced. dp[i] means from nums[0..i], the longest increasing subsequence that ends with nums[i]"
+
+  - id: 310
+    title: "Minimum Height Trees"
+    link: "./310_Minimum_Height_Trees"
+    leetcode-difficulty: medium
+    topics: [graph, bfs, tree, neetcode150]
+    status: L2_STRUGGLE
+    refinement_focus: "Peel off the leaves layer by layer until 1 or 2 nodes left"
+  
+  - id: 322
+    title: "Coin Change"
+    link: "./322_Coin_Change"
+    leetcode-difficulty: medium
+    topics: [dp, bfs, neetcode150]
+    status: L2_STRUGGLE
+    refinement_focus: "dp[i] means the minimum coins to make amount i"
+
+  - id: 347
+    title: "Top K Frequent Elements"
+    link: "./347_Top_K_Frequent_Elements"
+    leetcode-difficulty: medium
+    topics: [hashtable, heap, bucket-sort, neetcode150]
+    status: L2_STRUGGLE
+    refinement_focus: "Use HashMap to count frequency, then use Min-Heap or Bucket Sort to get top K. Bucket sort is optimal O(n), but I forget how to implement it"
+
+  - id: 416
+    title: "Partition Equal Subset Sum"
+    link: "./416_Partition_Equal_Subset_Sum"
+    leetcode-difficulty: medium
+    topics: [dp, knapsack, neetcode150]
+    status: L1_FORGOT
+    refinement_focus: "The first time I need to learn from the answer and learn knapsack. dp[i][j] means using nums[0..i], can we fill a knapsack of capacity j. dp[i][j] = dp[i-1][j] || dp[i-1][j-nums[i]]"
+
+  - id: 496
+    title: "Next Greater Element I"
+    link: "./496_Next_Greater_Element_I"
+    leetcode-difficulty: easy
+    topics: [monotonic-stack, hashtable, array, neetcode150]
+    status: L2_STRUGGLE
+    refinement_focus: "Monotonic stack."
+
+  - id: 503
+    title: "Next Greater Element II"
+    link: "./503_Next_Greater_Element_II"
+    leetcode-difficulty: medium
+    topics: [monotonic-stack, array, circular, neetcode150]
+    status: L2_STRUGGLE
+    refinement_focus: "Monotonic stack. Circular array can be simulated by iterating 2 times"
+
+  - id: 509
+    title: "Fibonacci Number"
+    link: "./509_Fibonacci_Number"
+    leetcode-difficulty: easy
+    topics: [dp, recursion, neetcode150]
+    status: L3_MASTERED
+    refinement_focus: "Recursion with memo or bottom-up DP"
 
   - id: 647
     title: "Palindromic Substrings"
     link: "./647_Palindromic_Substrings"
     leetcode-difficulty: medium
     topics: [dp, string, neetcode150]
-    status: L1_FORGOT
-    refinement_focus: "Very similar to 005_Longest_Palindromic_Substring"
+    status: L2_STRUGGLE
+    refinement_focus: "Very similar to 005_Longest_Palindromic_Substring. There are three ways: Expand, 2D-dp, or 1D-dp build up layer by layer"
 
-#  - id:
-#    title: ""
-#    link: "./"
-#    leetcode-difficulty:
-#    topics: []
-#    status:
-#    refinement_focus: ""
+  - id: 704
+    title: "Binary Search"
+    link: "./704_Binary_Search"
+    leetcode-difficulty: easy
+    topics: [binary-search, array, neetcode150]
+    status: L3_MASTERED
+    refinement_focus: "Standard binary search template"
+
+  - id: 746
+    title: "Min Cost Climbing Stairs"
+    link: "./746_Min_Cost_Climbing_Stairs"
+    leetcode-difficulty: easy
+    topics: [dp, array, neetcode150]
+    status: L3_MASTERED
+    refinement_focus: "dp[i] means min cost to reach step i. dp[i] = min(dp[i-1]+cost[i-1], dp[i-2]+cost[i-2])"
+
+  - id: 852
+    title: "Peak Index in a Mountain Array"
+    link: "./852_Peak_Index_in_a_Mountain_Array"
+    leetcode-difficulty: easy
+    topics: [binary-search, array, neetcode150]
+    status: L2_STRUGGLE
+    refinement_focus: "Binary search to find the first location where arr[i] > arr[i+1]"
