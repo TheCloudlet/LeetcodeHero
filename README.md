@@ -50,8 +50,8 @@ This is the task we discussed on Sept 6-7. Phase 1 (Diagnosis) revealed a clear 
 - **The Debt List (The 7 "L1_FORGOT" entries from YAML):**
 
   - [x] `211` (Design Add/Search Trie) - (Trie Data Structure)
-  - [ ] `207` (Course Schedule I) - (Kahn's / Topological Sort)
-  - [ ] `210` (Course Schedule II) - (Graph Cycle Check)
+  - [x] `207` (Course Schedule I) - (Kahn's / Topological Sort)
+  - [x] `210` (Course Schedule II) - (Graph Cycle Check)
   - [ ] `152` (Max Product Subarray)
   - [ ] `155` (Min Stack)
   - [ ] `239` (Sliding Window Max) - (Monotonic Queue)

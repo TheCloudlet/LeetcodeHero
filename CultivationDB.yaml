@@ -368,8 +368,11 @@ problems:
     link: "./210_Course_Schedule_II"
     leetcode-difficulty: medium
     topics: [graph, bfs, dfs, topological-sort, neetcode150]
-    status: L1_FORGOT
-    refinement_focus: "Now forget how to trace the path"
+    status: L2_STRUGGLE
+    refinement_focus: |
+      First time, now forget how to trace the path
+
+      Second time re-learn. Khan's algorithm is easy to implement. The error I made is indeg[course] == 0, I wrote indeg[course] != 0.
 
   - id: 211
     title: "Design Add and Search Words Data Structure"
