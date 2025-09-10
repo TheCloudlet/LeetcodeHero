@@ -101,6 +101,10 @@ ______________________________________________________________________
 1. **Late Machine Code Optimizations**
 1. **Code Emission**
 
+TODO: 每一個階段輸入跟輸出是什麼
+TODO: 每一個階段為什麼要放在這個位置
+
+
 ### 步驟 1: 指令選擇 (Instruction Selection - ISel)
 
 - **核心理論:** **DAG Pattern Matching**。ISel 將 IR 轉成一個 DAG (圖)，然後用 CPU 的「指令拼圖 (Patterns)」去「覆蓋 (Tile)」這個 DAG，找出總成本最低的方案。
@@ -167,3 +171,125 @@ ______________________________________________________________________
    - **是 Pre-RA Scheduler 的錯嗎？** 是不是它排得很爛，無謂地拉長了 Live Ranges？
    - **是 ISel 的錯嗎？** 是不是它選了一組很爛的指令，用了太多不必要的暫存器？
 1. **解決 (Solution):** 根據病因，去修改 `.td` 檔裡的 ISel Pattern，或是寫一個 C++ Pass 去優化，從根本上解決問題。
+
+______________________________________________________________________
+
+## Other topics
+
+### What is Phi Instruction and what is Phi Elimination?
+
+#### A. Phi 指令的本質 (The Nature of Phi Instructions)
+
+**什麼是 Phi 指令？**
+
+Phi 指令是 SSA (Static Single Assignment) 形式的核心概念，用於處理**控制流合併點 (Control Flow Join Points)**的問題。
+
+**問題場景：**
+```c
+int x;
+if (condition) {
+    x = 10;    // x 在這個路徑被定義為 10
+} else {
+    x = 20;    // x 在另一個路徑被定義為 20  
+}
+// 問題：這裡的 x 應該是什麼？
+return x * 2;
+```
+
+**在 SSA 中的解決方案：**
+```llvm
+entry:
+  br i1 %condition, label %then, label %else
+
+then:
+  %x1 = i32 10
+  br label %join
+
+else:
+  %x2 = i32 20
+  br label %join
+
+join:
+  %x3 = phi i32 [ %x1, %then ], [ %x2, %else ]  ; 這就是 Phi 指令！
+  %result = mul i32 %x3, 2
+  ret i32 %result
+```
+
+**Phi 指令的語義：**
+- `%x3 = phi i32 [ %x1, %then ], [ %x2, %else ]` 的意思是：
+  - 如果控制流從 `%then` 基本塊來，則 `%x3 = %x1`
+  - 如果控制流從 `%else` 基本塊來，則 `%x3 = %x2`
+
+#### B. 為什麼需要 Phi Elimination？
+
+**核心問題：真實 CPU 沒有 Phi 指令**
+
+Phi 是 SSA 的數學抽象概念，但真實的硬體（如 RISC-V）並沒有 `phi` 這種指令。因此，在 Register Allocation 階段，編譯器必須將 Phi 指令「消滅」，轉換成真實 CPU 能理解的指令。
+
+#### C. Phi Elimination 的兩種結局
+
+##### 結局 A：Register Coalescing (暫存器合併) - 免費的解決方案
+
+**條件：** Phi 的來源變數和結果變數的 Live Range **不重疊**
+
+**策略：** Register Allocator 將它們分配到**同一個物理暫存器**
+
+**範例：**
+```llvm
+; 原始 LLVM IR
+%x3 = phi i32 [ %x1, %then ], [ %x2, %else ]
+
+; 假設 RegAlloc 分配：%x1 -> s1, %x2 -> s1, %x3 -> s1
+; 結果：Phi 指令直接消失！無需額外指令。
+```
+
+**為什麼可行？** 因為在任何時間點，只有一個變數是「活著的」，所以它們可以安全地共享同一個暫存器。
+
+##### 結局 B：插入拷貝指令 (Copy Insertion) - 昂貴的解決方案
+
+**條件：** 暫存器壓力過高，強迫 RegAlloc 將 Phi 的來源和結果分配到**不同的物理暫存器**
+
+**策略：** 在每個前驅基本塊的末端插入 `mv` (拷貝) 指令
+
+**範例：**
+```llvm
+; 原始 LLVM IR
+%x3 = phi i32 [ %x1, %then ], [ %x2, %else ]
+
+; 假設 RegAlloc 分配：%x1 -> s1, %x2 -> s2, %x3 -> s3
+; 編譯器必須插入拷貝指令：
+
+then:
+  %x1 = ...           ; 原本的指令
+  mv s3, s1          ; 新插入：將 s1 拷貝到 s3
+  br join
+
+else:
+  %x2 = ...           ; 原本的指令  
+  mv s3, s2          ; 新插入：將 s2 拷貝到 s3
+  br join
+
+join:
+  ; phi 指令消失了，s3 現在包含正確的值
+  mul s4, s3, 2      ; %result = %x3 * 2
+```
+
+#### D. Phi Elimination 的效能影響
+
+**好消息 (結局 A)：**
+- 當 Register Coalescing 成功時，Phi Elimination 是「免費的」
+- 沒有額外的指令，沒有效能損失
+
+**壞消息 (結局 B)：**
+- 每個 Phi 指令可能變成多條 `mv` 指令
+- 增加程式碼大小和執行時間
+- **更糟糕的是**：新增的 `mv` 指令會佔用更多暫存器，進一步加劇暫存器壓力，可能引發更多 Spilling
+
+#### E. 對編譯器工程師的啟示
+
+**優化目標：** 盡可能讓 Register Coalescing 成功，避免插入不必要的拷貝指令。
+
+**策略：**
+1. **改善 Pre-RA Scheduler：** 更好的指令排程可以縮短 Live Range，減少干涉
+2. **Loop Rotation 等優化：** 重新組織控制流，減少 Phi 指令的數量
+3. **調整 Register Allocation 演算法：** 在分配決策中考慮 Phi 的 Coalescing 機會
