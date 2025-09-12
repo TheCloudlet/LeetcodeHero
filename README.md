@@ -21,7 +21,7 @@ Each problem is contained in its own directory, named with its LeetCode number a
 
 Feel free to check out my other projects on my [GitHub Profile](https://github.com/TheCloudlet).
 
-______________________________________________________________________
+---
 
 ## Progress Tracker
 
@@ -37,7 +37,7 @@ This step is non-negotiable. We must see the truth first.
 - **Core Mission:** Honestly tag every problem as `L1_FORGOT`, `L2_STRUGGLE`, or `L3_MASTERED`.
 - **Key Challenge (Psychological Nudity):** The `refinement_focus` field *must* be filled out. This forces the admission of weakness and is the cure for the "I feel awful" panic.
 
-______________________________________________________________________
+---
 
 ### Phase 2: The Triage (The "Debt List") - \[PRIORITY: ACTIVE\]
 
@@ -62,7 +62,7 @@ This is the task we discussed on Sept 6-7. Phase 1 (Diagnosis) revealed a clear 
   - [ ] `004` (Median of Two Sorted Arrays) - (Hard Binary Search)
   - [ ] `556` (Next Greater Element III)
 
-______________________________________________________________________
+---
 
 ### Phase 3: The Refinement (The "L2 Drill")
 
@@ -76,7 +76,7 @@ This is the "core" training. This is the medicine for the "I know the solution, 
   1. **Timer stops, pencils down.** (Stop coding).
   1. **Self Code Review (The Shame Challenge):** Open your new (ugly/buggy) code next to your old solution. Aloud, identify 3 things that are not "production-ready" or "elegant."
 
-______________________________________________________________________
+---
 
 ### Phase 4: The Gap Filling (New Knowledge) - \[LOCKED 🔒\]
 
