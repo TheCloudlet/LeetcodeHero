@@ -54,7 +54,10 @@ problems:
     leetcode-difficulty: medium
     topics: [linked-list, indirect-pointer, neetcode150]
     status: L2_STRUGGLE
-    refinement_focus: "Indirect-pointer and sum/carry"
+    refinement_focus: |
+      Try 1: Indirect-pointer and sum/carry handling
+
+      Try 2: Sum/carry is correctly handled, but indirect pointer usage is incorrect. The resultHead and indirect-pointer declarations are poorly structured. Also, (*indirect) = new ListNode(val); is unclear. I incorrectly wrote indirect = &(new ListNode());
 
   - id: 3
     title: "Longest Substring Without Repeating Characters"
