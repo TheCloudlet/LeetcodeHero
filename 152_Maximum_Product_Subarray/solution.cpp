@@ -1,5 +1,5 @@
 // Leetcode 152. Maximum Product Subarray
-// @tag: dp, array, neetcode150, need-review
+// @tag: dp, array, neetcode150, need-review, kadane-algorithm
 // @difficulty: medium
 
 // Let's think:
@@ -27,39 +27,28 @@
 // starting a new subarray calculation from that point.
 
 #include <algorithm>
-#include <cassert>
+#include <climits>
 #include <vector>
 
 class Solution {
 public:
-  int maxProduct(std::vector<int> &nums) {
-    assert(!nums.empty());
+  int maxProduct(const std::vector<int> &nums) {
+    int n = nums.size();
+    assert(n != 0);
 
-    // Initialize with the first element
-    int globalMaxProduct = nums[0];
-    int minProductEndingHere = nums[0];
-    int maxProductEndingHere = nums[0];
-
-    for (size_t i = 1; i < nums.size(); ++i) {
-      int n = nums[i];
-
-      // We need a temp variable because we're about to overwrite
-      // maxProductEndingHere, but we still need its old value to calculate
-      // the new minProductEndingHere.
-      int oldMax = maxProductEndingHere;
-
-      // The new max is the largest of n, n * old_max, or n * old_min
-      maxProductEndingHere =
-          std::max({n, n * oldMax, n * minProductEndingHere});
-
-      // The new min is the smallest of n, n * old_max, or n * old_min
-      minProductEndingHere =
-          std::min({n, n * oldMax, n * minProductEndingHere});
-
-      // Update the overall global maximum
-      globalMaxProduct = std::max(globalMaxProduct, maxProductEndingHere);
+    int globalMax = nums[0];
+    int localMax = nums[0];
+    int localMin = nums[0];
+    for (int idx = 1; idx < n; idx++) { // Start with idx 1
+      // Three conditions: the current is `-`, 0, `+`
+      int num = nums[idx];
+      int prevMax = localMax;
+      int prevMin = localMin;
+      localMax = std::max({prevMax * num, prevMin * num, num});
+      localMin = std::min({prevMax * num, prevMin * num, num});
+      globalMax = std::max(globalMax, localMax);
     }
 
-    return globalMaxProduct;
+    return globalMax;
   }
 };

@@ -52,7 +52,7 @@ This is the task we discussed on Sept 6-7. Phase 1 (Diagnosis) revealed a clear 
   - [x] `211` (Design Add/Search Trie) - (Trie Data Structure)
   - [x] `207` (Course Schedule I) - (Kahn's / Topological Sort)
   - [x] `210` (Course Schedule II) - (Graph Cycle Check)
-  - [ ] `152` (Max Product Subarray)
+  - [x] `152` (Max Product Subarray)
   - [x] `155` (Min Stack)
   - [ ] `239` (Sliding Window Max) - (Monotonic Queue)
   - [ ] `416` (Partition Equal Subset Sum) - (Knapsack DP)
