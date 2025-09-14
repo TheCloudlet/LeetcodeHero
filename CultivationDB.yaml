@@ -336,8 +336,10 @@ problems:
     link: "./155_Min_Stack"
     leetcode-difficulty: medium
     topics: [stack, design, neetcode150]
-    status: L1_FORGOT
-    refinement_focus: "The key is to use two stacks, one for normal stack, one for min stack"
+    status: L2_STRUGGLE
+    refinement_focus: |
+      Attempt 1: Don't understand the problem
+      Attempt 2: I know the key is to maintain two stacks, and I think through the logic, and slowly implement the code correctly. But cannot do it in a flash.
 
   - id: 167
     title: "Two Sum II - Input Array Is Sorted"
