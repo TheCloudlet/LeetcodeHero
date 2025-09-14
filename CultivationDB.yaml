@@ -243,6 +243,15 @@ problems:
     status: L3_MASTERED
     refinement_focus: "Sorting"
 
+  - id: 53
+    title: "Maximum Subarray"
+    link: "./053_Maximum_Subarray"
+    leetcode-difficulty: medium
+    topics: [dp, array, neetcode150, kadane-algorithm]
+    status: L3_MASTERED
+    refinement_focus: |
+      Attempt 1: One shot Kadane's algorithm after praticing LeetCode #152.
+
   - id: 56
     title: "Merge Intervals"
     link: "./056_Merge_Intervals"
