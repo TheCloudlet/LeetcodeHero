@@ -432,8 +432,10 @@ problems:
     link: "./239_Sliding_Window_Maximum"
     leetcode-difficulty: hard
     topics: [monotonic-queue, array, sliding-window, neetcode150]
-    status: L1_FORGOT
-    refinement_focus: "Really need to re-learn monotonic queue. "
+    status: L2_STRUGGLE
+    refinement_focus: |
+      Attempt 1: WTF
+      Attempt 2: I can quickly write the whole solution. But there are 2 problems. First, indices are wrong. Second, I caused overflow by not checking (idx >= k) when calculating std::size_t. Be extra cautious when using unsigned types.
 
   - id: 278
     title: "First Bad Version"

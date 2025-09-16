@@ -54,13 +54,14 @@ This is the task we discussed on Sept 6-7. Phase 1 (Diagnosis) revealed a clear 
   - [x] `210` (Course Schedule II) - (Graph Cycle Check)
   - [x] `152` (Max Product Subarray)
   - [x] `155` (Min Stack)
-  - [ ] `239` (Sliding Window Max) - (Monotonic Queue)
+  - [x] `239` (Sliding Window Max) - (Monotonic Queue)
   - [ ] `416` (Partition Equal Subset Sum) - (Knapsack DP)
 
 - **The 2 Missing Problems (The "New Debt"):**
 
   - [ ] `004` (Median of Two Sorted Arrays) - (Hard Binary Search)
   - [ ] `556` (Next Greater Element III)
+  - [ ] `918` Maximum Sum Circular Subarray (kadane's algorithm variant)
 
 ---
 
