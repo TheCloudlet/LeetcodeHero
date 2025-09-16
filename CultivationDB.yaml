@@ -482,8 +482,11 @@ problems:
     link: "./416_Partition_Equal_Subset_Sum"
     leetcode-difficulty: medium
     topics: [dp, knapsack, neetcode150]
-    status: L1_FORGOT
-    refinement_focus: "The first time I need to learn from the answer and learn knapsack. dp[i][j] means using nums[0..i], can we fill a knapsack of capacity j. dp[i][j] = dp[i-1][j] || dp[i-1][j-nums[i]]"
+    status: L2_STRUGGLE
+    refinement_focus: |
+      Attempt 1: The first time I need to learn from the answer and learn knapsack. dp[i][j] means using nums[0..i], can we fill a knapsack of capacity j. dp[i][j] = dp[i-1][j] || dp[i-1][j-nums[i]]"
+
+      Attempt 2: Fast implement. Forget to set dp[0] = true. Forget std::accumulate need to add accumulator 0 and include numeric. Should be L2~L3. But I set to L2. Lets practice later.
 
   - id: 496
     title: "Next Greater Element I"

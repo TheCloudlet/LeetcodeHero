@@ -55,7 +55,7 @@ This is the task we discussed on Sept 6-7. Phase 1 (Diagnosis) revealed a clear 
   - [x] `152` (Max Product Subarray)
   - [x] `155` (Min Stack)
   - [x] `239` (Sliding Window Max) - (Monotonic Queue)
-  - [ ] `416` (Partition Equal Subset Sum) - (Knapsack DP)
+  - [x] `416` (Partition Equal Subset Sum) - (Knapsack DP)
 
 - **The 2 Missing Problems (The "New Debt"):**
 
