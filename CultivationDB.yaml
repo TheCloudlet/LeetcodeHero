@@ -419,6 +419,14 @@ problems:
     status: L3_MASTERED
     refinement_focus: "HashSet"
 
+  - id: 226
+    title: "Invert Binary Tree"
+    link: "./226_Invert_Binary_Tree"
+    leetcode-difficulty: easy
+    topics: [tree, dfs, bfs, neetcode150]
+    status: L3_MASTERED
+    refinement_focus: "Recursion or Iteration"
+
   - id: 238
     title: "Product of Array Except Self"
     link: "./238_Product_of_Array_Except_Self"
