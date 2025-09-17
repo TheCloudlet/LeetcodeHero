@@ -528,6 +528,14 @@ problems:
     status: L3_MASTERED
     refinement_focus: "Recursion with memo or bottom-up DP"
 
+  - id: 543
+    title: "Diameter of Binary Tree"
+    link: "./543_Diameter_of_Binary_Tree"
+    leetcode-difficulty: easy
+    topics: [tree, bfs, binary-tree, neetcode150]
+    status: L3_MASTERED
+    refinement_focus: "Recursion or FOLD"
+
   - id: 647
     title: "Palindromic Substrings"
     link: "./647_Palindromic_Substrings"

@@ -122,7 +122,7 @@ ______________________________________________________________________
   - [ ] Complete all Neetcode 150 Linked List problems (0/13)
   - [ ] Review all `L2_STRUGGLE` Linked List problems from `CultivationDB.yaml`
 - [ ] **Theme: Trees (Basics & Traversal)**
-  - [ ] Complete core Neetcode 150 Tree problems (e.g., Traversal, Max Depth, Same Tree, Subtree) (2/7)
+  - [.] Complete core Neetcode 150 Tree problems (e.g., Traversal, Max Depth, Same Tree, Subtree) (3/7)
 - [ ] **Theme: Trees (Advanced)**
   - [ ] Complete advanced Neetcode 150 Tree problems (e.g., Level Order, BST, Tries) (0/7)
 - [ ] **Theme: DP / Graphs / etc.**
