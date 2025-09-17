@@ -105,21 +105,56 @@ This is the task we discussed on Sept 6-7. Phase 1 (Diagnosis) revealed a clear 
 
 ______________________________________________________________________
 
-### Phase 3: The Refinement (The "L2 Drill")
+### Phase 3: The Integration - Mindful Mastery
 
-This is the "core" training. This is the medicine for the "I know the solution, but my code isn't beautiful" demon.
+**Mission:** To systematically clear foundational weaknesses and the `L2_STRUGGLE` list by merging deliberate practice with the mindfulness techniques defined in the "LeetCode 心法練習 SOP". The goal is not just to solve problems, but to achieve a state of calm, focused flow while doing so.
 
-- [ ] **Task:** Execute timed drills for the entire **L2_STRUGGLE List** (the ~30 problems you logged).
-- **The Rules (The Bomb Disposal Drill):**
-  1. Open a **blank page** (no peeking at old solutions).
-  1. Set a **25-minute timer**.
-  1. Begin implementation.
-  1. **Timer stops, pencils down.** (Stop coding).
-  1. **Self Code Review (The Shame Challenge):** Open your new (ugly/buggy) code next to your old solution. Aloud, identify 3 things that are not "production-ready" or "elegant."
+**The Weekly Ritual:**
+
+- [ ] Dedicate each week to a specific theme.
+- [ ] For every practice session, begin with the `A. 解題前 (Pre-computation Checklist)`.
+- [ ] When facing difficulty or success, apply the `B. 解題中 (Runtime Debugging)` techniques.
+- [ ] End each session with the `C. 解題後 (Post-mortem Review)`.
+
+**Topic Mastery Checklist:**
+
+- [ ] **Theme: Linked List**
+  - [ ] Complete all Neetcode 150 Linked List problems (0/13)
+  - [ ] Review all `L2_STRUGGLE` Linked List problems from `CultivationDB.yaml`
+- [ ] **Theme: Trees (Basics & Traversal)**
+  - [ ] Complete core Neetcode 150 Tree problems (e.g., Traversal, Max Depth, Same Tree, Subtree) (1/7)
+- [ ] **Theme: Trees (Advanced)**
+  - [ ] Complete advanced Neetcode 150 Tree problems (e.g., Level Order, BST, Tries) (0/7)
+- [ ] **Theme: DP / Graphs / etc.**
+  - [ ] Systematically work through other `L2_STRUGGLE` topics from `CultivationDB.yaml`
+- [ ] **Theme: System Design (Introduction)**
+  - [ ] Watch/Read 2-3 introductory pieces of content on System Design per week (e.g., foundational concepts, classic problem overviews). (0/10)
 
 ______________________________________________________________________
 
-### Phase 4: The Gap Filling (New Knowledge) - \[LOCKED 🔒\]
+### Phase 4: The Synthesis - Holistic Interview Prep
 
-- [ ] **Task:** Attack all new, un-solved problems (like the rest of the **Neetcode 150 Trees** you wanted to do).
-- **Unlock Condition:** This phase only begins *after* Phase 2 (The Debt List) is 100% complete. We must fix our known debt before we acquire new knowledge.
+**Prerequisite:** This phase begins when the `L2_STRUGGLE` list feels manageable and you have built confidence in the core topics from Phase 3. The focus shifts from topic-by-topic learning to integrated, mock-interview-style practice.
+
+**Mission:** To synthesize all required skills—algorithmic fluency, system design, and behavioral communication—into a cohesive, interview-ready whole.
+
+**The Three Pillars of Preparation:**
+
+- **Pillar 1: Algorithmic Fluency**
+
+  - [ ] Conduct full-length (45 min) mock coding interviews (0/5)
+  - [ ] Review all `L3_MASTERED` problems to ensure instant recall (0/20)
+  - [ ] Tackle a curated list of `Hard` problems to expand boundaries (0/5)
+
+- **Pillar 2: System Design**
+
+  - [ ] Study and summarize foundational System Design concepts (e.g., CAP Theorem, Caching, Load Balancing, Databases) (0/5)
+  - [ ] Practice explaining the architecture of classic problems aloud (e.g., Design Twitter, Design a URL Shortener, Design a Web Crawler) (0/5)
+  - [ ] Conduct full-length (45 min) mock System Design interviews (0/3)
+
+- **Pillar 3: Behavioral & Communication**
+
+  - [ ] Draft and refine 5-7 key project stories using the STAR method.
+  - [ ] Practice telling your stories aloud, focusing on clarity and impact.
+  - [ ] Prepare thoughtful questions to ask your interviewers.
+  - [ ] Review your "About Me" and professional narrative from your resume.
