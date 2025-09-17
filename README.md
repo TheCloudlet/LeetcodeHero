@@ -21,7 +21,47 @@ Each problem is contained in its own directory, named with its LeetCode number a
 
 Feel free to check out my other projects on my [GitHub Profile](https://github.com/TheCloudlet).
 
----
+______________________________________________________________________
+
+# LeetCode 心法練習 SOP
+
+## A. 解題前 (Pre-computation Checklist)
+
+- [ ] 靜坐 1-2 分鐘，專注於呼吸，穩定心神。
+- [ ] 讀誦或默念以下動機設定：
+  > 願我能在此次練習中保持耐心與平靜。\
+  > 無論解出與否，願我能從中學到新的知識。\
+  > 這不僅是為了面試，也是一次鍛鍊我心智韌性的機會。
+
+## B. 解題中 (Runtime Debugging)
+
+### 當卡關、挫折感升起時 (Exception Handling: Frustration)
+
+- **觸發條件**：想了十分鐘還是沒頭緒、程式碼一直出錯、看到 test case 沒過。
+- **除錯程序**：
+  - [ ] **暫停 (Pause)**：立刻停止打字，雙手離開鍵盤。
+  - [ ] **返回錨點 (Return to Anchor)**：做一次有意識的深呼吸，感受氣息與身體。
+  - [ ] **標記念頭 (Label the Thought)**：在心中為升起的念頭貼上標籤。「*一個『我很笨』的念頭出現了*」、「*一個『焦慮』的感覺升起了*」。
+  - [ ] **認知分離 (Decoupling)**：認知到你正在「觀察」這個念頭，而非「是」這個念頭。
+  - [ ] **重新出發 (Resume)**：帶著更清明的心，重新審視問題。
+
+### 當解出題目、沾沾自喜時 (Handling Success Signals)
+
+- **觸發條件**：「Accepted!」的綠色字樣出現。
+- **除錯程序**：
+  - [ ] **覺察喜悅**：體會那份開心的感覺，並用正念觀察它。
+  - [ ] **標記念頭**：「*一個『我很強』的念頭出現了*」。
+  - [ ] **認知分離**：理解這份喜悅也是無常的、因緣和合的（來自過去的積累與當下的狀態），避免陷入「我執」。
+
+## C. 解題後 (Post-mortem Review)
+
+- [ ] **心念覆盤 (Mental Log Review)**：花一分鐘回想並回答：
+  1. 這次最讓你卡關的，是技術瓶頸，還是心理波動？
+  1. 在哪個時間點最想放棄？當時是什麼念頭在主導？
+  1. 你有沒有成功地使用「暫停呼吸」或「標記念頭」的工具？
+- [ ] **感恩作結 (Gratitude)**：感謝自己今天花時間進行了這次「雙重練習」（演算法 + 心法），為練習畫上一個積極的句點。
+
+______________________________________________________________________
 
 ## Progress Tracker
 
@@ -37,7 +77,7 @@ This step is non-negotiable. We must see the truth first.
 - **Core Mission:** Honestly tag every problem as `L1_FORGOT`, `L2_STRUGGLE`, or `L3_MASTERED`.
 - **Key Challenge (Psychological Nudity):** The `refinement_focus` field *must* be filled out. This forces the admission of weakness and is the cure for the "I feel awful" panic.
 
----
+______________________________________________________________________
 
 ### Phase 2: The Triage (The "Debt List") - \[PRIORITY: ACTIVE\]
 
@@ -63,7 +103,7 @@ This is the task we discussed on Sept 6-7. Phase 1 (Diagnosis) revealed a clear 
   - [ ] `556` (Next Greater Element III)
   - [ ] `918` Maximum Sum Circular Subarray (kadane's algorithm variant)
 
----
+______________________________________________________________________
 
 ### Phase 3: The Refinement (The "L2 Drill")
 
@@ -77,7 +117,7 @@ This is the "core" training. This is the medicine for the "I know the solution, 
   1. **Timer stops, pencils down.** (Stop coding).
   1. **Self Code Review (The Shame Challenge):** Open your new (ugly/buggy) code next to your old solution. Aloud, identify 3 things that are not "production-ready" or "elegant."
 
----
+______________________________________________________________________
 
 ### Phase 4: The Gap Filling (New Knowledge) - \[LOCKED 🔒\]
 
