@@ -292,6 +292,14 @@ problems:
     status: L2_STRUGGLE
     refinement_focus: "dp[n] means number of unique BST that can be built with n nodes. dp[n] = sum of dp[i-1]*dp[n-i] for i in [1..n]. Catalan number"
 
+  - id: 100
+    title: "Same Tree"
+    link: "./100_Same_Tree"
+    leetcode-difficulty: easy
+    topics: [tree, dfs, bfs, neetcode150]
+    status: L3_MASTERED
+    refinement_focus: "Recursion"
+
   - id: 110
     title: "Balanced Binary Tree"
     link: "./110_Balanced_Binary_Tree"
