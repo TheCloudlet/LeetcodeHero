@@ -292,6 +292,15 @@ problems:
     status: L2_STRUGGLE
     refinement_focus: "dp[n] means number of unique BST that can be built with n nodes. dp[n] = sum of dp[i-1]*dp[n-i] for i in [1..n]. Catalan number"
 
+  - id: 110
+    title: "Balanced Binary Tree"
+    link: "./110_Balanced_Binary_Tree"
+    leetcode-difficulty: easy
+    topics: [tree, dfs, bfs, neetcode150]
+    status: L2_STRUGGLE
+    refinement_focus: |
+      Attempt 1: Reviewed the definition of balanced biniary tree. Implementation is smooth, but I forgot to (add 1) when calculating height.
+
   - id: 104
     title: "Maximum Depth of Binary Tree"
     link: "./104_Maximum_Depth_of_Binary_Tree"
