@@ -553,6 +553,15 @@ problems:
     status: L3_MASTERED
     refinement_focus: "Recursion or FOLD"
 
+  - id: 572
+    title: "Subtree of Another Tree"
+    link: "./572_Subtree_of_Another_Tree"
+    leetcode-difficulty: easy
+    topics: [tree, dfs, bfs, neetcode150]
+    status: L3_MASTERED
+    refinement_focus: |
+      Attempt 1: Recusive and helper is same funciton can solve the problem. But I think what if we can use KMF algorithm way like structure?
+
   - id: 647
     title: "Palindromic Substrings"
     link: "./647_Palindromic_Substrings"
