@@ -470,6 +470,15 @@ problems:
       Attempt 1: WTF
       Attempt 2: I can quickly write the whole solution. But there are 2 problems. First, indices are wrong. Second, I caused overflow by not checking (idx >= k) when calculating std::size_t. Be extra cautious when using unsigned types.
 
+  - id: 235
+    title: "Lowest Common Ancestor of a Binary Search Tree"
+    link: "./235_Lowest_Common_Ancestor_of_a_Binary_Search_Tree"
+    leetcode-difficulty: medium
+    topics: [tree, monotonic, dfs, binary-tree, neetcode150]
+    status: L2_STRUGGLE
+    refinement_focus: |
+      Attempt 1: I didn't write the code correctly in a sprint. But I reframe the question and solve it correctly.
+
   - id: 278
     title: "First Bad Version"
     link: "./278_First_Bad_Version"
