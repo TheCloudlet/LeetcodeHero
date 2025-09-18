@@ -2,6 +2,33 @@
 // @tag: tree, dfs, binary-tree, neetcode150
 // @difficulty: easy
 
+// Serilize and KMP
+#if defined(SERIALIZE_AND_KMP)
+class Solution {
+public:
+  bool isSubtree(TreeNode *root, TreeNode *subRoot) {
+    std::string s1, s2;
+    serialize(root, s1);
+    serialize(subRoot, s2);
+    return s1.find(s2) != std::string::npos;
+  }
+
+private:
+  void serialize(TreeNode *root, std::string &output) {
+    if (!root) {
+      output.append("#");
+      return;
+    }
+    output.append(",");
+    output.append(std::to_string(root->val));
+    serialize(root->left, output);
+    serialize(root->right, output);
+  }
+};
+#endif
+
+// Basic soution:
+#if defined(BASIC)
 class Solution {
 public:
   bool isSubtree(TreeNode *root, TreeNode *subRoot) {
@@ -32,3 +59,4 @@ private:
     return isSameTree(s->left, t->left) && isSameTree(s->right, t->right);
   }
 };
+#endif
