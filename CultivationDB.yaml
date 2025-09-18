@@ -300,6 +300,15 @@ problems:
     status: L3_MASTERED
     refinement_focus: "Recursion"
 
+  - id: 102
+    title: "Binary Tree Level Order Traversal"
+    link: "./102_Binary_Tree_Level_Order_Traversal"
+    leetcode-difficulty: medium
+    topics: [tree, traversal, neetcode150]
+    status: L2_STRUGGLE
+    refinement_focus: |
+      Attempt 1: Use nullptr in a queue to mark level end. But I forget to check if the current queue is empty which means we are done. So it causes infinite loop.
+
   - id: 110
     title: "Balanced Binary Tree"
     link: "./110_Balanced_Binary_Tree"
