@@ -292,6 +292,15 @@ problems:
     status: L2_STRUGGLE
     refinement_focus: "dp[n] means number of unique BST that can be built with n nodes. dp[n] = sum of dp[i-1]*dp[n-i] for i in [1..n]. Catalan number"
 
+  - id: 98
+    title: "Validate Binary Search Tree"
+    link: "./098_Validate_Binary_Search_Tree"
+    leetcode-difficulty: medium
+    topics: [tree, dfs, binary-tree, neetcode150]
+    status: L1_FORGOT
+    refinement_focus: |
+      Attempt 1: I only validate all nodes (node->val vs node->left->val) recursively. But actually we need to pass down the valid range (min, max) from root to leaf.
+
   - id: 100
     title: "Same Tree"
     link: "./100_Same_Tree"
