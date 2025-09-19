@@ -69,13 +69,6 @@ ______________________________________________________________________
 
 **Mission:** To systematically clear foundational weaknesses and the `L2_STRUGGLE` list by merging deliberate practice with the mindfulness techniques defined in the "LeetCode 心法練習 SOP". The goal is not just to solve problems, but to achieve a state of calm, focused flow while doing so.
 
-**The Weekly Ritual:**
-
-- [ ] Dedicate each week to a specific theme.
-- [ ] For every practice session, begin with the `A. 解題前 (Pre-computation Checklist)`.
-- [ ] When facing difficulty or success, apply the `B. 解題中 (Runtime Debugging)` techniques.
-- [ ] End each session with the `C. 解題後 (Post-mortem Review)`.
-
 **Topic Mastery Checklist:**
 
 - [ ] **Theme: Linked List**
@@ -84,7 +77,7 @@ ______________________________________________________________________
 - [x] **Theme: Trees (Basics & Traversal)**
   - [x] Complete core Neetcode 150 Tree problems (e.g., Traversal, Max Depth, Same Tree, Subtree) (6/6)
 - [.] **Theme: Trees (Advanced)**
-  - [.] Complete advanced Neetcode 150 Tree problems (e.g., Level Order, BST, Tries) (2/9)
+  - [.] Complete advanced Neetcode 150 Tree problems (e.g., Level Order, BST, Tries) (3/9)
 - [ ] **Theme: DP / Graphs / etc.**
   - [ ] Systematically work through other `L2_STRUGGLE` topics from `CultivationDB.yaml`
 - [ ] **Theme: System Design (Introduction)**

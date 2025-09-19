@@ -404,6 +404,15 @@ problems:
     status: L2_STRUGGLE
     refinement_focus: "dp[i] means max amount can be robbed from house[0..i]. dp[i] = max(dp[i-1], dp[i-2]+nums[i]). Use foldl to optimize space"
 
+  - id: 199
+    title: "Binary Tree Right Side View"
+    link: "./199_Binary_Tree_Right_Side_View"
+    leetcode-difficulty: medium
+    topics: [tree, bfs, dfs, neetcode150]
+    status: L3_MASTERED
+    refinement_focus: |
+      Attempt 1: Almost one shot. Only forgot to check the root node is nullptr.
+
   - id: 207
     title: "Course Schedule"
     link: "./207_Course_Schedule"
