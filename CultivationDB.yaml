@@ -620,3 +620,12 @@ problems:
     topics: [binary-search, array, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: "Binary search to find the first location where arr[i] > arr[i+1]"
+
+  - id: 1448
+    title: "Count Good Nodes in Binary Tree"
+    link: "./1448_Count_Good_Nodes_in_Binary_Tree"
+    leetcode-difficulty: medium
+    topics: [tree, dfs, binary-tree, neetcode150]
+    status: L2_STRUGGLE
+    refinement_focus: |
+      Attempt 1: Very fun. I thought of using mono-stack, but it is not necessary. Just pass down the max value from root to leaf.
