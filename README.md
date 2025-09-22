@@ -56,6 +56,7 @@ This is the task we discussed on Sept 6-7. Phase 1 (Diagnosis) revealed a clear 
   - [x] `155` (Min Stack)
   - [x] `239` (Sliding Window Max) - (Monotonic Queue)
   - [x] `416` (Partition Equal Subset Sum) - (Knapsack DP)
+  - [ ] `320` (Kth Smallest Element in a BST)
 
 - **The 2 Missing Problems (The "New Debt"):**
 
@@ -77,7 +78,7 @@ ______________________________________________________________________
 - [x] **Theme: Trees (Basics & Traversal)**
   - [x] Complete core Neetcode 150 Tree problems (e.g., Traversal, Max Depth, Same Tree, Subtree) (6/6)
 - [.] **Theme: Trees (Advanced)**
-  - [.] Complete advanced Neetcode 150 Tree problems (e.g., Level Order, BST, Tries) (5/9)
+  - [.] Complete advanced Neetcode 150 Tree problems (e.g., Level Order, BST, Tries) (6/9)
 - [ ] **Theme: DP / Graphs / etc.**
   - [ ] Systematically work through other `L2_STRUGGLE` topics from `CultivationDB.yaml`
 - [ ] **Theme: System Design (Introduction)**

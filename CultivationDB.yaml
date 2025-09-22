@@ -479,6 +479,17 @@ problems:
     status: L3_MASTERED
     refinement_focus: "Recursion or Iteration"
 
+  - id: 230
+    title: "Kth Smallest Element in a BST"
+    link: "./230_Kth_Smallest_Element_in_a_BST"
+    leetcode-difficulty: medium
+    topics: [tree, dfs, binary-search-tree, neetcode150]
+    status: L1_FORGOT
+    refinement_focus: |
+      Attempt 1: I know the concept, but implementation has ALOT of problem.
+        - Recusive soultion I didn't make k and result all inside function argument as reference, I am thinking to put result as return value, but it is not a good idea.
+        - Iterative solution, The structure of while loop is totally wrong, I need to practice more.
+
   - id: 238
     title: "Product of Array Except Self"
     link: "./238_Product_of_Array_Except_Self"
