@@ -2,6 +2,10 @@
 // @tags: array, hash-table, divide-and-conquer, tree, binary-tree, neetcode150
 // @difficulty: medium
 
+// NOTE:
+// This is an O(N^2) solution because of the search of root in inorder array.
+// We can optimize it to O(N) by using a hash map to store the value -> index
+// mapping.
 #include <vector>
 
 class Solution {
