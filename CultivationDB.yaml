@@ -318,6 +318,15 @@ problems:
     refinement_focus: |
       Attempt 1: Use nullptr in a queue to mark level end. But I forget to check if the current queue is empty which means we are done. So it causes infinite loop.
 
+  - id: 105
+    title: "Construct Binary Tree from Preorder and Inorder Traversal"
+    link: "./105_Construct_Binary_Tree_from_Preorder_and_Inorder_Traversal"
+    leetcode-difficulty: medium
+    topics: [tree, dfs, recursion, neetcode150]
+    status: L2_STRUGGLE
+    refinement_focus: |
+      Attempt 1: I know the idea, but I cannot implement it fluently. The key is to correctly manage the indices of preorder and inorder arrays. Forgot to check if the current subtree is empty (preStart > preEnd || inStart > inEnd)
+
   - id: 110
     title: "Balanced Binary Tree"
     link: "./110_Balanced_Binary_Tree"
