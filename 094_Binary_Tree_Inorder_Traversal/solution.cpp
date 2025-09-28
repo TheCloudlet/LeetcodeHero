@@ -1,3 +1,7 @@
+// Leetcode 94. Binary Tree Inorder Traversal
+// @tag: tree, dfs, stack
+// @difficulty: easy
+
 /**
  * Definition for a binary tree node.
  * struct TreeNode {
@@ -11,35 +15,33 @@
  * };
  */
 
+#include <vector>
 #include <stack>
 
 class Solution {
 public:
-  int kthSmallest(TreeNode *root, int k) {
+  std::vector<int> inorderTraversal(TreeNode *root) {
     if (!root) {
-      return -1;
+      return {};
     }
+    std::vector<int> result;
 
-    std::stack<TreeNode *> nodeStack;
     TreeNode *curr = root;
+    std::stack<TreeNode *> traversalStack;
 
-    while (curr || !nodeStack.empty()) {
+    while (curr || !traversalStack.empty()) {
       while (curr) {
-        nodeStack.push(curr);
+        traversalStack.push(curr);
         curr = curr->left;
       }
 
-      curr = nodeStack.top();
-      nodeStack.pop();
-
-      --k;
-      if (k <= 0) {
-        return curr->val;
-      }
+      curr = traversalStack.top();
+      traversalStack.pop();
+      result.push_back(curr->val);
 
       curr = curr->right;
     }
 
-    return -1;
+    return result;
   }
 };

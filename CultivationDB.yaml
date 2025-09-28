@@ -283,6 +283,14 @@ problems:
     topics: [dp, string, backtracking, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: "dp[i] means ways to decode s[0..i-1]. Also, we need to handle 1 digit and 2 digit separately"
+  
+  - id: 94
+    title: "Binary Tree Inorder Traversal"
+    link: "./094_Binary_Tree_Inorder_Traversal"
+    leetcode-difficulty: easy
+    topics: [tree, dfs]
+    status: L3_MASTERED
+    refinement_focus: "Just finish after #230 so it is a one shot"
 
   - id: 96
     title: "Unique Binary Search Trees"
@@ -502,11 +510,13 @@ problems:
     link: "./230_Kth_Smallest_Element_in_a_BST"
     leetcode-difficulty: medium
     topics: [tree, dfs, binary-search-tree, neetcode150]
-    status: L1_FORGOT
+    status: L2_STRUGGLE
     refinement_focus: |
-      Attempt 1: I know the concept, but implementation has ALOT of problem.
-        - Recusive soultion I didn't make k and result all inside function argument as reference, I am thinking to put result as return value, but it is not a good idea.
-        - Iterative solution, The structure of while loop is totally wrong, I need to practice more.
+      Attempt 1: I know the concept, but implementation has a lot of problems.
+        - Recursive solution: I didn't make k and result function arguments as references. I was thinking to put result as return value, but it is not a good idea.
+        - Iterative solution: The structure of while loop is totally wrong. I need to practice more.
+
+      Attempt 2: I know the big structure but I have problems with the iterative solution. The key is using `while (curr || !stack.empty())` as the main iterating method, and we should not prevent curr from being null. In fact, we want to see curr is null so that we use pop to backtrack, then go to the right child.
 
   - id: 238
     title: "Product of Array Except Self"
