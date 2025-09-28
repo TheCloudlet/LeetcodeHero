@@ -47,7 +47,7 @@ This is the task we discussed on Sept 6-7. Phase 1 (Diagnosis) revealed a clear 
   - [x] `155` (Min Stack)
   - [x] `239` (Sliding Window Max) - (Monotonic Queue)
   - [x] `416` (Partition Equal Subset Sum) - (Knapsack DP)
-  - [ ] `230` (Kth Smallest Element in a BST)
+  - [x] `230` (Kth Smallest Element in a BST)
 
 - **The 2 Missing Problems (The "New Debt"):**
 

@@ -289,8 +289,8 @@ problems:
     link: "./094_Binary_Tree_Inorder_Traversal"
     leetcode-difficulty: easy
     topics: [tree, dfs]
-    status: L3_MASTERED
-    refinement_focus: "Just finish after #230 so it is a one shot"
+    status: L2_STRUGGLE
+    refinement_focus: "Just finish after #230 so it is a one shot. But I still recomment to practice more."
 
   - id: 96
     title: "Unique Binary Search Trees"
