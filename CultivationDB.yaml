@@ -283,7 +283,7 @@ problems:
     topics: [dp, string, backtracking, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: "dp[i] means ways to decode s[0..i-1]. Also, we need to handle 1 digit and 2 digit separately"
-  
+
   - id: 94
     title: "Binary Tree Inorder Traversal"
     link: "./094_Binary_Tree_Inorder_Traversal"
@@ -384,6 +384,14 @@ problems:
     topics: [dp, string, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: "Not absolutely sure I can get this right during interview, but I know the idea. ip[i] means s[i..end] can be segmented. Need a helper function isPrefix and a recursive function with memo"
+
+  - id: 144
+    title: "Binary Tree Preorder Traversal"
+    link: "./144_Binary_Tree_Preorder_Traversal"
+    leetcode-difficulty: medium
+    topics: [tree, dfs, neetcode150]
+    status: L2_STRUGGLE
+    refinement_focus: "Push right first then left into stack"
 
   - id: 146
     title: "LRU Cache"
