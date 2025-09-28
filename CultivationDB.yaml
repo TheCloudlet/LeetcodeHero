@@ -343,7 +343,7 @@ problems:
     topics: [tree, dfs, bfs, neetcode150]
     status: L3_MASTERED
     refinement_focus: "Basic DP"
-  
+
   - id: 124
     title: "Binary Tree Maximum Path Sum"
     link: "./124_Binary_Tree_Maximum_Path_Sum"
@@ -542,6 +542,15 @@ problems:
     topics: [binary-search, neetcode150]
     status: L3_MASTERED
     refinement_focus: "Just standard [start, end) binary search to change the predicate"
+
+  - id: 297
+    title: "Serialize and Deserialize Binary Tree"
+    link: "./297_Serialize_and_Deserialize_Binary_Tree"
+    leetcode-difficulty: hard
+    topics: [tree, bfs, dfs, binary-tree, design, neetcode150]
+    status: L2_STRUGGLE
+    refinement_focus: |
+      Attempt 1: Core tree logic (BFS traversal) was fine. My main friction point was implementing the string tokenizer from scratch quickly. Need to internalize the `stringstream` + `getline` pattern. Also, remember to handle the trailing comma from serialize.
 
   - id: 300
     title: "Longest Increasing Subsequence"
