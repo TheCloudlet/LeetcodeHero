@@ -388,10 +388,20 @@ problems:
   - id: 144
     title: "Binary Tree Preorder Traversal"
     link: "./144_Binary_Tree_Preorder_Traversal"
-    leetcode-difficulty: medium
-    topics: [tree, dfs, neetcode150]
+    leetcode-difficulty: easy
+    topics: [tree, dfs]
     status: L2_STRUGGLE
-    refinement_focus: "Push right first then left into stack"
+    refinement_focus: |
+      Attempt 1: Easier than inorder or Postorder iterative solution. But I still have problems with the structure of while loop. I need to practice more.
+
+  - id: 145
+    title: "Binary Tree Postorder Traversal"
+    link: "./145_Binary_Tree_Postorder_Traversal"
+    leetcode-difficulty: easy
+    topics: [tree, dfs]
+    status: L1_FORGOT
+    refinement_focus: |
+      Attempt 1: This is definatly hard if you want to use iterative solution but you didn't come up the `std::reverse` trick.
 
   - id: 146
     title: "LRU Cache"
