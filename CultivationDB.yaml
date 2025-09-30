@@ -187,6 +187,15 @@ problems:
     status: L2_STRUGGLE
     refinement_focus: "I know the stack solution, but I cannot execute it fluently and elegantly"
 
+  - id: 21
+    title: "Merge Two Sorted Lists"
+    link: "./021_Merge_Two_Sorted_Lists"
+    leetcode-difficulty: easy
+    topics: [linked-list, indirect-pointer, neetcode150]
+    status: L2_STRUGGLE
+    refinement_focus: |
+      Attempt 1: Normal dummy node is okay. But I forget indirect-pointer usage. Always use `ListNode *result;` then `ListNode **indirect = &result;`
+
   - id: 24
     title: "Swap Nodes in Pairs"
     link: "./024_Swap_Nodes_in_Pairs"
@@ -465,7 +474,7 @@ problems:
     status: L3_MASTERED
     refinement_focus: |
       Attempt 1: Almost one shot. Only forgot to check the root node is nullptr.
-  
+
   - id: 206
     title: "Reverse Linked List"
     link: "./206_Reverse_Linked_List"
