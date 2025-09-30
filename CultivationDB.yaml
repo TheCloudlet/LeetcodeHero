@@ -465,6 +465,17 @@ problems:
     status: L3_MASTERED
     refinement_focus: |
       Attempt 1: Almost one shot. Only forgot to check the root node is nullptr.
+  
+  - id: 206
+    title: "Reverse Linked List"
+    link: "./206_Reverse_Linked_List"
+    leetcode-difficulty: easy
+    topics: [linked-list, iteration, recursion, neetcode150]
+    status: L1_FORGOT
+    refinement_focus: |
+      Attempt 1: Every time I do this, I feel very frustrated. I know the idea.
+        - Iterative: use 3 pointers prev, curr, next. But I cannot implement correctly.
+        - Recursive: In Haskell, this is easy `reverse (x:xs) = (reverse xs) ++ [x]`, but I cannot implement it in C++. It is `head->next->next = head; head->next = nullptr; return newHead;`...
 
   - id: 207
     title: "Course Schedule"

@@ -48,6 +48,7 @@ This is the task we discussed on Sept 6-7. Phase 1 (Diagnosis) revealed a clear 
   - [x] `239` (Sliding Window Max) - (Monotonic Queue)
   - [x] `416` (Partition Equal Subset Sum) - (Knapsack DP)
   - [x] `230` (Kth Smallest Element in a BST)
+  - [ ] `206` (Reverse Linked List)
 
 - **The 2 Missing Problems (The "New Debt"):**
 
@@ -64,7 +65,7 @@ ______________________________________________________________________
 **Topic Mastery Checklist:**
 
 - [ ] **Theme: Linked List**
-  - [ ] Complete all Neetcode 150 Linked List problems (0/13)
+  - [ ] Complete all Neetcode 150 Linked List problems (1/13)
   - [ ] Review all `L2_STRUGGLE` Linked List problems from `CultivationDB.yaml`
 - [x] **Theme: Trees (Basics & Traversal)** (6/6)
 - [x] **Theme: Trees (Advanced)** (9/9)
