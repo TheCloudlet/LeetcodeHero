@@ -73,7 +73,7 @@ ______________________________________________________________________
   - [ ] Systematically work through other `L2_STRUGGLE` topics from `CultivationDB.yaml`
 - [ ] **Theme: System Design (Introduction)**
   - [ ] Watch/Read 2-3 introductory pieces of content on System Design per week (e.g., foundational concepts, classic problem overviews). (0/10)
-
+- [ ] Interval Tree
 ______________________________________________________________________
 
 ### Phase 4: The Synthesis - Holistic Interview Prep
