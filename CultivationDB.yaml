@@ -729,6 +729,15 @@ problems:
     title: "Compute Alternating Sum"
     link: "./3701_Compute_Alternating_Sum"
     leetcode-difficulty: easy
-    topics: [array]
+    topics: [array, leetcode-contest]
     status: L3_MASTERED
     refinement_focus: "Trivial"
+
+  - id: 3702
+    title: "Longest Subsequence With Non-Zero Bitwise XOR"
+    link: "./3702_Longest_Subsequence_With_Non-Zero_Bitwise_XOR"
+    leetcode-difficulty: medium
+    topics: [bit-manipulation, leetcode-contest]
+    status: L1_FORGOT
+    refinement_focus: |
+      Attempt 1: There are only 3 cases, but I thought we can only solve it by DP.
