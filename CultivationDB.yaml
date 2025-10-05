@@ -724,3 +724,11 @@ problems:
     status: L2_STRUGGLE
     refinement_focus: |
       Attempt 1: Very fun. I thought of using mono-stack, but it is not necessary. Just pass down the max value from root to leaf.
+
+  - id: 3701
+    title: "Compute Alternating Sum"
+    link: "./3701_Compute_Alternating_Sum"
+    leetcode-difficulty: easy
+    topics: [array]
+    status: L3_MASTERED
+    refinement_focus: "Trivial"
