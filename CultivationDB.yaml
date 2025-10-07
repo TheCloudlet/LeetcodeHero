@@ -196,6 +196,8 @@ problems:
     refinement_focus: |
       Attempt 1: Normal dummy node is okay. But I forget indirect-pointer usage. Always use `ListNode *result;` then `ListNode **indirect = &result;`
 
+      Attempt 2: One-shot using indirect pointer. But a little uncertain when doing it in a sprint.
+
   - id: 24
     title: "Swap Nodes in Pairs"
     link: "./024_Swap_Nodes_in_Pairs"
@@ -494,6 +496,8 @@ problems:
       Attempt 1: Every time I do this, I feel very frustrated. I know the idea.
         - Iterative: use 3 pointers prev, curr, next. But I cannot implement correctly.
         - Recursive: In Haskell, this is easy `reverse (x:xs) = (reverse xs) ++ [x]`, but I cannot implement it in C++. It is `head->next->next = head; head->next = nullptr; return newHead;`...
+
+      Attempt 2: I use iterative. It is almost an one-shot. Only return I should return prev instead of curr.
 
   - id: 207
     title: "Course Schedule"
