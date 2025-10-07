@@ -741,3 +741,12 @@ problems:
     status: L1_FORGOT
     refinement_focus: |
       Attempt 1: There are only 3 cases, but I thought we can only solve it by DP.
+
+  - id: 3073
+    title: "Remove K-Balanced Substrings"
+    link: "./3073_Remove_K-Balanced_Substrings"
+    leetcode-difficulty: medium
+    topics: [string, leetcode-contest]
+    status: L2_STRUGGLE
+    refinement_focus: |
+      Attempt 1: Didn't finish during contest. Use vector<pair<char, int>> to store (char, count) pairs. Then simulate the removal of k-balanced substrings.
