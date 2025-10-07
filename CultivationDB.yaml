@@ -394,6 +394,15 @@ problems:
     status: L2_STRUGGLE
     refinement_focus: "Not absolutely sure I can get this right during interview, but I know the idea. ip[i] means s[i..end] can be segmented. Need a helper function isPrefix and a recursive function with memo"
 
+  - id: 141
+    title: "Linked List Cycle"
+    link: "./141_Linked_List_Cycle"
+    leetcode-difficulty: easy
+    topics: [linked-list, two-pointer, fast-and-slow-pointer, neetcode150]
+    status: L2_STRUGGLE
+    refinement_focus: |
+      Attempt 1: I know the fast/slow pointer idea, but I cannot implement it fluently. The key is to check if fast and fast->next are nullptr directly in the while loop condition.
+
   - id: 144
     title: "Binary Tree Preorder Traversal"
     link: "./144_Binary_Tree_Preorder_Traversal"
