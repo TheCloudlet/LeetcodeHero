@@ -53,3 +53,17 @@ public:
     return newHead;
   }
 };
+
+// NOTE: Alternative O(1) Space Solution
+//
+// Just as a point of interest, there's a clever but less intuitive solution
+// that uses O(1) extra space by modifying the list in-place. It involves
+// three passes:
+//
+// 1. Weave: Create a copy of each node and place it immediately after its
+// original node. A -> B becomes A -> A' -> B -> B'.
+//
+// 2. Set Random Pointers: For each original node `curr`, its copy's random
+// pointer can be found via `curr->next->random = curr->random->next`.
+//
+// 3. Unweave: Separate the combined list back into two distinct lists.
