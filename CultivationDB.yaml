@@ -387,6 +387,15 @@ problems:
     topics: [hashset, array, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: "sort is O(n log n), use HashSet to achieve O(n). Check only sequence starters"
+    
+  - id: 138
+    title: "Copy List with Random Pointer"
+    link: "./138_Copy_List_with_Random_Pointer"
+    leetcode-difficulty: medium
+    topics: [linked-list, hashtable, neetcode150]
+    status: L3_MASTERED
+    refinement_focus: |
+      Attempt 1: One-shot with HashMap.
 
   - id: 139
     title: "Word Break"
