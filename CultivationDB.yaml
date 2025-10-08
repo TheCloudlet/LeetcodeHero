@@ -406,6 +406,15 @@ problems:
       Attempt 1: I know the fast/slow pointer idea, but I cannot implement it fluently. The key is to check if fast and fast->next are nullptr directly in the while loop condition.
 
       Attempt 2: One-shot
+  
+  - id: 143
+    title: "Reorder List"
+    link: "./143_Reorder_List"
+    leetcode-difficulty: medium
+    topics: [linked-list, two-pointer, fast-and-slow-pointer, reverse, neetcode150]
+    status: L2_STRUGGLE
+    refinement_focus: |
+      Attempt 1: I know the big picture. But failed at finding the mid node. I used `while (fast && fast->next)` which makes slow point to the second middle node in even-length list. So when merging, the first half is longer than the second half by one node, which causes problem.
 
   - id: 144
     title: "Binary Tree Preorder Traversal"
