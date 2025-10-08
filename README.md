@@ -65,7 +65,7 @@ ______________________________________________________________________
 **Topic Mastery Checklist:**
 
 - [ ] **Theme: Linked List**
-  - [ ] Complete all Neetcode 150 Linked List problems (4/13)
+  - [ ] Complete all Neetcode 150 Linked List problems (5/13)
   - [ ] Review all `L2_STRUGGLE` Linked List problems from `CultivationDB.yaml`
 - [x] **Theme: Trees (Basics & Traversal)** (6/6)
 - [x] **Theme: Trees (Advanced)** (9/9)
