@@ -192,7 +192,7 @@ problems:
     link: "./021_Merge_Two_Sorted_Lists"
     leetcode-difficulty: easy
     topics: [linked-list, indirect-pointer, neetcode150]
-    status: L2_STRUGGLE
+    status: L3_MASTERED
     refinement_focus: |
       Attempt 1: Normal dummy node is okay. But I forget indirect-pointer usage. Always use `ListNode *result;` then `ListNode **indirect = &result;`
 
@@ -401,9 +401,11 @@ problems:
     link: "./141_Linked_List_Cycle"
     leetcode-difficulty: easy
     topics: [linked-list, two-pointer, fast-and-slow-pointer, neetcode150]
-    status: L2_STRUGGLE
+    status: L3_MASTERED
     refinement_focus: |
       Attempt 1: I know the fast/slow pointer idea, but I cannot implement it fluently. The key is to check if fast and fast->next are nullptr directly in the while loop condition.
+
+      Attempt 2: One-shot
 
   - id: 144
     title: "Binary Tree Preorder Traversal"
@@ -491,7 +493,7 @@ problems:
     link: "./206_Reverse_Linked_List"
     leetcode-difficulty: easy
     topics: [linked-list, iteration, recursion, neetcode150]
-    status: L1_FORGOT
+    status: L2_STRUGGLE
     refinement_focus: |
       Attempt 1: Every time I do this, I feel very frustrated. I know the idea.
         - Iterative: use 3 pointers prev, curr, next. But I cannot implement correctly.
