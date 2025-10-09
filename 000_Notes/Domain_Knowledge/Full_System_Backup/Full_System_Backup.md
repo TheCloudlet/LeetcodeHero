@@ -309,6 +309,7 @@ The core of this workflow is **LVM (Logical Volume Manager)** and its underlying
 
 More to read:
 
+- [Hitachi Copy On Write](https://download.hitachivantara.com/download/epcra/rd701311.pdf) & [Hitachi VSP](https://en.wikipedia.org/wiki/Virtual_Storage_Platform)
 - [Storage Snapshot technology: techniques and details](https://stonefly.com/blog/storage-snapshot-technology-techniques-and-details/)
 - [How to create snapshots on Linux](https://linuxconfig.org/how-to-create-snapshots-on-linux)
 
@@ -371,136 +372,158 @@ The key is we
    2. **Kernel Driver Development**: Writing kernel-level code to intercept and log write operations
    3. **Change Log Management**: Maintaining persistent bitmaps or change logs that survive system restarts
 
-FIXME: Start
-
-#### Linux vs Windows VSS Component Mapping
-
-| VSS (Windows) Role               | Linux Equivalent                   | Description                                                                             |
-| -------------------------------- | ---------------------------------- | --------------------------------------------------------------------------------------- |
-| **VSS Service** (Coordinator)    | Backup software/script             | In Linux, typically backup software or admin scripts act as the orchestrator            |
-| **Writer** (Applications)        | Database applications              | e.g., MySQL, PostgreSQL - they need to be told "prepare for backup"                     |
-| **Provider** (Snapshot provider) | Kernel **Device Mapper** framework | The actual low-level kernel technology that creates snapshots; LVM is the frontend tool |
-| **Requestor** (Requester)        | Backup software/script             | The commander that initiates the backup workflow                                        |
-
-#### Complete Linux Backup Workflow
-
-**Scenario**: Backup a running Linux server with root directory on LVM volume `/dev/vg_main/lv_root`.
-
-##### Step 1: Quiesce - Application and Filesystem Freeze
-
-This corresponds to VSS "Freeze" phase, but in Linux typically consists of two parts:
-
-**1.1 Notify Applications to Enter Consistent State**
-
-The backup script's (Requestor) first task is to notify critical applications (Writers) like databases to **flush** in-memory data to disk.
-
-This has no unified command - requires application-specific operations:
-
-**MySQL**:
-
-```sql
-FLUSH TABLES WITH READ LOCK;
-```
-
-Ensures all tables are written to disk and temporarily locked.
-
-**PostgreSQL**:
-
-```sql
-SELECT pg_start_backup('backup_label');
-```
-
-Enters backup mode.
-
-This step ensures **application-level data consistency**.
-
-**1.2 Freeze Filesystem Write Operations**
-
-For ultimate stability, the backup script calls the `fsfreeze` tool:
-
-```bash
-fsfreeze --freeze /
-```
-
-**Kernel-level operation**: `fsfreeze` sends a special `ioctl()` system call (`FIFREEZE`) to the filesystem (e.g., ext4 or XFS). Upon receiving this command, the filesystem driver **suspends all new write operations**, queuing them. This effectively blocks all write traffic at the **VFS (Virtual File System)** layer.
-
-⚠️ **This freeze window must be extremely short**.
-
-##### Step 2: Create Snapshot - Kernel Copy-on-Write Performance
-
-At the moment the filesystem is frozen by `fsfreeze`, the backup script immediately executes the most critical step:
-
-```bash
-lvcreate --snapshot --name root_snapshot --size 10G /dev/vg_main/lv_root
-```
-
-**Kernel-level operation** (Linux "Provider" at work):
-
-1. `lvcreate` tool sends `ioctl()` system calls to the kernel's **Device Mapper** framework requesting snapshot creation.
-
-2. **Device Mapper** completes the following operations almost instantly:
-   - Creates a new virtual block device `/dev/vg_main/root_snapshot`
-   - Establishes a **CoW (Copy-on-Write)** area (our allocated 10G space) and an **Exception Table** to track changes
-   - From this nanosecond forward, a **read-only, time-frozen view** pointing to the original volume (`lv_root`) is born.
-
-##### Step 3: Thaw - Resume System Operation
-
-After successful snapshot creation, the freeze state must be immediately released:
-
-```bash
-fsfreeze --unfreeze /
-```
-
-**Kernel-level operation**: `fsfreeze` sends another `ioctl()` call (`FITHAW`) to the filesystem, telling it to release the previously suspended write queue and resume all normal I/O operations.
-
-Simultaneously, the backup script notifies databases and other applications to unlock and resume service.
-
-💡 **The entire freeze window**, from `fsfreeze --freeze` to `fsfreeze --unfreeze`, should ideally complete within **1 second**, completely transparent to users.
-
-##### Step 4: Backup from Snapshot - Safe, Leisurely Data Copy
-
-Now our backup script enters the safest, most relaxed phase:
-
-```bash
-dd if=/dev/vg_main/root_snapshot of=/mnt/backup/backup.img bs=4M
-```
-
-**Kernel-level operation**:
-
-1. `dd` begins reading LBA blocks from `/dev/vg_main/root_snapshot` device.
-
-2. All read requests are processed by **Device Mapper**. Since our read target is the snapshot, Device Mapper strictly follows **CoW table rules**, returning only original data belonging to the snapshot creation moment.
-
-3. Meanwhile, users might be frantically writing new files to `lv_root`. With each write, Device Mapper silently performs **CoW operations** in the background, moving old data to the snapshot area to protect our snapshot view's integrity.
-
-4. `dd` can take hours to complete its work, **never worrying about source data changes**. It reads from an absolutely static point in time.
-
-**Cleanup**: After backup completion, delete the snapshot and release resources:
-
-```bash
-lvremove /dev/vg_main/root_snapshot
-```
-
-#### Key Insight
-
-This entire workflow, though composed of different tools (`fsfreeze`, `lvcreate`, `dd`, `lvremove`), shares the same core principle as **Windows VSS**: **creating a static point-in-time copy through kernel-level Copy-on-Write mechanisms**.
-
-### Restoration Process (Simplified)
-
-**Complete Disk Restoration**:
-
-- Boot from external media (USB, CD)
-- Write the image file back to LBA blocks in order
-- Result: **Identical disk** with same partitions, boot loader, OS, and files
-
-**Key Advantage**: Since we captured everything at the LBA level, the restored system boots **exactly** as it was, including:
-
-- Operating system state
-- Installed programs
-- User settings and documents
-- Even the exact same free space pattern
-  FIXME: End
-
 ## What is an "Image File" or "Disk Image"?
 
-## What is Full System Backup vs File Backup?
+## What is Bare-Metal Backup vs File Backup?
+
+## Competitor products
+
+### Copy on Write Snapshot
+
+**Linux/BSD System Tools:**
+
+- **Btrfs (Linux)**: `btrfs subvolume snapshot`
+
+  - Native CoW filesystem with built-in snapshot capabilities
+  - Features: Subvolume management, send/receive for remote replication, compression
+  - Use case: Modern Linux systems requiring advanced filesystem features
+
+- **ZFS (Linux/BSD)**: `zfs snapshot`
+
+  - Enterprise-grade filesystem with comprehensive data protection
+  - Features: CoW snapshots, block-level deduplication, built-in compression, checksumming
+  - Use case: High-performance storage systems requiring data integrity guarantees
+
+- **LVM (Linux)**: `lvcreate --snapshot`
+  - Lower-level volume management approach using Device Mapper
+  - Features: Maximum flexibility, works with any filesystem, kernel-level CoW implementation
+  - Trade-off: Lower performance overhead but highly versatile for custom backup solutions
+
+**Enterprise Storage Systems:**
+
+- **NetApp ONTAP**: Advanced snapshot and replication capabilities based on WAFL (Write Anywhere File Layout) filesystem
+- **Dell EMC PowerMax / Unity XT**: Support for CoW snapshots and comprehensive data protection
+- **Pure Storage FlashArray**: CoW snapshot technology with instant cloning capabilities
+- **IBM Spectrum Virtualize / FlashSystem**: CoW snapshots with multi-tier backup strategies
+
+**Virtualization Platforms:**
+
+- **VMware vSphere**: Uses CoW technology at the hypervisor level to protect VM state through snapshots
+- **Proxmox / KVM / QEMU**: Support for qcow2 format (Copy-on-Write virtual disks) for efficient VM storage
+
+### Bare-Metal Backup
+
+These tools are designed for backing up complete operating systems, applications, configurations, and data, with support for restoration to the same or different hardware (bare-metal recovery).
+
+**Enterprise Backup Solutions:**
+
+- **Veeam Backup & Replication**: Comprehensive solution supporting VM, physical machines, and complete system backup/restore
+- **Acronis Cyber Protect**: Full system image backup with cross-platform restore capabilities and cloud integration
+- **Commvault**: Enterprise-grade platform for complete system backup and comprehensive data protection
+- **Veritas NetBackup**: Advanced solution supporting whole system backup, disaster recovery, and database protection
+
+**Open Source and Free Tools:**
+
+- **Clonezilla**: Popular open-source tool for complete disk imaging and system restoration
+- **Redo Rescue**: User-friendly backup tool focused on simplicity for complete system backup
+- **Timeshift (Linux)**: System snapshot tool optimized for desktop environments and system state recovery
+- **dd + rsync**: Manual approach using command-line tools for complete disk or partition backup
+
+**Cloud Backup Platforms:**
+
+- **Backblaze B2 + MSP360**: Cloud-integrated solution for complete system backup to remote storage
+- **AWS Backup / Azure Backup**: Enterprise cloud platforms offering native whole system backup and recovery services
+
+#### Enterprise Backup Solutions Comparison
+
+This section provides a comprehensive comparison of four major enterprise backup solutions: **Veeam**, **Acronis**, **Commvault**, and **Veritas**.
+
+##### Technical Feature Comparison
+
+| Feature              | Veeam                              | Acronis                                   | Commvault                          | Veritas                                |
+| -------------------- | ---------------------------------- | ----------------------------------------- | ---------------------------------- | -------------------------------------- |
+| Backup Types         | Image, File, App-level, CDP        | Image, File, Cross-platform Restore       | Image, File, App-level, Container  | Image, File, App-level, Container      |
+| Supported Platforms  | VM, Physical, Cloud                | Windows, Linux, macOS, Cloud              | VM, Physical, Cloud, Container     | VM, Physical, Cloud, Container         |
+| Restore Capabilities | Instant Recovery, Cross-machine    | Cross-machine, Bare-metal                 | Multi-layer Restore, Cross-machine | Multi-layer Restore, Disaster Recovery |
+| Security             | Encryption, RBAC, Immutable Backup | Antivirus, Vulnerability Scan, Encryption | Encryption, Compliance Support     | Encryption, Compliance Support         |
+| Automation & API     | Strong DevOps Support              | Moderate Support                          | Strong Support                     | Strong Support                         |
+| Storage Integration  | Multiple Backends                  | Cloud-focused                             | SAN, NAS, Cloud                    | SAN, NAS, Tape, Cloud                  |
+
+##### Strengths and Limitations
+
+**Veeam:**
+
+- **Strengths**: Fast backup performance, strong VM support, instant recovery capabilities
+- **Limitations**: Complex licensing model, advanced features require additional cost
+
+**Acronis:**
+
+- **Strengths**: Integrated security features, comprehensive cross-platform support
+- **Limitations**: UI complexity, modular pricing structure
+
+**Commvault:**
+
+- **Strengths**: Highly customizable, enterprise-grade features and scalability
+- **Limitations**: High implementation cost, complex deployment requirements
+
+**Veritas:**
+
+- **Strengths**: High stability, scalable for large environments
+- **Limitations**: Expensive licensing, complex UI and operations
+
+##### Licensing Overview
+
+| Product   | Licensing Model      | Estimated Cost (Annual) |
+| --------- | -------------------- | ----------------------- |
+| Veeam     | Per VM or device     | $400–$1,000 per VM      |
+| Acronis   | Per device + modules | $85–$150 per device     |
+| Commvault | Per capacity/device  | $10,000–$100,000        |
+| Veritas   | Per capacity/module  | $5,000–$50,000          |
+
+##### Regional Distribution Partners
+
+| Product   | Taiwan Distributors       |
+| --------- | ------------------------- |
+| Veeam     | SYSTEX, AegisTek, Synnex  |
+| Acronis   | AegisTek, Synnex, SYSTECH |
+| Commvault | Zero One Technology       |
+| Veritas   | SYSTEX                    |
+
+##### Performance Analysis
+
+**Veeam**: Demonstrates fast backup and restore performance with low resource usage, making it ideal for virtualized environments requiring quick recovery times.
+
+**Acronis**: Offers moderate performance with strong security integration, particularly suitable for small to medium businesses and managed service providers.
+
+**Commvault**: Provides high performance capabilities but is resource-intensive, best suited for large enterprises with complex backup requirements.
+
+**Veritas**: Maintains stable and scalable performance, delivering consistent results in large-scale deployments across enterprise environments.
+
+##### Solution Selection Guidelines
+
+Each solution has distinct advantages depending on the specific use case:
+
+- **Veeam**: Optimal for virtualized environments with fast recovery requirements
+- **Acronis**: Best suited for SMBs requiring integrated security and cross-platform support
+- **Commvault**: Designed for large enterprises with complex backup and compliance requirements
+- **Veritas**: Preferred in high-availability sectors such as finance and telecommunications
+
+> other: easeus, Image, Ghost, NAKIVO, Veeam
+
+---
+
+FIXME: Below is not organized yet.
+
+[From reddit synology forum](https://www.reddit.com/r/synology/comments/18z5jhu/active_backup_for_business_anyone_using_it)
+
+> Backing up Linux doesn't work because the kernel version supported by ABB is outdated. It's a known issue. The workaround is to set up the backup of the linux server as a "File server" type backup in ABB. Use Connection mode: rsync shell mode via SSH and include the folders you are interested in backing up, excluding the obvious ones
+
+> No, don't waste your time regarding Active Backup For Business for Linux, the software has Kernel dependence which Synology is too slow in supporting. Though I've not used it (ABfB) in quite sometime, my last experience was around the release of Ubuntu 22.04 where it took over 8 months for a supporting version (Kernel 5.15). Just use rsync.
+
+FIXME: Remove later
+
+## Outstanding Questions
+
+1. **Full System Backup vs File Backup**: What are the fundamental differences in approach and when should each be used?
+2. **Implementation Process**: How do you perform a complete bare-metal backup in practice?
+3. **Competitive Analysis**: How do the various backup solutions compare in real-world enterprise deployments?
