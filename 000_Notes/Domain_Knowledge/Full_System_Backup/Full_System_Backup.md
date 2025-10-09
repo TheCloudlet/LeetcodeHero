@@ -3,7 +3,7 @@ author: Yi-Ping Pan (Cloudlet)
 date: 2025-10-08
 ---
 
-# Full System Backup
+# From Platters to Pixels: A Deep Dive into Full System Backup
 
 TODO: Real title should edited later.
 
@@ -96,18 +96,19 @@ When you create a file (e.g., `note.md`), the file system does several things:
 2. In a special area called "**Metadata**" (think of it as the file system's index table), it records:
    - The filename is `note.md`
    - File size, creation time, permissions, etc.
-   - **Most critically**: This file's content is stored in non-contiguous blocks LBA 1234, LBA 1235, LBA 2567, etc.
+   - **Most critically**: This file's content is stored in blocks LBA 1234, LBA 1235, LBA 2567, etc.
 
-> So... File systems is just two parts: **metadata** + **data blocks**.
-> Data blocks are just a huge linked-list tree that describes directory and file hierarchy, then it points to actual data blocks.
+> So... File systems have two main components: **metadata structures** + **data blocks**.
+> The metadata structures (like inodes, directory entries, and allocation tables) form tree-like hierarchies that describe the directory structure and track which data blocks belong to each file. These metadata structures then point to the actual data blocks containing file content.
 
 When you open `note.md`, the file system looks up its metadata, finds all the LBA blocks where the content is stored, and reads them in order to reconstruct the complete file content.
 
 **Other resources**:
 
 - [kernel.org - Filesystems in the Linux kernel](https://docs.kernel.org/filesystems/index.html)
-- [Jserv - Linux File System (Traditional Chinese)](https://hackmd.io/@sysprog/linux-file-system)
+- [Jserv - Linux File System (zh-TW)](https://hackmd.io/@sysprog/linux-file-system)
 - [Understanding the Linux Filesystem: An In-Depth Guide for DevOps Engineers](https://dev.to/prodevopsguytech/understanding-the-linux-filesystem-an-in-depth-guide-for-devops-engineers-ona)
+- [File Descriptors and File Systems](https://man7.org/training/download/lusp_fileio_slides.pdf)
 
 ### My Questions
 
@@ -160,11 +161,13 @@ Now that we understand the four layers of disk storage, we can explain how full 
 A full system backup captures **everything** at the LBA level:
 
 1. **Layer 3 - Partition Information**:
+
    - Complete MBR/GPT partition table
    - Boot loader code
    - Partition boundaries and types
 
 2. **Layer 4 - All File Systems**:
+
    - System files (Windows/, Linux /boot, macOS /System)
    - User data (Documents, Pictures, etc.)
    - Hidden files and system metadata
@@ -197,9 +200,14 @@ Backup Image:     [MBR][Partition 1: OS][Partition 2: Data][Unallocated]
 
 **Key Point**: This process completely bypasses Layer 4 (File System) and works directly at Layer 2 (LBA), which is why it can capture everything including corrupted file systems, deleted data, and boot sectors.
 
-### Challenges of Full System Backup
+## System Level Challenges of Full System Backup
 
-#### How to Backup a "Running" System?
+1. How to backup a "running" system?
+2. How to minimize performance impact on the live system during backup? (Intremental backup)
+3. How to revoverver from a full system backup image to a new system?
+4. How to perform single file recovery from a full system backup image?
+
+### How to Backup a "Running" System?
 
 If we directly read LBA blocks sequentially on a running system, **catastrophic consequences** would occur.
 
@@ -250,7 +258,7 @@ The Principal nods and reveals his "secret weapon" - **LVM Snapshots**.
 **Step 1: Freeze**
 
 At 09:59:59 AM, the Principal announces over the PA system (`fsfreeze`):
-*"Attention all students and staff: Please maintain your current position and stay completely still for one second!"*
+_"Attention all students and staff: Please maintain your current position and stay completely still for one second!"_
 
 **Step 2: Create Snapshot - Time Magic**
 
@@ -265,13 +273,13 @@ This mirror school perfectly replicates the state of every classroom and every s
 **Step 3: Thaw**
 
 At 10:00:01 AM, one second after the magic, the Principal immediately announces:
-*"Alright, everyone resume normal activities!"*
+_"Alright, everyone resume normal activities!"_
 
 The real school starts operating again - students continue moving between classes. The entire freeze lasted just one second, completely unnoticed.
 
 **Step 4: Leisurely Photography in the "Mirror School"**
 
-Now the Principal hands you a key: *"This key accesses the frozen 'Mirror School'. Take your time photographing inside - it doesn't matter how long you take, time is permanently stopped in there."*
+Now the Principal hands you a key: _"This key accesses the frozen 'Mirror School'. Take your time photographing inside - it doesn't matter how long you take, time is permanently stopped in there."_
 
 You enter this mirror school and can spend three hours calmly photographing every classroom. Every photo you take will perfectly reflect the 10:00:00 AM state.
 
@@ -283,7 +291,7 @@ This is the Principal's second magic, executed by his assistant **"The Record Ke
 
 At 10:30 AM, when Tommy in the real world wants to move from "Classroom 10" to "Classroom 50":
 
-Before Tommy can leave, the Record Keeper immediately rushes to the mirror school and posts a seal on "Classroom 10's" door reading: *"This classroom state is locked - permanently preserving Tommy's 10:00 AM appearance in red clothing."*
+Before Tommy can leave, the Record Keeper immediately rushes to the mirror school and posts a seal on "Classroom 10's" door reading: _"This classroom state is locked - permanently preserving Tommy's 10:00 AM appearance in red clothing."_
 
 Only after this is done can real-world Tommy leave.
 
@@ -298,6 +306,67 @@ The key to full system backup isn't how fast your photography skills are (`dd` s
 Linux philosophy differs from Windows. Windows **VSS** is a highly integrated, framework-based "one-stop" service. Linux provides a series of independent, powerful, composable tools and kernel features that let us build the exact same backup workflow.
 
 The core of this workflow is **LVM (Logical Volume Manager)** and its underlying kernel framework **Device Mapper**.
+
+### How to minimize performance impact on the live system during backup?
+
+The key is we
+
+1. Skip the unsued space
+
+   - **Challenge:**
+     We need to know how to interpret the filesystem metadata (e.g., NTFS, ext4) to identify which blocks are actually used by files and which are free space.
+
+2. **Incremental Backup: Only Backup Changed Blocks**
+
+   The second optimization strategy focuses on backing up only the blocks that have changed since the last backup, dramatically reducing backup time and storage requirements.
+
+   #### **Changed Block Tracking (CBT)**
+
+   Changed Block Tracking works by maintaining a bitmap that records which blocks have been modified since the last backup. This is implemented by installing a kernel driver or module that intercepts all write operations to the disk.
+
+   **Why Use a Bitmap?**
+
+   Bitmaps are extremely space-efficient for tracking block changes. Each bit represents a single block's modification state: 1 for changed, 0 for unchanged. For example, tracking 1 million blocks requires only 1 million bits = 125KB of memory.
+
+   **Why Require Kernel-Level Implementation?**
+
+   Only the kernel has the capability to intercept all write operations to the disk. User-space programs cannot monitor every write operation, making kernel-level tracking essential for accurate change detection.
+
+   #### **Backup Storage Models**
+
+   **Traditional "Main + Patches" Model:**
+
+   ```text
+   Day 1 (Full)  main_backup.full      (100GB)
+   Day 2 (Inc)   patch_2025_10_08.inc  (500MB)
+   Day 3 (Inc)   patch_2025_10_09.inc  (300MB)
+   ...
+   Day 30 (Inc)  patch_2025_11_06.inc  (1GB)
+   ```
+
+   **Limitation: Fragile Restore Chain**
+
+   This approach creates a dependency chain where restoring requires the full backup plus all incremental patches in sequence. If any patch is corrupted or missing, the entire restore fails.
+
+   **Modern Approach: Hash Array Mapped Trie (HAMT)**
+
+   Modern backup systems use structures similar to Haskell's Hash Array Mapped Trie, which maintains a mapping from Logical Block Addresses (LBA) to actual data blocks with structural sharing.
+
+   **Advantages:**
+
+   - **Robust Restore Chain**: Each backup is self-contained with references to shared blocks
+   - **Fast Restore Time**: Direct access to any backup point without chain dependencies
+   - **Efficient Storage**: Deduplication through structural sharing of unchanged blocks
+
+   #### **Implementation Challenges**
+
+   The primary challenge lies in implementing a reliable mechanism to track block changes. This requires:
+
+   1. **Deep Filesystem Knowledge**: Understanding the internal structures of filesystems (NTFS, ext4, APFS) or volume managers
+   2. **Kernel Driver Development**: Writing kernel-level code to intercept and log write operations
+   3. **Change Log Management**: Maintaining persistent bitmaps or change logs that survive system restarts
+
+FIXME: Start
 
 #### Linux vs Windows VSS Component Mapping
 
@@ -425,6 +494,7 @@ This entire workflow, though composed of different tools (`fsfreeze`, `lvcreate`
 - Installed programs
 - User settings and documents
 - Even the exact same free space pattern
+  FIXME: End
 
 ## What is an "Image File" or "Disk Image"?
 
