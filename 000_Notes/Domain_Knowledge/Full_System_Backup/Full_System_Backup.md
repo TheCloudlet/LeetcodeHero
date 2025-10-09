@@ -307,6 +307,11 @@ Linux philosophy differs from Windows. Windows **VSS** is a highly integrated, f
 
 The core of this workflow is **LVM (Logical Volume Manager)** and its underlying kernel framework **Device Mapper**.
 
+More to read:
+
+- [Storage Snapshot technology: techniques and details](https://stonefly.com/blog/storage-snapshot-technology-techniques-and-details/)
+- [How to create snapshots on Linux](https://linuxconfig.org/how-to-create-snapshots-on-linux)
+
 ### How to minimize performance impact on the live system during backup?
 
 The key is we
