@@ -7,7 +7,7 @@
 
 class Solution {
 public:
-  int sumDivisibleByK(std::vector<int> &nums, int k) {
+  int sumDivisibleByK(const std::vector<int> &nums, int k) {
     // Count frequency of each element
     std::unordered_map<int, int> frequencyMap;
 
@@ -16,10 +16,10 @@ public:
     }
 
     // Sum elements whose frequency is divisible by k
-    int result = 0;
+    long long result = 0; // NOTE: Use long long to avoid overflow
     for (const auto &[num, count] : frequencyMap) {
       if (count % k == 0) {
-        result += (num * count);
+        result += const_cast<long long>(num) * count;
       }
     }
 
