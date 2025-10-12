@@ -791,3 +791,12 @@ problems:
     topics: [hashtable, array, leetcode-contest]
     status: L3_MASTERED
     refinement_focus: "Trivial"
+
+  - id: 3713
+    title: "Longest Balanced Substring I"
+    link: "./3713_Longest_Balanced_Substring_I"
+    leetcode-difficulty: medium
+    topics: [string, brute-force, leetcode-contest]
+    status: L1_FORGOT
+    refinement_focus: |
+      Attempt 1: Didn't finish during contest. I don't even identify this as a brute-force problem.
