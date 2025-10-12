@@ -783,3 +783,11 @@ problems:
     status: L2_STRUGGLE
     refinement_focus: |
       Attempt 1: Didn't finish during contest. Use vector<pair<char, int>> to store (char, count) pairs. Then simulate the removal of k-balanced substrings.
+
+  - id: 3712
+    title: "Sum of Elements With Frequency Divisible by K"
+    link: "./3712_Sum_of_Elements_With_Frequency_Divisible_by_K"
+    leetcode-difficulty: easy
+    topics: [hashtable, array, leetcode-contest]
+    status: L3_MASTERED
+    refinement_focus: "Trivial"
