@@ -522,8 +522,62 @@ FIXME: Below is not organized yet.
 
 FIXME: Remove later
 
-## Outstanding Questions
+---
+
+## xxxx
+
+From the above notes, I need to make a slide that focuses on the following three questions:
+The time is limmited to 5-10 minutes.
 
 1. **Full System Backup vs File Backup**: What are the fundamental differences in approach and when should each be used?
 2. **Implementation Process**: How do you perform a complete bare-metal backup in practice?
 3. **Competitive Analysis**: How do the various backup solutions compare in real-world enterprise deployments?
+
+Maybe lets come up with the slide sturcture & 講稿
+
+請用繁體中文回答. 在下方
+
+---
+
+## 面試導向簡報設計：「企業級備份系統技術深度解析」
+
+### 🎯 面試策略重點
+
+- **展現技術深度**：從硬體層到應用層的完整理解
+- **突出問題解決能力**：針對實際業務場景的技術決策
+- **證明實務經驗**：具體的技術實現和性能考量
+
+### Structure of the Slide
+
+1. **封面**
+
+   - 標題：「企業級備份系統技術深度解析」
+   - 副標題：「從硬體到應用的全面理解」
+   - 作者姓名與日期
+
+2. **目錄**
+
+   - Full System Backup vs File Backup
+   - Implementation Process
+   - Competitive Analysis
+
+3. **Full System Backup vs File Backup**
+
+   - Talk about storage layers (HDD/SSD, LBA, Partition, File System)
+   - 備份層級差異（Block-level vs File-level）
+   - 使用情境與優缺點分析 (技術難度)
+
+4. **Implementation Process** 假設我要從無到有 Implement 一個 Full System Backup
+
+   - 1. Big picture: 備份流程總覽
+   - 2. Steps of implementing
+
+     - 1. Full backup (Snapshot)
+     - 2. Incremental backup (Changed Block Tracking, HAMT)
+     - 3. Storage optimization (Compression, Encryption)
+     - 4. Restore process (Bare-metal restore, Single file restore)
+     - 5. Automation & Scheduling (For restore performance)
+     - 6. Entropy & ECC (For data integrity)
+
+5. **Competitive Analysis**
+   - FIXME: NYI
