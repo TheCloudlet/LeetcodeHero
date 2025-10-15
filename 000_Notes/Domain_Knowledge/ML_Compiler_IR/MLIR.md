@@ -1527,6 +1527,429 @@ class ConvertNPUCommonToNPU_B : public OpRewritePattern<npu_common::GenericConvO
 
 ---
 
+## Questions
+
+### Convoluiton lowering
+
+#### Q1: How convolution lowering works in MLIR?
+
+Convolution lowering in MLIR follows a multi-stage transformation process:
+
+**Stage 1: Framework → Linalg (PROVIDED)**
+
+```text
+torch.aten.conv2d → linalg.conv_2d_nhwc_hwcf
+tf.nn.conv2d → linalg.conv_2d_nhwc_hwcf
+```
+
+**Stage 2: Linalg → Target Dialect (YOU IMPLEMENT)**
+
+The lowering strategy depends on your target hardware capabilities:
+
+**Option A: Direct Mapping (1→1)**
+
+```cpp
+// Simple case: NPU has native conv2d instruction
+class ConvertLinalgConv2DToNPU : public OpRewritePattern<linalg::Conv2DNhwcHwcfOp> {
+  LogicalResult matchAndRewrite(linalg::Conv2DNhwcHwcfOp op,
+                                PatternRewriter &rewriter) const override {
+    rewriter.replaceOpWithNewOp<npu::Conv2DOp>(
+        op, op.getInput(), op.getFilter(),
+        op.getStrides(), op.getPadding());
+    return success();
+  }
+};
+```
+
+**Option B: Decomposition (1→N)**
+
+```cpp
+// Complex case: NPU requires explicit memory management
+class ConvertLinalgConv2DToNPU : public OpRewritePattern<linalg::Conv2DNhwcHwcfOp> {
+  LogicalResult matchAndRewrite(linalg::Conv2DNhwcHwcfOp op,
+                                PatternRewriter &rewriter) const override {
+    Location loc = op.getLoc();
+
+    // Step 1: DMA load input to local memory
+    auto inputLocal = rewriter.create<npu::DMALoadOp>(
+        loc, op.getInput(), /*local_mem=*/true);
+
+    // Step 2: DMA load filter to local memory
+    auto filterLocal = rewriter.create<npu::DMALoadOp>(
+        loc, op.getFilter(), /*local_mem=*/true);
+
+    // Step 3: Perform convolution
+    auto convResult = rewriter.create<npu::Conv2DOp>(
+        loc, inputLocal, filterLocal, op.getStrides(), op.getPadding());
+
+    // Step 4: DMA store result back to global memory
+    rewriter.replaceOpWithNewOp<npu::DMAStoreOp>(
+        op, convResult, /*global_mem=*/true);
+
+    return success();
+  }
+};
+```
+
+**Option C: Algorithm-Specific Lowering**
+
+```cpp
+// Advanced case: Lower to im2col + GEMM for better optimization
+class ConvertConv2DToGEMM : public OpRewritePattern<linalg::Conv2DNhwcHwcfOp> {
+  LogicalResult matchAndRewrite(linalg::Conv2DNhwcHwcfOp op,
+                                PatternRewriter &rewriter) const override {
+    // Conv2D = im2col(input) × reshape(filter) + col2im(result)
+    auto im2colResult = rewriter.create<npu::Im2ColOp>(loc, op.getInput(), ...);
+    auto filterReshaped = rewriter.create<npu::ReshapeOp>(loc, op.getFilter(), ...);
+    auto gemmResult = rewriter.create<npu::GEMMOp>(loc, im2colResult, filterReshaped);
+    rewriter.replaceOpWithNewOp<npu::Col2ImOp>(op, gemmResult, ...);
+    return success();
+  }
+};
+```
+
+**Stage 3: Optimization (OPTIONAL)**
+
+```cpp
+// Fuse conv + activation for better performance
+class FuseConvRelu : public OpRewritePattern<npu::ReLUOp> {
+  LogicalResult matchAndRewrite(npu::ReLUOp relu, PatternRewriter &rewriter) const override {
+    auto conv = relu.getInput().getDefiningOp<npu::Conv2DOp>();
+    if (!conv || !conv.getResult().hasOneUse()) return failure();
+
+    // Replace conv + relu with fused operation
+    rewriter.replaceOpWithNewOp<npu::FusedConvReluOp>(
+        relu, conv.getInput(), conv.getFilter(), conv.getStrides(), conv.getPadding());
+    rewriter.eraseOp(conv);
+    return success();
+  }
+};
+```
+
+#### Q2: Does NPU dialect usually have a convolution operator?
+
+**Yes, most NPU dialects include convolution operators**, but the design varies by hardware capabilities:
+
+**Typical NPU Dialect Operations:**
+
+| Operation Category    | Common NPU Ops                                    | Purpose                         |
+| --------------------- | ------------------------------------------------- | ------------------------------- |
+| **Convolution**       | `npu.conv2d`, `npu.depthwise_conv`, `npu.conv3d`  | Core neural network operations  |
+| **Matrix Ops**        | `npu.matmul`, `npu.gemm`, `npu.batch_matmul`      | Dense layer computations        |
+| **Activation**        | `npu.relu`, `npu.sigmoid`, `npu.gelu`             | Non-linear functions            |
+| **Pooling**           | `npu.max_pool`, `npu.avg_pool`, `npu.global_pool` | Spatial reduction               |
+| **Memory**            | `npu.dma_load`, `npu.dma_store`, `npu.copy`       | Data movement                   |
+| **Fused**             | `npu.conv_relu`, `npu.conv_bn`, `npu.matmul_add`  | Hardware-optimized combinations |
+| **Hardware-Specific** | `npu.winograd_conv`, `npu.quantized_conv`         | Vendor optimizations            |
+
+**Design Considerations:**
+
+1. **Granularity**: Balance between high-level ops (easy to optimize) vs low-level ops (close to hardware)
+
+2. **Memory Hierarchy**: Explicit memory management for NPUs with complex memory systems
+
+3. **Fusion Opportunities**: Hardware-specific fused operations for better performance
+
+4. **Data Types**: Support for quantized types (int8, int16) common in NPU inference
+
+**Example NPU Dialect Definition:**
+
+```cpp
+// npu.conv2d operation
+def NPU_Conv2DOp : NPU_Op<"conv2d"> {
+  let summary = "2D convolution operation for NPU";
+  let arguments = (ins
+    AnyTensor:$input,
+    AnyTensor:$filter,
+    OptionalAttr<I64ArrayAttr>:$strides,
+    OptionalAttr<I64ArrayAttr>:$padding,
+    OptionalAttr<StrAttr>:$data_format,
+    OptionalAttr<BoolAttr>:$use_local_memory
+  );
+  let results = (outs AnyTensor:$output);
+
+  let assemblyFormat = [{
+    $input `,` $filter
+    (`strides` `=` $strides^)?
+    (`padding` `=` $padding^)?
+    (`local_mem` $use_local_memory^)?
+    attr-dict `:` functional-type(operands, results)
+  }];
+}
+```
+
+#### Q3: What are the Common Tensor Operations in NPU Dialects?
+
+NPU dialects typically support a comprehensive set of tensor operations that cover the full spectrum of neural network computations. These operations can be categorized into several groups:
+
+**1. Core Computational Layers (計算密集型操作)**
+
+These are the most compute-intensive operations and the primary targets for NPU hardware acceleration, typically accounting for 80%+ of model execution time.
+
+| Operation                 | MLIR Op                                               | Purpose                                      | Applications                                            |
+| ------------------------- | ----------------------------------------------------- | -------------------------------------------- | ------------------------------------------------------- |
+| **Convolution**           | `npu.conv2d`, `npu.conv3d`, `npu.depthwise_conv`      | Sliding kernel feature extraction            | CNN backbone: image classification, object detection    |
+| **Matrix Multiplication** | `npu.matmul`, `npu.gemm`, `npu.batch_matmul`          | Dense linear transformations                 | Fully connected layers, RNN/LSTM, Transformer attention |
+| **Pooling**               | `npu.max_pool`, `npu.avg_pool`, `npu.global_avg_pool` | Spatial downsampling and feature aggregation | Feature map reduction, spatial invariance               |
+
+**2. Activation Functions (激活函數)**
+
+Element-wise non-linear functions that introduce non-linearity to enable learning complex patterns.
+
+| Operation        | MLIR Op                                               | Mathematical Definition             | Primary Use Cases                            |
+| ---------------- | ----------------------------------------------------- | ----------------------------------- | -------------------------------------------- |
+| **ReLU Family**  | `npu.relu`, `npu.leaky_relu`, `npu.prelu`, `npu.gelu` | `f(x) = max(0, x)` and variants     | Most widely used activation functions        |
+| **Sigmoid/Tanh** | `npu.sigmoid`, `npu.tanh`                             | `σ(x) = 1/(1+e^(-x))`, `tanh(x)`    | RNN gating mechanisms, binary classification |
+| **Softmax**      | `npu.softmax`                                         | `softmax(x_i) = e^(x_i) / Σe^(x_j)` | Multi-class classification output layer      |
+
+**3. Data Shape & Structuring Operations (資料維度操作)**
+
+These operations don't involve complex mathematical computations but are critical for data flow and tensor manipulation.
+
+| Operation             | MLIR Op                        | Purpose                                   | Example                                |
+| --------------------- | ------------------------------ | ----------------------------------------- | -------------------------------------- |
+| **Reshape/Flatten**   | `npu.reshape`, `npu.flatten`   | Change tensor shape without altering data | `1x28x28x1` → `784x1` for FC layer     |
+| **Concatenation**     | `npu.concat`                   | Join tensors along specified dimension    | Feature fusion from multiple branches  |
+| **Transpose/Permute** | `npu.transpose`, `npu.permute` | Reorder tensor dimensions                 | `NCHW` ↔ `NHWC` layout conversion      |
+| **Slice/Pad**         | `npu.slice`, `npu.pad`         | Extract subregions or add padding         | Crop operations, zero-padding for conv |
+
+**4. Normalization Layers (正規化層)**
+
+Critical for training stability and model convergence.
+
+| Operation                  | MLIR Op             | Purpose                            | Application                     |
+| -------------------------- | ------------------- | ---------------------------------- | ------------------------------- |
+| **Batch Normalization**    | `npu.batch_norm`    | Normalize across batch dimension   | CNN layers (training/inference) |
+| **Layer Normalization**    | `npu.layer_norm`    | Normalize across feature dimension | Transformer models              |
+| **Instance Normalization** | `npu.instance_norm` | Normalize per instance             | Style transfer, GANs            |
+
+**5. Basic Element-wise Arithmetic (基礎逐元素運算)**
+
+Fundamental tensor operations for combining and transforming data.
+
+| Operation            | MLIR Op                                               | Mathematical Definition            | Key Applications                       |
+| -------------------- | ----------------------------------------------------- | ---------------------------------- | -------------------------------------- |
+| **Basic Arithmetic** | `npu.add`, `npu.sub`, `npu.mul`, `npu.div`            | Element-wise: `C[i] = A[i] ⊕ B[i]` | ResNet skip connections, bias addition |
+| **Comparison**       | `npu.greater`, `npu.less`, `npu.equal`                | Element-wise comparisons           | Conditional operations, masking        |
+| **Reduction**        | `npu.reduce_sum`, `npu.reduce_mean`, `npu.reduce_max` | Reduce along specified dimensions  | Global pooling, loss computation       |
+
+**6. Advanced/Specialized Operations (進階操作)**
+
+Hardware-specific or algorithm-optimized operations.
+
+| Operation                | MLIR Op                                               | Purpose                               | Benefits                                     |
+| ------------------------ | ----------------------------------------------------- | ------------------------------------- | -------------------------------------------- |
+| **Fused Operations**     | `npu.conv_relu`, `npu.matmul_add`, `npu.conv_bn_relu` | Combine multiple ops in single kernel | Reduced memory bandwidth, better performance |
+| **Quantized Operations** | `npu.qconv2d`, `npu.qmatmul`                          | Low-precision arithmetic (int8/int16) | Faster inference, reduced memory usage       |
+| **Winograd Convolution** | `npu.winograd_conv`                                   | Algorithm-optimized convolution       | Reduced arithmetic complexity for 3x3 conv   |
+
+**NPU Dialect Design Principles:**
+
+1. **Performance-Oriented**: Operations designed to maximize hardware utilization
+2. **Memory-Aware**: Explicit control over data movement and memory hierarchy
+3. **Fusion-Friendly**: Support for operation fusion to reduce memory traffic
+4. **Quantization-Ready**: Native support for reduced precision arithmetic
+5. **Layout-Flexible**: Support for different tensor layouts (NCHW, NHWC, etc.)
+
+**Key Insight**: The convolution operator in NPU dialects is typically **more specific** than the generic `linalg.conv_2d`, including hardware-specific attributes like memory placement, data layout preferences, and optimization hints.
+
+### Compiler Design Insights (編譯器設計洞察)
+
+**Performance Optimization Principles:**
+
+1. **80/20 Rule - Focus on Core Computational Layers**
+
+   - The **Core Computational Layers** (Category 1) are the performance bottleneck
+   - These are the **highest priority** for hardware-specific NPU dialect operations
+   - Design principle: Optimize the operations that consume 80% of execution time
+
+2. **Fusion Opportunities - Eliminate Memory Traffic**
+
+   - **Activation Functions** (Category 2) and **Basic Arithmetic** (Category 5) rarely exist independently
+   - **Compiler's key responsibility**: Use **Operator Fusion** to merge them into Core Computational Layers
+   - **Benefit**: Eliminate intermediate memory reads/writes
+
+   ```cpp
+   // Before fusion: 2 separate operations + memory traffic
+   %conv = npu.conv2d %input, %filter
+   %relu = npu.relu %conv
+
+   // After fusion: 1 operation, no intermediate memory
+   %result = npu.conv_relu %input, %filter
+   ```
+
+3. **Performance Killers - Data Layout Operations**
+
+   - **Data Shape & Structuring Operations** (Category 3) are performance bottlenecks
+   - A single unnecessary `Transpose` can completely negate NPU acceleration gains
+   - **Root cause**: Massive memory movement overhead
+   - **Solution**: **Layout-Aware Optimization** to minimize or eliminate these operations
+
+   ```cpp
+   // Performance killer example:
+   %nhwc = npu.transpose %nchw  // Expensive memory reshuffling
+   %conv = npu.conv2d %nhwc, %filter
+
+   // Optimized approach:
+   %conv = npu.conv2d %nchw, %filter {layout="nchw"}  // Native layout support
+   ```
+
+**Compiler Design Strategy:**
+
+| Priority         | Operation Category    | Optimization Strategy          | Implementation            |
+| ---------------- | --------------------- | ------------------------------ | ------------------------- |
+| **🔴 Critical**  | Core Computational    | Hardware-specific ops + Fusion | Custom NPU instructions   |
+| **🟡 Important** | Activation/Arithmetic | Fuse with core ops             | Pattern rewriting         |
+| **⚠️ Minimize**  | Data Layout           | Layout-aware optimization      | Avoid/optimize transposes |
+
+## Layout-Aware Optimization
+
+**Definition:** Layout-Aware Optimization is a compiler optimization strategy where the compiler deeply understands the physical memory layout of data and proactively selects and transforms data layouts based on target hardware characteristics to generate the highest-performance execution code.
+
+**Core Principle:** Instead of passively accepting input data layouts, the compiler actively plans the optimal layout path for the entire computation process.
+
+### Why NPU Requires Layout-Aware Optimization
+
+NPUs are extremely sensitive to data layout optimization - it's one of the **most critical and differentiating optimization tasks** in NPU compiler design.
+
+#### Hardware Architecture Constraints
+
+| Factor                         | Impact                                                                                         | Example                                                            |
+| ------------------------------ | ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| **Hardware Design Preference** | NPU compute units (e.g., Systolic Arrays) are physically designed for specific data flows      | NPU optimized for 16-channel parallel reads: NHWC >> NCHW          |
+| **Memory Access Efficiency**   | Hardware achieves maximum efficiency through coalesced (contiguous) memory access              | 2x2 patch processing: contiguous layout = 1 read vs 4 reads        |
+| **SRAM Utilization**           | Limited on-chip SRAM determines how data tiling affects compute unit utilization ("feed rate") | Optimal tiling layout keeps compute units busy vs waiting for data |
+
+**Performance Impact:** Wrong layout can reduce NPU hardware utilization to **<10%** of peak performance.
+
+#### Layout Optimization Trade-offs
+
+**Warehouse Management Analogy:**
+
+```text
+❌ Layout-Unaware (Passive):
+Goods (data) → Store as received → Robotic arm (compute unit) travels long distances
+Result: Low efficiency, single-item retrieval
+
+✅ Layout-Aware (Active):
+Goods (data) → Smart reorganization → Robotic arm (compute unit) optimal access pattern
+Result: High efficiency, batch processing
+```
+
+### Implementation Strategy
+
+Layout-Aware Optimization is implemented as a **global, cost-model-based compiler pass** with the following phases:
+
+#### Phase 1: Hardware Model Construction
+
+**Purpose:** Define NPU layout preferences and transformation costs.
+
+```cpp
+// Hardware model definition using MLIR TableGen
+def NPU_HardwareModel : HardwareModel {
+  let layoutPreferences = [
+    OpLayoutPreference<"npu.conv2d", [NHWC_Layout], 100>,      // High preference
+    OpLayoutPreference<"npu.matmul", [NCHW_Layout], 80>,       // Medium preference
+  ];
+
+  let transformationCosts = [
+    LayoutTransformCost<NCHW_to_NHWC, 50>,    // Transpose cost
+    LayoutTransformCost<NHWC_to_NCHW, 50>,    // Transpose cost
+  ];
+}
+```
+
+#### Phase 2: Layout Constraint Propagation
+
+**Process:** Traverse computation graph and propagate layout constraints from fixed points.
+
+```text
+Input Image (NHWC) → Conv2D → ReLU → MatMul (prefers NCHW) → Output
+     ↓                ↓       ↓          ↓
+  Fixed layout    Inherits   Inherits   Conflict detected!
+```
+
+#### Phase 3: Cost Analysis & Decision Making
+
+**Decision Point:** When operations have conflicting layout preferences.
+
+| Scenario              | Option A                           | Option B                               | Decision Criteria         |
+| --------------------- | ---------------------------------- | -------------------------------------- | ------------------------- |
+| **Op A** outputs NCHW | Insert `transpose` before **Op B** | Force **Op A** to output NHWC directly | **Total cost** comparison |
+| **Op B** prefers NHWC | Cost = transpose_cost              | Cost = suboptimal_Op_A_cost            | Choose minimum total cost |
+
+**Cost Model Example:**
+
+```cpp
+// Cost calculation for layout decision
+float calculateTotalCost(LayoutPath path) {
+  float computeCost = 0;
+  float transformCost = 0;
+
+  for (auto op : path.operations) {
+    computeCost += getOpCost(op, path.getLayout(op));
+  }
+
+  for (auto transform : path.transformations) {
+    transformCost += getTransformCost(transform);
+  }
+
+  return computeCost + transformCost;
+}
+```
+
+#### Phase 4: Transformation Node Insertion
+
+**Result:** Explicit layout conversion operations in the final IR.
+
+```cpp
+// Before optimization: Implicit layout mismatch
+%conv_result = npu.conv2d %input, %filter  // Outputs NCHW
+%matmul_result = npu.matmul %conv_result, %weights  // Expects NHWC
+
+// After optimization: Explicit layout conversion
+%conv_result = npu.conv2d %input, %filter  // Outputs NCHW
+%transposed = npu.transpose %conv_result {perm = [0, 2, 3, 1]}  // NCHW → NHWC
+%matmul_result = npu.matmul %transposed, %weights  // Uses NHWC
+```
+
+### Layout Optimization Examples
+
+#### Example 1: Eliminating Redundant Transposes
+
+```cpp
+// Suboptimal: Multiple layout conversions
+%nhwc_1 = npu.transpose %nchw {perm = [0, 2, 3, 1]}  // NCHW → NHWC
+%conv = npu.conv2d %nhwc_1, %filter                  // Prefers NHWC
+%nchw_2 = npu.transpose %conv {perm = [0, 3, 1, 2]}  // NHWC → NCHW
+%pool = npu.max_pool %nchw_2                         // Prefers NCHW
+
+// Optimized: Layout-consistent path
+%conv = npu.conv2d %nchw, %filter {layout = "nchw"}  // Direct NCHW support
+%pool = npu.max_pool %conv                           // No transpose needed
+```
+
+#### Example 2: Global Layout Planning
+
+**Strategy Comparison:**
+
+| Approach       | Layout Decisions             | Transpose Count | Performance   |
+| -------------- | ---------------------------- | --------------- | ------------- |
+| **Local Opt**  | Greedy per-operation         | 3-4 transposes  | ⚠️ Suboptimal |
+| **Global Opt** | End-to-end cost minimization | 0-1 transpose   | ✅ Optimal    |
+
+```cpp
+// Global optimization result
+%input_hwc = npu.transpose %input_chw {perm = [1, 2, 0]}    // One upfront transpose
+%conv1 = npu.conv2d %input_hwc, %f1 {layout = "nhwc"}      // Chain of NHWC ops
+%relu1 = npu.relu %conv1
+%conv2 = npu.conv2d %relu1, %f2 {layout = "nhwc"}
+%relu2 = npu.relu %conv2
+%output = npu.global_avg_pool %relu2 {layout = "nhwc"}     // No additional transposes
+```
+
+**Performance Insight:** One strategic transpose upfront eliminates 4-5 transposes later in the pipeline.
+
 ## Good reference
 
 - [MLIR Rationale](https://mlir.llvm.org/docs/Rationale/)
