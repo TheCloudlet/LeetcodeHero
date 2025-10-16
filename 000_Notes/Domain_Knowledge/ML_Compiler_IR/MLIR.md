@@ -1527,7 +1527,6 @@ class ConvertNPUCommonToNPU_B : public OpRewritePattern<npu_common::GenericConvO
 
 ---
 
-<<<<<<< Updated upstream
 ## Questions
 
 ### Convoluiton lowering
@@ -1608,6 +1607,23 @@ class ConvertConv2DToGEMM : public OpRewritePattern<linalg::Conv2DNhwcHwcfOp> {
   }
 };
 ```
+
+**重要提醒：Im2col 的記憶體開銷**
+
+使用 im2col 方法將卷積轉換為矩陣乘法時，需要注意：
+
+- **記憶體膨脹**：對於 kernel size K×K, input channels C_in, output size H×W 的卷積，im2col 會產生大小為 (H×W) × (K×K×C_in) 的中間矩陣。
+- **實際案例**：224×224×3 輸入，3×3 卷積核，im2col 後矩陣大小約 50176 × 27 = 1.35M 元素（若為 FP32 則 5.4 MB）。
+- **緩解策略**：
+  - 使用 implicit GEMM（直接在 GEMM 中展開，無需顯式 im2col）
+  - 分塊處理（tiling）以降低單次記憶體需求
+  - 優先使用 Winograd 演算法（適用於 3×3, 5×5 小型卷積核）
+
+**Winograd 演算法限制**
+
+- **僅適用於小型卷積核**：通常限於 3×3 和 5×5，更大的卷積核運算複雜度過高。
+- **數值穩定性問題**：使用低精度（INT8）時，Winograd 變換可能引入較大的數值誤差。
+- **Padding 限制**：某些 Winograd 實作對 padding 有特定要求。
 
 **Stage 3: Optimization (OPTIONAL)**
 
@@ -1753,6 +1769,8 @@ Hardware-specific or algorithm-optimized operations.
 5. **Layout-Flexible**: Support for different tensor layouts (NCHW, NHWC, etc.)
 
 **Key Insight**: The convolution operator in NPU dialects is typically **more specific** than the generic `linalg.conv_2d`, including hardware-specific attributes like memory placement, data layout preferences, and optimization hints.
+
+---
 
 ### Compiler Design Insights (編譯器設計洞察)
 
@@ -1949,8 +1967,8 @@ float calculateTotalCost(LayoutPath path) {
 %output = npu.global_avg_pool %relu2 {layout = "nhwc"}     // No additional transposes
 ```
 
-**Performance Insight:** One strategic transpose upfront eliminates 4-5 transposes later in the pipeline.
-=======
+---
+
 ## NPU Accerlation
 
 目前主流的 NPU (Neural Processing Unit) 包括：
@@ -1970,6 +1988,26 @@ float calculateTotalCost(LayoutPath path) {
 - 具備低精度運算能力 (如 FP16, INT8)
 - 內建專用的記憶體層次結構 (如 HBM, SRAM)
 - 支援特定的深度學習框架 (如 TensorFlow, PyTorch)
+
+### NPU 硬體架構限制與設計考量
+
+**記憶體層次結構限制：**
+
+1. **On-chip SRAM 容量有限**：通常只有數 MB 至數十 MB，無法容納完整的模型權重和中間結果。
+2. **記憶體頻寬階層**：On-chip SRAM (TB/s) >> HBM (GB/s) >> DDR (GB/s)，資料搬移策略直接影響性能。
+3. **DMA 傳輸延遲**：資料在不同記憶體層級間的搬移需要精確的 prefetching 和 double buffering 策略。
+
+**運算單元限制：**
+
+1. **固定的 Systolic Array 尺寸**：如 Google TPU v4 為 128x128，超過此尺寸需要 tiling。
+2. **Pipeline 深度**：Systolic array 有固定的 pipeline stages，小型矩陣可能無法充分利用硬體。
+3. **稀疏運算支援不足**：多數 NPU 針對密集運算優化，稀疏矩陣運算效率較低。
+
+**資料格式與精度限制：**
+
+1. **量化精度支援**：多數 NPU 優先支援 INT8/INT16，FP32 支援有限或效率較低。
+2. **混合精度挑戰**：不同精度間的轉換可能引入額外開銷。
+3. **特殊數值格式**：某些 NPU 使用專有的浮點格式（如 BFloat16, TensorFloat-32）。
 
 有甚麼硬體指令或設計是 NPU 能加速的關鍵嗎?
 
@@ -1993,22 +2031,26 @@ float calculateTotalCost(LayoutPath path) {
 
 也就是說從 linalg 有哪一些運算可以直接對應到 Systolic Array?
 
-- linalg.matmul
-- linalg.conv_2d
-- linalg.batch_matmul
-- linalg.reduce (如 sum, max)
+**可直接對應到 Systolic Array 的 linalg ops**
 
-### ✅ 可直接對應到 Systolic Array 的 linalg ops
+| 運算類型     | linalg dialect op                                        | 說明                                                                                          |
+| ------------ | -------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| 矩陣乘法     | `linalg.matmul`                                          | 對應到 $C = A \times B$，是 systolic array 最典型的應用。                                     |
+| 批次矩陣乘法 | `linalg.batch_matmul`                                    | 多組矩陣乘法，適合在 systolic array 上進行時間/空間共享。                                     |
+| 向量內積     | `linalg.dot`                                             | 向量乘積，可視為矩陣乘法的基本單元。                                                          |
+| 卷積         | `linalg.conv_1d`, `linalg.conv_2d`, `linalg.conv_3d`     | 卷積可轉換為矩陣乘法（透過 im2col），也可使用 Winograd 等演算法直接映射。                     |
+| 轉置矩陣乘法 | `linalg.matmul_transpose_a`, `linalg.matmul_transpose_b` | 若有轉置需求，可使用這些變體。注意：某些 NPU 可能不原生支援轉置變體，需要額外的 layout 轉換。 |
 
-| 運算類型     | linalg dialect op                                        | 說明                                                      |
-| ------------ | -------------------------------------------------------- | --------------------------------------------------------- |
-| 矩陣乘法     | `linalg.matmul`                                          | 對應到 $C = A \times B$，是 systolic array 最典型的應用。 |
-| 批次矩陣乘法 | `linalg.batch_matmul`                                    | 多組矩陣乘法，適合在 systolic array 上進行時間/空間共享。 |
-| 向量內積     | `linalg.dot`                                             | 向量乘積，可視為矩陣乘法的基本單元。                      |
-| 卷積         | `linalg.conv_1d`, `linalg.conv_2d`, `linalg.conv_3d`     | 卷積可轉換為矩陣乘法（如 im2col），也可直接映射。         |
-| 轉置矩陣乘法 | `linalg.matmul_transpose_a`, `linalg.matmul_transpose_b` | 若有轉置需求，可使用這些變體。                            |
+**硬體限制說明：**
 
-### ⚠️ 需額外處理或轉換的 linalg ops
+1. **Systolic Array 尺寸限制**：多數 NPU 的 systolic array 有固定尺寸（如 128x128, 256x256），超過此尺寸的矩陣需要進行 tiling（分塊處理）。
+2. **資料對齊要求**：許多 NPU 要求輸入資料必須按特定邊界對齊（如 16-byte, 64-byte alignment），否則性能會大幅下降。
+3. **記憶體頻寬瓶頸**：即使運算單元充足，若資料無法及時供給，硬體利用率仍會受限。需要仔細設計 DMA 傳輸策略。
+4. **Layout 偏好**：不同 NPU 對 NCHW vs NHWC 有不同偏好，錯誤的 layout 可能導致額外的 transpose 開銷。
+5. **量化精度限制**：多數 NPU 支援 INT8/INT16/FP16，但不一定支援 FP32。混合精度運算可能需要額外的轉換邏輯。
+6. **卷積核尺寸限制**：Winograd 演算法僅適用於小型卷積核（通常 3x3, 5x5），大型卷積核仍需使用 im2col + GEMM 方式。
+
+**需額外處理或轉換的 linalg ops**
 
 | 運算類型               | linalg dialect op         | 說明                                                                                           |
 | ---------------------- | ------------------------- | ---------------------------------------------------------------------------------------------- |
@@ -2016,7 +2058,8 @@ float calculateTotalCost(LayoutPath path) {
 | 解線性方程組           | `linalg.triangular_solve` | 可用於解 $Ax = b$，但不一定適合 systolic array。                                               |
 | 一般 element-wise 運算 | `linalg.generic`          | 可實現任意逐元素操作，但需額外設計 systolic 支援。                                             |
 | 張量縮減               | `linalg.reduce`           | 僅支援單維度縮減（sum, max, min），需要配合 loop tiling 才能有效利用 systolic array 的並行性。 |
->>>>>>> Stashed changes
+
+---
 
 ## Good reference
 
