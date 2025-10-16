@@ -1527,6 +1527,7 @@ class ConvertNPUCommonToNPU_B : public OpRewritePattern<npu_common::GenericConvO
 
 ---
 
+<<<<<<< Updated upstream
 ## Questions
 
 ### Convoluiton lowering
@@ -1949,6 +1950,73 @@ float calculateTotalCost(LayoutPath path) {
 ```
 
 **Performance Insight:** One strategic transpose upfront eliminates 4-5 transposes later in the pipeline.
+=======
+## NPU Accerlation
+
+目前主流的 NPU (Neural Processing Unit) 包括：
+
+- Google TPU
+- NVIDIA Tensor Cores
+- Intel Nervana
+- Graphcore IPU
+- Habana Gaudi
+- Cambricon MLU
+- 以及各種手機 SoC 內建的 NPU (如 Apple Neural Engine, Huawei Ascend)
+
+這些 NPU 通常有以下特點：
+
+- 專門針對深度學習運算進行優化
+- 支援高效的矩陣運算 (如 GEMM, CONV)
+- 具備低精度運算能力 (如 FP16, INT8)
+- 內建專用的記憶體層次結構 (如 HBM, SRAM)
+- 支援特定的深度學習框架 (如 TensorFlow, PyTorch)
+
+有甚麼硬體指令或設計是 NPU 能加速的關鍵嗎?
+
+- 高度並行的矩陣乘法指令 (如 systolic arrays)
+- 支援卷積操作的指令 (如 Winograd, FFT-based conv)
+- 支援張量操作的指令集 (如張量縮減, 張量轉置)
+- 低延遲的記憶體存取指令 (如 DMA, Prefetch)
+- 支援稀疏矩陣運算的指令 (如稀疏矩陣乘法)
+- 支援量化運算的指令 (如 INT8 乘加)
+- 專用的激活函數指令 (如 ReLU, Sigmoid)
+- 支援批次處理的指令 (如 batch matmul)
+- 支援動態形狀的指令 (如 dynamic reshape)
+
+所以架設有一個 Systolic Array 他可以做甚麼運算?
+
+- 高效的矩陣乘法 (Matrix Multiplication)
+- 卷積運算 (Convolution Operations)
+- 向量內積 (Vector Dot Products)
+- 張量縮減 (Tensor Reductions)
+- 支援低精度運算 (如 INT8, FP16)
+
+也就是說從 linalg 有哪一些運算可以直接對應到 Systolic Array?
+
+- linalg.matmul
+- linalg.conv_2d
+- linalg.batch_matmul
+- linalg.reduce (如 sum, max)
+
+### ✅ 可直接對應到 Systolic Array 的 linalg ops
+
+| 運算類型     | linalg dialect op                                        | 說明                                                      |
+| ------------ | -------------------------------------------------------- | --------------------------------------------------------- |
+| 矩陣乘法     | `linalg.matmul`                                          | 對應到 $C = A \times B$，是 systolic array 最典型的應用。 |
+| 批次矩陣乘法 | `linalg.batch_matmul`                                    | 多組矩陣乘法，適合在 systolic array 上進行時間/空間共享。 |
+| 向量內積     | `linalg.dot`                                             | 向量乘積，可視為矩陣乘法的基本單元。                      |
+| 卷積         | `linalg.conv_1d`, `linalg.conv_2d`, `linalg.conv_3d`     | 卷積可轉換為矩陣乘法（如 im2col），也可直接映射。         |
+| 轉置矩陣乘法 | `linalg.matmul_transpose_a`, `linalg.matmul_transpose_b` | 若有轉置需求，可使用這些變體。                            |
+
+### ⚠️ 需額外處理或轉換的 linalg ops
+
+| 運算類型               | linalg dialect op         | 說明                                                                                           |
+| ---------------------- | ------------------------- | ---------------------------------------------------------------------------------------------- |
+| LU 分解                | 無直接對應 op             | 需透過自定義 lowering 或轉換為一系列 `linalg.generic`。                                        |
+| 解線性方程組           | `linalg.triangular_solve` | 可用於解 $Ax = b$，但不一定適合 systolic array。                                               |
+| 一般 element-wise 運算 | `linalg.generic`          | 可實現任意逐元素操作，但需額外設計 systolic 支援。                                             |
+| 張量縮減               | `linalg.reduce`           | 僅支援單維度縮減（sum, max, min），需要配合 loop tiling 才能有效利用 systolic array 的並行性。 |
+>>>>>>> Stashed changes
 
 ## Good reference
 
