@@ -809,3 +809,11 @@ problems:
     status: L3_MASTERED
     refinement_focus: |
       Attempt 1: The return value might be tricky when the largest value is K's multiple.
+
+  - id: 3119
+    title: "Longest Balanced Subarray i"
+    link: "./3119_Longest_Balanced_Subarray_i"
+    leetcode-difficulty: medium
+    topics: [array, hash-set, two-pointer, sliding-window, enumeration]
+    refinement_focus: |
+      Attempt 1: Starting, when I read the problem, I missed the "distinct" keyword. So I thought of using frequency map to track counts of each number in the window and try to use prefix sum to optimize. But it is too complicated. After realizing "distinct", I can use two-pointer sliding window to solve it easily.
