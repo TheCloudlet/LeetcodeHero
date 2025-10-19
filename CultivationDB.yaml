@@ -800,3 +800,12 @@ problems:
     status: L1_FORGOT
     refinement_focus: |
       Attempt 1: Didn't finish during contest. I don't even identify this as a brute-force problem.
+
+  - id: 3118
+    title: Smallest Missing Multiple of K
+    link: "./3118_Smallest_Missing_Multiple_of_K"
+    leetcode-difficulty: easy
+    topics: [math, hashtable, iteration, leetcode-contest]
+    status: L3_MASTERED
+    refinement_focus: |
+      Attempt 1: The return value might be tricky when the largest value is K's multiple.
