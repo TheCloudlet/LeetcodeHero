@@ -801,19 +801,29 @@ problems:
     refinement_focus: |
       Attempt 1: Didn't finish during contest. I don't even identify this as a brute-force problem.
 
-  - id: 3118
+  - id: 3718
     title: Smallest Missing Multiple of K
-    link: "./3118_Smallest_Missing_Multiple_of_K"
+    link: "./3718_Smallest_Missing_Multiple_of_K"
     leetcode-difficulty: easy
     topics: [math, hashtable, iteration, leetcode-contest]
     status: L3_MASTERED
     refinement_focus: |
       Attempt 1: The return value might be tricky when the largest value is K's multiple.
 
-  - id: 3119
+  - id: 3719
     title: "Longest Balanced Subarray i"
-    link: "./3119_Longest_Balanced_Subarray_i"
+    link: "./3719_Longest_Balanced_Subarray_i"
     leetcode-difficulty: medium
     topics: [array, hash-set, two-pointer, sliding-window, enumeration]
+    status: L2_STRUGGLE
     refinement_focus: |
       Attempt 1: Starting, when I read the problem, I missed the "distinct" keyword. So I thought of using frequency map to track counts of each number in the window and try to use prefix sum to optimize. But it is too complicated. After realizing "distinct", I can use two-pointer sliding window to solve it easily.
+
+  - id: 3720
+    title: "3720. Lexicographically Smallest Permutation Greater Than Target"
+    link: "./3720_Lexicographically_Smallest_Permutation_Greater_Than_Target"
+    leetcode-difficulty: medium
+    topics: [string, greedy, sorting, counting, hash-table]
+    status: L1_FORGOT
+    refinement_focus: |
+      Attempt 1: Althought I know the basic idea. But I cannot correclty implement the greedy algotithm. Even struggled for the whole afternoon. And I got very frustrated and tired, evern cannot understand the solution from genmin.
