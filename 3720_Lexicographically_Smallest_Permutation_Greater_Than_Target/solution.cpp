@@ -6,6 +6,9 @@
 #include <string>
 #include <vector>
 
+// TODO: Need to review the greedy algorithm carefully.
+// I don't understand why this works yet.
+
 class Solution {
  public:
   std::string lexGreaterPermutation(std::string s, std::string target) {
