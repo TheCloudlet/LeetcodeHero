@@ -198,6 +198,15 @@ problems:
 
       Attempt 2: One-shot using indirect pointer. But a little uncertain when doing it in a sprint.
 
+  - id: 23
+    title: "Merge k Sorted Lists"
+    link: "./023_Merge_k_Sorted_Lists"
+    leetcode-difficulty: hard
+    topics: [linked-list, heap, priority-queue, neetcode150]
+    status: L2_STRUGGLE
+    refinement_focus: |
+      Attempt 1: Not really hard, but I need to review how to initialize a priority queue and also prevent adding nullptr to the queue
+
   - id: 24
     title: "Swap Nodes in Pairs"
     link: "./024_Swap_Nodes_in_Pairs"
