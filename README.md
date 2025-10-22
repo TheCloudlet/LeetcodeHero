@@ -21,14 +21,15 @@ Each problem is contained in its own directory, named with its LeetCode number a
 
 Feel free to check out my other projects on my [GitHub Profile](https://github.com/TheCloudlet).
 
-______________________________________________________________________
+---
 
 ## Progress Tracker
 
 ### Phase 1: The Diagnostic (The Awareness Pass)
 
 - [x] Build and complete the `CultivationDB.yaml` database.
-______________________________________________________________________
+
+---
 
 ### Phase 2: The Triage (The "Debt List") - \[PRIORITY: ACTIVE\]
 
@@ -56,7 +57,7 @@ This is the task we discussed on Sept 6-7. Phase 1 (Diagnosis) revealed a clear 
   - [ ] `556` (Next Greater Element III)
   - [ ] `918` Maximum Sum Circular Subarray (kadane's algorithm variant)
 
-______________________________________________________________________
+---
 
 ### Phase 3: The Integration - Mindful Mastery
 
@@ -65,7 +66,7 @@ ______________________________________________________________________
 **Topic Mastery Checklist:**
 
 - [ ] **Theme: Linked List**
-  - [ ] Complete all Neetcode 150 Linked List problems (5/13)
+  - [ ] Complete all Neetcode 150 Linked List problems (10/13)
   - [ ] Review all `L2_STRUGGLE` Linked List problems from `CultivationDB.yaml`
 - [x] **Theme: Trees (Basics & Traversal)** (6/6)
 - [x] **Theme: Trees (Advanced)** (9/9)
@@ -74,7 +75,8 @@ ______________________________________________________________________
 - [ ] **Theme: System Design (Introduction)**
   - [ ] Watch/Read 2-3 introductory pieces of content on System Design per week (e.g., foundational concepts, classic problem overviews). (0/10)
 - [ ] Interval Tree
-______________________________________________________________________
+
+---
 
 ### Phase 4: The Synthesis - Holistic Interview Prep
 
