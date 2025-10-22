@@ -387,7 +387,7 @@ problems:
     topics: [hashset, array, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: "sort is O(n log n), use HashSet to achieve O(n). Check only sequence starters"
-    
+
   - id: 138
     title: "Copy List with Random Pointer"
     link: "./138_Copy_List_with_Random_Pointer"
@@ -415,7 +415,7 @@ problems:
       Attempt 1: I know the fast/slow pointer idea, but I cannot implement it fluently. The key is to check if fast and fast->next are nullptr directly in the while loop condition.
 
       Attempt 2: One-shot
-  
+
   - id: 143
     title: "Reorder List"
     link: "./143_Reorder_List"
@@ -575,6 +575,15 @@ problems:
     topics: [tree, dfs, bfs, neetcode150]
     status: L3_MASTERED
     refinement_focus: "Recursion or Iteration"
+
+  - id: 287
+    title: "Find the Duplicate Number"
+    link: "./287_Find_the_Duplicate_Number"
+    leetcode-difficulty: medium
+    topics: [two-pointer, linked-list-cycle, array, neetcode150]
+    status: L2_STRUGGLE
+    refinement_focus: |
+      Attempt 1: For simple map solution, I can implement it fluently. For the two-pointer solution, this is not intuitive at all. The key is to treat the array as a linked list, and the duplicate number is the entry point of the cycle. Then use Floyd's Tortoise and Hare algorithm to find the entry point.
 
   - id: 230
     title: "Kth Smallest Element in a BST"
@@ -826,4 +835,4 @@ problems:
     topics: [string, greedy, sorting, counting, hash-table]
     status: L1_FORGOT
     refinement_focus: |
-      Attempt 1: Althought I know the basic idea. But I cannot correclty implement the greedy algotithm. Even struggled for the whole afternoon. And I got very frustrated and tired, evern cannot understand the solution from genmin.
+      Attempt 1: Although I know the basic idea, I cannot correctly implement the greedy algorithm. Even struggled for the whole afternoon. I got very frustrated and tired, and even cannot understand the solution from genmin.
