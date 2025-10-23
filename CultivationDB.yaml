@@ -198,6 +198,15 @@ problems:
 
       Attempt 2: One-shot using indirect pointer. But a little uncertain when doing it in a sprint.
 
+  - id: 22
+    title: "Generate Parentheses"
+    link: "./022_Generate_Parentheses"
+    leetcode-difficulty: medium
+    topics: [backtracking, string]
+    status: L2_STRUGGLE
+    refinement_focus: |
+      Attempt 1: I know the core idea, implement has some flaws.
+
   - id: 23
     title: "Merge k Sorted Lists"
     link: "./023_Merge_k_Sorted_Lists"
