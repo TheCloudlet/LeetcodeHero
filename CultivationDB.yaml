@@ -205,7 +205,7 @@ problems:
     topics: [linked-list, heap, priority-queue, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: |
-      Attempt 1: Not really hard, but I need to review how to initialize a priority queue and also prevent adding nullptr to the queue
+      Attempt 1: Not really hard, but I need to review how to initialize a priority queue and also prevent adding nullptr to the queue. There are also one way to use merge sort to merge k lists.
 
   - id: 24
     title: "Swap Nodes in Pairs"
