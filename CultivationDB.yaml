@@ -224,6 +224,15 @@ problems:
     status: L2_STRUGGLE
     refinement_focus: "While loop or helper recursion"
 
+  - id: 25
+    title: "Reverse Nodes in k-Group"
+    link: "./025_Reverse_Nodes_in_k-Group"
+    leetcode-difficulty: hard
+    topics: [linked-list, indirect-pointer, recursion, neetcode150]
+    status: L2_STRUGGLE
+    refinement_focus: |
+      Attempt 1: I know the solution, but there are some logical errors. The key is to set `prev` to next group start before reversing, and after reversing, link the previous group's tail to `prev`.
+
   - id: 34
     title: "Find First and Last Position of Element in Sorted Array"
     link: "./034_Find_First_and_Last_Position_of_Element_in_Sorted_Array"
@@ -304,6 +313,15 @@ problems:
     topics: [dp, math, neetcode150]
     status: L3_MASTERED
     refinement_focus: "Fibonacci, bottom-up DP, top-down DP, or even math"
+
+  - id: 76
+    title: "Minimum Window Substring"
+    link: "./076_Minimum_Window_Substring"
+    leetcode-difficulty: hard
+    topics: [hashtable, sliding-window, string, neetcode150]
+    status: L2_STRUGGLE
+    refinement_focus: |
+      Attempt 1: Brute for but get TLE. Then use sliding window. I don't know when to use sliding window or brute force. The note is written in the #3719 solution.
 
   - id: 91
     title: "Decode Ways"
