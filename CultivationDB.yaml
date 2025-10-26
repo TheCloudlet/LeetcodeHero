@@ -872,3 +872,17 @@ problems:
     status: L1_FORGOT
     refinement_focus: |
       Attempt 1: Although I know the basic idea, I cannot correctly implement the greedy algorithm. Even struggled for the whole afternoon. I got very frustrated and tired, and even cannot understand the solution from genmin.
+
+  - id: 3726
+    title: "Remove Zeros in Decimal Representation"
+    link: "./3726_Remove_Zeros_in_Decimal_Representation"
+    topics: [string, weekly-contest]
+    status: L3_MASTERED
+    refinement_focus: "Simple std::to_string and std::stll"
+
+  - id: 3727
+    title: "Maximum Alternating Sum of Squares"
+    link: "./3727_Maximum_Alternating_Sum_of_Squares/"
+    topics: [greedy, sorting, weekly-contest]
+    status: L3_MASTERED
+    refinement_focus: "Greedy"
