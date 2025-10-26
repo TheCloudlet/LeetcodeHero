@@ -886,3 +886,11 @@ problems:
     topics: [greedy, sorting, weekly-contest]
     status: L3_MASTERED
     refinement_focus: "Greedy"
+
+  - id: 3729
+    title: "Stable Subarrays With Equal Boundary and Interior Sum"
+    link: "./3729_Stable_Subarrays_With_Equal_Boundary_and_Interior_Sum"
+    topics: [prefix-sum, subarray, weekly-contest]
+    status: L2_STRUGGLE
+    refinement_focus: |
+      Attempt 1: Tried brute-force first, TLE. Then, prefix-sum, TLE. Then, prefix-sum + hash-map for same l,r value, TLE. Gemini's solution is not very intuitive. It keeps track of prefix-sum and index in a hash-map, so that we can find all possible pairs for every r.
