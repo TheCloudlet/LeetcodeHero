@@ -42,7 +42,7 @@
 problems:
   - id: 1
     title: "Two Sum"
-    link: ./001_Two_Sum/
+    link: "./problems/001_two_sum/"
     leetcode-difficulty: easy
     topics: [hashtable, array, neetcode150]
     status: L3_MASTERED
@@ -50,7 +50,7 @@ problems:
 
   - id: 2
     title: "Add Two Numbers"
-    link: "./002_Add_Two_Numbers"
+    link: "./problems/002_add_two_numbers/"
     leetcode-difficulty: medium
     topics: [linked-list, indirect-pointer, neetcode150]
     status: L2_STRUGGLE
@@ -61,7 +61,7 @@ problems:
 
   - id: 3
     title: "Longest Substring Without Repeating Characters"
-    link: "./003_Longest_Substring_Without_Repeating_Characters"
+    link: "./problems/003_longest_substring_without_repeating_characters/"
     leetcode-difficulty: medium
     topics: [hashtable, sliding-window, string, neetcode150]
     status: L3_MASTERED
@@ -69,7 +69,7 @@ problems:
 
   - id: 5
     title: "Longest Palindromic Substring"
-    link: "./005_Longest_Palindromic_Substring"
+    link: "./problems/005_longest_palindromic_substring/"
     leetcode-difficulty: medium
     topics: [iteration, dp, manachers-algorithm, string, neetcode150]
     status: L2_STRUGGLE
@@ -77,7 +77,7 @@ problems:
 
   - id: 6
     title: "Zigzag Conversion"
-    link: "./006_Zigzag_Conversion"
+    link: "./problems/006_zigzag_conversion/"
     leetcode-difficulty: medium
     topics: [vector, string]
     status: L3_MASTERED
@@ -85,7 +85,7 @@ problems:
 
   - id: 7
     title: "Reverse Integer"
-    link: "./007_Reverse_Integer"
+    link: "./problems/007_reverse_integer/"
     leetcode-difficulty: medium
     topics: [integer, signed, boundary]
     status: L2_STRUGGLE
@@ -93,7 +93,7 @@ problems:
 
   - id: 8
     title: "String to Integer"
-    link: "./008_String_to_Integer"
+    link: "./problems/008_string_to_integer/"
     leetcode-difficulty: medium
     topics: [parsing, stoi, boundary, signed, overflow]
     status: L3_MASTERED
@@ -101,7 +101,7 @@ problems:
 
   - id: 9
     title: "Palindrome Number"
-    link: "./009_Palindrome_Number"
+    link: "./problems/009_palindrome_number/"
     leetcode-difficulty: easy
     topics: [iteration]
     status: L3_MASTERED
@@ -109,7 +109,7 @@ problems:
 
   - id: 11
     title: "Container With Most Water"
-    link: "./011_Container_With_Most_Water"
+    link: "./problems/011_container_with_most_water/"
     leetcode-difficulty: medium
     topics: [two-pointer, array, greedy, neetcode150]
     status: L2_STRUGGLE
@@ -117,7 +117,7 @@ problems:
 
   - id: 12
     title: "Integer to Roman"
-    link: "./012_Integer_to_Roman"
+    link: "./problems/012_integer_to_roman/"
     leetcode-difficulty: medium
     topics: [array]
     status: L2_STRUGGLE
@@ -125,7 +125,7 @@ problems:
 
   - id: 13
     title: "Roman to Integer"
-    link: "./013 Roman to Integer"
+    link: "./problems/013_roman_to_integer/"
     leetcode-difficulty: easy
     topics: [array]
     status: L2_STRUGGLE
@@ -133,7 +133,7 @@ problems:
 
   - id: 14
     title: "Longest Common Prefix"
-    link: "./014_Longest_Common_Prefix"
+    link: "./problems/014_longest_common_prefix/"
     leetcode-difficulty: easy
     topics: [array]
     status: L3_MASTERED
@@ -141,7 +141,7 @@ problems:
 
   - id: 15
     title: "3 Sum"
-    link: "./015_3Sum"
+    link: "./problems/015_3sum/"
     leetcode-difficulty: medium
     topics: [two-pointer, neetcode150]
     status: L2_STRUGGLE
@@ -149,7 +149,7 @@ problems:
 
   - id: 16
     title: "3 Sum Closest"
-    link: "./016_3Sum_Closest"
+    link: "./problems/016_3sum_closest/"
     leetcode-difficulty: medium
     topics: [two-pointer, array, sorting]
     status: L2_STRUGGLE
@@ -157,7 +157,7 @@ problems:
 
   - id: 17
     title: "Letter Combinations of a Phone Number"
-    link: "./017_Letter_Combinations_of_a_Phone_Number"
+    link: "./problems/017_letter_combinations_of_a_phone_number/"
     leetcode-difficulty: medium
     topics: [hashtable, backtracking, string]
     status: L3_MASTERED
@@ -165,7 +165,7 @@ problems:
 
   - id: 18
     title: "4 Sum"
-    link: "./018_4Sum"
+    link: "./problems/018_4sum/"
     leetcode-difficulty: medium
     topics: [k-sum, two-pointer, array, sorting]
     status: L2_STRUGGLE
@@ -173,7 +173,7 @@ problems:
 
   - id: 19
     title: "Remove Nth Node From End of List"
-    link: "./019_Remove_Nth_Node_From_End_of_List"
+    link: "./problems/019_remove_nth_node_from_end_of_list/"
     leetcode-difficulty: medium
     topics: [fast-and-slow-pointer, linked-list, indirect-pointer, neetcode150]
     status: L2_STRUGGLE
@@ -181,7 +181,7 @@ problems:
 
   - id: 20
     title: "Valid Parentheses"
-    link: "./020_Valid_Parentheses"
+    link: "./problems/020_valid_parentheses/"
     leetcode-difficulty: easy
     topics: [stack, string, neetcode150]
     status: L2_STRUGGLE
@@ -189,7 +189,7 @@ problems:
 
   - id: 21
     title: "Merge Two Sorted Lists"
-    link: "./021_Merge_Two_Sorted_Lists"
+    link: "./problems/021_merge_two_sorted_lists/"
     leetcode-difficulty: easy
     topics: [linked-list, indirect-pointer, neetcode150]
     status: L3_MASTERED
@@ -200,7 +200,7 @@ problems:
 
   - id: 22
     title: "Generate Parentheses"
-    link: "./022_Generate_Parentheses"
+    link: "./problems/022_generate_parentheses/"
     leetcode-difficulty: medium
     topics: [backtracking, string]
     status: L2_STRUGGLE
@@ -209,7 +209,7 @@ problems:
 
   - id: 23
     title: "Merge k Sorted Lists"
-    link: "./023_Merge_k_Sorted_Lists"
+    link: "./problems/023_merge_k_sorted_lists/"
     leetcode-difficulty: hard
     topics: [linked-list, heap, priority-queue, neetcode150]
     status: L2_STRUGGLE
@@ -218,7 +218,7 @@ problems:
 
   - id: 24
     title: "Swap Nodes in Pairs"
-    link: "./024_Swap_Nodes_in_Pairs"
+    link: "./problems/024_swap_nodes_in_pairs/"
     leetcode-difficulty: medium
     topics: [linked-list, indirect-pointer, recursion]
     status: L2_STRUGGLE
@@ -226,7 +226,7 @@ problems:
 
   - id: 25
     title: "Reverse Nodes in k-Group"
-    link: "./025_Reverse_Nodes_in_k-Group"
+    link: "./problems/025_reverse_nodes_in_k-group/"
     leetcode-difficulty: hard
     topics: [linked-list, indirect-pointer, recursion, neetcode150]
     status: L2_STRUGGLE
@@ -235,7 +235,7 @@ problems:
 
   - id: 34
     title: "Find First and Last Position of Element in Sorted Array"
-    link: "./034_Find_First_and_Last_Position_of_Element_in_Sorted_Array"
+    link: "./problems/034_find_first_and_last_position_of_element_in_sorted_array/"
     leetcode-difficulty: medium
     topics: [binary-search, array, sorting]
     status: L2_STRUGGLE
@@ -243,7 +243,7 @@ problems:
 
   - id: 35
     title: "Search Insert Position"
-    link: "./035_Search_Insert_Position"
+    link: "./problems/035_search_insert_position/"
     leetcode-difficulty: easy
     topics: [binary-search, array, sorting]
     status: L3_MASTERED
@@ -251,7 +251,7 @@ problems:
 
   - id: 36
     title: "Valid Sudoku"
-    link: "./036_Valid_Sudoku"
+    link: "./problems/036_valid_sudoku/"
     leetcode-difficulty: medium
     topics: [hashset, matrix, simulation, neetcode150]
     status: L3_MASTERED
@@ -259,7 +259,7 @@ problems:
 
   - id: 42
     title: "Trapping Rain Water"
-    link: "./042_Trapping_Rain_Water"
+    link: "./problems/042_trapping_rain_water/"
     leetcode-difficulty: hard
     topics: [two-pointer, monotonic-stack, array, neetcode150]
     status: L2_STRUGGLE
@@ -267,7 +267,7 @@ problems:
 
   - id: 48
     title: "Rotate Image"
-    link: "./048_Rotate_Image"
+    link: "./problems/048_rotate_image/"
     leetcode-difficulty: medium
     topics: [matrix]
     status: L3_MASTERED
@@ -275,7 +275,7 @@ problems:
 
   - id: 49
     title: "Group Anagrams"
-    link: "./049_Group_Anagrams"
+    link: "./problems/049_group_anagrams/"
     leetcode-difficulty: medium
     topics: [hashtable, string, sorting, neetcode150]
     status: L3_MASTERED
@@ -283,7 +283,7 @@ problems:
 
   - id: 53
     title: "Maximum Subarray"
-    link: "./053_Maximum_Subarray"
+    link: "./problems/053_maximum_subarray/"
     leetcode-difficulty: medium
     topics: [dp, array, neetcode150, kadane-algorithm]
     status: L3_MASTERED
@@ -292,7 +292,7 @@ problems:
 
   - id: 56
     title: "Merge Intervals"
-    link: "./056_Merge_Intervals"
+    link: "./problems/056_merge_intervals/"
     leetcode-difficulty: medium
     topics: [array, sorting, neetcode150]
     status: L2_STRUGGLE
@@ -300,7 +300,7 @@ problems:
 
   - id: 61
     title: "Rotate List"
-    link: "./061_Rotate_List"
+    link: "./problems/061_rotate_list/"
     leetcode-difficulty: medium
     topics: [linked-list, two-pointer, indirect-pointer]
     status: L3_MASTERED
@@ -308,7 +308,7 @@ problems:
 
   - id: 66
     title: "Plus One"
-    link: "./066_plus_one"
+    link: "./problems/066_plus_one/"
     leetcode-difficulty: easy
     topics: [array, math]
     status: L2_STRUGGLE
@@ -317,7 +317,7 @@ problems:
 
   - id: 70
     title: "Climbing Stairs"
-    link: "./070_Climbing_Stairs"
+    link: "./problems/070_climbing_stairs/"
     leetcode-difficulty: easy
     topics: [dp, math, neetcode150]
     status: L3_MASTERED
@@ -325,7 +325,7 @@ problems:
 
   - id: 76
     title: "Minimum Window Substring"
-    link: "./076_Minimum_Window_Substring"
+    link: "./problems/076_minimum_window_substring/"
     leetcode-difficulty: hard
     topics: [hashtable, sliding-window, string, neetcode150]
     status: L2_STRUGGLE
@@ -334,7 +334,7 @@ problems:
 
   - id: 84
     title: "Largest Rectangle in Histogram"
-    link: "./084_largest_rectangle_in_histogram"
+    link: "./problems/084_largest_rectangle_in_histogram/"
     leetcode-difficulty: hard
     topics: [stack, array, monotonic-stack, neetcode150]
     status: L1_FORGOT
@@ -343,7 +343,7 @@ problems:
 
   - id: 91
     title: "Decode Ways"
-    link: "./091_Decode_Ways"
+    link: "./problems/091_decode_ways/"
     leetcode-difficulty: medium
     topics: [dp, string, backtracking, neetcode150]
     status: L2_STRUGGLE
@@ -351,7 +351,7 @@ problems:
 
   - id: 94
     title: "Binary Tree Inorder Traversal"
-    link: "./094_Binary_Tree_Inorder_Traversal"
+    link: "./problems/094_binary_tree_inorder_traversal/"
     leetcode-difficulty: easy
     topics: [tree, dfs]
     status: L2_STRUGGLE
@@ -359,7 +359,7 @@ problems:
 
   - id: 96
     title: "Unique Binary Search Trees"
-    link: "./096_Unique_Binary_Search_Trees"
+    link: "./problems/096_unique_binary_search_trees/"
     leetcode-difficulty: medium
     topics: [dp, math, neetcode150]
     status: L2_STRUGGLE
@@ -367,7 +367,7 @@ problems:
 
   - id: 98
     title: "Validate Binary Search Tree"
-    link: "./098_Validate_Binary_Search_Tree"
+    link: "./problems/098_validate_binary_search_tree/"
     leetcode-difficulty: medium
     topics: [tree, dfs, binary-tree, neetcode150]
     status: L1_FORGOT
@@ -376,7 +376,7 @@ problems:
 
   - id: 100
     title: "Same Tree"
-    link: "./100_Same_Tree"
+    link: "./problems/100_same_tree/"
     leetcode-difficulty: easy
     topics: [tree, dfs, bfs, neetcode150]
     status: L3_MASTERED
@@ -384,7 +384,7 @@ problems:
 
   - id: 102
     title: "Binary Tree Level Order Traversal"
-    link: "./102_Binary_Tree_Level_Order_Traversal"
+    link: "./problems/102_binary_tree_level_order_traversal/"
     leetcode-difficulty: medium
     topics: [tree, traversal, neetcode150]
     status: L2_STRUGGLE
@@ -393,7 +393,7 @@ problems:
 
   - id: 105
     title: "Construct Binary Tree from Preorder and Inorder Traversal"
-    link: "./105_Construct_Binary_Tree_from_Preorder_and_Inorder_Traversal"
+    link: "./problems/105_construct_binary_tree_from_preorder_and_inorder_traversal/"
     leetcode-difficulty: medium
     topics: [tree, dfs, recursion, neetcode150]
     status: L2_STRUGGLE
@@ -402,7 +402,7 @@ problems:
 
   - id: 110
     title: "Balanced Binary Tree"
-    link: "./110_Balanced_Binary_Tree"
+    link: "./problems/110_balanced_binary_tree/"
     leetcode-difficulty: easy
     topics: [tree, dfs, bfs, neetcode150]
     status: L2_STRUGGLE
@@ -411,7 +411,7 @@ problems:
 
   - id: 104
     title: "Maximum Depth of Binary Tree"
-    link: "./104_Maximum_Depth_of_Binary_Tree"
+    link: "./problems/104_maximum_depth_of_binary_tree/"
     leetcode-difficulty: easy
     topics: [tree, dfs, bfs, neetcode150]
     status: L3_MASTERED
@@ -419,7 +419,7 @@ problems:
 
   - id: 124
     title: "Binary Tree Maximum Path Sum"
-    link: "./124_Binary_Tree_Maximum_Path_Sum"
+    link: "./problems/124_binary_tree_maximum_path_sum/"
     leetcode-difficulty: hard
     topics: [tree, dfs, binary-tree, neetcode150]
     status: L2_STRUGGLE
@@ -428,7 +428,7 @@ problems:
 
   - id: 125
     title: "Valid Palindrome"
-    link: "./125_Valid_Palindrome"
+    link: "./problems/125_valid_palindrome/"
     leetcode-difficulty: easy
     topics: [two-pointer, string, neetcode150]
     status: L3_MASTERED
@@ -436,7 +436,7 @@ problems:
 
   - id: 128
     title: "Longest Consecutive Sequence"
-    link: "./128_Longest_Consecutive_Sequence"
+    link: "./problems/128_longest_consecutive_sequence/"
     leetcode-difficulty: medium
     topics: [hashset, array, neetcode150]
     status: L2_STRUGGLE
@@ -444,7 +444,7 @@ problems:
 
   - id: 138
     title: "Copy List with Random Pointer"
-    link: "./138_Copy_List_with_Random_Pointer"
+    link: "./problems/138_copy_list_with_random_pointer/"
     leetcode-difficulty: medium
     topics: [linked-list, hashtable, neetcode150]
     status: L3_MASTERED
@@ -453,7 +453,7 @@ problems:
 
   - id: 139
     title: "Word Break"
-    link: "./139_Word_Break"
+    link: "./problems/139_word_break/"
     leetcode-difficulty: medium
     topics: [dp, string, neetcode150]
     status: L2_STRUGGLE
@@ -461,7 +461,7 @@ problems:
 
   - id: 141
     title: "Linked List Cycle"
-    link: "./141_Linked_List_Cycle"
+    link: "./problems/141_linked_list_cycle/"
     leetcode-difficulty: easy
     topics: [linked-list, two-pointer, fast-and-slow-pointer, neetcode150]
     status: L3_MASTERED
@@ -472,7 +472,7 @@ problems:
 
   - id: 143
     title: "Reorder List"
-    link: "./143_Reorder_List"
+    link: "./problems/143_reorder_list/"
     leetcode-difficulty: medium
     topics: [linked-list, two-pointer, fast-and-slow-pointer, reverse, neetcode150]
     status: L2_STRUGGLE
@@ -481,7 +481,7 @@ problems:
 
   - id: 144
     title: "Binary Tree Preorder Traversal"
-    link: "./144_Binary_Tree_Preorder_Traversal"
+    link: "./problems/144_binary_tree_preorder_traversal/"
     leetcode-difficulty: easy
     topics: [tree, dfs]
     status: L2_STRUGGLE
@@ -490,7 +490,7 @@ problems:
 
   - id: 145
     title: "Binary Tree Postorder Traversal"
-    link: "./145_Binary_Tree_Postorder_Traversal"
+    link: "./problems/145_binary_tree_postorder_traversal/"
     leetcode-difficulty: easy
     topics: [tree, dfs]
     status: L1_FORGOT
@@ -499,7 +499,7 @@ problems:
 
   - id: 146
     title: "LRU Cache"
-    link: "./146_LRU_Cache"
+    link: "./problems/146_lru_cache/"
     leetcode-difficulty: medium
     topics: [design, linked-list, hashtable, neetcode150]
     status: L2_STRUGGLE
@@ -507,7 +507,7 @@ problems:
 
   - id: 150
     title: "Evaluate Reverse Polish Notation"
-    link: "./150_Evaluate_Reverse_Polish_Notation"
+    link: "./problems/150_evaluate_reverse_polish_notation/"
     leetcode-difficulty: medium
     topics: [stack, array, neetcode150]
     status: L3_MASTERED
@@ -515,7 +515,7 @@ problems:
 
   - id: 152
     title: "Maximum Product Subarray"
-    link: "./152_Maximum_Product_Subarray"
+    link: "./problems/152_maximum_product_subarray/"
     leetcode-difficulty: medium
     topics: [dp, array, neetcode150, kadane-algorithm]
     status: L2_STRUGGLE
@@ -526,7 +526,7 @@ problems:
 
   - id: 155
     title: "Min Stack"
-    link: "./155_Min_Stack"
+    link: "./problems/155_min_stack/"
     leetcode-difficulty: medium
     topics: [stack, design, neetcode150]
     status: L2_STRUGGLE
@@ -537,7 +537,7 @@ problems:
 
   - id: 167
     title: "Two Sum II - Input Array Is Sorted"
-    link: "./167_Two_Sum_II_Input_Array_Is_Sorted"
+    link: "./problems/167_two_sum_ii_input_array_is_sorted/"
     leetcode-difficulty: easy
     topics: [two-pointer, array, neetcode150]
     status: L3_MASTERED
@@ -545,7 +545,7 @@ problems:
 
   - id: 198
     title: "House Robber"
-    link: "./198_House_Robber"
+    link: "./problems/198_house_robber/"
     leetcode-difficulty: medium
     topics: [dp, array, neetcode150]
     status: L2_STRUGGLE
@@ -553,7 +553,7 @@ problems:
 
   - id: 199
     title: "Binary Tree Right Side View"
-    link: "./199_Binary_Tree_Right_Side_View"
+    link: "./problems/199_binary_tree_right_side_view/"
     leetcode-difficulty: medium
     topics: [tree, bfs, dfs, neetcode150]
     status: L3_MASTERED
@@ -562,7 +562,7 @@ problems:
 
   - id: 206
     title: "Reverse Linked List"
-    link: "./206_Reverse_Linked_List"
+    link: "./problems/206_reverse_linked_list/"
     leetcode-difficulty: easy
     topics: [linked-list, iteration, recursion, neetcode150]
     status: L2_STRUGGLE
@@ -575,7 +575,7 @@ problems:
 
   - id: 207
     title: "Course Schedule"
-    link: "./207_Course_Schedule"
+    link: "./problems/207_course_schedule/"
     leetcode-difficulty: medium
     topics: [graph, bfs, dfs, topological-sort, neetcode150]
     status: L2_STRUGGLE
@@ -586,7 +586,7 @@ problems:
 
   - id: 210
     title: "Course Schedule II"
-    link: "./210_Course_Schedule_II"
+    link: "./problems/210_course_schedule_ii/"
     leetcode-difficulty: medium
     topics: [graph, bfs, dfs, topological-sort, neetcode150]
     status: L2_STRUGGLE
@@ -597,7 +597,7 @@ problems:
 
   - id: 211
     title: "Design Add and Search Words Data Structure"
-    link: "./211_Design_Add_and_Search_Words_Data_Structure"
+    link: "./problems/211_design_add_and_search_words_data_structure/"
     leetcode-difficulty: medium
     topics: [trie, backtracking, design, neetcode150]
     status: L2_STRUGGLE
@@ -608,7 +608,7 @@ problems:
 
   - id: 213
     title: "House Robber II"
-    link: "./213_House_Robber_II"
+    link: "./problems/213_house_robber_ii/"
     leetcode-difficulty: medium
     topics: [dp, circular, array, neetcode150]
     status: L2_STRUGGLE
@@ -616,7 +616,7 @@ problems:
 
   - id: 217
     title: "Contains Duplicate"
-    link: "./217_Contains_Duplicate"
+    link: "./problems/217_contains_duplicate/"
     leetcode-difficulty: easy
     topics: [hashset, array, neetcode150]
     status: L3_MASTERED
@@ -624,7 +624,7 @@ problems:
 
   - id: 226
     title: "Invert Binary Tree"
-    link: "./226_Invert_Binary_Tree"
+    link: "./problems/226_invert_binary_tree/"
     leetcode-difficulty: easy
     topics: [tree, dfs, bfs, neetcode150]
     status: L3_MASTERED
@@ -632,7 +632,7 @@ problems:
 
   - id: 287
     title: "Find the Duplicate Number"
-    link: "./287_Find_the_Duplicate_Number"
+    link: "./problems/287_find_the_duplicate_number/"
     leetcode-difficulty: medium
     topics: [two-pointer, linked-list-cycle, array, neetcode150]
     status: L2_STRUGGLE
@@ -641,7 +641,7 @@ problems:
 
   - id: 230
     title: "Kth Smallest Element in a BST"
-    link: "./230_Kth_Smallest_Element_in_a_BST"
+    link: "./problems/230_kth_smallest_element_in_a_bst/"
     leetcode-difficulty: medium
     topics: [tree, dfs, binary-search-tree, neetcode150]
     status: L2_STRUGGLE
@@ -654,7 +654,7 @@ problems:
 
   - id: 238
     title: "Product of Array Except Self"
-    link: "./238_Product_of_Array_Except_Self"
+    link: "./problems/238_product_of_array_except_self/"
     leetcode-difficulty: medium
     topics: [array, prefix-sum, neetcode150]
     status: L2_STRUGGLE
@@ -662,7 +662,7 @@ problems:
 
   - id: 239
     title: "Sliding Window Maximum"
-    link: "./239_Sliding_Window_Maximum"
+    link: "./problems/239_sliding_window_maximum/"
     leetcode-difficulty: hard
     topics: [monotonic-queue, array, sliding-window, neetcode150]
     status: L2_STRUGGLE
@@ -672,7 +672,7 @@ problems:
 
   - id: 235
     title: "Lowest Common Ancestor of a Binary Search Tree"
-    link: "./235_Lowest_Common_Ancestor_of_a_Binary_Search_Tree"
+    link: "./problems/235_lowest_common_ancestor_of_a_binary_search_tree/"
     leetcode-difficulty: medium
     topics: [tree, monotonic, dfs, binary-tree, neetcode150]
     status: L2_STRUGGLE
@@ -681,7 +681,7 @@ problems:
 
   - id: 278
     title: "First Bad Version"
-    link: "./278_First_Bad_Version"
+    link: "./problems/278_first_bad_version/"
     leetcode-difficulty: easy
     topics: [binary-search, neetcode150]
     status: L3_MASTERED
@@ -689,7 +689,7 @@ problems:
 
   - id: 297
     title: "Serialize and Deserialize Binary Tree"
-    link: "./297_Serialize_and_Deserialize_Binary_Tree"
+    link: "./problems/297_serialize_and_deserialize_binary_tree/"
     leetcode-difficulty: hard
     topics: [tree, bfs, dfs, binary-tree, design, neetcode150]
     status: L2_STRUGGLE
@@ -698,7 +698,7 @@ problems:
 
   - id: 300
     title: "Longest Increasing Subsequence"
-    link: "./300_Longest_Increasing_Subsequence"
+    link: "./problems/300_longest_increasing_subsequence/"
     leetcode-difficulty: medium
     topics: [dp, binary-search, neetcode150]
     status: L2_STRUGGLE
@@ -706,7 +706,7 @@ problems:
 
   - id: 310
     title: "Minimum Height Trees"
-    link: "./310_Minimum_Height_Trees"
+    link: "./problems/310_minimum_height_trees/"
     leetcode-difficulty: medium
     topics: [graph, bfs, tree, neetcode150]
     status: L2_STRUGGLE
@@ -714,7 +714,7 @@ problems:
 
   - id: 322
     title: "Coin Change"
-    link: "./322_Coin_Change"
+    link: "./problems/322_coin_change/"
     leetcode-difficulty: medium
     topics: [dp, bfs, neetcode150]
     status: L2_STRUGGLE
@@ -722,7 +722,7 @@ problems:
 
   - id: 347
     title: "Top K Frequent Elements"
-    link: "./347_Top_K_Frequent_Elements"
+    link: "./problems/347_top_k_frequent_elements/"
     leetcode-difficulty: medium
     topics: [hashtable, heap, bucket-sort, neetcode150]
     status: L2_STRUGGLE
@@ -730,7 +730,7 @@ problems:
 
   - id: 416
     title: "Partition Equal Subset Sum"
-    link: "./416_Partition_Equal_Subset_Sum"
+    link: "./problems/416_partition_equal_subset_sum/"
     leetcode-difficulty: medium
     topics: [dp, knapsack, neetcode150]
     status: L2_STRUGGLE
@@ -741,7 +741,7 @@ problems:
 
   - id: 496
     title: "Next Greater Element I"
-    link: "./496_Next_Greater_Element_I"
+    link: "./problems/496_next_greater_element_i/"
     leetcode-difficulty: easy
     topics: [monotonic-stack, hashtable, array, neetcode150]
     status: L2_STRUGGLE
@@ -749,7 +749,7 @@ problems:
 
   - id: 503
     title: "Next Greater Element II"
-    link: "./503_Next_Greater_Element_II"
+    link: "./problems/503_next_greater_element_ii/"
     leetcode-difficulty: medium
     topics: [monotonic-stack, array, circular, neetcode150]
     status: L2_STRUGGLE
@@ -757,7 +757,7 @@ problems:
 
   - id: 509
     title: "Fibonacci Number"
-    link: "./509_Fibonacci_Number"
+    link: "./problems/509_fibonacci_number/"
     leetcode-difficulty: easy
     topics: [dp, recursion, neetcode150]
     status: L3_MASTERED
@@ -765,7 +765,7 @@ problems:
 
   - id: 543
     title: "Diameter of Binary Tree"
-    link: "./543_Diameter_of_Binary_Tree"
+    link: "./problems/543_diameter_of_binary_tree/"
     leetcode-difficulty: easy
     topics: [tree, bfs, binary-tree, neetcode150]
     status: L3_MASTERED
@@ -773,7 +773,7 @@ problems:
 
   - id: 572
     title: "Subtree of Another Tree"
-    link: "./572_Subtree_of_Another_Tree"
+    link: "./problems/572_subtree_of_another_tree/"
     leetcode-difficulty: easy
     topics: [tree, dfs, bfs, neetcode150]
     status: L3_MASTERED
@@ -782,7 +782,7 @@ problems:
 
   - id: 647
     title: "Palindromic Substrings"
-    link: "./647_Palindromic_Substrings"
+    link: "./problems/647_palindromic_substrings/"
     leetcode-difficulty: medium
     topics: [dp, string, neetcode150]
     status: L2_STRUGGLE
@@ -790,7 +790,7 @@ problems:
 
   - id: 704
     title: "Binary Search"
-    link: "./704_Binary_Search"
+    link: "./problems/704_binary_search/"
     leetcode-difficulty: easy
     topics: [binary-search, array, neetcode150]
     status: L3_MASTERED
@@ -798,7 +798,7 @@ problems:
 
   - id: 746
     title: "Min Cost Climbing Stairs"
-    link: "./746_Min_Cost_Climbing_Stairs"
+    link: "./problems/746_min_cost_climbing_stairs/"
     leetcode-difficulty: easy
     topics: [dp, array, neetcode150]
     status: L3_MASTERED
@@ -806,7 +806,7 @@ problems:
 
   - id: 852
     title: "Peak Index in a Mountain Array"
-    link: "./852_Peak_Index_in_a_Mountain_Array"
+    link: "./problems/852_peak_index_in_a_mountain_array/"
     leetcode-difficulty: easy
     topics: [binary-search, array, neetcode150]
     status: L2_STRUGGLE
@@ -814,7 +814,7 @@ problems:
 
   - id: 1448
     title: "Count Good Nodes in Binary Tree"
-    link: "./1448_Count_Good_Nodes_in_Binary_Tree"
+    link: "./problems/1448_count_good_nodes_in_binary_tree/"
     leetcode-difficulty: medium
     topics: [tree, dfs, binary-tree, neetcode150]
     status: L2_STRUGGLE
@@ -823,7 +823,7 @@ problems:
 
   - id: 3701
     title: "Compute Alternating Sum"
-    link: "./3701_Compute_Alternating_Sum"
+    link: "./problems/3701_compute_alternating_sum/"
     leetcode-difficulty: easy
     topics: [array, leetcode-contest]
     status: L3_MASTERED
@@ -831,16 +831,16 @@ problems:
 
   - id: 3702
     title: "Longest Subsequence With Non-Zero Bitwise XOR"
-    link: "./3702_Longest_Subsequence_With_Non-Zero_Bitwise_XOR"
+    link: "./problems/3702_longest_subsequence_with_nonzero_bitwise_xor/"
     leetcode-difficulty: medium
     topics: [bit-manipulation, leetcode-contest]
     status: L1_FORGOT
     refinement_focus: |
       Attempt 1: There are only 3 cases, but I thought we can only solve it by DP.
 
-  - id: 3073
+  - id: 3703
     title: "Remove K-Balanced Substrings"
-    link: "./3073_Remove_K-Balanced_Substrings"
+    link: "./problems/3703_remove_k-balanced_substrings/"
     leetcode-difficulty: medium
     topics: [string, leetcode-contest]
     status: L2_STRUGGLE
@@ -849,7 +849,7 @@ problems:
 
   - id: 3712
     title: "Sum of Elements With Frequency Divisible by K"
-    link: "./3712_Sum_of_Elements_With_Frequency_Divisible_by_K"
+    link: "./problems/3712_sum_of_elements_with_frequency_divisible_by_k/"
     leetcode-difficulty: easy
     topics: [hashtable, array, leetcode-contest]
     status: L3_MASTERED
@@ -857,7 +857,7 @@ problems:
 
   - id: 3713
     title: "Longest Balanced Substring I"
-    link: "./3713_Longest_Balanced_Substring_I"
+    link: "./problems/3713_longest_balanced_substring_i/"
     leetcode-difficulty: medium
     topics: [string, brute-force, leetcode-contest]
     status: L1_FORGOT
@@ -866,7 +866,7 @@ problems:
 
   - id: 3718
     title: Smallest Missing Multiple of K
-    link: "./3718_Smallest_Missing_Multiple_of_K"
+    link: "./problems/3718_smallest_missing_multiple_of_k/"
     leetcode-difficulty: easy
     topics: [math, hashtable, iteration, leetcode-contest]
     status: L3_MASTERED
@@ -875,7 +875,7 @@ problems:
 
   - id: 3719
     title: "Longest Balanced Subarray i"
-    link: "./3719_Longest_Balanced_Subarray_i"
+    link: "./problems/3719_longest_balanced_subarray_i/"
     leetcode-difficulty: medium
     topics: [array, hash-set, two-pointer, sliding-window, enumeration]
     status: L2_STRUGGLE
@@ -884,7 +884,7 @@ problems:
 
   - id: 3720
     title: "3720. Lexicographically Smallest Permutation Greater Than Target"
-    link: "./3720_Lexicographically_Smallest_Permutation_Greater_Than_Target"
+    link: "./problems/3720_lexicographically_smallest_permutation_greater_than_target/"
     leetcode-difficulty: medium
     topics: [string, greedy, sorting, counting, hash-table]
     status: L1_FORGOT
@@ -893,21 +893,21 @@ problems:
 
   - id: 3726
     title: "Remove Zeros in Decimal Representation"
-    link: "./3726_Remove_Zeros_in_Decimal_Representation"
+    link: "./problems/3726_remove_zeros_in_decimal_representation/"
     topics: [string, weekly-contest]
     status: L3_MASTERED
     refinement_focus: "Simple std::to_string and std::stll"
 
   - id: 3727
     title: "Maximum Alternating Sum of Squares"
-    link: "./3727_Maximum_Alternating_Sum_of_Squares/"
+    link: "./problems/3727_maximum_alternating_sum_of_squares/"
     topics: [greedy, sorting, weekly-contest]
     status: L3_MASTERED
     refinement_focus: "Greedy"
 
-  - id: 3729
+  - id: 3728
     title: "Stable Subarrays With Equal Boundary and Interior Sum"
-    link: "./3729_Stable_Subarrays_With_Equal_Boundary_and_Interior_Sum"
+    link: "./problems/3728_stable_subarrays_with_equal_boundary_and_interior_sum/"
     topics: [prefix-sum, subarray, weekly-contest]
     status: L2_STRUGGLE
     refinement_focus: |

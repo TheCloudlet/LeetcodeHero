@@ -127,19 +127,19 @@ Model File          Framework-            Hardware-             Target-         
 │  Emission Paths:                                                                                 │
 │                                                                                                  │
 │    ┌─────────────┬────────────────────────────────────────────────────────────┐                  │
-│    │ Target      │ Emission Process                                            │                 │
+│    │ Target      │ Emission Process                                           │                  │
 │    ├─────────────┼────────────────────────────────────────────────────────────┤                  │
-│    │ NVIDIA GPU  │ nvvm → LLVM IR → PTX → CUBIN                                │                 │
-│    │             │ mlir-translate → llc → ptxas                                │                 │
+│    │ NVIDIA GPU  │ nvvm → LLVM IR → PTX → CUBIN                               │                  │
+│    │             │ mlir-translate → llc → ptxas                               │                  │
 │    ├─────────────┼────────────────────────────────────────────────────────────┤                  │
-│    │ AMD GPU     │ rocdl → LLVM IR → AMDGPU ISA → binary                       │                 │
-│    │             │ mlir-translate → llc                                        │                 │
+│    │ AMD GPU     │ rocdl → LLVM IR → AMDGPU ISA → binary                      │                  │
+│    │             │ mlir-translate → llc                                       │                  │
 │    ├─────────────┼────────────────────────────────────────────────────────────┤                  │
-│    │ CPU         │ llvm → LLVM IR → x86/ARM assembly → object file             │                 │
-│    │             │ mlir-translate → llc → assembler                            │                 │
+│    │ CPU         │ llvm → LLVM IR → x86/ARM assembly → object file            │                  │
+│    │             │ mlir-translate → llc → assembler                           │                  │
 │    ├─────────────┼────────────────────────────────────────────────────────────┤                  │
-│    │ Custom NPU  │ npu → NPU ISA → model.bin (YOU IMPLEMENT)                   │                 │
-│    │             │ mlir-translate --npu-to-binary                              │                 │
+│    │ Custom NPU  │ npu → NPU ISA → model.bin (YOU IMPLEMENT)                  │                  │
+│    │             │ mlir-translate --npu-to-binary                             │                  │
 │    └─────────────┴────────────────────────────────────────────────────────────┘                  │
 │                                                                                                  │
 │  Output: model.bin (NPU instructions + weights + metadata)                                       │
@@ -1949,6 +1949,1042 @@ float calculateTotalCost(LayoutPath path) {
 ```
 
 **Performance Insight:** One strategic transpose upfront eliminates 4-5 transposes later in the pipeline.
+
+---
+
+## What is heterogeneous computing?
+
+Heterogeneous computing refers to a computing architecture that utilizes different types of processors or cores within a single system to optimize performance and efficiency for various tasks. Instead of relying solely on a single type of processor (like a CPU), heterogeneous computing combines multiple types of processing units, such as CPUs, GPUs (Graphics Processing Units), NPUs (Neural Processing Units), FPGAs (Field-Programmable Gate Arrays), and other specialized accelerators.
+
+Question: Is ARM bigLITTLE architecture considered heterogeneous computing?
+
+Yes, ARM big.LITTLE architecture is considered a form of heterogeneous computing. In this architecture, two types of CPU cores are used: "big" cores that are high-performance and power-hungry, and "LITTLE" cores that are energy-efficient and designed for low-power tasks. The system can dynamically switch between these cores based on the workload requirements, optimizing for both performance and power consumption. This combination of different core types within a single processor exemplifies the principles of heterogeneous computing.
+
+Then how does this kind of heterogeneous computing compiles and execute code?
+
+In heterogeneous computing architectures like ARM big.LITTLE, the compilation and execution of code involve several key steps to ensure that tasks are efficiently distributed across the different types of cores. Here's how it typically works:
+
+1. **Code Compilation**:
+
+   - **Key Insight**: Both "big" and "LITTLE" cores use the **same ARM ISA** (e.g., ARMv8-A), so the compiler generates a **single binary** that can run on both core types without modification.
+   - The compiler may apply different optimization strategies (e.g., aggressive loop unrolling for big cores, code size optimization for LITTLE cores), but these optimizations don't require separate binaries.
+   - No special compiler support is needed - standard ARM toolchains (GCC, Clang) work transparently.
+
+2. **Task Scheduling** (Runtime Decision):
+
+   - The operating system (OS) or a runtime scheduler (**not the compiler**) is responsible for managing the execution of tasks across the heterogeneous cores. It monitors the workload and decides which core type to use based on performance needs and power efficiency.
+   - For high-performance tasks, the scheduler may assign them to the big cores, while background or low-priority tasks may be directed to the LITTLE cores.
+   - The scheduler can also dynamically migrate tasks between cores based on changing workload conditions.
+   - **Examples**: Linux's Energy Aware Scheduler (EAS), Android's schedutil governor
+
+3. **Execution**:
+   - Once tasks are assigned to the appropriate cores, the CPU executes the compiled code. The big cores handle intensive computations, while the LITTLE cores manage less demanding tasks.
+   - The system may also implement power management strategies to optimize energy consumption, such as scaling the frequency of the cores (DVFS) or putting unused cores into low-power states.
+
+Is NPU considered heterogeneous computing?
+
+Yes, NPUs (Neural Processing Units) are considered a form of heterogeneous computing. NPUs are specialized hardware accelerators designed specifically for performing neural network computations and machine learning tasks. They operate alongside traditional CPUs and GPUs within a computing system, allowing for efficient execution of AI workloads.
+
+Then how does NPU heterogeneous computing compiles and execute code?
+
+In NPU heterogeneous computing architectures, the compilation and execution of code involve several specialized steps to effectively leverage the capabilities of the NPU alongside traditional processors like CPUs and GPUs. Here's how it typically works:
+
+1. **Model Compilation**:
+
+   - The machine learning model (e.g., TensorFlow, PyTorch) is first converted into an intermediate representation (IR) that can be understood by the compiler. This often involves using frameworks like MLIR (Multi-Level Intermediate Representation).
+   - The compiler analyzes the model to identify operations that can be offloaded to the NPU. It generates optimized code for these operations, taking into account the NPU's architecture, memory hierarchy, and supported data types.
+   - The compiler may also generate fallback code for operations that cannot be executed on the NPU, ensuring that the entire model can still run on the CPU or GPU if necessary.
+
+2. **Task Scheduling**:
+   - The runtime environment or operating system manages the scheduling of tasks between the CPU, GPU, and NPU. It determines which parts of the model should be executed on the NPU based on performance considerations and resource availability.
+   - The scheduler may also handle data movement between the different processors, ensuring that input data is transferred to the NPU's memory before execution and that results are retrieved afterward.
+   - Dynamic scheduling may be employed to adapt to changing workloads and optimize resource utilization.
+
+But my question is. Is a NPU a multicore processor? I mean an ARM Core + Accelerator?
+
+An NPU (Neural Processing Unit) is not typically considered a multicore processor in the same way that a CPU with multiple cores is. Instead, an NPU is a specialized hardware accelerator designed specifically for executing neural network computations efficiently. It is often integrated into a system alongside other processing units, such as CPUs and GPUs, but it does not function as a general-purpose multicore processor.
+
+**Clarification on NPU Architecture:**
+
+```text
+SoC (System on Chip) Example:
+┌──────────────────────────────────────────┐
+│  MediaTek Dimensity / Apple A17 Bionic   │
+│                                          │
+│  ┌─────────┐  ┌─────────┐  ┌─────────┐   │
+│  │ARM Cores│  │   GPU   │  │   NPU   │   │
+│  │(CPU)    │  │         │  │         │   │
+│  └─────────┘  └─────────┘  └─────────┘   │
+│       ↕            ↕            ↕        │
+│  ┌──────────────────────────────────┐    │
+│  │    Shared Memory / Interconnect  │    │
+│  └──────────────────────────────────┘    │
+└──────────────────────────────────────────┘
+```
+
+- **ARM Cores (CPU)**: General-purpose computation
+- **NPU**: Specialized accelerator with its own compute units (e.g., MAC arrays, tensor engines)
+- **Not "ARM Core + Accelerator"**: The NPU is a **separate, independent accelerator**, not an ARM core with extensions
+
+So, it is just a specialized accelerator that works alongside other cores like ARM cores?
+
+Yes, that's correct. An NPU is a specialized accelerator that works alongside other processing units, such as ARM cores (CPUs) and GPUs. It is designed specifically to handle the computational demands of neural networks and machine learning tasks more efficiently than general-purpose processors.
+
+**Key Characteristics:**
+
+| Feature                | CPU (ARM Core)               | NPU (Neural Accelerator)                 |
+| ---------------------- | ---------------------------- | ---------------------------------------- |
+| **Purpose**            | General-purpose computing    | AI/ML inference/training                 |
+| **ISA**                | ARM instruction set          | Custom NPU instruction set               |
+| **Programming Model**  | C/C++, any language          | Compiled neural network kernels          |
+| **Memory Access**      | Direct to system RAM         | Often uses DMA + local memory            |
+| **Parallelism**        | Multi-core (2-8 cores)       | Massive parallelism (100s-1000s of MACs) |
+| **Typical Operations** | Branch-heavy, irregular code | Matrix multiplication, convolution       |
+
+Then, consider a task that might be partitioned to run on both ARM cores and NPU, how does the compilation and execution work in this case?
+
+**Hybrid CPU-NPU Execution Model:**
+
+When a machine learning workload is partitioned across ARM cores (CPU) and NPU, the compilation and execution follow a **heterogeneous scheduling model**:
+
+#### 1. Compilation Phase: Graph Partitioning
+
+```text
+Original Model (e.g., TensorFlow/PyTorch)
+          ↓
+    [MLIR Frontend]
+          ↓
+High-Level IR (torch/tf dialect)
+          ↓
+    [Graph Partitioning Pass]
+          ↓
+  ┌───────┴──────┐
+  ↓              ↓
+CPU Subgraph   NPU Subgraph
+  ↓              ↓
+[CPU Codegen]  [NPU Codegen]
+  ↓              ↓
+ARM Binary     NPU Binary
+```
+
+**Partitioning Strategy:**
+
+```cpp
+// Compiler decides which ops go where
+for (auto op : model.getOperations()) {
+  if (canRunOnNPU(op) && isBeneficial(op)) {
+    // Offload to NPU
+    npuSubgraph.add(op);
+  } else {
+    // Fallback to CPU
+    cpuSubgraph.add(op);
+  }
+}
+
+// Insert data transfer ops between subgraphs
+insertMemcpyOps(cpuSubgraph, npuSubgraph);
+```
+
+**Decision Criteria:**
+
+| Condition                      | Action            | Reason                                     |
+| ------------------------------ | ----------------- | ------------------------------------------ |
+| Conv2D with large tensors      | ✅ NPU            | High compute density, NPU accelerates well |
+| Small MatMul (<64x64)          | ⚠️ CPU            | NPU launch overhead > computation time     |
+| Non-standard activation (GELU) | ❌ CPU (fallback) | NPU may not support this op                |
+| Dynamic shape operations       | ❌ CPU            | NPU often requires static shapes           |
+
+#### 2. Runtime Execution: Orchestration
+
+```text
+┌─────────────────────────────────────────┐
+│         Runtime Scheduler (CPU)         │
+│                                         │
+│  1. Load model metadata                 │
+│  2. Allocate buffers (CPU + NPU memory) │
+│  3. Schedule execution plan             │
+└─────────────────────────────────────────┘
+         ↓
+    [Execution Timeline]
+
+CPU:  [Op1]─┬─[Wait]──────[Op4]─[Op5]
+            │
+NPU:  ──────┴─[DMA_In]─[Op2+Op3]─[DMA_Out]──
+            ↑                              ↑
+        Data Transfer            Result Transfer
+```
+
+**Execution Steps:**
+
+1. **CPU Preprocessing**: ARM cores execute initial ops (e.g., image decoding, normalization)
+
+2. **DMA Transfer**: Copy data from CPU memory → NPU local memory
+
+3. **NPU Computation**: NPU executes compute-intensive kernels (conv, matmul)
+
+4. **DMA Transfer Back**: Copy results from NPU memory → CPU memory
+
+5. **CPU Postprocessing**: ARM cores execute final ops (e.g., softmax, NMS)
+
+**Synchronization Example:**
+
+```cpp
+// Simplified runtime pseudocode
+void executeModel(Model& model) {
+  // CPU executes Op1
+  Tensor t1 = cpu_execute(Op1, input);
+
+  // Launch NPU kernel (async)
+  NPUContext ctx = npu_launch_async(Op2_Op3, t1);
+
+  // CPU can do other work while NPU runs
+  // ...
+
+  // Wait for NPU completion
+  Tensor t3 = npu_wait(ctx);
+
+  // CPU continues with Op4, Op5
+  Tensor output = cpu_execute(Op4_Op5, t3);
+}
+```
+
+#### 3. Key Challenges in CPU-NPU Partitioning
+
+| Challenge                  | Solution                                       |
+| -------------------------- | ---------------------------------------------- |
+| **Data Transfer Overhead** | Minimize CPU↔NPU data movement, fuse NPU ops   |
+| **Synchronization Cost**   | Use async execution, pipeline CPU and NPU work |
+| **Memory Consistency**     | Ensure cache coherency between CPU and NPU     |
+| **Load Balancing**         | Profile and adjust partitioning for best perf  |
+
+**Performance Insight:**
+
+- **Ideal case**: Large NPU subgraphs amortize launch/transfer overhead
+- **Poor case**: Frequent CPU↔NPU switching dominates execution time
+- **Goal**: Minimize the number of partition boundaries
+
+**Summary:**
+
+In CPU-NPU heterogeneous execution:
+
+- **Compiler**: Partitions computation graph, generates separate binaries for CPU and NPU
+- **Runtime**: Orchestrates execution, handles data movement and synchronization
+- **Performance**: Depends critically on minimizing cross-device communication
+
+---
+
+Now that I am confused.
+
+So................... In general lets take camera HDR procesing as an example, the algorithm is come from pretrained model right?
+
+Yes, in general, camera HDR (High Dynamic Range) processing can utilize pretrained machine learning models to enhance image quality. These models are typically trained on large datasets of images to learn how to effectively combine multiple exposures into a single HDR image.
+
+Now how does the compilation and execution work in this case?
+
+In the case of camera HDR processing using a pretrained machine learning model, the compilation and execution process involves several key steps to ensure that the model runs efficiently on the target hardware, which may include CPUs, NPUs, or other accelerators. Here's how it typically works:
+
+#### HDR Processing Pipeline with ML Model
+
+**Scenario:** Smartphone camera with MediaTek/Qualcomm SoC (ARM CPU + NPU)
+
+```text
+┌─────────────────────────────────────────────────────────────────┐
+│                    HDR Processing Pipeline                      │
+└─────────────────────────────────────────────────────────────────┘
+
+1. Model Training (Offline - Done by Camera/AI Team)
+   ────────────────────────────────────────────────
+   • Train on dataset: (multi-exposure images) → (HDR output)
+   • Framework: TensorFlow/PyTorch
+   • Model architecture: U-Net, HDRNet, or custom CNN
+   • Output: model.pt / model.pb (trained weights)
+
+2. Model Compilation (Offline - Done once per device)
+   ───────────────────────────────────────────────
+   PyTorch/TF Model (.pt/.pb)
+           ↓
+   [Convert to MLIR]
+           ↓
+   torch/tf dialect
+           ↓
+   [Lower to Linalg]
+           ↓
+   linalg dialect (conv2d, matmul, etc.)
+           ↓
+   [Graph Partitioning]
+           ↓
+     ┌─────┴──────┐
+     ↓            ↓
+   CPU Ops      NPU Ops
+     ↓            ↓
+   [Codegen]  [NPU Codegen]
+     ↓            ↓
+   ARM binary  NPU binary (model.bin)
+           ↓
+   Packaged into Camera App
+
+3. Runtime Execution (Real-time - When taking photo)
+   ──────────────────────────────────────────────
+```
+
+#### Detailed Compilation Flow
+
+**Step 1: Model Import**
+
+```bash
+# Convert PyTorch model to MLIR
+$ torch-mlir-opt hdr_model.pt -o hdr_model.mlir
+
+# Or convert TensorFlow model
+$ tf-mlir-translate --graphdef-to-mlir hdr_model.pb -o hdr_model.mlir
+```
+
+**Step 2: High-Level Optimizations (Hardware-Agnostic)**
+
+```bash
+$ mlir-opt hdr_model.mlir \
+    --convert-torch-to-linalg \
+    --linalg-fuse-elementwise-ops \
+    --canonicalize \
+    -o hdr_optimized.mlir
+```
+
+**Generated IR Example:**
+
+```mlir
+// High-level operations
+func.func @hdr_process(%input: tensor<1x1920x1080x3xf32>) -> tensor<1x1920x1080x3xf32> {
+  %0 = linalg.conv_2d_nhwc_hwcf ins(%input, %filter : tensor<1x1920x1080x3xf32>, tensor<3x3x3x32xf32>)
+  %1 = linalg.generic { /* ReLU activation */ } ins(%0)
+  %2 = linalg.conv_2d_nhwc_hwcf ins(%1, %filter2 : ...)
+  return %2 : tensor<1x1920x1080x3xf32>
+}
+```
+
+**Step 3: Graph Partitioning (NPU-Specific)**
+
+```cpp
+// Compiler decides partition strategy
+GraphPartitioner partitioner(model);
+
+// Analyze each operation
+for (auto op : model.getOps()) {
+  if (op.isa<linalg::Conv2DOp>() && inputSize > threshold) {
+    // Large convolutions → NPU
+    partitioner.assignToNPU(op);
+  } else if (op.isa<linalg::AddOp>() && canFuseWithPrevious(op)) {
+    // Fuse with previous NPU op
+    partitioner.fuseWithPrevious(op);
+  } else {
+    // Fallback to CPU
+    partitioner.assignToCPU(op);
+  }
+}
+```
+
+**Partitioning Result:**
+
+```text
+Original Model:
+[Preprocessing] → [Conv1] → [ReLU] → [Conv2] → [Postprocessing]
+
+After Partitioning:
+┌──────────────┐   ┌───────────────────────┐   ┌───────────────┐
+│ CPU: Preproc │──►│ NPU: Conv1+ReLU+Conv2 │──►│ CPU: Postproc │
+└──────────────┘   └───────────────────────┘   └───────────────┘
+      (ARM)              (Accelerated)              (ARM)
+```
+
+**Step 4: Target-Specific Lowering**
+
+```bash
+# Lower CPU subgraph to ARM code
+$ mlir-opt hdr_cpu_subgraph.mlir \
+    --convert-linalg-to-loops \
+    --convert-scf-to-cf \
+    --lower-to-llvm \
+    -o hdr_cpu.llvm
+
+# Lower NPU subgraph to NPU binary
+$ mlir-opt hdr_npu_subgraph.mlir \
+    --convert-linalg-to-npu \
+    --npu-optimize-memory \
+    --npu-fuse-operations \
+    -o hdr_npu.mlir
+
+$ mlir-translate hdr_npu.mlir \
+    --npu-to-binary \
+    -o hdr_npu.bin
+```
+
+**Step 5: Link and Package**
+
+```bash
+# Link ARM binary with runtime library
+$ clang hdr_cpu.llvm -o libhdr_cpu.so
+
+# Package everything for deployment
+$ package-for-device \
+    --cpu-lib libhdr_cpu.so \
+    --npu-binary hdr_npu.bin \
+    --metadata hdr_metadata.json \
+    -o hdr_model_package.zip
+```
+
+#### Runtime Execution Flow
+
+**When User Presses Shutter Button:**
+
+```text
+ARM CPU (Host)                                              NPU (Device)
+      │                                                         │
+ 1.   │ App launches (executes `app` binary)                    │ (Idle)
+ 2.   │ Call NPU Driver: "Initialize hardware"                  │
+ 3.   │ Call NPU Driver: "Load `hdr_npu.bin`"                   ├──► (NPU loads instructions)
+ 4.   │                                                         │
+ 5.   │ (Camera captures 3 exposures: dark, normal, bright)     │
+ 6.   │ Execute "CPU Preprocessing" (e.g., align frames)        │
+ 7.   │                                                         │
+ 8.   │ Prepare data (Aligned input tensors)                    │
+ 9.   │ Call Driver: "Transfer data from RAM to NPU memory"     ├──► (DMA transfers 1920x1080x3 tensor)
+10.   │                                                         │
+11.   │ Call Driver: "Execute `hdr_npu.bin`" (async call)       ├──► (NPU starts HDR fusion: conv2d...)
+12.   │                                                         │
+13.   │ (ARM CPU is free now, can update UI "Processing...")    │    (NPU busy computing...)
+      │ ...                                                     │
+14.   │                                                         ├──► (NPU computation complete)
+15.   │ (Receives NPU completion interrupt/event)               │
+16.   │ Call Driver: "Transfer results from NPU memory to RAM"  ├──► (DMA transfers HDR result)
+17.   │                                                         │
+18.   │ (Receives NPU results)                                  │
+19.   │ Execute "CPU Postprocessing" (e.g., tone mapping)       │
+20.   │                                                         │
+21.   │ Display HDR photo / Save to gallery                     │
+      ↓                                                         ↓
+```
+
+**Code Example (Simplified Runtime):**
+
+```cpp
+// Camera app runtime code
+class HDRProcessor {
+  NPUModel npu_model;
+
+  Image processHDR(vector<Image> exposures) {
+    // Step 1: CPU preprocessing (alignment)
+    Tensor aligned = align_frames(exposures);  // ARM CPU
+
+    // Step 2: Copy to NPU
+    NPUTensor npu_input = npu_model.allocate_input();
+    npu_model.memcpy_to_npu(aligned, npu_input);
+
+    // Step 3: Execute on NPU (async)
+    NPUContext ctx = npu_model.execute_async(npu_input);
+
+    // Step 4: CPU can do other work here
+    update_ui("Processing HDR...");
+
+    // Step 5: Wait for NPU completion
+    NPUTensor npu_output = npu_model.wait(ctx);
+
+    // Step 6: Copy back to CPU
+    Tensor result;
+    npu_model.memcpy_from_npu(npu_output, result);
+
+    // Step 7: CPU postprocessing (tone mapping)
+    Image final_hdr = tone_map(result);  // ARM CPU
+
+    return final_hdr;
+  }
+};
+```
+
+#### Performance Breakdown
+
+**Without NPU (CPU-only):**
+
+```text
+Preprocessing:  50ms  (CPU)
+Conv1:         200ms  (CPU - slow!)
+ReLU:           10ms  (CPU)
+Conv2:         200ms  (CPU - slow!)
+Postprocessing: 50ms  (CPU)
+─────────────────────
+Total:         510ms  ← User waits ~0.5s
+```
+
+**With NPU:**
+
+```text
+Preprocessing:   50ms  (CPU)
+DMA to NPU:      10ms  (Memory copy)
+Conv1+ReLU+Conv2: 30ms  (NPU - fast!)
+DMA from NPU:    10ms  (Memory copy)
+Postprocessing:  50ms  (CPU)
+─────────────────────
+Total:          150ms  ← User waits ~0.15s
+                       ↑ 3.4x faster!
+```
+
+#### Key Takeaways
+
+| Aspect                  | Description                                                 |
+| ----------------------- | ----------------------------------------------------------- |
+| **Model Source**        | Pretrained model (trained offline by ML team)               |
+| **Compilation**         | Offline, once per device model (e.g., MediaTek Dimensity X) |
+| **Partitioning**        | Compiler automatically splits: light ops→CPU, heavy ops→NPU |
+| **Data Movement**       | DMA transfers between CPU RAM ↔ NPU local memory            |
+| **Execution**           | CPU preprocessing → NPU inference → CPU postprocessing      |
+| **User Experience**     | Real-time (150-200ms total latency)                         |
+| **Performance Benefit** | 3-5x speedup vs CPU-only                                    |
+
+**Why This Architecture?**
+
+- **CPU**: Good for irregular operations (alignment, tone mapping, control flow)
+- **NPU**: Excellent for regular tensor operations (convolutions, matrix multiply)
+- **Hybrid**: Leverages strengths of both processors for optimal performance
+
+---
+
+## DMA (Direct Memory Access)
+
+What is DMA? Does normal computer also use DMA?
+
+DMA (Direct Memory Access) is a feature that allows certain hardware subsystems within a computer to access the main system memory (RAM) independently of the central processing unit (CPU). This means that data can be transferred directly between memory and peripherals (like disk drives, network cards, or NPUs) without burdening the CPU with the task of moving data. This leads to more efficient use of CPU resources and can significantly improve overall system performance, especially for high-throughput data transfers.
+
+Yes, normal computers also use DMA. It is a common feature in many computer architectures, including personal computers, servers, and embedded systems. DMA is widely used in various peripherals such as hard drives, graphics cards, sound cards, and network interfaces to facilitate efficient data transfer without CPU intervention.
+
+So, if I were a program how can I use DMA to transfer data? Does it mean DMA is just a kernel driver?
+
+In general, as a user-space program, you don't directly interact with DMA hardware. Instead, you typically use system calls or APIs provided by the operating system that abstract away the details of DMA operations. The operating system's kernel manages DMA transfers through device drivers that handle the specifics of the hardware.
+
+When you want to transfer data using DMA, you would typically follow these steps:
+
+```text
+┌────────────────────────────────────────────────────────────────────────────────┐
+│                         DMA Transfer Workflow                                  │
+└────────────────────────────────────────────────────────────────────────────────┘
+
+    User Space                Kernel Space                   Hardware
+────────────────────────────────────────────────────────────────────────────────
+
+Step 1: Open Device
+────────────────────
+  [Application]
+       │
+       │ open("/dev/npu0")
+       ↓
+    [Kernel]─────────────►[Device Driver]
+       │                        │
+       │◄───────────────────────┘
+       │ Returns fd
+       ↓
+
+Step 2: Prepare Buffers
+────────────────────────
+  [Application]
+       │
+       │ malloc(buffer)
+       │ pin_memory(buffer)
+       ↓
+  [User Buffer]
+  (Virtual Addr)
+       │
+       │ mlock()/mmap()
+       ↓
+[Pinned Memory]◄─────[Memory Manager]
+  (Physical Addr)     Ensures pages
+       │              won't be swapped
+       ↓
+
+Step 3: Issue DMA Transfer
+────────────────────────────
+  [Application]
+       │
+       │ ioctl(fd, DMA_START,
+       │       {src, dst, size})
+       ↓
+    [Kernel]─────────────►[Device Driver]
+                               │
+                               │ Program DMA:
+                               │ • Src addr (phys)
+                               │ • Dst addr (phys)
+                               │ • Transfer size
+                               │ • Control flags
+                               ↓
+                          [DMA Controller]
+                               │
+                               │ Direct access    [RAM]
+                               │ (CPU-free)         ↕
+                               │                    ↕
+                               ↓                    ↕
+                          [Hardware Device]◄────────┘
+                          (NPU/NIC/Disk)
+                               │
+                               │ Data flows:
+                               │ RAM ↔ Device
+                               │ (Bypasses CPU!)
+                               ↓
+
+Step 4: Wait for Completion
+─────────────────────────────
+  [Application]                                   [DMA Controller]
+       │                                               │
+       │ poll()/select()                               │ (Transferring...)
+       │ /wait()                                       │
+       │ (Blocked/Async)                               │
+       │                                               │ (Complete!)
+       │                                               ↓
+       │                                        [HW Interrupt]
+       │                                               │
+       │                                               ↓
+       │                                        [Device Driver]
+       │                                        (ISR Handler)
+       │                                               │
+       │                                               │ Clear IRQ
+       │                                               │ Update status
+       │◄──────────────────────────────────────────────┘
+       │ Wakes up/Callback
+       ↓
+
+Step 5: Process Data
+─────────────────────
+  [Application]
+       │
+       │ Access buffer
+       │ (data ready!)
+       ↓
+  [User Buffer]
+  (Transferred data)
+       │
+       │ Process...
+       ↓
+    Output
+
+────────────────────────────────────────────────────────────────────────────────
+Key Benefits of DMA:
+• CPU is free during transfer (can do other work)
+• High bandwidth (direct memory access)
+• Low latency (no CPU intervention per byte)
+• Efficient for large data transfers
+
+Typical Use Cases:
+• Network packet I/O           • GPU texture uploads
+• Disk read/write operations   • NPU tensor data transfers
+• Audio/Video streaming        • High-speed sensor data acquisition
+────────────────────────────────────────────────────────────────────────────────
+```
+
+What is the abstraction that kernel provides to user program for DMA?
+
+The kernel provides several abstractions to user programs for DMA operations, typically through device drivers and system calls. Here are some common abstractions:
+
+1. **Device Files**: In Unix-like operating systems, hardware devices that support DMA are often represented as device files (e.g., `/dev/npu0`). User programs can open these files to interact with the hardware.
+2. **IOCTL (Input/Output Control)**: This is a system call that allows user programs to send control commands to device drivers. Through ioctl calls, user programs can configure DMA transfers, specify buffer addresses, and initiate the transfer.
+3. **Memory Mapping (mmap)**: The kernel may allow user programs to map device memory into their address space using the `mmap` system call. This enables direct access to hardware buffers that are used for DMA transfers.
+4. **Asynchronous I/O**: Some drivers provide asynchronous I/O interfaces that allow user programs to initiate DMA transfers without blocking, enabling better performance and responsiveness.
+5. **Completion Notifications**: The kernel may provide mechanisms for user programs to be notified when DMA transfers are complete, such as through signals, callbacks, or polling interfaces.
+
+## Fallback Mechanism in Heterogeneous Computing
+
+In heterogeneous computing systems that utilize multiple types of processors (e.g., CPU, GPU, NPU), a fallback mechanism is essential to ensure that operations can still be executed even if a particular processor cannot handle them. This mechanism allows the system to gracefully switch to an alternative processing unit when necessary.
+
+### What is the Fallback Mechanism?
+
+**Definition:** The Fallback mechanism is a **compile-time strategy** (not a runtime "accident") where the compiler proactively identifies operations that the NPU cannot execute and automatically partitions them to run on the CPU (ARM cores).
+
+**Key Insight:** The CPU is always in control of the execution orchestration. It's not about "cutting off" the CPU—the CPU directs the entire workflow and falls back to executing certain operations itself when the NPU cannot handle them.
+
+---
+
+### How Fallback Works: Compilation Phase
+
+The entire decision process occurs in MLIR's middle-end during compilation:
+
+#### Step 1: Identification
+
+```text
+┌────────────────────────────────────────────────────────────────┐
+│                    Compiler Analysis                           │
+└────────────────────────────────────────────────────────────────┘
+
+Input: linalg dialect computation graph
+  ↓
+[mlir-opt] attempts to lower each operation to npu.dialect
+  ↓
+Decision for each operation:
+```
+
+**Lowering Outcomes:**
+
+| Operation                | Lowering Result             | Target | Reason                                    |
+| ------------------------ | --------------------------- | ------ | ----------------------------------------- |
+| `linalg.conv2d`          | ✅ → `npu.conv2d`           | NPU    | Native NPU support                        |
+| `linalg.matmul`          | ✅ → `npu.matmul`           | NPU    | Native NPU support                        |
+| `linalg.ExoticOperation` | ❌ No lowering pattern      | CPU    | **FALLBACK**: No NPU equivalent           |
+| `linalg.gelu`            | ❌ Unsupported dtype (FP64) | CPU    | **FALLBACK**: NPU only supports INT8/FP32 |
+| `linalg.dynamic_reshape` | ❌ Dynamic shape            | CPU    | **FALLBACK**: NPU requires static shapes  |
+
+#### Step 2: Triggering Fallback - Common Reasons
+
+**Why does fallback occur?**
+
+1. **Hardware Limitation**: NPU lacks the specific instruction/operation
+2. **Data Type Mismatch**: Operation uses unsupported data types (e.g., NPU only supports INT8, but op uses FP64)
+3. **Dynamic Shapes**: NPU requires static tensor shapes, but operation has dynamic dimensions
+4. **Unsupported Attributes**: Operation parameters that NPU hardware cannot handle
+
+#### Step 3: Graph Partitioning
+
+When the compiler encounters an unsupported operation, it strategically partitions the computation graph:
+
+```text
+Original Computation Graph:
+┌──────────────────────────────────────────────────────────────────┐
+│ [Conv1] → [ReLU] → [ExoticOp] → [Conv2] → [Pool] → [Matmul]      │
+└──────────────────────────────────────────────────────────────────┘
+
+After Partitioning:
+┌─────────────┐   ┌────────────┐   ┌──────────────────────┐
+│ Subgraph 1  │   │ Subgraph 2 │   │    Subgraph 3        │
+│             │   │            │   │                      │
+│ [Conv1]     │   │ [ExoticOp] │   │ [Conv2]              │
+│    ↓        │   │            │   │    ↓                 │
+│ [ReLU]      │   │            │   │ [Pool]               │
+│             │   │            │   │    ↓                 │
+│             │   │            │   │ [Matmul]             │
+└──────┬──────┘   └─────┬──────┘   └──────┬───────────────┘
+       │                │                 │
+    Target:          Target:           Target:
+    NPU (✅)         CPU (⚠️)          NPU (✅)
+```
+
+#### Step 4: Dual Compilation
+
+The compiler generates code for different targets:
+
+```text
+┌─────────────────────────────────────────────────────────────────┐
+│                    Compilation Targets                          │
+└─────────────────────────────────────────────────────────────────┘
+
+Subgraph 1 (NPU)
+     ↓
+[NPU Backend] → mlir-opt --convert-linalg-to-npu
+     ↓
+[NPU Codegen] → mlir-translate --npu-to-binary
+     ↓
+npu_subgraph1.bin
+
+Subgraph 2 (CPU) ⚠️ FALLBACK
+     ↓
+[LLVM Backend] → mlir-opt --convert-linalg-to-llvm
+     ↓
+[LLVM Codegen] → llc, clang
+     ↓
+cpu_fallback.so (ARM binary)
+
+Subgraph 3 (NPU)
+     ↓
+[NPU Backend] → mlir-opt --convert-linalg-to-npu
+     ↓
+[NPU Codegen] → mlir-translate --npu-to-binary
+     ↓
+npu_subgraph3.bin
+```
+
+---
+
+### Runtime Execution Flow
+
+**CPU orchestrates the entire execution (CPU never "gets cut off"):**
+
+```text
+ARM CPU (Host)                                        NPU (Device)
+─────────────────────────────────────────────────────────────────
+
+1. [NPU Subgraph 1]
+   │
+   │ NPU Driver call
+   ├────────────────────────────────────────────────►Execute
+   │                                                  Subgraph 1
+   │                                                  (Conv1+ReLU)
+   │◄─────────────────────────────────────────────── Complete
+   │
+   │ ⚠️ Performance Killer #1: DMA Round-trip
+   ├─ DMA: NPU SRAM → RAM ──────────────────────────►Transfer
+   │  (Copy results back)                             results
+   │
+2. [CPU Fallback - ExoticOp]
+   │
+   │ Execute ExoticOp on ARM CPU
+   │ (Processes data in RAM)
+   ↓
+   [CPU computes ExoticOp result]
+   │
+   │ ⚠️ Performance Killer #2: DMA Round-trip
+   ├─ DMA: RAM → NPU SRAM ──────────────────────────►Transfer
+   │  (Copy CPU results to NPU)                       input
+   │
+3. [NPU Subgraph 3]
+   │
+   │ NPU Driver call
+   ├────────────────────────────────────────────────►Execute
+   │                                                  Subgraph 3
+   │                                                  (Conv2+Pool
+   │                                                   +Matmul)
+   │◄─────────────────────────────────────────────── Complete
+   ↓
+Final Output
+```
+
+**Code Example:**
+
+```cpp
+// Runtime execution pseudocode
+void executeModel(Model& model) {
+  // Step 1: NPU executes Subgraph 1
+  NPUContext ctx1 = npu_execute(subgraph1_bin);
+  Tensor intermediate1 = npu_get_result(ctx1);  // DMA: NPU → RAM ⚠️
+
+  // Step 2: CPU executes fallback operation
+  Tensor intermediate2 = cpu_execute_fallback(intermediate1);  // CPU computes
+
+  // Step 3: Transfer back to NPU
+  npu_set_input(intermediate2);  // DMA: RAM → NPU ⚠️
+
+  // Step 4: NPU executes Subgraph 3
+  NPUContext ctx3 = npu_execute(subgraph3_bin);
+  Tensor final_output = npu_get_result(ctx3);
+
+  return final_output;
+}
+```
+
+---
+
+### Key Insight: Compiler Engineer's Challenge
+
+#### Fallback is NOT a "Feature"—It's a "Necessary Compromise"
+
+**Performance Impact:**
+
+| Metric                    | Without Fallback | With Fallback (1 op) | Impact                             |
+| ------------------------- | ---------------- | -------------------- | ---------------------------------- |
+| **DMA Transfers**         | 2 (in + out)     | 4 (in + out + 2x)    | ⚠️ 2x memory bandwidth overhead    |
+| **NPU Utilization**       | 95%              | 40-60%               | ⚠️ NPU idle during CPU execution   |
+| **Latency**               | 150ms            | 300-400ms            | ⚠️ 2-3x slower                     |
+| **CPU-NPU Sync Overhead** | Minimal          | High                 | ⚠️ Multiple synchronization points |
+
+**Performance Killer Analysis:**
+
+```text
+Ideal (No Fallback):
+CPU:  [Preproc]─────────────[Wait]────────────────[Postproc]
+                             ↓                      ↑
+NPU:  ───────────[DMA_In]──[NPU Compute]──[DMA_Out]───────
+                           (Full execution)
+      Total: 150ms ✅
+
+With Fallback:
+CPU:  [Preproc]─[Wait]─[DMA]─[Fallback Op]─[DMA]─[Wait]─[Postproc]
+                 ↓      ↓         ↓          ↓      ↓      ↑
+NPU:  ──[DMA_In][Sub1][DMA_Out]──(idle)──[DMA_In][Sub3][DMA_Out]──
+      ⚠️ NPU idle          ⚠️ 2x extra DMA
+      Total: 400ms ❌ (NPU speedup completely negated!)
+```
+
+---
+
+### How to Eliminate Fallback?
+
+As an NPU compiler engineer, your primary goal is to **minimize or eliminate fallback occurrences**.
+
+#### Strategy 1: Implement More Lowering Patterns
+
+```cpp
+// Teach the compiler how to lower previously unsupported operations
+class ConvertExoticOpToNPU : public OpRewritePattern<linalg::ExoticOperation> {
+public:
+  LogicalResult matchAndRewrite(linalg::ExoticOperation op,
+                                PatternRewriter &rewriter) const override {
+    // Option A: Direct mapping to NPU instruction
+    rewriter.replaceOpWithNewOp<npu::ExoticOp>(op, ...);
+
+    // Option B: Decompose into supported NPU ops
+    auto op1 = rewriter.create<npu::BasicOp1>(...);
+    auto op2 = rewriter.create<npu::BasicOp2>(op1);
+    rewriter.replaceOp(op, op2);
+
+    return success();
+  }
+};
+```
+
+#### Strategy 2: Algorithm Decomposition
+
+**Challenge:** Decompose complex unsupported operations into sequences of NPU-supported primitives.
+
+```text
+Example: GELU Activation (not natively supported by NPU)
+
+GELU(x) = x * Φ(x)
+where Φ(x) = 0.5 * (1 + tanh(√(2/π) * (x + 0.044715 * x³)))
+
+Decomposition into NPU primitives:
+┌─────────────────────────────────────────────────────────────┐
+│ linalg.gelu %x                                              │
+│       ↓ (Decompose)                                         │
+│ %x_cubed = npu.mul(%x, npu.mul(%x, %x))                     │
+│ %term1 = npu.mul(%x_cubed, 0.044715)                        │
+│ %term2 = npu.add(%x, %term1)                                │
+│ %term3 = npu.mul(%term2, 0.797885)  // √(2/π)               │
+│ %tanh_result = npu.tanh(%term3)                             │
+│ %term4 = npu.add(%tanh_result, 1.0)                         │
+│ %term5 = npu.mul(%term4, 0.5)                               │
+│ %result = npu.mul(%x, %term5)                               │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**Trade-off Analysis:**
+
+| Approach              | Pros                                   | Cons                                      |
+| --------------------- | -------------------------------------- | ----------------------------------------- |
+| **CPU Fallback**      | Easy to implement                      | ❌ Severe performance penalty             |
+| **NPU Decomposition** | ✅ No DMA overhead, full NPU execution | More complex, may use more NPU operations |
+| **Approximation**     | ✅ Fewer ops, faster                   | ⚠️ Reduced numerical accuracy             |
+
+#### Strategy 3: Data Type Adaptation
+
+```cpp
+// If NPU doesn't support FP64, add automatic quantization
+class AdaptDataTypeForNPU : public OpRewritePattern<linalg::GenericOp> {
+  LogicalResult matchAndRewrite(linalg::GenericOp op,
+                                PatternRewriter &rewriter) const override {
+    if (op.getType().isF64()) {
+      // Insert quantization: FP64 → FP32/INT8
+      auto quantized = rewriter.create<npu::QuantizeOp>(op.getOperand());
+      auto npu_op = rewriter.create<npu::ComputeOp>(quantized);
+      auto dequantized = rewriter.create<npu::DequantizeOp>(npu_op);
+      rewriter.replaceOp(op, dequantized);
+      return success();
+    }
+    return failure();
+  }
+};
+```
+
+---
+
+### Summary: Fallback Mechanism
+
+| Aspect               | Details                                                          |
+| -------------------- | ---------------------------------------------------------------- |
+| **When**             | Compile-time decision (not runtime)                              |
+| **Where**            | MLIR middle-end (graph partitioning pass)                        |
+| **Why**              | NPU cannot execute certain operations (hardware/type/shape)      |
+| **How**              | Partition graph → Dual compilation (NPU + CPU binaries)          |
+| **Runtime**          | CPU orchestrates: NPU → DMA → CPU fallback → DMA → NPU           |
+| **Performance Cost** | ❌ 2x DMA overhead, NPU idle time, 2-3x slower                   |
+| **Goal**             | ✅ Minimize fallback: Implement lowering patterns, decompose ops |
+
+**Key Takeaway for NPU Compiler Engineers:**
+
+> "Every fallback you eliminate is a 2-3x performance improvement. Your job is to teach the compiler how to translate 'impossible' operations into sequences of NPU-native primitives—without sacrificing correctness."
+
+---
+
+## Mock Interview Questions for NPU Compiler Position
+
+說明為什麼想應徵 NPU Compiler 這個職位？
+
+- [ ] Q: 你對 MediaTek 的 APU（AI Processing Unit）有什麼了解？
+- [ ] Q: 你過去的 C++/Backend 經驗中，哪一個專案最接近 compiler 開發？
+
+#### 📚 MLIR 基礎概念
+
+- [ ] Q: 什麼是 MLIR？它和傳統的 LLVM IR 有什麼差異？
+- [ ] Q: 請解釋 Dialect 的概念，並舉例說明常見的 Dialect（如 Linalg, SCF, Arith）
+- [ ] Q: 什麼是 Operation、Attribute、Type 在 MLIR 中的角色？
+- [ ] Q: MLIR 的 SSA（Static Single Assignment）是什麼？為什麼重要？
+- [ ] Q: 請畫出一個典型的 AI model 從 TensorFlow/PyTorch 到 NPU binary 的 compilation pipeline
+
+#### 🔄 Lowering & Pattern Rewriting
+
+- [ ] Q: 什麼是 Lowering？為什麼需要多層 Dialect？
+- [ ] Q: 解釋 Progressive Lowering 的好處
+- [ ] Q: Pattern Rewriting 和傳統 Instruction Selection 的差異？
+- [ ] Q: 什麼是 ConversionTarget？如何設定 legal/illegal operations？
+- [ ] Q: 請實作一個簡單的 OpRewritePattern（例如：將 AddOp 改寫成 MulOp + ConstantOp）
+- [ ] Q: 如何處理 1-to-N lowering？請舉 DMA insertion 的例子
+- [ ] Q: 如何處理 N-to-1 lowering？請舉 operator fusion 的例子
+- [ ] Q: Greedy Pattern Rewriter 的執行順序是什麼？如何保證收斂？
+- [ ] Q: 如果兩個 pattern 互相衝突，該如何處理？
+
+#### 🧠 NPU Architecture & Optimization
+
+- [ ] Q: NPU、GPU、CPU 在架構上的主要差異是什麼？
+- [ ] Q: 什麼是 Systolic Array？它如何加速 Matrix Multiplication？
+- [ ] Q: 解釋 NPU 的 Memory Hierarchy（Global Memory, Local Memory, Register）
+- [ ] Q: 什麼是 Tiling？為什麼對 NPU 很重要？
+- [ ] Q: NCHW vs NHWC layout 對 NPU performance 有什麼影響？
+- [ ] Q: 什麼是 Layout-Aware Optimization？請舉例說明
+- [ ] Q: 如何決定最佳的 tile size？
+- [ ] Q: 什麼是 Compute-Memory Trade-off？
+- [ ] Q: Convolution 在 NPU 上有哪些優化技巧？（im2col, Winograd, FFT-based）
+
+#### 🔧 實作與除錯
+
+- [ ] Q: 如何 debug 一個 MLIR pass？有哪些工具可以用？
+- [ ] Q: `mlir-opt` 和 `mlir-translate` 的用途是什麼？
+- [ ] Q: 如何驗證 lowering 的正確性？
+- [ ] Q: 遇到 segmentation fault 在 pattern rewriting 時，你會怎麼 debug？
+- [ ] Q: 如何 profile NPU kernel 的 performance？
+- [ ] Q: 如果 lowering 後的 code 跑得比預期慢，你會從哪裡開始查？
+
+#### 🚀 進階題（Operator Fusion & Multi-Target）
+
+- [ ] Q: 什麼情況下不該做 operator fusion？
+- [ ] Q: 如何判斷兩個 op 可以 fuse？（Legality check）
+- [ ] Q: Conv + ReLU + BatchNorm 的 fusion 順序重要嗎？
+- [ ] Q: 什麼是 Multi-Target Strategy？為什麼 NPU compiler 需要？
+- [ ] Q: 如何處理 NPU 不支援的 operation？（fallback to CPU）
+- [ ] Q: 大模型放不進 NPU local memory 怎麼辦？
+- [ ] Q: 什麼是 Pipeline Parallelism 和 Data Parallelism？
+- [ ] Q: Quantization（INT8/INT16）對 NPU compiler 有什麼影響？
+
+#### 💼 行為問題 & 專案經驗
+
+- [ ] Q: 描述一個你遇到的最困難的技術挑戰，以及你如何解決它
+- [ ] Q: 你如何在 tight deadline 下平衡 code quality 和 delivery speed？
+- [ ] Q: 如果你的 optimization 讓某些 test case 變慢了，你會怎麼處理？
+- [ ] Q: 你如何學習新技術？（以 MLIR 為例）
+- [ ] Q: 你過去的專案中，有沒有實際提升效能的案例？具體數字是多少？
+- [ ] Q: 如果你加入團隊，前三個月你會做什麼？
+
+#### 📝 Coding Challenge（可能的白板題）
+
+- [ ] Q: 實作一個簡單的 MLIR pass，將 `arith.addi(x, 0)` 優化掉
+- [ ] Q: 寫一個 pattern 判斷 Conv + ReLU 可以 fuse
+- [ ] Q: 給定一個 tensor shape 和 memory size，計算最佳 tile size
+- [ ] Q: 實作一個簡單的 DFS 來遍歷 MLIR operation tree
+
+#### 🤔 反問面試官的問題
+
+- [ ] Q: NPU compiler team 目前最大的技術挑戰是什麼？
+- [ ] Q: 團隊使用的 MLIR version 和主要的 custom dialects 有哪些？
+- [ ] Q: 新人的 onboarding 流程是怎樣的？
+- [ ] Q: 團隊如何平衡 performance optimization 和 code maintainability？
+- [ ] Q: MediaTek APU 的下一代架構有什麼特別的 compiler 需求？
+
+### Hands-on Practice（實作練習）
+
+- [ ] 完成 MLIR Toy Tutorial Chapter 1-3
+- [ ] 跑通一個 TensorFlow Lite → MLIR → Binary 的範例
+- [ ] 閱讀一個真實的 IREE 或 TVM lowering commit
+- [ ] 實作一個簡單的 Conv tiling strategy（在紙上或 pseudo code）
+
+---
 
 ## Good reference
 
