@@ -323,6 +323,15 @@ problems:
     refinement_focus: |
       Attempt 1: Brute for but get TLE. Then use sliding window. I don't know when to use sliding window or brute force. The note is written in the #3719 solution.
 
+  - id: 84
+    title: "Largest Rectangle in Histogram"
+    link: "./084_largest_rectangle_in_histogram"
+    leetcode-difficulty: hard
+    topics: [stack, array, monotonic-stack, neetcode150]
+    status: L1_FORGOT
+    refinement_focus: |
+      Attempt 1: (Fail 15 + 45) The key is to find the nearest smaller element on both sides for each bar. Use monotonic stack to achieve O(n) time complexity.
+
   - id: 91
     title: "Decode Ways"
     link: "./091_Decode_Ways"
