@@ -306,6 +306,15 @@ problems:
     status: L3_MASTERED
     refinement_focus: "Make the list circular first. There are optimiazations like if k == length, do nothing"
 
+  - id: 66
+    title: "Plus One"
+    link: "./066_plus_one"
+    leetcode-difficulty: easy
+    topics: [array, math]
+    status: L2_STRUGGLE
+    refinement_focus: |
+      Attempt 1: (Pass 15) But the simplest way is to use vector::insert to insert 1 at the beginning if there is a carry at the end.
+
   - id: 70
     title: "Climbing Stairs"
     link: "./070_Climbing_Stairs"
