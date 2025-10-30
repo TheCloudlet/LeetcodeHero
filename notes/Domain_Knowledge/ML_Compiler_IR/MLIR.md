@@ -2189,7 +2189,7 @@ In the case of camera HDR processing using a pretrained machine learning model, 
 
 ```text
 ┌─────────────────────────────────────────────────────────────────┐
-│                    HDR Processing Pipeline                       │
+│                    HDR Processing Pipeline                      │
 └─────────────────────────────────────────────────────────────────┘
 
 1. Model Training (Offline - Done by Camera/AI Team)
@@ -2443,6 +2443,454 @@ Total:          150ms  ← User waits ~0.15s
 - **CPU**: Good for irregular operations (alignment, tone mapping, control flow)
 - **NPU**: Excellent for regular tensor operations (convolutions, matrix multiply)
 - **Hybrid**: Leverages strengths of both processors for optimal performance
+
+---
+
+## DMA (Direct Memory Access)
+
+What is DMA? Does normal computer also use DMA?
+
+DMA (Direct Memory Access) is a feature that allows certain hardware subsystems within a computer to access the main system memory (RAM) independently of the central processing unit (CPU). This means that data can be transferred directly between memory and peripherals (like disk drives, network cards, or NPUs) without burdening the CPU with the task of moving data. This leads to more efficient use of CPU resources and can significantly improve overall system performance, especially for high-throughput data transfers.
+
+Yes, normal computers also use DMA. It is a common feature in many computer architectures, including personal computers, servers, and embedded systems. DMA is widely used in various peripherals such as hard drives, graphics cards, sound cards, and network interfaces to facilitate efficient data transfer without CPU intervention.
+
+So, if I were a program how can I use DMA to transfer data? Does it mean DMA is just a kernel driver?
+
+In general, as a user-space program, you don't directly interact with DMA hardware. Instead, you typically use system calls or APIs provided by the operating system that abstract away the details of DMA operations. The operating system's kernel manages DMA transfers through device drivers that handle the specifics of the hardware.
+
+When you want to transfer data using DMA, you would typically follow these steps:
+
+```text
+┌────────────────────────────────────────────────────────────────────────────────┐
+│                         DMA Transfer Workflow                                  │
+└────────────────────────────────────────────────────────────────────────────────┘
+
+    User Space                Kernel Space                   Hardware
+────────────────────────────────────────────────────────────────────────────────
+
+Step 1: Open Device
+────────────────────
+  [Application]
+       │
+       │ open("/dev/npu0")
+       ↓
+    [Kernel]─────────────►[Device Driver]
+       │                        │
+       │◄───────────────────────┘
+       │ Returns fd
+       ↓
+
+Step 2: Prepare Buffers
+────────────────────────
+  [Application]
+       │
+       │ malloc(buffer)
+       │ pin_memory(buffer)
+       ↓
+  [User Buffer]
+  (Virtual Addr)
+       │
+       │ mlock()/mmap()
+       ↓
+[Pinned Memory]◄─────[Memory Manager]
+  (Physical Addr)     Ensures pages
+       │              won't be swapped
+       ↓
+
+Step 3: Issue DMA Transfer
+────────────────────────────
+  [Application]
+       │
+       │ ioctl(fd, DMA_START,
+       │       {src, dst, size})
+       ↓
+    [Kernel]─────────────►[Device Driver]
+                               │
+                               │ Program DMA:
+                               │ • Src addr (phys)
+                               │ • Dst addr (phys)
+                               │ • Transfer size
+                               │ • Control flags
+                               ↓
+                          [DMA Controller]
+                               │
+                               │ Direct access    [RAM]
+                               │ (CPU-free)         ↕
+                               │                    ↕
+                               ↓                    ↕
+                          [Hardware Device]◄────────┘
+                          (NPU/NIC/Disk)
+                               │
+                               │ Data flows:
+                               │ RAM ↔ Device
+                               │ (Bypasses CPU!)
+                               ↓
+
+Step 4: Wait for Completion
+─────────────────────────────
+  [Application]                                   [DMA Controller]
+       │                                               │
+       │ poll()/select()                               │ (Transferring...)
+       │ /wait()                                       │
+       │ (Blocked/Async)                               │
+       │                                               │ (Complete!)
+       │                                               ↓
+       │                                        [HW Interrupt]
+       │                                               │
+       │                                               ↓
+       │                                        [Device Driver]
+       │                                        (ISR Handler)
+       │                                               │
+       │                                               │ Clear IRQ
+       │                                               │ Update status
+       │◄──────────────────────────────────────────────┘
+       │ Wakes up/Callback
+       ↓
+
+Step 5: Process Data
+─────────────────────
+  [Application]
+       │
+       │ Access buffer
+       │ (data ready!)
+       ↓
+  [User Buffer]
+  (Transferred data)
+       │
+       │ Process...
+       ↓
+    Output
+
+────────────────────────────────────────────────────────────────────────────────
+Key Benefits of DMA:
+• CPU is free during transfer (can do other work)
+• High bandwidth (direct memory access)
+• Low latency (no CPU intervention per byte)
+• Efficient for large data transfers
+
+Typical Use Cases:
+• Network packet I/O           • GPU texture uploads
+• Disk read/write operations   • NPU tensor data transfers
+• Audio/Video streaming        • High-speed sensor data acquisition
+────────────────────────────────────────────────────────────────────────────────
+```
+
+What is the abstraction that kernel provides to user program for DMA?
+
+The kernel provides several abstractions to user programs for DMA operations, typically through device drivers and system calls. Here are some common abstractions:
+
+1. **Device Files**: In Unix-like operating systems, hardware devices that support DMA are often represented as device files (e.g., `/dev/npu0`). User programs can open these files to interact with the hardware.
+2. **IOCTL (Input/Output Control)**: This is a system call that allows user programs to send control commands to device drivers. Through ioctl calls, user programs can configure DMA transfers, specify buffer addresses, and initiate the transfer.
+3. **Memory Mapping (mmap)**: The kernel may allow user programs to map device memory into their address space using the `mmap` system call. This enables direct access to hardware buffers that are used for DMA transfers.
+4. **Asynchronous I/O**: Some drivers provide asynchronous I/O interfaces that allow user programs to initiate DMA transfers without blocking, enabling better performance and responsiveness.
+5. **Completion Notifications**: The kernel may provide mechanisms for user programs to be notified when DMA transfers are complete, such as through signals, callbacks, or polling interfaces.
+
+## Fallback Mechanism in Heterogeneous Computing
+
+In heterogeneous computing systems that utilize multiple types of processors (e.g., CPU, GPU, NPU), a fallback mechanism is essential to ensure that operations can still be executed even if a particular processor cannot handle them. This mechanism allows the system to gracefully switch to an alternative processing unit when necessary.
+
+### What is the Fallback Mechanism?
+
+**Definition:** The Fallback mechanism is a **compile-time strategy** (not a runtime "accident") where the compiler proactively identifies operations that the NPU cannot execute and automatically partitions them to run on the CPU (ARM cores).
+
+**Key Insight:** The CPU is always in control of the execution orchestration. It's not about "cutting off" the CPU—the CPU directs the entire workflow and falls back to executing certain operations itself when the NPU cannot handle them.
+
+---
+
+### How Fallback Works: Compilation Phase
+
+The entire decision process occurs in MLIR's middle-end during compilation:
+
+#### Step 1: Identification
+
+```text
+┌────────────────────────────────────────────────────────────────┐
+│                    Compiler Analysis                           │
+└────────────────────────────────────────────────────────────────┘
+
+Input: linalg dialect computation graph
+  ↓
+[mlir-opt] attempts to lower each operation to npu.dialect
+  ↓
+Decision for each operation:
+```
+
+**Lowering Outcomes:**
+
+| Operation                | Lowering Result             | Target | Reason                                    |
+| ------------------------ | --------------------------- | ------ | ----------------------------------------- |
+| `linalg.conv2d`          | ✅ → `npu.conv2d`           | NPU    | Native NPU support                        |
+| `linalg.matmul`          | ✅ → `npu.matmul`           | NPU    | Native NPU support                        |
+| `linalg.ExoticOperation` | ❌ No lowering pattern      | CPU    | **FALLBACK**: No NPU equivalent           |
+| `linalg.gelu`            | ❌ Unsupported dtype (FP64) | CPU    | **FALLBACK**: NPU only supports INT8/FP32 |
+| `linalg.dynamic_reshape` | ❌ Dynamic shape            | CPU    | **FALLBACK**: NPU requires static shapes  |
+
+#### Step 2: Triggering Fallback - Common Reasons
+
+**Why does fallback occur?**
+
+1. **Hardware Limitation**: NPU lacks the specific instruction/operation
+2. **Data Type Mismatch**: Operation uses unsupported data types (e.g., NPU only supports INT8, but op uses FP64)
+3. **Dynamic Shapes**: NPU requires static tensor shapes, but operation has dynamic dimensions
+4. **Unsupported Attributes**: Operation parameters that NPU hardware cannot handle
+
+#### Step 3: Graph Partitioning
+
+When the compiler encounters an unsupported operation, it strategically partitions the computation graph:
+
+```text
+Original Computation Graph:
+┌──────────────────────────────────────────────────────────────────┐
+│ [Conv1] → [ReLU] → [ExoticOp] → [Conv2] → [Pool] → [Matmul]      │
+└──────────────────────────────────────────────────────────────────┘
+
+After Partitioning:
+┌─────────────┐   ┌────────────┐   ┌──────────────────────┐
+│ Subgraph 1  │   │ Subgraph 2 │   │    Subgraph 3        │
+│             │   │            │   │                      │
+│ [Conv1]     │   │ [ExoticOp] │   │ [Conv2]              │
+│    ↓        │   │            │   │    ↓                 │
+│ [ReLU]      │   │            │   │ [Pool]               │
+│             │   │            │   │    ↓                 │
+│             │   │            │   │ [Matmul]             │
+└──────┬──────┘   └─────┬──────┘   └──────┬───────────────┘
+       │                │                 │
+    Target:          Target:           Target:
+    NPU (✅)         CPU (⚠️)          NPU (✅)
+```
+
+#### Step 4: Dual Compilation
+
+The compiler generates code for different targets:
+
+```text
+┌─────────────────────────────────────────────────────────────────┐
+│                    Compilation Targets                          │
+└─────────────────────────────────────────────────────────────────┘
+
+Subgraph 1 (NPU)
+     ↓
+[NPU Backend] → mlir-opt --convert-linalg-to-npu
+     ↓
+[NPU Codegen] → mlir-translate --npu-to-binary
+     ↓
+npu_subgraph1.bin
+
+Subgraph 2 (CPU) ⚠️ FALLBACK
+     ↓
+[LLVM Backend] → mlir-opt --convert-linalg-to-llvm
+     ↓
+[LLVM Codegen] → llc, clang
+     ↓
+cpu_fallback.so (ARM binary)
+
+Subgraph 3 (NPU)
+     ↓
+[NPU Backend] → mlir-opt --convert-linalg-to-npu
+     ↓
+[NPU Codegen] → mlir-translate --npu-to-binary
+     ↓
+npu_subgraph3.bin
+```
+
+---
+
+### Runtime Execution Flow
+
+**CPU orchestrates the entire execution (CPU never "gets cut off"):**
+
+```text
+ARM CPU (Host)                                        NPU (Device)
+─────────────────────────────────────────────────────────────────
+
+1. [NPU Subgraph 1]
+   │
+   │ NPU Driver call
+   ├────────────────────────────────────────────────►Execute
+   │                                                  Subgraph 1
+   │                                                  (Conv1+ReLU)
+   │◄─────────────────────────────────────────────── Complete
+   │
+   │ ⚠️ Performance Killer #1: DMA Round-trip
+   ├─ DMA: NPU SRAM → RAM ──────────────────────────►Transfer
+   │  (Copy results back)                             results
+   │
+2. [CPU Fallback - ExoticOp]
+   │
+   │ Execute ExoticOp on ARM CPU
+   │ (Processes data in RAM)
+   ↓
+   [CPU computes ExoticOp result]
+   │
+   │ ⚠️ Performance Killer #2: DMA Round-trip
+   ├─ DMA: RAM → NPU SRAM ──────────────────────────►Transfer
+   │  (Copy CPU results to NPU)                       input
+   │
+3. [NPU Subgraph 3]
+   │
+   │ NPU Driver call
+   ├────────────────────────────────────────────────►Execute
+   │                                                  Subgraph 3
+   │                                                  (Conv2+Pool
+   │                                                   +Matmul)
+   │◄─────────────────────────────────────────────── Complete
+   ↓
+Final Output
+```
+
+**Code Example:**
+
+```cpp
+// Runtime execution pseudocode
+void executeModel(Model& model) {
+  // Step 1: NPU executes Subgraph 1
+  NPUContext ctx1 = npu_execute(subgraph1_bin);
+  Tensor intermediate1 = npu_get_result(ctx1);  // DMA: NPU → RAM ⚠️
+
+  // Step 2: CPU executes fallback operation
+  Tensor intermediate2 = cpu_execute_fallback(intermediate1);  // CPU computes
+
+  // Step 3: Transfer back to NPU
+  npu_set_input(intermediate2);  // DMA: RAM → NPU ⚠️
+
+  // Step 4: NPU executes Subgraph 3
+  NPUContext ctx3 = npu_execute(subgraph3_bin);
+  Tensor final_output = npu_get_result(ctx3);
+
+  return final_output;
+}
+```
+
+---
+
+### Key Insight: Compiler Engineer's Challenge
+
+#### Fallback is NOT a "Feature"—It's a "Necessary Compromise"
+
+**Performance Impact:**
+
+| Metric                    | Without Fallback | With Fallback (1 op) | Impact                             |
+| ------------------------- | ---------------- | -------------------- | ---------------------------------- |
+| **DMA Transfers**         | 2 (in + out)     | 4 (in + out + 2x)    | ⚠️ 2x memory bandwidth overhead    |
+| **NPU Utilization**       | 95%              | 40-60%               | ⚠️ NPU idle during CPU execution   |
+| **Latency**               | 150ms            | 300-400ms            | ⚠️ 2-3x slower                     |
+| **CPU-NPU Sync Overhead** | Minimal          | High                 | ⚠️ Multiple synchronization points |
+
+**Performance Killer Analysis:**
+
+```text
+Ideal (No Fallback):
+CPU:  [Preproc]─────────────[Wait]────────────────[Postproc]
+                             ↓                      ↑
+NPU:  ───────────[DMA_In]──[NPU Compute]──[DMA_Out]───────
+                           (Full execution)
+      Total: 150ms ✅
+
+With Fallback:
+CPU:  [Preproc]─[Wait]─[DMA]─[Fallback Op]─[DMA]─[Wait]─[Postproc]
+                 ↓      ↓         ↓          ↓      ↓      ↑
+NPU:  ──[DMA_In][Sub1][DMA_Out]──(idle)──[DMA_In][Sub3][DMA_Out]──
+      ⚠️ NPU idle          ⚠️ 2x extra DMA
+      Total: 400ms ❌ (NPU speedup completely negated!)
+```
+
+---
+
+### How to Eliminate Fallback?
+
+As an NPU compiler engineer, your primary goal is to **minimize or eliminate fallback occurrences**.
+
+#### Strategy 1: Implement More Lowering Patterns
+
+```cpp
+// Teach the compiler how to lower previously unsupported operations
+class ConvertExoticOpToNPU : public OpRewritePattern<linalg::ExoticOperation> {
+public:
+  LogicalResult matchAndRewrite(linalg::ExoticOperation op,
+                                PatternRewriter &rewriter) const override {
+    // Option A: Direct mapping to NPU instruction
+    rewriter.replaceOpWithNewOp<npu::ExoticOp>(op, ...);
+
+    // Option B: Decompose into supported NPU ops
+    auto op1 = rewriter.create<npu::BasicOp1>(...);
+    auto op2 = rewriter.create<npu::BasicOp2>(op1);
+    rewriter.replaceOp(op, op2);
+
+    return success();
+  }
+};
+```
+
+#### Strategy 2: Algorithm Decomposition
+
+**Challenge:** Decompose complex unsupported operations into sequences of NPU-supported primitives.
+
+```text
+Example: GELU Activation (not natively supported by NPU)
+
+GELU(x) = x * Φ(x)
+where Φ(x) = 0.5 * (1 + tanh(√(2/π) * (x + 0.044715 * x³)))
+
+Decomposition into NPU primitives:
+┌─────────────────────────────────────────────────────────────┐
+│ linalg.gelu %x                                              │
+│       ↓ (Decompose)                                         │
+│ %x_cubed = npu.mul(%x, npu.mul(%x, %x))                     │
+│ %term1 = npu.mul(%x_cubed, 0.044715)                        │
+│ %term2 = npu.add(%x, %term1)                                │
+│ %term3 = npu.mul(%term2, 0.797885)  // √(2/π)               │
+│ %tanh_result = npu.tanh(%term3)                             │
+│ %term4 = npu.add(%tanh_result, 1.0)                         │
+│ %term5 = npu.mul(%term4, 0.5)                               │
+│ %result = npu.mul(%x, %term5)                               │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**Trade-off Analysis:**
+
+| Approach              | Pros                                   | Cons                                      |
+| --------------------- | -------------------------------------- | ----------------------------------------- |
+| **CPU Fallback**      | Easy to implement                      | ❌ Severe performance penalty             |
+| **NPU Decomposition** | ✅ No DMA overhead, full NPU execution | More complex, may use more NPU operations |
+| **Approximation**     | ✅ Fewer ops, faster                   | ⚠️ Reduced numerical accuracy             |
+
+#### Strategy 3: Data Type Adaptation
+
+```cpp
+// If NPU doesn't support FP64, add automatic quantization
+class AdaptDataTypeForNPU : public OpRewritePattern<linalg::GenericOp> {
+  LogicalResult matchAndRewrite(linalg::GenericOp op,
+                                PatternRewriter &rewriter) const override {
+    if (op.getType().isF64()) {
+      // Insert quantization: FP64 → FP32/INT8
+      auto quantized = rewriter.create<npu::QuantizeOp>(op.getOperand());
+      auto npu_op = rewriter.create<npu::ComputeOp>(quantized);
+      auto dequantized = rewriter.create<npu::DequantizeOp>(npu_op);
+      rewriter.replaceOp(op, dequantized);
+      return success();
+    }
+    return failure();
+  }
+};
+```
+
+---
+
+### Summary: Fallback Mechanism
+
+| Aspect               | Details                                                          |
+| -------------------- | ---------------------------------------------------------------- |
+| **When**             | Compile-time decision (not runtime)                              |
+| **Where**            | MLIR middle-end (graph partitioning pass)                        |
+| **Why**              | NPU cannot execute certain operations (hardware/type/shape)      |
+| **How**              | Partition graph → Dual compilation (NPU + CPU binaries)          |
+| **Runtime**          | CPU orchestrates: NPU → DMA → CPU fallback → DMA → NPU           |
+| **Performance Cost** | ❌ 2x DMA overhead, NPU idle time, 2-3x slower                   |
+| **Goal**             | ✅ Minimize fallback: Implement lowering patterns, decompose ops |
+
+**Key Takeaway for NPU Compiler Engineers:**
+
+> "Every fallback you eliminate is a 2-3x performance improvement. Your job is to teach the compiler how to translate 'impossible' operations into sequences of NPU-native primitives—without sacrificing correctness."
 
 ---
 
