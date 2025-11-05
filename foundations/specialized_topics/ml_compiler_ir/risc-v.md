@@ -498,6 +498,8 @@ movss xmm3, [rsi+12]    # a[i+3]
 
 **Actual Spilling Rate Comparison (from academic research):**
 
+**Spilling rate** 是暫存器不夠用時，被迫把資料存回記憶體的頻率。Memory access 比 register 慢 10-100 倍，所以這是效能殺手。LLVM Backend 的 Register Allocation Pass 使用 graph coloring 演算法來決定何時 spill。RISC-V 有 32 個暫存器，spilling rate 只有 2%，遠低於 x86 的 15%。更多暫存器 = 更少 spilling = 更高效能。
+
 ```
 Architecture    Register Count    Avg Spill Rate (SPECint)
 ──────────────────────────────────────────────────────────
@@ -505,19 +507,6 @@ x86 (32-bit)         8                    ~15%
 x86-64              16                     ~8%
 ARM64               31                     ~3%
 RISC-V              32                     ~2%
-```
-
-**對 AI Workload 的影響：**
-
-```c
-// Loop unrolling 時需要很多暫存器
-for (int i = 0; i < N; i += 4) {
-  float sum0 = a[i+0] * b[i+0];  // 需要暫存器
-  float sum1 = a[i+1] * b[i+1];  // 需要暫存器
-  float sum2 = a[i+2] * b[i+2];  // 需要暫存器
-  float sum3 = a[i+3] * b[i+3];  // 需要暫存器
-  // ... 更多的中間結果
-}
 ```
 
 **Compiler 寄存器分配器的福音：**
@@ -569,13 +558,26 @@ RISC-V 保留了 **custom opcode 空間**，讓你加自己的指令！
 ```assembly
 # 假設 MediaTek 加了一個量化指令
 custom.quant.int8 v1, v2, scale, zero_point
+# ↑ 一條指令完成量化！
 
-# 而不是用一堆標準指令模擬
-vmul.vf v1, v2, scale
-vadd.vi v1, v1, zero_point
-vmax.vi v1, v1, -128
-vmin.vi v1, v1, 127
+# 而不是用一堆標準指令模擬（5-6 條）
+vmul.vf v1, v2, scale      # 1. 除以 scale
+vadd.vi v1, v1, zero_point # 2. 加 zero_point
+vmax.vi v1, v1, -128       # 3. Clipping 下界
+vmin.vi v1, v1, 127        # 4. Clipping 上界
 ```
+
+**量化 (Quantization) 快速理解：**
+
+| Concept              | Description                                               | Example                                  |
+| -------------------- | --------------------------------------------------------- | ---------------------------------------- |
+| **Purpose**          | Convert FP32 (4 bytes) to INT8 (1 byte), save 4x memory   | ResNet-50: 102MB → 25MB                  |
+| **Formula**          | `INT8 = clip(round(FP32/scale) + zero_point, -128, 127)`  | FP32=1.5 → INT8=50                       |
+| **scale**            | Scaling factor = (max-min)/255, controls precision        | Data range -1~1 → scale=0.00784          |
+| **zero_point**       | Zero-point alignment, which INT8 value maps to FP32's 0.0 | Symmetric quant=0, Asymmetric=-128       |
+| **Performance Gain** | INT8 ops 2-4x faster than FP32 (hardware dependent)       | Tensor Core: INT8 is 4x faster than FP32 |
+| **Accuracy Loss**    | Usually <2% accuracy drop (after fine-tuning)             | ImageNet Top-1: 76.1% → 75.8%            |
+| **Why Custom Inst**  | Standard instructions need 5-6, custom only needs 1       | 5-6x speedup + power saving              |
 
 **LLVM 整合方式：**
 
@@ -926,16 +928,16 @@ vle32.v v0, (a1)          // 一次 load 512-bit * 8 = 4KB!
 
 ```
 ┌─────────────────────────────────────┐
-│         MediaTek NPU SoC           │
+│         MediaTek NPU SoC            │
 ├─────────────────────────────────────┤
-│  Andes AX45MP (控制核心)            │
+│  Andes AX45MP (Control Core)        │
 │  - RV64IMAFDCV                      │
-│  - 負責 NPU 初始化                   │
-│  - 處理 DMA 和中斷                   │
+│  - NPU initialization               │
+│  - DMA and interrupt handling       │
 ├─────────────────────────────────────┤
 │  Proprietary NPU Cores              │
-│  - 矩陣運算單元                      │
-│  - 專用的量化引擎                    │
+│  - Matrix computation units         │
+│  - Dedicated quantization engine    │
 └─────────────────────────────────────┘
 ```
 
@@ -1018,13 +1020,13 @@ vector_add:
 ```
 
 **GCC vs LLVM 的取捨**：
-| 特性 | GCC | LLVM |
-|------|-----|------|
-| **向量化品質** | 基本 | 優秀 |
-| **編譯速度** | 快 | 慢 |
-| **除錯資訊** | 傳統穩定 | 更現代 |
-| **客製化容易度** | 困難 | 容易 |
-| **產業採用** | 嵌入式為主 | AI/ML 為主 |
+| Feature | GCC | LLVM |
+| ------------------------- | ------------------ | ----------- |
+| **Vectorization Quality** | Basic | Excellent |
+| **Compilation Speed** | Fast | Slow |
+| **Debug Info** | Traditional stable | More modern |
+| **Customization Ease** | Difficult | Easy |
+| **Industry Adoption** | Embedded focus | AI/ML focus |
 
 #### **LLVM/Clang - NPU Compiler 的首選** ⭐⭐⭐
 
@@ -1176,12 +1178,12 @@ void npu_task_scheduler(void *params) {
 
 #### **硬體對比表**：
 
-| 開發板               | CPU                   | RAM       | 價格    | 適合場景   |
-| -------------------- | --------------------- | --------- | ------- | ---------- |
-| **HiFive Unmatched** | SiFive U740 (5 cores) | 16GB      | $665    | 高性能開發 |
-| **VisionFive 2**     | JH7110 (4 cores)      | 2-8GB     | $60-100 | Linux 開發 |
-| **Milk-V Mars**      | JH7110                | 2-8GB     | $50     | 入門學習   |
-| **Sipeed Lichee RV** | Allwinner D1          | 512MB-1GB | $20     | IoT 原型   |
+| Board                | CPU                   | RAM       | Price   | Use Case                     |
+| -------------------- | --------------------- | --------- | ------- | ---------------------------- |
+| **HiFive Unmatched** | SiFive U740 (5 cores) | 16GB      | $665    | High-performance development |
+| **VisionFive 2**     | JH7110 (4 cores)      | 2-8GB     | $60-100 | Linux development            |
+| **Milk-V Mars**      | JH7110                | 2-8GB     | $50     | Entry-level learning         |
+| **Sipeed Lichee RV** | Allwinner D1          | 512MB-1GB | $20     | IoT prototyping              |
 
 **如何選擇開發板**（針對 NPU Compiler 開發）：
 
