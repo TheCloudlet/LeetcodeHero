@@ -9,21 +9,10 @@ author: Yi-Ping Pan (Cloudlet)
 
 (我們今天的目標是充分準備 Mediatek compiler engineer 的職缺，有內部消息透露 RISC-V 很重要．所以所有的準備)
 
-**History of RISC-V**
+\*\*
 
-- [ ] 2010年 UC Berkeley Krste Asanović 教授團隊創建
-- [ ] 為什麼叫 "V"：第五代 RISC（前四代是 Berkeley 的研究專案）
-- [ ] 2015年成立 RISC-V International（非營利組織）
-- [ ] 2020年總部從美國搬到瑞士（避免美國出口管制）
-
-**What does it want to solve**
-
-- [ ] 專有 ISA 的授權費問題（ARM 每顆晶片收費）
-- [ ] 供應商鎖定（vendor lock-in）
-- [ ] 學術研究的法律障礙
-- [ ] 架構的戰略獨立性
-- [ ] 遺留包袱（x86 有40+年歷史的相容性負擔）
-- [ ] 客製化困難（ARM 不讓你隨意改）
+- [x] History of RISC-V
+- [x] What does it want to solve
 
 **Ecosystem overview**
 
@@ -837,14 +826,14 @@ def estimate_latency(op):
 **2. 模組化 → 異構系統的最佳配置**
 
 ```
-┌─────────────┐
-│ NPU Cluster │
-├─────────────┤
-│ Compute Core│ ← RV64IMAFDCV (全功能)
-│ Compute Core│
-├─────────────┤
-│ Control Core│ ← RV32IMC (精簡)
-└─────────────┘
+┌──────────────┐
+│ NPU Cluster  │
+├──────────────┤
+│ Compute Core │ ← RV64IMAFDCV (全功能)
+│ Compute Core │
+├──────────────┤
+│ Control Core │ ← RV32IMC (精簡)
+└──────────────┘
 ```
 
 **3. 可擴展性 → 針對 AI workload 定製**
@@ -882,3 +871,445 @@ if (detect_matmul_pattern())
 - **x86**: 太複雜、功耗高、無法客製化 → 不適合
 - **ARM**: 授權費、不能隨意修改、某些場景被政治因素影響 → 有風險
 - **RISC-V**: 乾淨、開源、可客製化、生態正在快速成熟 → 最佳選擇
+
+---
+
+## RISC-V Ecosystem Overview (從 NPU Compiler 視角)
+
+理解 RISC-V 生態系統對於 NPU compiler 工程師至關重要，因為你需要知道：
+
+- 哪些硬體平台可以測試你的 compiler
+- 哪些工具鏈可以整合
+- 哪些公司在推動相關技術（潛在合作或競爭對手）
+
+### 硬體供應商與處理器 IP
+
+#### **SiFive - 美國的 RISC-V 先鋒**
+
+- **地位**：最早的商業化 RISC-V 公司（2015 年成立）
+- **產品線**：
+  - **Performance 系列**（P550, P670）：高性能應用處理器
+  - **Intelligence 系列**（X280）：AI/ML 專用，帶向量擴展
+  - **Essential 系列**（E24, E34）：嵌入式微控制器
+- **對 NPU Compiler 的意義**：
+  - X280 有完整的 RVV 1.0 實作，是測試向量化 compiler 的理想平台
+  - SiFive 與 Intel 合作，推動 RISC-V 進入資料中心
+
+```c
+// SiFive X280 的向量特性
+// VLEN = 512-bit (可配置到 1024-bit)
+// ELEN = 64-bit
+// LMUL = 8 (最大可用 8 個向量暫存器合併)
+
+// 這意味著 compiler 可以生成高度並行的程式碼
+vsetvli t0, a0, e32, m8  // 使用 m8 (8個暫存器合併)
+vle32.v v0, (a1)          // 一次 load 512-bit * 8 = 4KB!
+```
+
+#### **Andes Technology (晶心科技) - 台灣之光** ⭐
+
+- **地位**：全球第三大 CPU IP 供應商（僅次於 ARM、Synopsys）
+- **為什麼重要**：
+  - **台灣本土公司**，MediaTek 可能採用（地緣優勢）
+  - 在嵌入式市場深耕 20+ 年
+  - 支援完整的 RISC-V 擴展（包括 V extension）
+- **產品線**：
+  - **AndesCore 25 系列**：32-bit 嵌入式
+  - **AndesCore 45 系列**：64-bit 應用處理器
+  - **AX系列**：帶向量擴展的 AI 處理器
+- **技術特色**：
+  - **StackSafe**：硬體堆疊保護（防止 buffer overflow）
+  - **CoDense**：程式碼壓縮技術（比標準 C Extension 更強）
+  - **PowerBrake**：動態功耗管理
+
+**實際案例：Andes 在 NPU 系統中的角色**
+
+```
+┌─────────────────────────────────────┐
+│         MediaTek NPU SoC           │
+├─────────────────────────────────────┤
+│  Andes AX45MP (控制核心)            │
+│  - RV64IMAFDCV                      │
+│  - 負責 NPU 初始化                   │
+│  - 處理 DMA 和中斷                   │
+├─────────────────────────────────────┤
+│  Proprietary NPU Cores              │
+│  - 矩陣運算單元                      │
+│  - 專用的量化引擎                    │
+└─────────────────────────────────────┘
+```
+
+#### **Alibaba T-Head (平頭哥) - 中國的野心**
+
+- **背景**：阿里巴巴全資子公司（2018 年成立）
+- **戰略意義**：中國半導體自主化的關鍵
+- **玄鐵系列處理器**：
+  - **玄鐵 910**：64-bit 高性能核心（12-stage pipeline）
+  - **玄鐵 907**：中端應用處理器
+  - **玄鐵 902**：嵌入式 MCU
+- **技術亮點**：
+  - 自研的向量擴展實作（早於 RVV 1.0 標準）
+  - 開源了 xuantie-gnu-toolchain（GCC 移植）
+  - 與 Android 整合（T-Head 的晶片可以跑 Android）
+
+**玄鐵 910 的效能數據**：
+
+```
+SPECint2006: 7.5/GHz (與 ARM Cortex-A73 相當)
+功耗: 0.3 mW/MHz (非常省電)
+目標應用: 5G 基站、智慧家居、邊緣運算
+```
+
+**對 Compiler 工程師的挑戰**：
+
+- T-Head 有自己的 **RVV 0.7.1** 實作（與標準 RVV 1.0 不同）
+- Compiler 需要支援多個 RVV 版本（conditional compilation）
+
+```c
+#if defined(__riscv_v_intrinsic) && (__riscv_v_intrinsic >= 1000000)
+  // RVV 1.0 標準
+  vsetvl_e32m1(vl);
+#elif defined(__riscv_v_intrinsic) && (__riscv_v_intrinsic >= 7000)
+  // T-Head RVV 0.7
+  vsetvli(vl, avl, e32, m1);
+#endif
+```
+
+#### **StarFive - RISC-V 的開發板之王**
+
+- **產品**：VisionFive 系列單板電腦
+- **意義**：讓開發者可以在真實硬體上測試 RISC-V Linux
+- **VisionFive 2 規格**：
+  - CPU: JH7110 (4x SiFive U74 @ 1.5GHz)
+  - GPU: IMG BXE-4-32 (支援 OpenGL ES 3.2)
+  - RAM: 2GB/4GB/8GB LPDDR4
+  - 可以跑完整的 Debian/Ubuntu
+- **對 Compiler 開發的價值**：
+  - 可以實際測試 auto-vectorization 的效果
+  - Benchmark AI workload 的性能
+  - 除錯 memory ordering 相關的 bug
+
+### 軟體工具鏈（Compiler 工程師的武器庫）
+
+#### **GCC (GNU Compiler Collection)**
+
+- **RISC-V 支援狀態**：
+  - RV32I/RV64I: ✅ 完整支援（GCC 7.1+）
+  - RVV 1.0: ✅ 完整支援（GCC 14+）
+  - Auto-vectorization: ⚠️ 基本支援，但不如 LLVM 成熟
+
+**GCC 的 RISC-V 向量化範例**：
+
+```c
+// 原始程式碼
+void vector_add(int *a, int *b, int *c, int n) {
+  for (int i = 0; i < n; i++)
+    c[i] = a[i] + b[i];
+}
+
+// GCC 使用 -march=rv64gcv -O3 -ftree-vectorize 後生成：
+vector_add:
+  vsetvli a3, a3, e32, m1, ta, ma
+  vle32.v v1, (a0)
+  vle32.v v2, (a1)
+  vadd.vv v1, v1, v2
+  vse32.v v1, (a2)
+  // ... loop handling
+```
+
+**GCC vs LLVM 的取捨**：
+| 特性 | GCC | LLVM |
+|------|-----|------|
+| **向量化品質** | 基本 | 優秀 |
+| **編譯速度** | 快 | 慢 |
+| **除錯資訊** | 傳統穩定 | 更現代 |
+| **客製化容易度** | 困難 | 容易 |
+| **產業採用** | 嵌入式為主 | AI/ML 為主 |
+
+#### **LLVM/Clang - NPU Compiler 的首選** ⭐⭐⭐
+
+**為什麼 LLVM 對 NPU Compiler 如此重要？**
+
+1. **MLIR (Multi-Level IR)**：
+   - 可以表達高階的 AI 操作（linalg, tensor, etc.）
+   - 逐步 lower 到 RISC-V 機器碼
+   - 這是 Google TPU Compiler 和 TVM 的基礎
+
+```mlir
+// MLIR 中的矩陣乘法
+func.func @matmul(%A: tensor<1024x1024xf32>,
+                  %B: tensor<1024x1024xf32>) -> tensor<1024x1024xf32> {
+  %C = linalg.matmul ins(%A, %B : tensor<1024x1024xf32>, tensor<1024x1024xf32>)
+                     outs(%C : tensor<1024x1024xf32>) -> tensor<1024x1024xf32>
+  return %C : tensor<1024x1024xf32>
+}
+
+// Lower 到 RISC-V Vector
+// 1. Tiling
+// 2. Vectorization (使用 RVV)
+// 3. Register allocation
+// 4. Instruction scheduling
+```
+
+2. **Polyhedral 優化**：
+
+   - Loop interchange, tiling, fusion
+   - 對 AI workload 的效能影響巨大
+
+3. **向量化引擎**：
+   - Loop Vectorizer：自動向量化迴圈
+   - SLP Vectorizer：Superword-Level Parallelism
+   - 針對 RISC-V RVV 有專門優化
+
+**LLVM RISC-V Backend 的關鍵檔案**（面試會問！）：
+
+```
+llvm/lib/Target/RISCV/
+├── RISCVInstrInfo.td          # 指令定義
+├── RISCVInstrInfoV.td         # 向量指令定義
+├── RISCVISelLowering.cpp      # Instruction selection
+├── RISCVRegisterInfo.td       # 暫存器定義
+├── RISCVTargetMachine.cpp     # Target configuration
+└── RISCVVectorPeephole.cpp    # 向量優化 pass
+```
+
+**如何貢獻到 LLVM RISC-V Backend**：
+
+```bash
+# 1. Clone LLVM
+git clone https://github.com/llvm/llvm-project.git
+
+# 2. 建立 feature branch
+git checkout -b riscv-custom-opt
+
+# 3. 修改 (例如：加入 custom instruction support)
+vim llvm/lib/Target/RISCV/RISCVInstrInfo.td
+
+# 4. 建置測試
+ninja check-llvm-codegen-riscv
+
+# 5. 提交 patch 到 Phabricator (LLVM 的 code review 平台)
+```
+
+#### **Linux Kernel RISC-V Port**
+
+- **支援狀態**：Mainline since Linux 4.15 (2018)
+- **關鍵維護者**：Palmer Dabbelt (Google), Guo Ren (Alibaba)
+- **對 NPU Driver 開發的影響**：
+  - Memory management (頁表、DMA)
+  - 中斷處理 (IRQ handling)
+  - Device tree binding
+
+**NPU Driver 的典型架構**：
+
+```c
+// drivers/misc/mediatek_npu.c
+static int mtk_npu_probe(struct platform_device *pdev) {
+  struct mtk_npu_device *npu;
+
+  // 1. 記憶體映射
+  npu->reg_base = devm_ioremap_resource(&pdev->dev, res);
+
+  // 2. 中斷註冊
+  npu->irq = platform_get_irq(pdev, 0);
+  devm_request_irq(&pdev->dev, npu->irq, mtk_npu_irq_handler, ...);
+
+  // 3. DMA 設定
+  dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(36));
+
+  // 4. Character device 註冊
+  cdev_init(&npu->cdev, &mtk_npu_fops);
+}
+
+// 使用者空間可以透過 ioctl 呼叫 NPU
+// ioctl(fd, MTK_NPU_RUN_MODEL, &model_desc);
+```
+
+### 作業系統支援
+
+#### **Linux - 主流選擇**
+
+- **發行版支援**：
+  - Debian: ✅ 官方支援 (riscv64 port)
+  - Ubuntu: ✅ 22.04 LTS+ 支援
+  - Fedora: ✅ 完整支援
+  - Arch Linux: ✅ 社群支援
+- **應用場景**：高性能運算、伺服器、AI workload
+
+#### **FreeRTOS - 嵌入式首選**
+
+- **特性**：Real-time OS，極低記憶體佔用 (< 10KB)
+- **RISC-V 支援**：官方 port，支援多種 RISC-V 核心
+- **應用場景**：NPU 的 firmware、IoT 邊緣設備
+
+**FreeRTOS 在 NPU 中的角色**：
+
+```c
+// NPU 內部的 RISC-V 控制核心跑 FreeRTOS
+void npu_task_scheduler(void *params) {
+  while (1) {
+    // 1. 從 command queue 取任務
+    if (xQueueReceive(npu_cmd_queue, &cmd, portMAX_DELAY)) {
+      // 2. 配置 NPU 硬體
+      npu_configure(cmd.model_id);
+
+      // 3. 啟動 DMA
+      dma_start(cmd.input_addr, cmd.input_size);
+
+      // 4. 等待完成中斷
+      ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+
+      // 5. 回報結果
+      xQueueSend(npu_result_queue, &result, 0);
+    }
+  }
+}
+```
+
+#### **Zephyr - 現代 RTOS**
+
+- **特色**：模組化、安全性強（支援 ARM TrustZone 概念）
+- **RISC-V 支援**：多板支援（HiFive1, ESP32-C3, etc.）
+- **優勢**：Devicetree、Kconfig（與 Linux 類似的配置系統）
+
+### 開發板與評估套件
+
+#### **硬體對比表**：
+
+| 開發板               | CPU                   | RAM       | 價格    | 適合場景   |
+| -------------------- | --------------------- | --------- | ------- | ---------- |
+| **HiFive Unmatched** | SiFive U740 (5 cores) | 16GB      | $665    | 高性能開發 |
+| **VisionFive 2**     | JH7110 (4 cores)      | 2-8GB     | $60-100 | Linux 開發 |
+| **Milk-V Mars**      | JH7110                | 2-8GB     | $50     | 入門學習   |
+| **Sipeed Lichee RV** | Allwinner D1          | 512MB-1GB | $20     | IoT 原型   |
+
+**如何選擇開發板**（針對 NPU Compiler 開發）：
+
+1. **需要測試向量化**？→ 選有 RVV support 的（如 VisionFive 2）
+2. **需要跑完整 Linux**？→ 至少 2GB RAM
+3. **只是學習 ISA**？→ QEMU 模擬器即可（免費！）
+
+### 產業支持與戰略意義
+
+#### **Google - 雲端巨頭的投資**
+
+- **動機**：
+  - 降低對 ARM 的依賴
+  - Android 生態的多元化
+  - TPU 內部可能採用 RISC-V 微控制器
+- **貢獻**：
+  - Android RISC-V port (正在進行)
+  - LLVM 的資金支持
+  - 雲端基礎設施的實驗
+
+#### **NVIDIA - GPU 廠商的微妙角色**
+
+- **實際應用**：GPU 內部的微控制器使用 RISC-V（取代 Falcon）
+- **為什麼不是核心運算**？GPU shader core 仍是專有架構
+- **對 AI compiler 的啟示**：異構系統中，RISC-V 適合做控制，不一定是運算主力
+
+#### **Qualcomm - 手機晶片的對沖策略**
+
+- **動機**：與 ARM 的授權糾紛（Nuvia 收購案）
+- **投資**：加入 RISC-V International 成為戰略成員
+- **可能方向**：未來的 Snapdragon 晶片可能包含 RISC-V 核心
+
+#### **Samsung - 記憶體與 AI 晶片**
+
+- **應用**：SSD 控制器、IoT 晶片
+- **AI 野心**：Samsung Exynos NPU 可能採用 RISC-V 控制核心
+
+#### **Intel - x86 巨頭的轉向**
+
+- **戰略**：收購 SiFive 的傳聞（未成）
+- **Intel Foundry Services**：提供 RISC-V 晶片代工
+- **動機**：x86 市場萎縮，需要新的成長點
+
+### 中國的 RISC-V 投資狂潮
+
+**為什麼中國如此積極？**
+
+1. **美國制裁的陰影**：
+
+   - 華為被禁用 ARM（2019）
+   - 中興通訊被制裁（2018）
+   - RISC-V 是唯一的「安全」選擇
+
+2. **半導體自主化**：
+
+   - 中國製造 2025 計畫
+   - 目標：2025 年晶片自給率 70%
+   - RISC-V 是繞過專利的捷徑
+
+3. **投資規模**：
+   - 平頭哥（阿里）：數十億人民幣
+   - 中科院（香山處理器）：國家級專案
+   - 地方政府補助：深圳、上海等地大力支持
+
+**中國 RISC-V 聯盟（CRVIC）**：
+
+- 成員：華為、阿里、騰訊、百度、小米...
+- 目標：統一 RISC-V 標準（避免碎片化）
+- 對全球的影響：可能形成「中國標準」vs「國際標準」
+
+#### **印度的 Shakti 處理器專案**
+
+- **背景**：IIT Madras（印度理工學院）主導
+- **目標**：印度本土的處理器 IP
+- **進展**：已成功流片（22nm）
+- **意義**：發展中國家也能參與晶片設計（RISC-V 的民主化）
+
+### NPU Compiler 工程師應該關注什麼？
+
+1. **硬體趨勢**：
+
+   - RVV 1.0 的普及（編譯器需要跟上）
+   - 客製化指令的爆發（需要可擴展的 compiler 架構）
+   - 異構系統成為常態（RISC-V + NPU/GPU）
+
+2. **工具鏈成熟度**：
+
+   - LLVM > GCC（AI/ML workload）
+   - MLIR 是未來（多層級 IR）
+   - 需要掌握 Polyhedral 優化
+
+3. **生態系統的碎片化風險**：
+
+   - 不同廠商的 RVV 版本
+   - 客製化指令的不相容
+   - Compiler 需要支援多個 variant
+
+4. **產業機會**：
+   - MediaTek（台灣）、SiFive（美國）、平頭哥（中國）都在招 compiler 工程師
+   - 薪資水平：台灣 150-250萬/年，美國 $150k-250k/年
+   - 未來 5 年是 RISC-V 的黃金時期
+
+### 實戰：如何快速上手 RISC-V 開發
+
+```bash
+# 1. 安裝 RISC-V 工具鏈
+sudo apt install gcc-riscv64-unknown-elf
+
+# 2. 使用 QEMU 模擬器
+sudo apt install qemu-system-riscv64
+
+# 3. 編譯一個簡單的程式
+riscv64-unknown-elf-gcc -march=rv64gcv -o hello hello.c
+
+# 4. 在 QEMU 中執行
+qemu-riscv64 ./hello
+
+# 5. 使用 LLVM 查看生成的向量指令
+clang -target riscv64 -march=rv64gcv -O3 -S -emit-llvm hello.c -o hello.ll
+llc -march=riscv64 -mattr=+v hello.ll -o hello.s
+```
+
+**面試時的加分項**：
+
+- 能說出晶心科技的 AndesCore 系列
+- 了解 T-Head 的玄鐵處理器
+- 知道 VisionFive 2 開發板
+- 理解為什麼 LLVM 比 GCC 更適合 AI compiler
+- 能討論中國 RISC-V 投資的地緣政治因素
+
+---
