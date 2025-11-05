@@ -68,7 +68,7 @@ author: Yi-Ping Pan (Cloudlet)
 - [ ] 節省程式碼大小（重要！）
 - [ ] 對嵌入式系統的記憶體很有幫助
 
-**V Extension - 向量運算（Vector）** ⭐ 重點！
+**V Extension - 向量運算（Vector）** [KEY!]
 
 - [ ] 為什麼重要：AI workload 的核心
 - [ ] 可變長度向量（VLEN 可以是 128, 256, 512...）
@@ -363,8 +363,8 @@ c.addi x10, 1       # 2 bytes (節省 50%)
 **Compiler Backend 的挑戰：**
 LLVM RISC-V backend 需要智能選擇何時使用壓縮指令：
 
-- 常用的立即數範圍 → 用壓縮指令
-- 需要完整 32-bit 立即數 → 用標準指令
+- 常用的立即數範圍 -> 用壓縮指令
+- 需要完整 32-bit 立即數 -> 用標準指令
 - 這是 instruction selection 階段的優化
 
 #### 3. Load-Store 架構的深意
@@ -399,7 +399,7 @@ for (int i = 0; i < N; i++)
 // 1. 哪些是 load (A, B)
 // 2. 哪些是 compute (乘法、加法)
 // 3. 哪些是 store (C)
-// → 更容易做 software pipelining 和 DMA 規劃
+// -> 更容易做 software pipelining 和 DMA 規劃
 ```
 
 #### 4. 大量通用暫存器 (32 個)
@@ -558,7 +558,7 @@ RISC-V 保留了 **custom opcode 空間**，讓你加自己的指令！
 ```assembly
 # 假設 MediaTek 加了一個量化指令
 custom.quant.int8 v1, v2, scale, zero_point
-# ↑ 一條指令完成量化！
+# ^ 一條指令完成量化！
 
 # 而不是用一堆標準指令模擬（5-6 條）
 vmul.vf v1, v2, scale      # 1. 除以 scale
@@ -571,12 +571,12 @@ vmin.vi v1, v1, 127        # 4. Clipping 上界
 
 | Concept              | Description                                               | Example                                  |
 | -------------------- | --------------------------------------------------------- | ---------------------------------------- |
-| **Purpose**          | Convert FP32 (4 bytes) to INT8 (1 byte), save 4x memory   | ResNet-50: 102MB → 25MB                  |
-| **Formula**          | `INT8 = clip(round(FP32/scale) + zero_point, -128, 127)`  | FP32=1.5 → INT8=50                       |
-| **scale**            | Scaling factor = (max-min)/255, controls precision        | Data range -1~1 → scale=0.00784          |
+| **Purpose**          | Convert FP32 (4 bytes) to INT8 (1 byte), save 4x memory   | ResNet-50: 102MB -> 25MB                 |
+| **Formula**          | `INT8 = clip(round(FP32/scale) + zero_point, -128, 127)`  | FP32=1.5 -> INT8=50                      |
+| **scale**            | Scaling factor = (max-min)/255, controls precision        | Data range -1~1 -> scale=0.00784         |
 | **zero_point**       | Zero-point alignment, which INT8 value maps to FP32's 0.0 | Symmetric quant=0, Asymmetric=-128       |
 | **Performance Gain** | INT8 ops 2-4x faster than FP32 (hardware dependent)       | Tensor Core: INT8 is 4x faster than FP32 |
-| **Accuracy Loss**    | Usually <2% accuracy drop (after fine-tuning)             | ImageNet Top-1: 76.1% → 75.8%            |
+| **Accuracy Loss**    | Usually <2% accuracy drop (after fine-tuning)             | ImageNet Top-1: 76.1% -> 75.8%           |
 | **Why Custom Inst**  | Standard instructions need 5-6, custom only needs 1       | 5-6x speedup + power saving              |
 
 **LLVM 整合方式：**
@@ -597,94 +597,585 @@ asm volatile ("custom.quant.int8 %0, %1, %2, %3"
 3. **Pattern Matching**:
    Compiler 可以自動識別量化的 pattern，替換成 custom instruction。
 
-#### 7. 向量擴展 (RVV) 的革命性設計 ⭐
+#### 7. 向量擴展 (RVV) 的革命性設計 [CRITICAL]
 
-這是 RISC-V 最厲害的地方，也是為什麼它對 AI 如此重要。
+這是 RISC-V 最厲害的地方，也是為什麼它對 AI 如此重要。本節將深入探討 Vector Length Agnostic (VLA) 設計、Tail Handling 機制，以及它們與 MLIR Fallback 和 LLVM Backend 的關聯。
 
-**Vector Length Agnostic (VLA) 設計：**
+---
+
+### 7.1 核心概念：Vector Length Agnostic (VLA)
+
+**VLA 的革命性承諾：Write Once, Run Anywhere**
 
 ```c
-// 同樣的程式碼
 void vector_add(float *a, float *b, float *c, size_t n) {
-  size_t vl;
+  size_t vl;  // Vector Length - 硬體會告訴你這次能處理多少元素
+
   for (size_t i = 0; i < n; i += vl) {
-    vl = vsetvl_e32m1(n - i);  // 硬體告訴你這次能處理多少元素
+    // Step 1: 詢問硬體「你能處理多少？」
+    vl = vsetvl_e32m1(n - i);
+    // vsetvl = "vector set vector length"
+    // e32 = element width 32-bit (float)
+    // m1 = LMUL=1 (使用 1 個向量暫存器)
+    // 硬體回傳：min(硬體能力, 剩餘元素數)
+
+    // Step 2-4: 向量運算（語法與標量類似）
+    vfloat32m1_t va = vle32_v_f32m1(&a[i], vl);  // Vector Load
+    vfloat32m1_t vb = vle32_v_f32m1(&b[i], vl);  // Vector Load
+    vfloat32m1_t vc = vfadd_vv_f32m1(va, vb, vl); // Vector Add
+    vse32_v_f32m1(&c[i], vc, vl);                 // Vector Store
+  }
+  // 重點：單一 loop，無需 cleanup code！
+}
+```
+
+**同一份 binary 在不同硬體的執行行為：**
+
+| Hardware    | VLEN    | vl (max) | Elements/Iter | Iterations (n=100) |
+| ----------- | ------- | -------- | ------------- | ------------------ |
+| IoT Chip    | 128-bit | 4        | 4 floats      | 25                 |
+| Mobile Chip | 256-bit | 8        | 8 floats      | 13 (last vl=4)     |
+| Server Chip | 512-bit | 16       | 16 floats     | 7 (last vl=4)      |
+
+**核心優勢：**
+
+- 同一份二進制檔案自動適應硬體能力
+- 硬體升級 -> 自動加速（無需重新編譯）
+- 自動處理任意長度（n=33, 97 皆可）
+
+---
+
+### 7.2 Tail Handling：RISC-V 如何消除 Cleanup Loop
+
+**問題定義：尾端元素處理**
+
+在向量化程式設計中，**Tail Handling（尾端處理）**是指處理陣列長度不是向量寬度整數倍時，剩餘元素的處理方式。這是所有 SIMD 架構都必須面對的問題，而 RISC-V 的解決方案是最優雅的。
+
+**範例：n=33, 向量寬度=4**
+
+- 33 ÷ 4 = 8 次完整向量操作 + **剩餘 1 個元素**
+- 這 1 個元素怎麼處理？這是傳統架構的痛點
+
+#### 傳統架構：手動 Cleanup Loop 的代價
+
+```c
+// [BAD] ARM NEON 的傳統做法
+void neon_add(float *a, float *b, float *c, int n) {
+    int i;
+
+    // 第一階段：向量化處理（只能處理 4 的倍數）
+    for (i = 0; i + 3 < n; i += 4) {
+        float32x4_t va = vld1q_f32(&a[i]);  // Load 4 個 float
+        float32x4_t vb = vld1q_f32(&b[i]);
+        float32x4_t vc = vaddq_f32(va, vb);
+        vst1q_f32(&c[i], vc);
+    }
+
+    // 第二階段：Cleanup Loop（標量處理剩餘元素）
+    // [BAD] 這是額外的程式碼！
+    // [BAD] 這會引入額外的分支！
+    // [BAD] Pipeline 效率降低！
+    for (; i < n; i++) {
+        c[i] = a[i] + b[i];  // 標量運算，慢得多
+    }
+}
+
+// n=33 的執行情況：
+// Loop 1: i=0,  處理 a[0..3]   [OK] 向量化
+// Loop 1: i=4,  處理 a[4..7]   [OK] 向量化
+// Loop 1: i=8,  處理 a[8..11]  [OK] 向量化
+// Loop 1: i=12, 處理 a[12..15] [OK] 向量化
+// Loop 1: i=16, 處理 a[16..19] [OK] 向量化
+// Loop 1: i=20, 處理 a[20..23] [OK] 向量化
+// Loop 1: i=24, 處理 a[24..27] [OK] 向量化
+// Loop 1: i=28, 處理 a[28..31] [OK] 向量化
+// Loop 2: i=32, 處理 a[32]     [BAD] 退化成標量！
+```
+
+**為什麼 Cleanup Loop 是個問題？**
+
+1. **程式碼複雜度增加**：
+
+   - 需要寫兩份邏輯（向量版 + 標量版）
+   - 容易出 bug（兩個 loop 的邊界條件）
+
+2. **分支預測失敗**：
+
+   - CPU 的 branch predictor 需要預測 cleanup loop 會不會執行
+   - 如果 n 變化頻繁（如神經網路的不同層），預測失敗率高
+
+3. **效能損失**：
+
+   ```
+   向量加法延遲：    1 cycle (4 個 float)
+   標量加法延遲：    1 cycle (1 個 float)
+
+   如果尾端有 3 個元素：
+   - 向量版能在 1 cycle 處理（如果硬體支援部分 masking）
+   - 標量版需要 3 cycles
+   ```
+
+4. **Compiler 優化困難**：
+   - Auto-vectorizer 需要生成兩種程式碼路徑
+   - Loop unrolling 受限（展開後尾端處理更複雜）
+
+**RISC-V 的革命性解決方案：Hardware-Managed Tail**
+
+RISC-V 透過 `vsetvl` 指令和 **向量遮罩（Vector Masking）** 機制，讓硬體自動處理尾端：
+
+```c
+// [GOOD] RISC-V 的優雅方式
+void riscv_add(float *a, float *b, float *c, size_t n) {
+  size_t vl;  // Vector Length - 這次能處理多少元素
+
+  for (size_t i = 0; i < n; i += vl) {
+    // 關鍵！硬體會自動調整 vl
+    vl = vsetvl_e32m1(n - i);
+
+    // 硬體保證：vl = min(VLMAX, n-i)
+    // - VLMAX = 硬體最大向量長度
+    // - n-i = 剩餘元素數
+
+    // 後續的向量指令自動只處理 vl 個元素
     vfloat32m1_t va = vle32_v_f32m1(&a[i], vl);
     vfloat32m1_t vb = vle32_v_f32m1(&b[i], vl);
     vfloat32m1_t vc = vfadd_vv_f32m1(va, vb, vl);
     vse32_v_f32m1(&c[i], vc, vl);
+    // 注意：只有一個 loop！沒有 cleanup code！
+  }
+}
+
+// n=33 的執行情況（假設 VLMAX=4）：
+// i=0:  vl=4, 處理 a[0..3]
+// i=4:  vl=4, 處理 a[4..7]
+// i=8:  vl=4, 處理 a[8..11]
+// i=12: vl=4, 處理 a[12..15]
+// i=16: vl=4, 處理 a[16..19]
+// i=20: vl=4, 處理 a[20..23]
+// i=24: vl=4, 處理 a[24..27]
+// i=28: vl=4, 處理 a[28..31]
+// i=32: vl=1, 處理 a[32]      [GOOD] 自動調整！仍然用向量指令！
+```
+
+**核心機制：vsetvl 的運作原理**
+
+```assembly
+# vsetvl rd, rs1, vtypei
+# rd  = 輸出的 vl（向量長度）
+# rs1 = 請求的元素數量（Application Vector Length, AVL）
+# vtypei = 向量類型配置（element width, LMUL, etc.）
+
+vsetvli t0, a0, e32, m1, ta, ma
+# t0 <-- 硬體回傳的 vl
+# a0 = 剩餘元素數（n-i）
+# e32 = element width 32-bit
+# m1 = LMUL=1（使用 1 個暫存器）
+# ta = tail agnostic（尾端元素的值不重要）
+# ma = mask agnostic（遮罩外的元素值不重要）
+
+# 硬體的計算邏輯：
+# vl = min(VLMAX, a0)
+# 其中 VLMAX = (VLEN / 32) * LMUL
+#            = (128 / 32) * 1 = 4  (假設 VLEN=128)
+```
+
+**向量遮罩的硬體實作**
+
+當 `vl < VLMAX` 時，硬體自動生成一個內部的 mask：
+
+```
+假設 VLMAX=4，但這次 vl=1（只剩 1 個元素）
+
+內部 mask = [1, 0, 0, 0]
+            ↑  ↑  ↑  ↑
+            處 忽 忽 忽
+            理 略 略 略
+
+vadd.vv v1, v2, v3, vl
+# 硬體實際執行：
+# v1[0] = v2[0] + v3[0]  <- 有效
+# v1[1] = <不改變>        <- 被 mask
+# v1[2] = <不改變>        <- 被 mask
+# v1[3] = <不改變>        <- 被 mask
+
+# 關鍵：這仍然是一條向量指令！
+# 硬體透過內部的 mask 實現部分執行
+```
+
+**Tail Agnostic vs Tail Undisturbed**
+
+RISC-V 提供兩種尾端處理策略：
+
+```c
+// Tail Agnostic (ta)
+vsetvli t0, a0, e32, m1, ta, ma
+vadd.vv v1, v2, v3
+// v1 中 vl 之外的元素可以是任意值（可能被硬體覆寫）
+// 優勢：硬體可以優化，不需要保留舊值
+
+// Tail Undisturbed (tu)
+vsetvli t0, a0, e32, m1, tu, ma
+vadd.vv v1, v2, v3
+// v1 中 vl 之外的元素保持原有的值
+// 用於需要保留暫存器部分內容的場景
+```
+
+**實戰案例：矩陣轉置的 Tail Handling**
+
+```c
+// 轉置一個 N×M 的矩陣（N 和 M 可能不是向量長度的倍數）
+void transpose(float *src, float *dst, int N, int M) {
+  for (int i = 0; i < N; i++) {
+    size_t vl;
+    for (int j = 0; j < M; j += vl) {
+      // 關鍵：每一行的尾端長度可能不同
+      vl = vsetvl_e32m1(M - j);
+
+      // Strided load（跳躍存取）
+      vfloat32m1_t v = vlse32_v_f32m1(&src[i*M + j], M*sizeof(float), vl);
+
+      // 連續 store
+      vse32_v_f32m1(&dst[j*N + i], v, vl);
+    }
+  }
+  // 無論 M 是多少，都不需要額外的 cleanup code！
+}
+```
+
+**與其他架構的對比總結**
+
+| Feature              | ARM NEON             | x86 AVX-512                  | RISC-V RVV               |
+| -------------------- | -------------------- | ---------------------------- | ------------------------ |
+| **Vector Length**    | 固定 128-bit         | 固定 512-bit                 | 可變 (VLA)               |
+| **Tail Handling**    | 手動 cleanup loop    | 手動 cleanup / k-register    | 硬體自動 (vsetvl)        |
+| **Code Complexity**  | 高（兩個 loop）      | 中-高（需要 mask register）  | 低（單一 loop）          |
+| **Branch Count**     | +1 (cleanup 判斷)    | +1 (cleanup 判斷)            | 0 (無額外分支)           |
+| **Portability**      | 固定寬度，無法擴展   | 固定寬度，較舊 CPU 無法執行  | 同一 binary 適應所有硬體 |
+| **Hardware Support** | 廣泛（手機、嵌入式） | 有限（高階伺服器、降頻問題） | 新興（但生態快速成長）   |
+
+---
+
+### 7.3 豐富的 Load/Store Patterns
+
+RISC-V RVV 提供多種記憶體存取模式，直接對應 AI workload 的需求：
+
+```assembly
+# 1. Unit-stride：連續記憶體存取（最常見）
+vle32.v v1, (a0)         # Load 連續的 vl 個 float
+vse32.v v1, (a0)         # Store 連續的 vl 個 float
+
+# 2. Strided：跳躍存取（用於 layout 轉換）
+vlse32.v v1, (a0), a1    # Load，每次跳 a1 bytes
+                          # 應用：NCHW → NHWC 轉換
+
+# 3. Indexed (Scatter/Gather)：稀疏存取
+vlxei32.v v1, (a0), v2   # Load，index 來自 v2
+                          # 應用：稀疏矩陣、embedding lookup
+
+# 4. Segment：交錯結構存取
+vlseg3e32.v v1, v2, v3, (a0)  # Load 3 個交錯的向量
+                              # 應用：RGB 像素、AoS ↔ SoA
+```
+
+這些 pattern 直接對應 AI workload 的常見需求，compiler 可以直接映射，不需要複雜的 shuffle。
+
+---
+
+### 7.4 與 MLIR Fallback 和 LLVM Backend 的關聯
+
+**NPU Compiler 的完整 Lowering Pipeline：**
+
+```
+High-Level (Python/TensorFlow/PyTorch)
+          |
+          v
+    MLIR (linalg dialect)
+          |
+          v
+    MLIR (vector dialect) <-- Vectorization 決策點
+          |
+          v
+    MLIR (LLVM dialect)
+          |
+          v
+    LLVM IR (target-independent)
+          |
+          v
+    LLVM IR (RISC-V intrinsics) <-- RVV 特化
+          |
+          v
+    RISC-V Assembly (SelectionDAG)
+          |
+          v
+    Machine Code
+```
+
+#### 7.4.1 MLIR Fallback 機制
+
+**什麼時候 Fallback？**
+
+在 NPU compiler 中，並非所有操作都在 NPU 上執行。某些情況下需要 fallback 到 CPU（RISC-V control core）：
+
+```mlir
+// 原始 MLIR（linalg dialect）
+func.func @model(%input: tensor<1x224x224x3xf32>)
+    -> tensor<1x1000xf32> {
+
+  // 1. Conv2D - 在 NPU 執行（custom lowering）
+  %conv1 = linalg.conv_2d_nhwc_hwcf
+    ins(%input, %weights1: ...)
+
+  // 2. BatchNorm - 可能 fallback 到 RISC-V
+  //    因為 NPU 可能沒有專用硬體
+  %bn1 = linalg.generic {
+    // ...batch norm computation...
+  }
+
+  // 3. ReLU - 在 NPU 執行（簡單操作）
+  %relu1 = linalg.generic {
+    // max(0, x)
+  }
+
+  return %result : tensor<1x1000xf32>
+}
+```
+
+**Fallback Decision（Compiler 內部邏輯）：**
+
+```python
+# 在 MLIR Pass 中
+def should_fallback_to_cpu(op):
+    if op.is_conv2d():
+        return False  # NPU 擅長
+    elif op.is_matmul():
+        if op.output_size < 1024:
+            return True  # 太小，不值得送 NPU
+        return False
+    elif op.is_batchnorm():
+        if target.has_bn_engine():
+            return False  # NPU 有專用引擎
+        return True  # Fallback to RISC-V
+    elif op.is_custom():
+        return True  # 未知操作，CPU 處理
+```
+
+**Fallback 後的 RVV 向量化：**
+
+```mlir
+// BatchNorm fallback 到 RISC-V
+func.func @batchnorm_riscv(%input: tensor<?xf32>,
+                           %mean: f32, %var: f32)
+    -> tensor<?xf32> {
+
+  // Lower 到 vector dialect
+  %c0 = arith.constant 0 : index
+  %c1 = arith.constant 1 : index
+  %len = tensor.dim %input, %c0 : tensor<?xf32>
+
+  %result = scf.for %i = %c0 to %len step %vl {
+    // vsetvl 動態設定向量長度
+    %vl = riscv.vsetvl %remaining, e32, m1
+
+    // 向量化的 (x - mean) / sqrt(var + eps)
+    %v_in = vector.load %input[%i] : vector<?xf32>
+    %v_sub = arith.subf %v_in, %mean : vector<?xf32>
+    %v_norm = arith.divf %v_sub, %std : vector<?xf32>
+    vector.store %v_norm, %result[%i] : vector<?xf32>
+  }
+
+  return %result : tensor<?xf32>
+}
+```
+
+**關鍵：VLA 讓 Fallback 也能高效**
+
+- 即使 fallback 到 CPU，仍能利用 RVV 加速
+- 無需手動處理尾端（不同 batch size 自動適應）
+- 同一份 compiler 生成的程式碼可在不同 RISC-V 核心執行
+
+#### 7.4.2 LLVM Backend 的 RVV Codegen
+
+**LLVM IR 中的 VLA 表示：**
+
+```llvm
+; LLVM IR 使用 <vscale x n x type> 表示 VLA 向量
+define void @vector_add(float* %a, float* %b, float* %c, i64 %n) {
+entry:
+  %i = alloca i64
+  store i64 0, i64* %i
+  br label %loop
+
+loop:
+  %idx = load i64, i64* %i
+  %remaining = sub i64 %n, %idx
+
+  ; vsetvl intrinsic - 設定向量長度
+  %vl = call i64 @llvm.riscv.vsetvl.i64(i64 %remaining,
+                                         i64 0,      ; AVL
+                                         i64 3)      ; vtype (e32, m1)
+
+  ; 向量 load（vscale 表示長度可變）
+  %pa = getelementptr float, float* %a, i64 %idx
+  %pb = getelementptr float, float* %b, i64 %idx
+  %pc = getelementptr float, float* %c, i64 %idx
+
+  %va = call <vscale x 4 x float> @llvm.riscv.vle.nxv4f32(
+    <vscale x 4 x float> undef, float* %pa, i64 %vl)
+  %vb = call <vscale x 4 x float> @llvm.riscv.vle.nxv4f32(
+    <vscale x 4 x float> undef, float* %pb, i64 %vl)
+
+  ; 向量加法
+  %vc = fadd <vscale x 4 x float> %va, %vb
+
+  ; 向量 store
+  call void @llvm.riscv.vse.nxv4f32(<vscale x 4 x float> %vc,
+                                     float* %pc, i64 %vl)
+
+  ; 更新 loop index
+  %next = add i64 %idx, %vl
+  store i64 %next, i64* %i
+  %cond = icmp ult i64 %next, %n
+  br i1 %cond, label %loop, label %exit
+
+exit:
+  ret void
+}
+
+; 內建函數聲明（由 LLVM RISC-V backend 提供）
+declare i64 @llvm.riscv.vsetvl.i64(i64, i64, i64)
+declare <vscale x 4 x float> @llvm.riscv.vle.nxv4f32(
+  <vscale x 4 x float>, float*, i64)
+declare void @llvm.riscv.vse.nxv4f32(
+  <vscale x 4 x float>, float*, i64)
+```
+
+**關鍵設計：`<vscale x n x type>`**
+
+- `vscale`：一個 runtime constant，表示 VLEN 的倍數
+- 編譯時不知道具體長度，但知道長度的"比例"
+- 讓 LLVM 的優化 pass 仍能運作（如 CSE, DCE, GVN）
+
+**LLVM Backend 的 Instruction Selection：**
+
+```cpp
+// llvm/lib/Target/RISCV/RISCVISelLowering.cpp
+SDValue RISCVTargetLowering::LowerOperation(SDValue Op,
+                                             SelectionDAG &DAG) {
+  switch (Op.getOpcode()) {
+  case ISD::INTRINSIC_WO_CHAIN: {
+    unsigned IntNo = cast<ConstantSDNode>(Op.getOperand(0))->getZExtValue();
+
+    // vsetvl intrinsic
+    if (IntNo == Intrinsic::riscv_vsetvl) {
+      SDValue AVL = Op.getOperand(1);
+      SDValue VType = Op.getOperand(3);
+
+      // 生成 RISC-V vsetvl 指令
+      return DAG.getNode(RISCVISD::VSETVL, DL, VT, AVL, VType);
+    }
+
+    // vle (vector load)
+    if (IntNo == Intrinsic::riscv_vle) {
+      SDValue Ptr = Op.getOperand(2);
+      SDValue VL = Op.getOperand(3);
+
+      // 生成 vle32.v 指令
+      return DAG.getNode(RISCVISD::VLE, DL, VT, Ptr, VL);
+    }
+    // ... 其他 intrinsics
+  }
   }
 }
 ```
 
-**魔法在哪？**
+**Register Allocation 的挑戰：**
 
-- **VLEN=128 的晶片**：一次處理 4 個 float (128/32=4)
-- **VLEN=256 的晶片**：一次處理 8 個 float (256/32=8)
-- **VLEN=512 的晶片**：一次處理 16 個 float (512/32=16)
-- **同樣的二進制檔案，無需重新編譯！**
+```
+RISC-V 有 32 個向量暫存器 (v0-v31)
+但 LMUL > 1 時會消耗多個暫存器！
 
-**對比其他架構：**
+LMUL=1: 使用 1 個暫存器（如 v1）
+LMUL=2: 使用 2 個暫存器（如 v2, v3 - 必須連續）
+LMUL=4: 使用 4 個暫存器（如 v4, v5, v6, v7）
+LMUL=8: 使用 8 個暫存器（如 v8-v15）
 
-- **ARM NEON**：固定 128-bit，如果硬體是 256-bit 就浪費了
-- **AVX-512**：固定 512-bit，如果跑在只有 256-bit 的機器就無法執行
-
-**NPU Compiler 的實際應用：**
-
-```python
-# 在 MLIR 層面
-func.func @matmul(%A: tensor<?x?xf32>, %B: tensor<?x?xf32>) {
-  // Compiler 生成的向量化程式碼可以適應不同的硬體
-  linalg.matmul ins(%A, %B: tensor<?x?xf32>, tensor<?x?xf32>)
-                outs(%C: tensor<?x?xf32>)
-
-  // Lower 到 RISC-V Vector
-  // → 自動適應 VLEN
-}
+Compiler 需要智能選擇 LMUL：
+- LMUL 大 → 一次處理更多元素 → 減少 loop overhead
+- LMUL 大 → 暫存器壓力增加 → 可能 spilling
 ```
 
-**Vector Mask 和 Tail Handling：**
+**Auto-Vectorization：Loop Vectorizer**
 
-```c
-// 處理不對齊的長度（例如 n=33）
-for (size_t i = 0; i < n; i += vl) {
-  vl = vsetvl_e32m1(n - i);  // 最後一輪 vl 會自動變成 1
-  // 硬體會自動 mask 掉多餘的元素，不需要 scalar cleanup code
-  vadd_vv(...);
-}
-```
-
-ARM NEON 需要手動處理剩餘元素：
-
-```c
-// NEON 版本
-int i;
-for (i = 0; i < n - 3; i += 4) {
-  // 向量化程式碼
-}
-// 剩餘元素需要 scalar loop
-for (; i < n; i++) {
+```cpp
+// LLVM Loop Vectorizer 看到這段程式碼
+for (int i = 0; i < n; i++)
   c[i] = a[i] + b[i];
+
+// 決策流程：
+// 1. 檢查是否有 dependency（無）
+// 2. 檢查 target 是否支援向量化（RISC-V RVV: YES）
+// 3. Cost model：向量化是否划算？
+//    - Loop trip count 預估
+//    - 向量化 overhead（vsetvl）
+//    - Memory bandwidth
+// 4. 如果通過，生成 VLA 向量化程式碼
+
+// 生成的 LLVM IR（簡化版）
+for (i = 0; i < n; i += vl) {
+  vl = vsetvl(n - i);
+  va = vle(&a[i], vl);
+  vb = vle(&b[i], vl);
+  vc = vadd(va, vb);
+  vse(&c[i], vc, vl);
 }
+// 注意：無 cleanup loop！
 ```
 
-**豐富的 Load/Store Patterns：**
+---
 
-```assembly
-# Unit-stride load (連續記憶體)
-vle32.v v1, (a0)
+### 7.5 架構對比與 Compiler 視角的總結
 
-# Strided load (跳躍存取，用於 NCHW → NHWC 轉換)
-vlse32.v v1, (a0), a1
+| Feature                 | ARM NEON               | x86 AVX-512            | RISC-V RVV                        |
+| ----------------------- | ---------------------- | ---------------------- | --------------------------------- |
+| **Vector Length**       | 固定 128-bit           | 固定 512-bit           | 可變 (VLA)                        |
+| **Tail Handling**       | 手動 cleanup loop      | k-register masking     | 硬體自動 (vsetvl)                 |
+| **LLVM Codegen**        | 固定寬度 vector type   | 固定寬度 vector type   | `<vscale x n>`                    |
+| **Binary Portability**  | 無（固定寬度）         | 無（固定寬度）         | [YES]（同一 binary 適應所有硬體） |
+| **Auto-Vec Success**    | 中等（尾端處理複雜）   | 中等（mask 複雜）      | 高（無尾端問題）                  |
+| **Fallback Efficiency** | 低（NEON 不夠靈活）    | 低（AVX 不靈活）       | 高（VLA 適應小 workload）         |
+| **MLIR Integration**    | 需要多個 lowering path | 需要多個 lowering path | 單一 VLA path                     |
 
-# Indexed load (scatter/gather，用於稀疏矩陣)
-vlxei32.v v1, (a0), v2
+**為什麼 VLA 對 NPU Compiler 是遊戲規則改變者？**
 
-# Segment load (用於 AoS → SoA 轉換)
-vlseg3e32.v v1, v2, v3, (a0)
-```
+1. **簡化 Fallback 路徑**
 
-這些 pattern 直接對應 AI workload 的常見需求，compiler 可以直接映射，不需要複雜的 shuffle。
+   - 小運算 fallback 到 CPU 仍能高效（RVV 自動適應）
+   - 不需要為每個 tensor shape 生成專門程式碼
+
+2. **統一的 MLIR Lowering**
+
+   - 不需要 "if VLEN=128 then ... else if VLEN=256 then ..."
+   - 單一 vector dialect lowering path
+
+3. **減少 Compiler Binary Size**
+
+   - 不需要為不同 VLEN 編譯多個版本
+   - 簡化 deployment
+
+4. **提高 Portability**
+   - 今天編譯 → 未來硬體自動加速
+   - 降低維護成本
+
+**面試完美答案範例：**
+
+> "RISC-V RVV 的 Vector Length Agnostic 設計透過 vsetvl 指令讓硬體動態告知向量長度，配合內部 masking 機制自動處理尾端，完全消除了 cleanup loop。
+>
+> 在 NPU compiler 中，這有兩大優勢：
+>
+> 1. **Fallback 路徑高效**：小運算 fallback 到 RISC-V control core 時，仍能用 RVV 加速，且自動適應不同 batch size。
+> 2. **簡化 MLIR lowering**：從 linalg dialect 到 LLVM IR 的 lowering 可以用單一 VLA path，不需要為不同硬體生成多個版本。
+>
+> LLVM backend 用 `<vscale x n x type>` 表示 VLA 向量，讓 auto-vectorizer 可以積極優化而無需擔心尾端處理，大幅提升向量化成功率。"
 
 #### 8. 記憶體一致性模型 (Weak Memory Model)
 
@@ -831,10 +1322,10 @@ def estimate_latency(op):
 ┌──────────────┐
 │ NPU Cluster  │
 ├──────────────┤
-│ Compute Core │ ← RV64IMAFDCV (全功能)
+│ Compute Core │ <-- RV64IMAFDCV (全功能)
 │ Compute Core │
 ├──────────────┤
-│ Control Core │ ← RV32IMC (精簡)
+│ Control Core │ <-- RV32IMC (精簡)
 └──────────────┘
 ```
 
@@ -908,7 +1399,7 @@ vsetvli t0, a0, e32, m8  // 使用 m8 (8個暫存器合併)
 vle32.v v0, (a1)          // 一次 load 512-bit * 8 = 4KB!
 ```
 
-#### **Andes Technology (晶心科技) - 台灣之光** ⭐
+#### **Andes Technology (晶心科技) - 台灣之光** [IMPORTANT]
 
 - **地位**：全球第三大 CPU IP 供應商（僅次於 ARM、Synopsys）
 - **為什麼重要**：
@@ -996,9 +1487,9 @@ SPECint2006: 7.5/GHz (與 ARM Cortex-A73 相當)
 #### **GCC (GNU Compiler Collection)**
 
 - **RISC-V 支援狀態**：
-  - RV32I/RV64I: ✅ 完整支援（GCC 7.1+）
-  - RVV 1.0: ✅ 完整支援（GCC 14+）
-  - Auto-vectorization: ⚠️ 基本支援，但不如 LLVM 成熟
+  - RV32I/RV64I: [FULL] 完整支援（GCC 7.1+）
+  - RVV 1.0: [FULL] 完整支援（GCC 14+）
+  - Auto-vectorization: [BASIC] 基本支援，但不如 LLVM 成熟
 
 **GCC 的 RISC-V 向量化範例**：
 
@@ -1028,7 +1519,7 @@ vector_add:
 | **Customization Ease** | Difficult | Easy |
 | **Industry Adoption** | Embedded focus | AI/ML focus |
 
-#### **LLVM/Clang - NPU Compiler 的首選** ⭐⭐⭐
+#### **LLVM/Clang - NPU Compiler 的首選** [***CRITICAL***]
 
 **為什麼 LLVM 對 NPU Compiler 如此重要？**
 
@@ -1132,10 +1623,10 @@ static int mtk_npu_probe(struct platform_device *pdev) {
 #### **Linux - 主流選擇**
 
 - **發行版支援**：
-  - Debian: ✅ 官方支援 (riscv64 port)
-  - Ubuntu: ✅ 22.04 LTS+ 支援
-  - Fedora: ✅ 完整支援
-  - Arch Linux: ✅ 社群支援
+  - Debian: [OFFICIAL] 官方支援 (riscv64 port)
+  - Ubuntu: [OFFICIAL] 22.04 LTS+ 支援
+  - Fedora: [FULL] 完整支援
+  - Arch Linux: [COMMUNITY] 社群支援
 - **應用場景**：高性能運算、伺服器、AI workload
 
 #### **FreeRTOS - 嵌入式首選**
