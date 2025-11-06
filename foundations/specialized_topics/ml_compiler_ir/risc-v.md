@@ -13,23 +13,14 @@ author: Yi-Ping Pan (Cloudlet)
 
 - [x] History of RISC-V
 - [x] What does it want to solve
-
-**Ecosystem overview**
-
-- [ ] 硬體：SiFive, Andes (晶心科技), Alibaba T-Head, StarFive
-- [ ] 軟體：GCC, LLVM, Linux kernel 支援
-- [ ] 作業系統：Linux, FreeRTOS, Zephyr
-- [ ] 開發板：HiFive, VisionFive, Milk-V
-- [ ] 產業支持：Google, NVIDIA, Qualcomm, Samsung, Intel
-- [ ] 中國大力投資（避免被卡脖子）
-- [ ] 印度的 Shakti 處理器專案
+- [x] Ecosystem overview
 
 ---
 
 **RV32I - 32-bit 基本整數指令集**
 
-- [ ] 32個通用暫存器（x0-x31，x0 永遠是 0）
-- [ ] 47條基本指令
+- [ ] 32 個通用暫存器（x0-x31，x0 永遠是 0）
+- [ ] 47 條基本指令
 - [ ] Load/Store 架構（只有這兩種指令存取記憶體）
 - [ ] 簡單的分支和跳躍
 
@@ -55,7 +46,7 @@ author: Yi-Ping Pan (Cloudlet)
 
 **F Extension - 單精度浮點（32-bit float）**
 
-- [ ] 32個浮點暫存器（f0-f31）
+- [ ] 32 個浮點暫存器（f0-f31）
 - [ ] IEEE 754 標準
 
 **D Extension - 雙精度浮點（64-bit double）**
@@ -64,7 +55,7 @@ author: Yi-Ping Pan (Cloudlet)
 
 **C Extension - 壓縮指令（16-bit）**
 
-- [ ] 將常用的32-bit指令壓縮成16-bit
+- [ ] 將常用的 32-bit 指令壓縮成 16-bit
 - [ ] 節省程式碼大小（重要！）
 - [ ] 對嵌入式系統的記憶體很有幫助
 
@@ -72,7 +63,7 @@ author: Yi-Ping Pan (Cloudlet)
 
 - [ ] 為什麼重要：AI workload 的核心
 - [ ] 可變長度向量（VLEN 可以是 128, 256, 512...）
-- [ ] 與 ARM NEON（固定128-bit）的差異
+- [ ] 與 ARM NEON（固定 128-bit）的差異
 - [ ] 與 x86 AVX/AVX-512 的比較
 - [ ] 向量暫存器（v0-v31）
 - [ ] 向量算術（加減乘除）
@@ -151,7 +142,7 @@ author: Yi-Ping Pan (Cloudlet)
 **RISC-V vs x86**
 
 - [ ] 複雜度：RISC vs CISC
-- [ ] 歷史包袱：乾淨 vs 40年相容性負擔
+- [ ] 歷史包袱：乾淨 vs 40 年相容性負擔
 - [ ] 功耗：低 vs 高
 - [ ] 應用場景：嵌入式/移動 vs 桌面/伺服器
 
@@ -1217,42 +1208,119 @@ store i32 1, i32* %npu_mailbox
 
 RISC-V 提供兩種原子操作：
 
-**1. LR/SC (Load-Reserved/Store-Conditional)**
+**1. LR/SC (Load-Reserved/Store-Conditional)** - Optimistic Concurrency
 
 ```assembly
+// C++ code:
+//   std::atomic<int> counter = 100;
+//   counter.fetch_add(1);
+// Result: counter = 101
+
+// Compiled to RISC-V:
 retry:
-  lr.w  x10, (x11)      # Load-Reserved
-  addi  x10, x10, 1     # 修改值
-  sc.w  x12, x10, (x11) # Store-Conditional
-  bnez  x12, retry      # 如果失敗就重試
+  lr.w    a0, (a1)         # Load word + establish reservation
+                           # a0 = mem[a1] = 100
+                           # Hardware marks this address for monitoring
+
+  addi    a0, a0, 1        # Modify in register (any complex operation allowed)
+                           # a0 = 101
+
+  sc.w    a2, a0, (a1)     # Store-Conditional: check if anyone else wrote
+                           # If SUCCESS: mem[a1] = 101, a2 = 0
+                           # If FAIL:    mem[a1] unchanged, a2 = 1
+
+  bnez    a2, retry        # If a2 != 0 (failed), retry from beginning
 ```
 
-**2. AMO (Atomic Memory Operations)**
+**Key Concepts:**
+
+- **Instruction suffix**: `.w` = Word (32-bit), `.d` = Double (64-bit)
+- **Memory ordering**: `.aq` = acquire, `.rl` = release, `.aqrl` = seq_cst
+- **Atomicity is HARDWARE-guaranteed** (via cache coherency protocol like MESI)
+- **Compiler only generates instructions** (recognizes semantics + inserts fences)
+
+**Hardware Reservation Mechanism:**
+
+```
+lr.w execution:
+  1. Read value from memory
+  2. Record reservation_address in CPU core's reservation set
+  3. Monitor other CPUs' writes to this address via cache coherency
+
+sc.w execution:
+  1. Check if reservation is still valid
+  2. If VALID and no other CPU wrote to this address:
+     → Write succeeds, return 0 in destination register
+  3. If INVALID (someone else wrote):
+     → Write fails, return 1 in destination register
+
+Reservation invalidated by:
+  - Other CPU writes to monitored address
+  - Context switch (OS thread switch)
+  - Timeout (implementation-dependent)
+```
+
+**2. AMO (Atomic Memory Operations)** - Single Instruction
 
 ```assembly
-amoadd.w x10, x12, (x11)  # Atomic add
+// C++ code:
+//   std::atomic<int> counter = 1;
+//   int old = counter.fetch_add(5);
+// Result: old = 1, counter = 6
+
+// Compiled to RISC-V (single instruction!):
+li      x12, 5               # x12 = 5 (value to add)
+la      x11, counter         # x11 = &counter
+amoadd.w x10, x12, (x11)     # Atomic operation
+
+// What amoadd.w does (atomically):
+//   Step 1: x10 = mem[x11]           → x10 = 1  (read old value)
+//   Step 2: temp = mem[x11] + x12    → temp = 1 + 5 = 6
+//   Step 3: mem[x11] = temp          → counter = 6
+// Final state: x10 = 1 (old), counter = 6 (new)
+
+// Other AMO operations:
+amoswap.w  x10, x12, (x11)   # x10 = mem[x11]; mem[x11] = x12;
+amoand.w   x10, x12, (x11)   # x10 = mem[x11]; mem[x11] &= x12;
+amoor.w    x10, x12, (x11)   # x10 = mem[x11]; mem[x11] |= x12;
+amoxor.w   x10, x12, (x11)   # x10 = mem[x11]; mem[x11] ^= x12;
+amomin.w   x10, x12, (x11)   # x10 = mem[x11]; mem[x11] = min(mem[x11], x12);
+amomax.w   x10, x12, (x11)   # x10 = mem[x11]; mem[x11] = max(mem[x11], x12);
 ```
 
-**為什麼兩種？**
+**LR/SC vs. AMO Comparison:**
 
-- **LR/SC**：更通用，可以實現任何原子操作
-- **AMO**：更高效，單條指令完成，硬體可以優化
+| Feature      | LR/SC                                      | AMO                                       |
+| ------------ | ------------------------------------------ | ----------------------------------------- |
+| Instructions | 3-4 (lr + ops + sc + branch)               | 1 (single instruction)                    |
+| Operations   | Any complex logic (CAS, conditional, etc.) | Fixed 8 ops (add/swap/and/or/xor/min/max) |
+| Efficiency   | Fast when no contention, retry overhead    | Always fast, no retry                     |
+| Use case     | Complex synchronization primitives         | Simple counters, flags                    |
 
-**NPU 系統的實際應用：**
+**Real-world Example: NPU Job Queue (Multi-producer, Multi-consumer)**
 
 ```c
-// Job queue 的多生產者-多消費者模型
+// Producer thread: enqueue job to NPU
 void enqueue(job_t *job) {
   int tail;
   do {
+    // Atomically load current tail index
     tail = __atomic_load_n(&queue->tail, __ATOMIC_ACQUIRE);
+    // Try to atomically increment tail (CAS operation)
   } while (!__atomic_compare_exchange_n(&queue->tail, &tail, tail+1,
                                         false, __ATOMIC_ACQ_REL, __ATOMIC_ACQUIRE));
-  queue->jobs[tail] = job;
+  // If we got here, we own slot 'tail'
+  queue->jobs[tail] = job;  // Compiler generates LR/SC for CAS
+}
+
+// Alternative using AMO (simpler but less control):
+void enqueue_simple(job_t *job) {
+  // Atomically fetch-and-increment tail
+  int slot = __atomic_fetch_add(&queue->tail, 1, __ATOMIC_RELAXED);
+  // Compiler generates: amoadd.w for fetch_add
+  queue->jobs[slot % QUEUE_SIZE] = job;
 }
 ```
-
-Compiler 會生成對應的 LR/SC 或 AMO 指令。
 
 #### 10. 沒有浮點運算的 Condition Codes
 
@@ -1409,7 +1477,7 @@ vle32.v v0, (a1)          // 一次 load 512-bit * 8 = 4KB!
 - **產品線**：
   - **AndesCore 25 系列**：32-bit 嵌入式
   - **AndesCore 45 系列**：64-bit 應用處理器
-  - **AX系列**：帶向量擴展的 AI 處理器
+  - **AX 系列**：帶向量擴展的 AI 處理器
 - **技術特色**：
   - **StackSafe**：硬體堆疊保護（防止 buffer overflow）
   - **CoDense**：程式碼壓縮技術（比標準 C Extension 更強）
@@ -1511,13 +1579,14 @@ vector_add:
 ```
 
 **GCC vs LLVM 的取捨**：
-| Feature | GCC | LLVM |
+
+| Feature                   | GCC                | LLVM        |
 | ------------------------- | ------------------ | ----------- |
-| **Vectorization Quality** | Basic | Excellent |
-| **Compilation Speed** | Fast | Slow |
-| **Debug Info** | Traditional stable | More modern |
-| **Customization Ease** | Difficult | Easy |
-| **Industry Adoption** | Embedded focus | AI/ML focus |
+| **Vectorization Quality** | Basic              | Excellent   |
+| **Compilation Speed**     | Fast               | Slow        |
+| **Debug Info**            | Traditional stable | More modern |
+| **Customization Ease**    | Difficult          | Easy        |
+| **Industry Adoption**     | Embedded focus     | AI/ML focus |
 
 #### **LLVM/Clang - NPU Compiler 的首選** [***CRITICAL***]
 
@@ -1774,7 +1843,7 @@ void npu_task_scheduler(void *params) {
 
 4. **產業機會**：
    - MediaTek（台灣）、SiFive（美國）、平頭哥（中國）都在招 compiler 工程師
-   - 薪資水平：台灣 150-250萬/年，美國 $150k-250k/年
+   - 薪資水平：台灣 150-250 萬/年，美國 $150k-250k/年
    - 未來 5 年是 RISC-V 的黃金時期
 
 ### 實戰：如何快速上手 RISC-V 開發
