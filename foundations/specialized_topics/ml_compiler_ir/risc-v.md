@@ -9,11 +9,10 @@ author: Yi-Ping Pan (Cloudlet)
 
 (我們今天的目標是充分準備 Mediatek compiler engineer 的職缺，有內部消息透露 RISC-V 很重要．所以所有的準備)
 
-\*\*
-
 - [x] History of RISC-V
 - [x] What does it want to solve
 - [x] Ecosystem overview
+- [ ] RV64GC + RV64V AMP
 
 ---
 
@@ -248,6 +247,8 @@ author: Yi-Ping Pan (Cloudlet)
 - [ ] RISC-V 規格文件（riscv.org/specifications）
 - [ ] LLVM RISC-V 文檔
 - [ ] Andes 技術文件（台灣公司！）
+
+---
 
 ## The basics of RISC-V
 
@@ -491,7 +492,7 @@ movss xmm3, [rsi+12]    # a[i+3]
 
 **Spilling rate** 是暫存器不夠用時，被迫把資料存回記憶體的頻率。Memory access 比 register 慢 10-100 倍，所以這是效能殺手。LLVM Backend 的 Register Allocation Pass 使用 graph coloring 演算法來決定何時 spill。RISC-V 有 32 個暫存器，spilling rate 只有 2%，遠低於 x86 的 15%。更多暫存器 = 更少 spilling = 更高效能。
 
-```
+```text
 Architecture    Register Count    Avg Spill Rate (SPECint)
 ──────────────────────────────────────────────────────────
 x86 (32-bit)         8                    ~15%
@@ -774,7 +775,7 @@ vsetvli t0, a0, e32, m1, ta, ma
 
 當 `vl < VLMAX` 時，硬體自動生成一個內部的 mask：
 
-```
+```text
 假設 VLMAX=4，但這次 vl=1（只剩 1 個元素）
 
 內部 mask = [1, 0, 0, 0]
@@ -876,7 +877,7 @@ vlseg3e32.v v1, v2, v3, (a0)  # Load 3 個交錯的向量
 
 **NPU Compiler 的完整 Lowering Pipeline：**
 
-```
+```text
 High-Level (Python/TensorFlow/PyTorch)
           |
           v
@@ -1081,7 +1082,7 @@ SDValue RISCVTargetLowering::LowerOperation(SDValue Op,
 
 **Register Allocation 的挑戰：**
 
-```
+```text
 RISC-V 有 32 個向量暫存器 (v0-v31)
 但 LMUL > 1 時會消耗多個暫存器！
 
@@ -1550,6 +1551,8 @@ SPECint2006: 7.5/GHz (與 ARM Cortex-A73 相當)
   - Benchmark AI workload 的性能
   - 除錯 memory ordering 相關的 bug
 
+---
+
 ### 軟體工具鏈（Compiler 工程師的武器庫）
 
 #### **GCC (GNU Compiler Collection)**
@@ -1653,6 +1656,8 @@ ninja check-llvm-codegen-riscv
 # 5. 提交 patch 到 Phabricator (LLVM 的 code review 平台)
 ```
 
+---
+
 #### **Linux Kernel RISC-V Port**
 
 - **支援狀態**：Mainline since Linux 4.15 (2018)
@@ -1734,6 +1739,8 @@ void npu_task_scheduler(void *params) {
 - **RISC-V 支援**：多板支援（HiFive1, ESP32-C3, etc.）
 - **優勢**：Devicetree、Kconfig（與 Linux 類似的配置系統）
 
+---
+
 ### 開發板與評估套件
 
 #### **硬體對比表**：
@@ -1750,6 +1757,8 @@ void npu_task_scheduler(void *params) {
 1. **需要測試向量化**？→ 選有 RVV support 的（如 VisionFive 2）
 2. **需要跑完整 Linux**？→ 至少 2GB RAM
 3. **只是學習 ISA**？→ QEMU 模擬器即可（免費！）
+
+---
 
 ### 產業支持與戰略意義
 
@@ -1787,6 +1796,8 @@ void npu_task_scheduler(void *params) {
 - **Intel Foundry Services**：提供 RISC-V 晶片代工
 - **動機**：x86 市場萎縮，需要新的成長點
 
+---
+
 ### 中國的 RISC-V 投資狂潮
 
 **為什麼中國如此積極？**
@@ -1814,12 +1825,16 @@ void npu_task_scheduler(void *params) {
 - 目標：統一 RISC-V 標準（避免碎片化）
 - 對全球的影響：可能形成「中國標準」vs「國際標準」
 
+---
+
 #### **印度的 Shakti 處理器專案**
 
 - **背景**：IIT Madras（印度理工學院）主導
 - **目標**：印度本土的處理器 IP
 - **進展**：已成功流片（22nm）
 - **意義**：發展中國家也能參與晶片設計（RISC-V 的民主化）
+
+---
 
 ### NPU Compiler 工程師應該關注什麼？
 
@@ -1845,6 +1860,8 @@ void npu_task_scheduler(void *params) {
    - MediaTek（台灣）、SiFive（美國）、平頭哥（中國）都在招 compiler 工程師
    - 薪資水平：台灣 150-250 萬/年，美國 $150k-250k/年
    - 未來 5 年是 RISC-V 的黃金時期
+
+---
 
 ### 實戰：如何快速上手 RISC-V 開發
 
@@ -1875,3 +1892,713 @@ llc -march=riscv64 -mattr=+v hello.ll -o hello.s
 - 能討論中國 RISC-V 投資的地緣政治因素
 
 ---
+
+## RV64GC + RV64V AMP
+
+### RISC-V 關鍵術語解析：NPU Compiler 面試必備
+
+#### RV64GC - 通用處理器的標準配置
+
+**RV64GC 是什麼？**
+
+RV64GC 是 RISC-V 最常見的配置縮寫，代表：
+
+```text
+RV64GC = RV64IMAFD_Zicsr_Zifencei + C
+
+拆解：
+RV64   = 64-bit 基礎架構
+G      = "General" 的縮寫，包含 IMAFD
+  I    = Integer (基本整數指令集)
+  M    = Multiply/Divide (乘除法)
+  A    = Atomic (原子操作)
+  F    = Float (單精度浮點)
+  D    = Double (雙精度浮點)
+C      = Compressed (壓縮指令，16-bit)
+```
+
+**為什麼叫 "G"？**
+
+歷史上，IMAFD 這個組合太常用了，RISC-V 社群就簡稱為 "G" (General-purpose)，方便表示通用處理器的標準配置。
+
+**完整展開：**
+
+RV64GC = RV64I + M + A + F + D + Zicsr + Zifencei + C
+
+其中：
+
+- Zicsr: CSR (Control and Status Register) 指令
+- Zifencei: 指令記憶體屏障（用於 self-modifying code）
+
+**在 NPU 系統中的角色：**
+
+```text
+┌─────────────────────────────────────────┐
+│         MediaTek NPU SoC                │
+├─────────────────────────────────────────┤
+│  Control Processor (RV64GC)             │ <-- Run Linux, system management
+│  - Operating system responsibility      │
+│  - Device driver                        │
+│  - Task scheduling                      │
+│  - DMA configuration                    │
+├─────────────────────────────────────────┤
+│  Compute Cores (RV64GCV)                │ <-- Handle AI computation
+│  - Vector operations (V extension)      │
+│  - Fallback path                        │
+│  - Data preprocessing/postprocessing    │
+├─────────────────────────────────────────┤
+│  NPU Hardware Accelerator               │ <-- Dedicated hardware
+│  - Matrix engines                       │
+│  - Quantization units                   │
+└─────────────────────────────────────────┘
+```
+
+**Compiler 視角：**
+
+```c
+// 編譯時指定 target
+clang -target riscv64 -march=rv64gc -O3 program.c
+
+// Compiler 知道可以使用：
+// - 64-bit 整數運算
+// - 硬體乘除法 (不需要軟體模擬)
+// - 原子操作 (用於 lock-free 資料結構)
+// - 浮點運算 (FP32 + FP64)
+// - 壓縮指令 (節省 25-30% code size)
+```
+
+**面試重點：**
+
+**Q: "為什麼 NPU 的 control core 通常用 RV64GC 而不是更簡單的 RV64I？"**
+
+**A**: "因為需要：
+
+1. **M extension**: device driver 中常有乘除法運算
+2. **A extension**: 多核心同步（spinlock, atomic counters）
+3. **F/D extension**: 某些 control logic 需要浮點運算（如 DMA bandwidth 計算）
+4. **C extension**: 減少記憶體佔用，對嵌入式系統很重要"
+
+---
+
+#### RV64V - AI/ML 的專用武器
+
+**RV64V 是什麼？**
+
+RV64V = RV64I + V extension
+
+V = Vector Extension (向量擴展)
+
+這是 RISC-V 為了 AI/ML workload 專門設計的指令集擴展，支援 **Vector Length Agnostic (VLA)** 設計。
+
+**完整配置通常是：**
+
+RV64GCV = RV64GC + V
+
+也就是：
+
+- 有 GC 的所有功能（通用處理）
+- 加上 V extension（向量加速）
+
+**V Extension 的核心能力：**
+
+```assembly
+# 1. 動態向量長度設定
+vsetvli t0, a0, e32, m1, ta, ma
+# t0 = 硬體回傳的 vl
+# a0 = 請求處理的元素數
+
+# 2. 向量記憶體操作
+vle32.v v1, (a0)        # Vector load
+vse32.v v1, (a0)        # Vector store
+vlse32.v v1, (a0), a1   # Strided load (用於 layout 轉換)
+
+# 3. 向量算術
+vadd.vv v1, v2, v3      # v1 = v2 + v3 (element-wise)
+vmul.vv v1, v2, v3      # v1 = v2 * v3
+vfmacc.vf v1, f0, v2    # v1 += f0 * v2 (FMA: fused multiply-add)
+
+# 4. 向量歸約 (Reduction)
+vredsum.vs v1, v2, v3   # v1 = sum(v2) + v3
+```
+
+**與其他架構的對比：**
+
+| Feature             | ARM NEON            | x86 AVX2            | x86 AVX-512        | RISC-V RVV             |
+| ------------------- | ------------------- | ------------------- | ------------------ | ---------------------- |
+| **Vector Width**    | Fixed 128-bit       | Fixed 256-bit       | Fixed 512-bit      | Variable (VLA)         |
+| **Max Elements**    | 4 float32           | 8 float32           | 16 float32         | VLEN/32 (variable)     |
+| **Tail Handling**   | Manual cleanup loop | Manual cleanup loop | k-register masking | Hardware auto (vsetvl) |
+| **Portability**     | None                | None                | None               | Complete               |
+| **AI Friendliness** | Medium              | Medium              | High               | Excellent              |
+
+**在 NPU Compiler 中的使用場景：**
+
+```python
+# MLIR lowering 決策樹
+def lower_operation(op):
+    if op.is_large_matmul():
+        return lower_to_npu(op)  # 送到 NPU 硬體
+
+    elif op.is_small_matmul():
+        # 小矩陣不值得送 NPU (overhead 太高)
+        return lower_to_rvv(op)  # Fallback 到 RV64V
+
+    elif op.is_elementwise():
+        # Element-wise 操作（如 ReLU, Add）
+        if op.size > threshold:
+            return lower_to_npu(op)
+        else:
+            return lower_to_rvv(op)  # RVV 更靈活
+
+    elif op.is_custom():
+        return lower_to_rvv(op)  # 未知操作，CPU 處理
+```
+
+**實際 Compiler 生成的程式碼：**
+
+```c
+// 原始 C code (AI 的 element-wise add)
+void add_bias(float *data, float *bias, int n) {
+    for (int i = 0; i < n; i++)
+        data[i] += bias[i];
+}
+
+// LLVM auto-vectorization 生成的 RVV code
+void add_bias_rvv(float *data, float *bias, int n) {
+    size_t vl;
+    for (size_t i = 0; i < n; i += vl) {
+        vl = vsetvl_e32m1(n - i);
+        vfloat32m1_t vd = vle32_v_f32m1(&data[i], vl);
+        vfloat32m1_t vb = vle32_v_f32m1(&bias[i], vl);
+        vfloat32m1_t vr = vfadd_vv_f32m1(vd, vb, vl);
+        vse32_v_f32m1(&data[i], vr, vl);
+    }
+    // 注意：沒有 cleanup loop！
+}
+```
+
+**面試重點：**
+
+**Q: "RVV 對 NPU compiler 最大的價值是什麼？"**
+
+**A**: "三點：
+
+1. **高效的 Fallback 路徑**：小運算不值得送 NPU 時，RVV 提供高效的 CPU fallback
+2. **統一的 Code Generation**：VLA 設計讓 compiler 不需要為不同硬體生成多個版本
+3. **簡化 Auto-Vectorization**：無需處理 tail cleanup，提高向量化成功率"
+
+---
+
+#### AMP - Asymmetric Multi-Processing（非對稱多核心處理）
+
+**AMP 是什麼？**
+
+AMP 是一種 **異構多核心架構**，不同的核心有不同的配置和功能，各司其職。
+
+**對比：SMP vs AMP**
+
+```text
+SMP (Symmetric Multi-Processing)
+┌────────┐ ┌────────┐ ┌────────┐ ┌────────┐
+│ Core 0 │ │ Core 1 │ │ Core 2 │ │ Core 3 │
+│ RV64GC │ │ RV64GC │ │ RV64GC │ │ RV64GC │ <-- 所有核心相同
+└────────┘ └────────┘ └────────┘ └────────┘
+     │          │          │          │
+     └──────────┴──────────┴──────────┘
+              共享 L2 Cache
+
+優點：負載平衡容易，程式設計簡單
+缺點：無法針對不同任務優化
+
+
+AMP (Asymmetric Multi-Processing)
+┌─────────────┐  ┌────────────┐  ┌───────────┐
+│   Big Core  │  │  Mid Core  │  │ Tiny Core │
+│   RV64GCV   │  │   RV64GC   │  │  RV64IMC  │ <-- 核心配置不同
+│  2.5 GHz    │  │   1.5 GHz  │  │  800 MHz  │
+│ Out-of-Order│  │  In-order  │  │  Simple   │
+└─────────────┘  └────────────┘  └───────────┘
+       │               │              │
+       │               │              │
+  AI workload    General tasks    Background
+  RVV 向量運算    Device driver     DMA engine
+
+優點：功耗效率高，針對性能優化
+缺點：負載平衡複雜，需要智能調度
+```
+
+**MediaTek NPU 的 AMP 架構實例：**
+
+```text
+MediaTek Dimensity 9300 (hypothetical)
+┌─────────────────────────────────────────┐
+│         Application Processor           │
+├─────────────────────────────────────────┤
+│  "Big" Cluster                          │
+│  ├─ 4x Cortex-X4 @ 3.25 GHz             │ <-- High-performance CPU
+│  │  (ARM, not RISC-V)                   │
+├─────────────────────────────────────────┤
+│  "Little" Cluster                       │
+│  ├─ 4x Cortex-A720 @ 2.0 GHz            │ <-- Power-efficient CPU
+├─────────────────────────────────────────┤
+│  NPU Subsystem (RISC-V AMP)             │
+│  ├─ Control Core: RV64GC @ 1.0 GHz      │ <-- Management core
+│  │   • Runs FreeRTOS                    │
+│  │   • Device driver                    │
+│  │   • Task queue management            │
+│  ├─ Compute Core 0: RV64GCV @ 1.5 GHz   │ <-- AI computation
+│  │   • With RVV extension               │
+│  │   • Fallback path                    │
+│  ├─ Compute Core 1: RV64GCV @ 1.5 GHz   │
+│  ├─ DMA Engine: RV32IMC @ 600 MHz       │ <-- Data movement
+│  │   • Low-power design                 │
+│  │   • Pure DMA control                 │
+│  └─ NPU Hardware (Non-programmable)     │ <-- Fixed-function hardware
+│      • Matrix engines (INT8/INT16)      │
+│      • Quantization units               │
+└─────────────────────────────────────────┘
+```
+
+**為什麼 NPU 用 AMP？**
+
+**1. 功耗優化**
+
+Control Core (RV64GC):
+
+- 功耗：~50 mW
+- 任務：輕量級控制
+- 大部分時間在等待
+
+Compute Core (RV64GCV):
+
+- 功耗：~200 mW (active), ~10 mW (idle)
+- 任務：向量運算
+- 只在需要時啟動
+
+DMA Engine (RV32IMC):
+
+- 功耗：~20 mW
+- 任務：記憶體搬移
+- 簡單設計，極低功耗
+
+**2. 成本優化**
+
+如果全部用 RV64GCV：
+
+- 晶片面積大 (向量單元佔空間)
+- 成本高
+- 但 control core 根本用不到向量運算！
+
+AMP 設計：
+
+- Control core 用簡單的 RV64GC (小面積)
+- 只有需要的 core 用 RV64GCV
+- 成本降低 30-40%
+
+**3. 性能優化**
+
+不同核心專注不同任務：
+
+- Control core: 低延遲響應中斷
+- Compute core: 高吞吐量向量運算
+- DMA engine: 持續的記憶體搬移
+
+**Compiler 對 AMP 的支援：**
+
+```c
+// Compiler 需要生成針對不同 core 的程式碼
+
+// 1. Control Core (RV64GC)
+void npu_driver_init(void) {
+    // 編譯參數：-march=rv64gc -O2
+    // 不能使用 vector 指令！
+    configure_dma();
+    setup_interrupts();
+    init_task_queue();
+}
+
+// 2. Compute Core (RV64GCV)
+void vector_workload(float *data, int n) {
+    // 編譯參數：-march=rv64gcv -O3 -ftree-vectorize
+    // 可以使用 RVV 指令
+    size_t vl;
+    for (size_t i = 0; i < n; i += vl) {
+        vl = vsetvl_e32m1(n - i);
+        // ... vector operations
+    }
+}
+
+// 3. DMA Engine (RV32IMC)
+void dma_copy_task(void *src, void *dst, size_t len) {
+    // 編譯參數：-march=rv32imc -Os (optimize for size)
+    // 極簡程式碼，功耗優先
+    dma_start(src, dst, len);
+    while (!dma_done());
+}
+```
+
+**LLVM 的 Multi-target Build：**
+
+```bash
+# Makefile for AMP system
+# 需要為不同 core 編譯不同版本
+
+# Control Core
+clang -target riscv64 -march=rv64gc -O2 \
+      -c control.c -o control_rv64gc.o
+
+# Compute Core
+clang -target riscv64 -march=rv64gcv -O3 -ftree-vectorize \
+      -c compute.c -o compute_rv64gcv.o
+
+# DMA Engine
+clang -target riscv32 -march=rv32imc -Os \
+      -c dma.c -o dma_rv32imc.o
+
+# Link 成不同的 binary
+riscv64-ld control_rv64gc.o -o control.elf
+riscv64-ld compute_rv64gcv.o -o compute.elf
+riscv32-ld dma_rv32imc.o -o dma.elf
+```
+
+**面試重點：**
+
+**Q: "為什麼 NPU 用 AMP 而不是 SMP？"**
+
+**A**: "三個關鍵原因：
+
+1. **功耗效率**：不同任務有不同的功耗需求，AMP 可以讓輕量級任務跑在低功耗核心
+2. **成本優化**：不需要每個核心都配備昂貴的向量單元
+3. **性能專精**：Control core 優化延遲，Compute core 優化吞吐量，各司其職"
+
+---
+
+### NPU Compiler 面試必知的其他架構知識
+
+#### 1. 記憶體層級架構 (Memory Hierarchy)
+
+```text
+CPU/NPU Core
+    |
+    v
+L1 Cache (32-64 KB, ~1 cycle)
+    |
+    v
+L2 Cache (256 KB - 1 MB, ~10 cycles)
+    |
+    v
+L3 Cache (共享, 2-8 MB, ~40 cycles)
+    |
+    v
+DRAM (GB 級, ~100-300 cycles)
+```
+
+**Compiler 需要考慮的：**
+
+```c
+// Bad: Cache thrashing
+for (int i = 0; i < N; i++) {
+    for (int j = 0; j < M; j++) {
+        C[i][j] += A[i][k] * B[k][j];  // B 的存取不連續
+    }
+}
+
+// Good: Tiling for cache locality
+for (int ii = 0; ii < N; ii += TILE) {
+    for (int jj = 0; jj < M; jj += TILE) {
+        for (int kk = 0; kk < K; kk += TILE) {
+            // 小塊矩陣乘法，fit in cache
+            matmul_tile(A, B, C, ii, jj, kk, TILE);
+        }
+    }
+}
+```
+
+**面試重點**：能說出 cache line size (通常 64 bytes)、cache associativity、false sharing 的概念。
+
+---
+
+#### 2. DMA (Direct Memory Access)
+
+```text
+傳統方式 (CPU copy):
+CPU ──讀取──> Memory A
+CPU ──寫入──> Memory B
+問題：CPU 被佔用，無法做其他事
+
+DMA 方式:
+CPU ──啟動DMA──> DMA Engine
+DMA Engine ──自動搬移──> Memory A -> Memory B
+CPU ──繼續執行其他任務──>
+問題解決：CPU 不被阻塞
+```
+
+**NPU 中的 DMA Pattern：**
+
+```c
+// Double buffering for zero overhead
+Buffer A: 正在被 NPU 處理
+Buffer B: DMA 正在搬入下一批資料
+
+while (has_data) {
+    // Overlap computation and data transfer
+    dma_start_async(input_data, buffer_next);  // 非阻塞
+    npu_compute(buffer_current);               // NPU 運算
+    dma_wait(buffer_next);                     // 等待 DMA 完成
+    swap(buffer_current, buffer_next);         // 交換 buffer
+}
+```
+
+**面試重點**：理解 zero-copy、scatter-gather DMA、descriptor-based DMA。
+
+---
+
+#### 3. 中斷處理 (Interrupt Handling)
+
+```text
+NPU 完成運算
+    |
+    v
+硬體觸發中斷 (IRQ)
+    |
+    v
+CPU 跳到 ISR (Interrupt Service Routine)
+    |
+    v
+讀取 NPU 狀態暫存器
+    |
+    v
+喚醒等待的 thread
+    |
+    v
+返回正常執行
+```
+
+**RISC-V 的中斷機制：**
+
+```c
+// 中斷處理函數
+void npu_irq_handler(void) {
+    uint32_t status = npu_read_status();
+
+    if (status & NPU_DONE) {
+        // 任務完成
+        complete_task();
+    }
+
+    if (status & NPU_ERROR) {
+        // 錯誤處理
+        handle_error();
+    }
+
+    npu_clear_interrupt();
+}
+
+// 註冊中斷
+register_irq(NPU_IRQ_NUM, npu_irq_handler);
+```
+
+**面試重點**：理解 interrupt vs polling、interrupt priority、nested interrupt。
+
+---
+
+#### 4. 同步機制 (Synchronization)
+
+```c
+// 1. Spinlock (適合短時間等待)
+void spinlock_acquire(atomic_int *lock) {
+    while (atomic_exchange(lock, 1) == 1) {
+        // 忙等待
+    }
+}
+
+// 2. Mutex (適合長時間等待)
+void mutex_lock(mutex_t *m) {
+    if (!trylock(m)) {
+        sleep_and_wait();  // 讓出 CPU
+    }
+}
+
+// 3. Semaphore (計數器，用於資源管理)
+void sem_wait(sem_t *s) {
+    atomic_decrement(&s->count);
+    if (s->count < 0) {
+        block();
+    }
+}
+```
+
+**NPU Task Queue 的同步：**
+
+```c
+// Producer (CPU)
+void submit_npu_task(task_t *task) {
+    spinlock_acquire(&queue_lock);
+    enqueue(task);
+    spinlock_release(&queue_lock);
+
+    sem_post(&task_count);  // 通知有新任務
+}
+
+// Consumer (NPU control core)
+void npu_worker(void) {
+    while (1) {
+        sem_wait(&task_count);  // 等待任務
+
+        spinlock_acquire(&queue_lock);
+        task_t *task = dequeue();
+        spinlock_release(&queue_lock);
+
+        npu_execute(task);
+    }
+}
+```
+
+**面試重點**：理解 atomic operations、memory ordering、lock-free 資料結構。
+
+---
+
+#### 5. RISC-V 特權模式 (Privilege Levels)
+
+```text
+M-mode (Machine)        最高權限
+    |
+    v
+S-mode (Supervisor)     OS Kernel
+    |
+    v
+U-mode (User)           User applications
+```
+
+**NPU Firmware 的模式使用：**
+
+M-mode:
+
+- Bootloader
+- NPU 硬體初始化
+- Exception handler
+
+S-mode:
+
+- Device driver (如果跑 Linux)
+- Memory management
+- Virtual memory
+
+U-mode:
+
+- AI runtime (TensorFlow Lite, ONNX Runtime)
+- User applications
+
+**面試重點**：理解 CSR (Control and Status Registers)、trap handling、context switch。
+
+---
+
+### 面試前的最後檢查清單
+
+#### 必須能回答的問題：
+
+1. **"RV64GC 和 RV64GCV 的差別是什麼？"**
+
+   - 答：GC 是通用配置（整數+浮點+原子+壓縮），GCV 額外加上 Vector extension
+
+2. **"為什麼 NPU 需要 AMP 架構？"**
+
+   - 答：功耗優化、成本優化、性能專精化
+
+3. **"VLA (Vector Length Agnostic) 對 compiler 的好處？"**
+
+   - 答：統一 codegen、無需 cleanup loop、binary portability
+
+4. **"NPU compiler 的 fallback 機制如何運作？"**
+
+   - 答：根據運算大小和硬體能力決策，小運算用 RVV，大運算用 NPU
+
+5. **"如何優化 NPU 的記憶體搬移？"**
+   - 答：DMA + double buffering、cache locality、zero-copy
+
+---
+
+#### 技術名詞必須知道：
+
+- **ISA (Instruction Set Architecture)**：指令集架構
+- **VLEN**：Vector register length (128, 256, 512...)
+- **LMUL**：Register grouping (m1, m2, m4, m8)
+- **ELEN**：Maximum element width (32, 64 bits)
+- **CSR**：Control and Status Registers
+- **Fence**：Memory ordering 指令
+- **ABI (Application Binary Interface)**：函數呼叫規範
+
+---
+
+#### 可以加分的話題：
+
+1. 提到晶心科技（Andes）- 台灣公司
+2. 了解 MLIR 的 lowering pipeline
+3. 知道 LLVM RISC-V backend 的關鍵檔案
+4. 能討論 polyhedral optimization
+5. 理解 quantization (INT8/INT16)
+
+---
+
+#### 準備的程式碼範例：
+
+```c
+// 1. 簡單的 RVV 向量化
+void vector_add(float *a, float *b, float *c, size_t n) {
+    size_t vl;
+    for (size_t i = 0; i < n; i += vl) {
+        vl = vsetvl_e32m1(n - i);
+        vfloat32m1_t va = vle32_v_f32m1(&a[i], vl);
+        vfloat32m1_t vb = vle32_v_f32m1(&b[i], vl);
+        vfloat32m1_t vc = vfadd_vv_f32m1(va, vb, vl);
+        vse32_v_f32m1(&c[i], vc, vl);
+    }
+}
+
+// 2. NPU task submission
+void submit_matmul(tensor_t *A, tensor_t *B, tensor_t *C) {
+    if (should_use_npu(A, B)) {
+        npu_matmul(A, B, C);  // 送到硬體
+    } else {
+        rvv_matmul(A, B, C);  // RVV fallback
+    }
+}
+```
+
+---
+
+### 快速複習卡
+
+#### RV64GC
+
+- **含義**：RV64I + M + A + F + D + C
+- **用途**：Control processor, device driver
+- **為什麼需要**：乘除法、原子操作、浮點運算、壓縮指令
+- **典型應用**：NPU 的 control core、跑 Linux 的主處理器
+
+#### RV64GCV
+
+- **含義**：RV64GC + V extension
+- **用途**：AI 運算、向量化處理
+- **為什麼需要**：高效的 fallback 路徑、處理不值得送 NPU 的小運算
+- **典型應用**：NPU 的 compute core、前後處理
+
+#### AMP
+
+- **含義**：Asymmetric Multi-Processing
+- **vs SMP**：異構 vs 同構
+- **三大優勢**：功耗優化、成本優化、性能專精
+- **典型配置**：Control (RV64GC) + Compute (RV64GCV) + DMA (RV32IMC)
+
+#### VLA (Vector Length Agnostic)
+
+- **核心機制**：vsetvl 動態設定向量長度
+- **最大優勢**：Write once, run anywhere
+- **vs 固定長度**：無需 cleanup loop、binary portability
+- **Compiler 好處**：統一 codegen、提高 auto-vectorization 成功率
+
+---
+
+**祝你面試順利！記住：展現你的學習能力和對技術的熱情，比死記硬背更重要。**
+
+**最重要的心態：把 RISC-V 當作解決實際問題的工具，而不是抽象的概念。面試官想看到你能用這些知識解決真實的 NPU compiler 問題。**
