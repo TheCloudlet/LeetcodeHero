@@ -28,7 +28,7 @@
 
 Modern SoC companies need compiler teams because **hardware differentiation requires software optimization**.
 
-```
+```text
 +----------------------+-------------------------+
 | Open Source Backend  | Commercial Backend      |
 +----------------------+-------------------------+
@@ -44,7 +44,7 @@ Modern SoC companies need compiler teams because **hardware differentiation requ
 
 ### The Compiler Engineer's Three Missions
 
-```
+```text
            Compiler Engineer's Core Responsibilities
                            |
         +------------------+------------------+
@@ -82,7 +82,7 @@ unsigned RISCVSubtarget::getInstrLatency(unsigned Opcode) {
 
 RISC-V's extensibility allows competitive advantage through private instructions:
 
-```
+```text
 Standard RISC-V + Company Secret Sauce
       |                    |
    RV64GC            Custom Crypto/ML/DSP
@@ -104,28 +104,28 @@ Bridge hardware and software:
 
 ### Load-Store Architecture
 
-```
-+------------------------------------------------------------+
-|               RISC Load-Store Architecture                 |
-|                                                            |
-|  Memory                Registers              Memory       |
-|    |                       |                    ^          |
-|    v                       v                    |          |
-| +------+              +----------+          +------+       |
-| | LOAD |------------->| COMPUTE  |--------->|STORE |       |
-| | lw/ld|              | add/mul  |          |sw/sd |       |
-| +------+              +----------+          +------+       |
-|                                                            |
-| Rule 1: ALL computation in REGISTERS ONLY                  |
-| Rule 2: ONLY load/store touch memory                       |
-+------------------------------------------------------------+
+```text
++--------------------------------------------------------+
+|                RISC Load-Store Architecture            |
+|                                                        |
+|   Memory             Registers              Memory     |
+|     |                    |                    ^        |
+|     v                    v                    |        |
+|  +-------+           +----------+          +-------+   |
+|  | LOAD  |---------->| COMPUTE  |--------->| STORE |   |
+|  | lw/ld |           | add/mul  |          | sw/sd |   |
+|  +-------+           +----------+          +-------+   |
+|                                                        |
+| Rule 1: ALL computation in REGISTERS ONLY              |
+| Rule 2: ONLY load/store touch memory                   |
++--------------------------------------------------------+
 ```
 
 ### Instruction Formats
 
 All base instructions are 32 bits:
 
-```
+```text
 R-Type (add rd, rs1, rs2):
  31      25|24  20|19  15|14 12|11   7|6     0
  +---------+------+------+-----+------+-------+
@@ -140,32 +140,28 @@ I-Type (addi rd, rs1, imm):
 
 S-Type (sw rs2, offset(rs1)):
  31      25|24  20|19  15|14 12|11   7|6     0
- +---------+------+------+-----+------+-------+
- |imm[11:5]| rs2  | rs1  |func3|imm[4:0]|opc |
- +---------+------+------+-----+------+-------+
+ +---------+------+------+-----+--------+-------+
+ |imm[11:5]| rs2  | rs1  |func3|imm[4:0]|opcode |
+ +---------+------+------+-----+--------+-------+
 ```
 
 ### Register ABI
 
-```
-+------+---------+-------------+--------------+-------------------+
-| Reg  | ABI     | Saved By    | Purpose      | Notes             |
-+------+---------+-------------+--------------+-------------------+
-| x0   | zero    | ---         | Zero         | Hardwired to 0    |
-| x1   | ra      | Caller      | Return addr  | Link register     |
-| x2   | sp      | Callee      | Stack ptr    | Must preserve     |
-| x5-7 | t0-t2   | Caller      | Temporaries  | Scratch           |
-| x8   | s0/fp   | Callee      | Saved/Frame  | Frame pointer     |
-| x9   | s1      | Callee      | Saved        | Must preserve     |
-| x10-11| a0-a1  | Caller      | Args/Return  | First 2 args/rets |
-| x12-17| a2-a7  | Caller      | Arguments    | Function args     |
-| x18-27| s2-s11 | Callee      | Saved        | Must preserve     |
-| x28-31| t3-t6  | Caller      | Temporaries  | Scratch           |
-+------+---------+-------------+--------------+-------------------+
+| Reg    | ABI    | Saved By | Purpose     | Notes             |
+| ------ | ------ | -------- | ----------- | ----------------- |
+| x0     | zero   | ---      | Zero        | Hardwired to 0    |
+| x1     | ra     | Caller   | Return addr | Link register     |
+| x2     | sp     | Callee   | Stack ptr   | Must preserve     |
+| x5-7   | t0-t2  | Caller   | Temporaries | Scratch           |
+| x8     | s0/fp  | Callee   | Saved/Frame | Frame pointer     |
+| x9     | s1     | Callee   | Saved       | Must preserve     |
+| x10-11 | a0-a1  | Caller   | Args/Return | First 2 args/rets |
+| x12-17 | a2-a7  | Caller   | Arguments   | Function args     |
+| x18-27 | s2-s11 | Callee   | Saved       | Must preserve     |
+| x28-31 | t3-t6  | Caller   | Temporaries | Scratch           |
 
 Caller-Saved: Free to clobber, caller must save if needed
 Callee-Saved: MUST preserve if used (requires prolog/epilog)
-```
 
 **Critical for RegAlloc:**
 
@@ -178,32 +174,32 @@ Callee-Saved: MUST preserve if used (requires prolog/epilog)
 
 ### The Seven-Stage Pipeline
 
-```
+```text
 +------------------------------------------------------------+
 |                LLVM Backend 7-Stage Pipeline               |
 +------------------------------------------------------------+
 | LLVM IR (target-independent)                               |
-|    |                                                        |
-|    v                                                        |
+|    |                                                       |
+|    v                                                       |
 | +------------------------------------------------------+   |
 | | 1. Instruction Selection (ISel)                      |   |
 | |    - DAG pattern matching                            |   |
 | |    - IR -> MachineIR with virtual registers          |   |
 | +------------------------------------------------------+   |
-|    |                                                        |
-|    v                                                        |
+|    |                                                       |
+|    v                                                       |
 | +------------------------------------------------------+   |
 | | 2. Pre-RA Scheduling                                 |   |
 | |    - Hide latencies                                  |   |
 | |    - Minimize register pressure                      |   |
 | +------------------------------------------------------+   |
-|    |                                                        |
-|    v                                                        |
+|    |                                                       |
+|    v                                                       |
 | +------------------------------------------------------+   |
 | | 3. SSA-based Machine Optimizations                   |   |
 | +------------------------------------------------------+   |
-|    |                                                        |
-|    v                                                        |
+|    |                                                       |
+|    v                                                       |
 | +------------------------------------------------------+   |
 | | 4. Register Allocation  <-- THE CRISIS               |   |
 | |    - Map virtual -> physical registers               |   |
@@ -211,56 +207,64 @@ Callee-Saved: MUST preserve if used (requires prolog/epilog)
 | |    - Spilling if necessary                           |   |
 | |    - PHI elimination                                 |   |
 | +------------------------------------------------------+   |
-|    |                                                        |
-|    v                                                        |
+|    |                                                       |
+|    v                                                       |
 | +------------------------------------------------------+   |
 | | 5. Prolog/Epilog Insertion (PEI)                     |   |
 | |    - Generate function entry/exit                    |   |
 | |    - Save/restore callee-saved registers             |   |
 | +------------------------------------------------------+   |
-|    |                                                        |
-|    v                                                        |
+|    |                                                       |
+|    v                                                       |
 | +------------------------------------------------------+   |
 | | 6. Post-RA Optimizations                             |   |
+| |    - Peephole optimization (redundant moves)         |   |
+| |    - Branch optimization (folding, inversion)        |   |
+| |    - Dead code elimination (unused instructions)     |   |
 | +------------------------------------------------------+   |
-|    |                                                        |
-|    v                                                        |
+|    |                                                       |
+|    v                                                       |
 | +------------------------------------------------------+   |
 | | 7. Code Emission                                     |   |
 | +------------------------------------------------------+   |
-|    |                                                        |
-|    v                                                        |
+|    |                                                       |
+|    v                                                       |
 | Machine Code (RISC-V binary)                               |
 +------------------------------------------------------------+
 ```
 
 ### Stage I/O
 
-```
-+--------+---------------------------+---------------------------+
-| Stage  | Input                     | Output                    |
-+--------+---------------------------+---------------------------+
-| ISel   | LLVM IR                   | MachineIR (virtual regs)  |
-|        | %1 = add i32 %a, %b       | %vr1 = ADD %vr2, %vr3     |
-+--------+---------------------------+---------------------------+
-| Sched  | Unordered MachineIR       | Optimally ordered         |
-+--------+---------------------------+---------------------------+
-| RegAlloc | INFINITE virtual regs   | FINITE physical regs      |
-|          | %vr1 = ADD %vr2, %vr3   | a0 = ADD a1, a2           |
-+--------+---------------------------+---------------------------+
-| PEI      | Function body (no frame)| Complete with frame       |
-|          | ADD a0, a1, a2          | addi sp, sp, -16          |
-|          | RET                     | sw ra, 12(sp)             |
-|          |                         | ADD a0, a1, a2            |
-|          |                         | lw ra, 12(sp)             |
-|          |                         | addi sp, sp, 16           |
-|          |                         | RET                       |
-+--------+---------------------------+---------------------------+
+```text
++----------+---------------------------+---------------------------+
+| Stage    | Input                     | Output                    |
++----------+---------------------------+---------------------------+
+| ISel     | LLVM IR                   | MachineIR (virtual regs)  |
+|          | %1 = add i32 %a, %b       | %vr1 = ADD %vr2, %vr3     |
++----------+---------------------------+---------------------------+
+| Sched    | Unordered MachineIR       | Optimally ordered         |
++----------+---------------------------+---------------------------+
+| RegAlloc | INFINITE virtual regs     | FINITE physical regs      |
+|          | %vr1 = ADD %vr2, %vr3     | a0 = ADD a1, a2           |
++----------+---------------------------+---------------------------+
+| PEI      | Function body (no frame)  | Complete with frame       |
+|          | ADD a0, a1, a2            | addi sp, sp, -16          |
+|          | RET                       | sw ra, 12(sp)             |
+|          |                           | ADD a0, a1, a2            |
+|          |                           | lw ra, 12(sp)             |
+|          |                           | addi sp, sp, 16           |
+|          |                           | RET                       |
++----------+---------------------------+---------------------------+
+| Post-RA  | Unoptimized physical regs | Optimized physical regs   |
+|          | mv a0, a1                 | (redundant move removed)  |
+|          | mv a2, a0                 | beq a1, zero, .L1         |
+|          | beq a2, zero, .L1         | (branch optimized)        |
++----------+---------------------------+---------------------------+
 ```
 
 ### Why This Order?
 
-```
+```text
 ISel first: Need target instructions before scheduling
   |
   v
@@ -411,7 +415,7 @@ For -Os (size): Use instruction byte count instead
 | +---------------------------------------------------------+|
 | | Job 1 wants: Space out dependent instructions           ||
 | |              (needs more registers alive)               ||
-| |                                                          ||
+| |                                                         ||
 | | Job 2 wants: Kill values ASAP                           ||
 | |              (fewer registers alive)                    ||
 | +---------------------------------------------------------+|
