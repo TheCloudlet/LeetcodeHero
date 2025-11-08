@@ -458,23 +458,27 @@ Good Schedule (hide latency):
 Live Range = span from definition to last use
 
 Bad Schedule (long ranges):
-  def v1    ]
-  def v2    ] v1, v2, v3
-  def v3    ] all overlap
-  use v1    ]
-  use v2    ] v2, v3
-  use v3    ] overlap
+  Instruction  | v1 | v2 | v3 | Pressure
+  -------------+----+----+----+---------
+  def v1       | ██ |    |    |    1
+  def v2       | ██ | ██ |    |    2
+  def v3       | ██ | ██ | ██ |    3 ← Peak!
+  use v1       |    | ██ | ██ |    2
+  use v2       |    |    | ██ |    1
+  use v3       |    |    |    |    0
 
 Interference: v1--v2, v2--v3
 Need at least 2 colors (registers)
 
 Good Schedule (short ranges):
-  def v1
-  use v1    <- v1 dies early!
-  def v2
-  use v2    <- v2 dies early!
-  def v3
-  use v3
+  Instruction  | v1 | v2 | v3 | Pressure
+  -------------+----+----+----+---------
+  def v1       | ██ |    |    |    1
+  use v1       |    |    |    |    0 ← v1 dies!
+  def v2       |    | ██ |    |    1
+  use v2       |    |    |    |    0 ← v2 dies!
+  def v3       |    |    | ██ |    1
+  use v3       |    |    |    |    0 ← v3 dies!
 
 Interference: NONE!
 Need only 1 color - can reuse same register!
