@@ -1,7 +1,7 @@
----
-title: All About Cpp Strings
-author: Yi-Ping Pan (Cloudlet)
----
++++
+title = "All About Cpp Strings"
+author = "Yi-Ping Pan (Cloudlet)"
++++
 
 # All About Cpp Strings
 
