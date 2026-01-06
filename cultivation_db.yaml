@@ -801,7 +801,11 @@ problems:
     leetcode-difficulty: easy
     topics: [binary-search, array, neetcode150]
     status: L3_MASTERED
-    refinement_focus: "Standard binary search template"
+    refinement_focus: |
+        #1: Standard binary search template
+        #2: I use `while(lo < hi)` at the first try
+            - `while(lo < hi)` is for finding boundary
+            - `while(lo <= hi)` is for exact match
 
   - id: 746
     title: "Min Cost Climbing Stairs"
