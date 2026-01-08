@@ -15,7 +15,7 @@ public:
   int minCostClimbingStairs(std::vector<int> &cost) {
     int prev1 = 0;
     int prev2 = 0;
-    for (int idx = 0; idx < cost.size(); ++idx) {
+    for (size_t idx = 0; idx < cost.size(); ++idx) {
       int newPrev2 = cost[idx] + std::min(prev1, prev2);
       prev1 = prev2;
       prev2 = newPrev2;
