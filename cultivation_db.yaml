@@ -238,7 +238,16 @@ problems:
     topics: [linked-list, indirect-pointer, recursion, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: |
-      Attempt 1: I know the solution, but there are some logical errors. The key is to set `prev` to next group start before reversing, and after reversing, link the previous group's tail to `prev`.
+  
+  - id: 33
+    title: "Search in Rotated Sorted Array"
+    link: "./problems/033_search_in_rotated_sorted_array/"
+    leetcode-difficulty: medium
+    topics: [binary-search, array, sorting]
+    status: L1_FORGOT
+    refinement_focus: |
+      #1: (1) we should check whether is left sorted or right sorted (monotonic)
+          (2) we should be very careful about the boundary conditions if there are only 2 elements left
 
   - id: 34
     title: "Find First and Last Position of Element in Sorted Array"
