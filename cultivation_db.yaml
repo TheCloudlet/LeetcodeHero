@@ -560,6 +560,15 @@ problems:
 
       Attempt 2: I know the key is to maintain two stacks, and I think through the logic, and slowly implement the code correctly. But cannot do it in a flash.
 
+  - id: 162
+    title: "Find Peak Element"
+    link: "./problems/162_find_peak_element/"
+    leetcode-difficulty: medium
+    topics: [binary-search, array]
+    status: L2_STRUGGLE
+    refinement_focus: |
+      #1: Easy solution after doing LC33, LC153, LC704 in a row.
+
   - id: 167
     title: "Two Sum II - Input Array Is Sorted"
     link: "./problems/167_two_sum_ii_input_array_is_sorted/"
