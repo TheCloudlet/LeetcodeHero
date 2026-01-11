@@ -539,6 +539,15 @@ problems:
       Attempt 1: The dp logic is not straightforward. The key is the remember three conditions: positve, negative, zero. Using DP to find max positive and min negative
 
       Attempt 2: The dp logic is smooth. The problem is the initial value of globalMax, localMax, and localMin, I didn't init it to nums[0] in the first place can cause overflow. After fixing, I use ranged based for, so index 0 is calculated twice which is not acceptable.
+  
+  - id: 153
+    title: "Find Minimum in Rotated Sorted Array"
+    link: "./problems/153_find_minimum_in_rotated_sorted_array/"
+    leetcode-difficulty: medium
+    topics: [binary-search, array, sorting, neetcode150]
+    status: L2_STRUGGLE
+    refinement_focus: |
+      #1: Used `while (left <= right)` and got AC, but Gemini suggested `while (left < right)` as it is less error-prone. Learned the binary search decision-making process. Plan to redo this.
 
   - id: 155
     title: "Min Stack"
