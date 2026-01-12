@@ -67,7 +67,9 @@ problems:
     leetcode-difficulty: medium
     topics: [hashtable, sliding-window, string, neetcode150]
     status: L3_MASTERED
-    refinement_focus: "通常這種題目 While 的使用是關鍵"
+    refinement_focus: |
+      #1: 通常這種題目 While 的使用是關鍵
+      #2: re-learn using std::vector<int> last_seen(128, -1)
 
   - id: 5
     title: "Longest Palindromic Substring"
@@ -238,7 +240,7 @@ problems:
     topics: [linked-list, indirect-pointer, recursion, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: |
-  
+
   - id: 33
     title: "Search in Rotated Sorted Array"
     link: "./problems/033_search_in_rotated_sorted_array/"
@@ -539,7 +541,7 @@ problems:
       Attempt 1: The dp logic is not straightforward. The key is the remember three conditions: positve, negative, zero. Using DP to find max positive and min negative
 
       Attempt 2: The dp logic is smooth. The problem is the initial value of globalMax, localMax, and localMin, I didn't init it to nums[0] in the first place can cause overflow. After fixing, I use ranged based for, so index 0 is calculated twice which is not acceptable.
-  
+
   - id: 153
     title: "Find Minimum in Rotated Sorted Array"
     link: "./problems/153_find_minimum_in_rotated_sorted_array/"
@@ -617,6 +619,15 @@ problems:
       BFS or DFS coloring to detect cycle. Or use Kahn's algorithm to do topological sort.
 
       2nd time re-learn. I use enum-class to define colors. And get it almost right
+
+  - id: 209
+    title: "Minimum Size Subarray Sum"
+    link: "./problems/209_minimum_size_subarray_sum/"
+    leetcode-difficulty: medium
+    topics: [sliding-window, array, neetcode150]
+    status: L3_MASTERED
+    refinement_focus: |
+      #1: One-shot.
 
   - id: 210
     title: "Course Schedule II"
