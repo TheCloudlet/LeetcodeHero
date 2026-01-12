@@ -348,7 +348,8 @@ problems:
     topics: [hashtable, sliding-window, string, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: |
-      Attempt 1: Brute for but get TLE. Then use sliding window. I don't know when to use sliding window or brute force. The note is written in the #3719 solution.
+      #1: Brute force but got TLE. Then used sliding window. I don't know when to use sliding window or brute force. The note is written in the #3719 solution.
+      #2: I can implement the solution using a map counter, but this is not very elegant. The best solution is to use a vector as a dictionary, plus using a total count variable to track all characters in t. Expand and shrink the window based on the total count.
 
   - id: 84
     title: "Largest Rectangle in Histogram"

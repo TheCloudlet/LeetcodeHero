@@ -2,55 +2,65 @@
 // @tag: sliding-window, hash-table, two-pointers, neetcode150
 // @difficulty: hard
 
-#include <cassert>
-#include <climits>
 #include <string>
-#include <unordered_map>
+#include <vector>
 
 class Solution {
  public:
-  std::string minWindow(std::string s, std::string t) {
-    if (t.empty() || s.length() < t.length()) {
-      return "";
+  std::string minWindow(const std::string& s, const std::string& t) {
+    // Optimization: Use vector<int> instead of unordered_map for O(1) access.
+    // Rename 'map' to 'dict' to avoid naming conflicts with std::map.
+    // dict[c] > 0: We have a "DEBT" of character 'c' (need to find it).
+    // dict[c] < 0: We have a "SURPLUS" of character 'c' (extra in window).
+    std::vector<int> dict(128, 0);
+    for (const char c : t) {
+      ++dict[c];
     }
 
-    std::unordered_map<char, int> t_freq;
-    for (const auto& ch : t) {
-      ++t_freq[ch];
-    }
+    int count = t.size();  // tracks the TOTAL debt remaining.
 
-    int need_unique = t_freq.size();
-    int match_unique = 0;
-
-    int min_start = 0;
-    int min_length = INT_MAX;
+    int start = 0;
+    int min_len = INT_MAX;
 
     int left = 0;
-    std::unordered_map<char, int> freq_window;
+    int right = 0;
 
-    for (int right = 0; right < s.size(); ++right) {
-      const char r_char = s[right];
-      ++freq_window[r_char];
-      if (t_freq.count(r_char) && freq_window[r_char] == t_freq[r_char]) {
-        match_unique++;
+    while (right < static_cast<int>(s.size())) {
+      const char r_ch = s[right];
+
+      // 1. Expand Window (Right)
+      // If dict[r_ch] is positive, it means this char is useful for paying off
+      // debt.
+      if (dict[r_ch] > 0) {
+        --count;
       }
 
-      if (match_unique == need_unique) {
-        // Try shrink left side
-        while (!t_freq.count(s[left]) ||
-               freq_window[s[left]] > t_freq[s[left]]) {
-          --freq_window[s[left]];
-          ++left;
+      // Always decrement frequency.
+      // Positive -> Closer to 0 (Debt paid)
+      // 0 or Negative -> Becomes Negative (Surplus created)
+      --dict[r_ch];
+      ++right;
+
+      while (count == 0) {
+        // Check if current window is the smallest so far
+        if (right - left < min_len) {
+          start = left;
+          min_len = right - left;
         }
 
-        // Valid state
-        if (int curr_len = right - left + 1; curr_len < min_length) {
-          min_start = left;
-          min_length = curr_len;
+        const char l_ch = s[left];
+
+        // We are removing l_ch. Check if this breaks the valid condition.
+        // If dict[l_ch] == 0, it means we had EXACTLY enough.
+        // Removing it puts us back in debt.
+        if (dict[l_ch] == 0) {
+          ++count;
         }
+        ++dict[l_ch];
+        ++left;
       }
     }
 
-    return min_length == INT_MAX ? "" : s.substr(min_start, min_length);
+    return min_len == INT_MAX ? "" : s.substr(start, min_len);
   }
 };
