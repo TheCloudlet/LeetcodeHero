@@ -726,6 +726,15 @@ problems:
     status: L2_STRUGGLE
     refinement_focus: |
       Attempt 1: I didn't write the code correctly in a sprint. But I reframe the question and solve it correctly.
+  
+  - id: 236
+    title: "Lowest Common Ancestor of a Binary Tree"
+    link: "./problems/236_lowest_common_ancestor_of_a_binary_tree/"
+    leetcode-difficulty: medium
+    topics: [tree, dfs, binary-tree]
+    status: L2_STRUGGLE
+    refinement_focus: |
+      #1: My soultion is to trace all path to p, and trace all path to q. Then iterate the longest two vector. But this best solution is the use recusive found or not.
 
   - id: 278
     title: "First Bad Version"
