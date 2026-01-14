@@ -598,6 +598,15 @@ problems:
     status: L3_MASTERED
     refinement_focus: |
       Attempt 1: Almost one shot. Only forgot to check the root node is nullptr.
+  
+  - id: 200
+    title: "Number of Islands"
+    link: "./problems/200_number_of_islands/"
+    leetcode-difficulty: medium
+    topics: [array, depth-first-search, matrix]
+    status: L2_STRUGGLE 
+    refinement_focus: |
+      Attempt 1: One-shot, but ugly. Key is `constexpr dirs[4][2]` and use `auto dfs = [&](auto &&dfs, int r, int c) -> void`.
 
   - id: 206
     title: "Reverse Linked List"
