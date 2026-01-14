@@ -443,7 +443,9 @@ problems:
     topics: [tree, dfs, binary-tree, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: |
-      Attempt 1: I have a clear understanding of the code structure, i.e., need a helper function that returns two values as an accumulator. There are two parts that I did not handle correctly. First, if there is only one negative value node, my base case will cause the max path to be 0. So the base case should return INT_MIN. Second, if a node has one negative child path and one positive child path, we need to discard the negative one, i.e., use std::max(0, lPathToLeaf). In sum, this needs more practice.
+       #1: I have a clear understanding of the code structure, i.e., need a helper function that returns two values as an accumulator. There are two parts that I did not handle correctly. First, if there is only one negative value node, my base case will cause the max path to be 0. So the base case should return INT_MIN. Second, if a node has one negative child path and one positive child path, we need to discard the negative one, i.e., use std::max(0, lPathToLeaf). In sum, this needs more practice.
+       
+       #2: basically correct, but I need to be more careful about the base case. We should return {INT_MIN, 0} instead of {0, 0} 
 
   - id: 125
     title: "Valid Palindrome"

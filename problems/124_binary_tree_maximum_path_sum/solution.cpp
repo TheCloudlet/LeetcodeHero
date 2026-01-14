@@ -2,47 +2,41 @@
 // @tag: tree, depth-first search, recursion, neetcode150
 // @difficulty: hard
 
-// Thinking
-// Sub problem:
-// max(left-weight-to-leaf + curr + right-weight-to-leaf, always max)
-
 #include <algorithm>
 #include <limits>
 #include <utility>
 
 class Solution {
-public:
-  int maxPathSum(TreeNode *root) {
-    auto [maxPath, _] = getPathInfo(root);
-    return maxPath;
+ public:
+  int maxPathSum(TreeNode* root) {
+    if (!root) {
+      return 0;
+    }
+    auto [global_max, _] = calculateMaxPath(root);
+    return global_max;
   }
 
-private:
-  // @return: {maxPath, maxPathToLeaf}
-  std::pair<int, int> getPathInfo(TreeNode *node) {
-    if (!node) {
-      // Base case: Smallest possible max, 0 gain for parent.
-      return {std::numeric_limits<int>::min(), 0};
+ private:
+  // Return: {Global Max, Path Contribution (>=0)}
+  // @global_max: global max path
+  // @path_contrib: max_path from root to leaf
+  std::pair<int, int> calculateMaxPath(const TreeNode* root) {
+    if (!root) {
+      return {INT_MIN, 0};
     }
 
-    auto [lMax, lPathToLeaf] = getPathInfo(node->left);
-    auto [rMax, rPathToLeaf] = getPathInfo(node->right);
+    const auto [l_max, l_contrib] = calculateMaxPath(root->left);
+    const auto [r_max, r_contrib] = calculateMaxPath(root->right);
 
-    // NOTE: Discard negative downward paths. This is the key insight.
-    //
-    // For example
-    //         A (val: 10)
-    //        /  \
+    //         A (val: 10)    a->left  => [-100, 0]
+    //        /  \            a->right => [5, 5]
     //    -100    5
-    //
-    // => If we don't discard -100, the max in subtree A will be (-85).
-    //    But the correct anser will be 15
-    int leftGain = std::max(0, lPathToLeaf);
-    int rightGain = std::max(0, rPathToLeaf);
 
-    int pathToLeaf = node->val + std::max(leftGain, rightGain);
-    int max = std::max({lMax, rMax, leftGain + rightGain + node->val});
+    int current_arch_sum = root->val + l_contrib + r_contrib;
+    int new_global_max = std::max({l_max, r_max, current_arch_sum});
+    int new_contrib = std::max(0, root->val + std::max(l_contrib, r_contrib));
 
-    return {max, pathToLeaf};
+    return {new_global_max, new_contrib};
   }
 };
+
