@@ -884,6 +884,22 @@ problems:
         #1: Binary search to find the first location where arr[i] > arr[i+1]
         #2: I thought I can aced it... AC, but has flaws. I used while (lo <= hi) and use double way check which is not needed.
 
+  - id: 994
+    title: "Rotting Oranges"
+    link: "./problems/994_rotting_oranges/"
+    leetcode-difficulty: medium
+    topics: [array, breadth-first-search, matrix]
+    status: L3_MASTERED
+    refinement_focus: |
+      #1: I used simulation with a queue to store the oranges that are going to rot, then update the grid. But this is slow. I should use *multi-source BFS* to speed up the simulation. (level order traversal one example for multi-source BFS)
+      From SICP's view, the *multi-source BFS* is
+      #+begin_src racket
+      (define (expand frontier grid seen)
+        ;; returns next-frontier and updated seen
+      )
+      #+end_src
+      - process =expand= stays the same, initial state is kept changing
+      - initial state is the set of all rotten oranges
 
   - id: 1448
     title: "Count Good Nodes in Binary Tree"
