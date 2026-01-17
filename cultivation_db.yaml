@@ -523,8 +523,10 @@ problems:
     link: "./problems/146_lru_cache/"
     leetcode-difficulty: medium
     topics: [design, linked-list, hashtable, neetcode150]
-    status: L2_STRUGGLE
-    refinement_focus: "Always practice. Use std::list + std::unordered_map. please understand why use list"
+    status: L1_FORGOT
+    refinement_focus: | 
+      #1: Always practice. Use std::list + std::unordered_map. please understand why use list
+      #2: failed the second time, the reason is `iterator usage`, `splice` and reusing the last node.
 
   - id: 150
     title: "Evaluate Reverse Polish Notation"
