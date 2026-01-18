@@ -3,22 +3,23 @@
 #include <vector>
 
 class Solution {
-public:
-  std::vector<std::vector<int>>
-  merge(std::vector<std::vector<int>> &intervals) {
+ public:
+  std::vector<std::vector<int>> merge(
+      std::vector<std::vector<int>>& intervals) {
     if (intervals.empty()) {
       return {};
     }
 
     // sort interval
     std::sort(intervals.begin(), intervals.end(),
-              [](const std::vector<int> &a, const std::vector<int> &b) {
+              [](const std::vector<int>& a, const std::vector<int>& b) {
                 return a.at(0) < b.at(0);
-              }); // NOTE: don't forget const and & here
+              });  // NOTE: don't forget const and & here
 
     std::vector<std::vector<int>> result;
-    result.reserve(intervals.size()); // Reserve space for performance
-    for (const auto &interval : intervals) {
+    result.reserve(intervals.size());  // Reserve space for performance
+
+    for (const auto& interval : intervals) {
       if (result.empty() || result.back()[1] < interval[0]) {
         result.emplace_back(interval);
       } else {

@@ -41,23 +41,21 @@ class Solution {
 
 class Solution {
  public:
-  int lengthOfMax_LenSubstring(string s) {
+  int lengthOfLongestSubstring(string s) {
     if (s.size() == 0 || s.size() == 1) {
       return s.size();
     }
     int left = 0;
-    int right = 0;
     int max_len = 0;
     std::vector<int> last_seen(128, -1);
 
-    while (right < static_cast<int>(s.size())) {
+    for (int right = 0; right < static_cast<int>(s.size()); ++right) {
       const char c = s[right];
       if (last_seen[c] != -1 && last_seen[c] >= left) {
         left = last_seen[c] + 1;
       }
       last_seen[c] = right;
       max_len = std::max(max_len, right - left + 1);
-      ++right;
     }
     return max_len;
   }
