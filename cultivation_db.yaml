@@ -316,6 +316,15 @@ problems:
     status: L2_STRUGGLE
     refinement_focus: "Sorting + Iterate and Merge"
 
+  - id: 57
+    title: "Insert Interval"
+    link: "./problems/057_insert_interval/"
+    leetcode-difficulty: medium
+    topics: [array, sorting, neetcode150]
+    status: L2_STRUGGLE
+    refinement_focus:
+      #1: Copy before insertion, merge overlaps, then append the rest
+
   - id: 61
     title: "Rotate List"
     link: "./problems/061_rotate_list/"
