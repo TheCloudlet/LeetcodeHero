@@ -816,6 +816,15 @@ problems:
 
       Attempt 2: Fast implement. Forget to set dp[0] = true. Forget std::accumulate need to add accumulator 0 and include numeric. Should be L2~L3. But I set to L2. Lets practice later.
 
+  - id: 435
+    title: "Non-overlapping Intervals"
+    link: "./problems/435_non_overlapping_intervals/"
+    leetcode-difficulty: medium
+    topics: [greedy, sorting, neetcode150]
+    status: L1_FORGOT
+    refinement_focus: |
+      #1: Greedy. Sort by end time. Then iterate and merge overlaps."
+
   - id: 496
     title: "Next Greater Element I"
     link: "./problems/496_next_greater_element_i/"
