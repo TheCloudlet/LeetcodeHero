@@ -1,0 +1,46 @@
+#+title: Random notes for C++
+#+author: Yi-Ping Pan (Cloudlet)
+
+* Comparator
+A comparator should answer this question:
+
+#+begin_quote
+"Should a come before b in the final ordering?"
+#+end_quote
+
+The answer is either "yes" or "no". (Boolean)
+
+The default comparator is =std::less<T>=, and the following might be a possible implementation:
+
+#+begin_src cpp
+constexpr bool operator()(const T& lhs, const T& rhs) const {
+    // assumes that the implementation handles pointer total order
+    return lhs < rhs;
+}
+#+end_src
+
+*WARNING*: For =std::priority_queue=, if =a < b < c= using a comparator, the last item =c= is placed at the top.
+* Priority Queue
+
+[[https://en.cppreference.com/w/cpp/container/priority_queue.html][cppreference]]
+
+** Heap
+Before understanding the priority queue, let's review the heap data structure.
+
+Requirements: (Max-Heap for example)
+
+1. For every node, the value of the node is greater than or equal to the value of its all children.
+2. The tree is a complete binary tree. (i.e. Ususally we can use an array to represent the tree.)
+
+*Pop()*
+
+When popping the top element, we need to maintain the heap property.
+
+1. Move the last element to the top.
+2. Sift down the top element to the correct position.
+
+The above two steps means the container must support the following operations:
+
+1. =front()= to get the top element.
+2. =pop_bakc()= to remove the last element.
+3. =push_back()= to add a new element. <-- This is when adding a new element to a heap.
