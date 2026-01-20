@@ -765,6 +765,15 @@ problems:
     refinement_focus: |
       #1: Sort by start time. Then iterate to check.
 
+  - id: 253
+    title: "Meeting Rooms II"
+    link: "./problems/253_meeting_rooms_ii/"
+    leetcode-difficulty: medium
+    topics: [greedy, sorting, priority-queue]
+    status: L1_FORGOT
+    refinement_focus: |
+      #1: Hint: Priority Queue.
+
   - id: 278
     title: "First Bad Version"
     link: "./problems/278_first_bad_version/"
