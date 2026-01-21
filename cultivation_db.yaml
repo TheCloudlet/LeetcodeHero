@@ -891,6 +891,15 @@ problems:
     topics: [dp, string, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: "Very similar to 005_Longest_Palindromic_Substring. There are three ways: Expand, 2D-dp, or 1D-dp build up layer by layer"
+  
+  - id: 684
+    title: "Redundant Connection"
+    link: "./problems/684_redundant_connection/"
+    leetcode-difficulty: medium
+    topics: [union-find, neetcode150]
+    status: L2_STRUGGLE
+    refinement_focus: |
+      #1: text book union find
 
   - id: 704
     title: "Binary Search"
