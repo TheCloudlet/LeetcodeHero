@@ -875,6 +875,15 @@ problems:
     status: L3_MASTERED
     refinement_focus: "Recursion or FOLD"
 
+  - id: 547
+    title: "Number of Provinces"
+    link: "./problems/547_number_of_provinces/"
+    leetcode-difficulty: medium
+    topics: [union-find, neetcode150]
+    status: L2_STRUGGLE
+    refinement_focus:
+      #1: One-shot union find, but recommended to practice more
+
   - id: 572
     title: "Subtree of Another Tree"
     link: "./problems/572_subtree_of_another_tree/"
@@ -891,7 +900,7 @@ problems:
     topics: [dp, string, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: "Very similar to 005_Longest_Palindromic_Substring. There are three ways: Expand, 2D-dp, or 1D-dp build up layer by layer"
-  
+
   - id: 684
     title: "Redundant Connection"
     link: "./problems/684_redundant_connection/"
