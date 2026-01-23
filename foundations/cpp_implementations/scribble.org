@@ -44,3 +44,91 @@ The above two steps means the container must support the following operations:
 1. =front()= to get the top element.
 2. =pop_bakc()= to remove the last element.
 3. =push_back()= to add a new element. <-- This is when adding a new element to a heap.
+
+* STL Sorting algorithms
+
+** Basic Sorting Algorithms
+
+*** =std::sort()=
+*Time Complexity*: O(N log N) average and worst case (typically IntroSort: QuickSort + HeapSort + InsertionSort)
+
+*Space Complexity*: O(log N) auxiliary space
+
+*Stability*: NOT stable (relative order of equal elements may change)
+
+*Use Case*: General-purpose sorting when stability is not required.
+
+#+begin_src cpp
+std::vector<int> v = {5, 2, 8, 2, 1};
+std::sort(v.begin(), v.end());  // {1, 2, 2, 5, 8}
+#+end_src
+
+*** =std::stable_sort()=
+*Time Complexity*: O(N log N) if sufficient extra memory; O(N log² N) otherwise
+
+*Space Complexity*: O(N) auxiliary space (if available)
+
+*Stability*: STABLE (preserves relative order of equal elements)
+
+*Use Case*: Multi-key sorting or when relative order must be preserved.
+
+*Common Pattern*: Sort by primary key with =std::sort()=, then by secondary key with =std::stable_sort()=.
+
+#+begin_src cpp
+// Example: Sort by age (primary), then by name (secondary)
+std::sort(people.begin(), people.end(),
+    [](const auto& a, const auto& b) { return a.age < b.age; });
+std::stable_sort(people.begin(), people.end(),
+    [](const auto& a, const auto& b) { return a.name < b.name; });
+#+end_src
+
+*** =std::partial_sort()=
+*Time Complexity*: O(N log K) where K is the number of elements to sort
+
+*Space Complexity*: O(1) auxiliary space
+
+*Stability*: NOT stable
+
+*Use Case*: When you only need the smallest/largest K elements in sorted order.
+
+*Behavior*: Sorts the first K elements; remaining elements are in unspecified order but all ≥ the K-th element.
+
+#+begin_src cpp
+std::vector<int> v = {5, 2, 8, 1, 9, 3};
+// Sort the first 3 elements
+std::partial_sort(v.begin(), v.begin() + 3, v.end());
+// Result: {1, 2, 3, ...remaining unspecified...}
+#+end_src
+
+*** =std::nth_element()=
+*Time Complexity*: O(N) average case (QuickSelect algorithm)
+
+*Space Complexity*: O(1) auxiliary space
+
+*Stability*: NOT stable
+
+*Use Case*: Finding the N-th smallest element or partitioning around a pivot (e.g., median finding).
+
+*Behavior*:
+- The element at position N is the same as if the range were fully sorted
+- All elements before position N are ≤ the N-th element
+- All elements after position N are ≥ the N-th element
+- Elements before/after N are NOT sorted among themselves
+
+#+begin_src cpp
+std::vector<int> v = {5, 2, 8, 1, 9, 3};
+// Find the 3rd smallest element (index 2)
+std::nth_element(v.begin(), v.begin() + 2, v.end());
+// Result: v[2] is 3 (the 3rd smallest)
+// Elements before v[2]: {2, 1} (unordered, but all ≤ 3)
+// Elements after v[2]: {5, 8, 9} (unordered, but all ≥ 3)
+#+end_src
+
+- =std::is_sorted()=
+- =std::is_sorted_until()=
+- =std::is_heap()=
+- =std::is_heap_until()=
+- =std::make_heap()=
+- =std::push_heap()=
+- =std::pop_heap()=
+- =std::sort_heap()=
