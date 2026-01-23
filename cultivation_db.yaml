@@ -682,6 +682,15 @@ problems:
     status: L2_STRUGGLE
     refinement_focus: "Arranged in circle. Two cases: rob house[0..n-2] or house[1..n-1]"
 
+  - id: 215
+    title: "Kth Largest Element in an Array"
+    link: "./problems/215_kth_largest_element_in_an_array/"
+    leetcode-difficulty: medium
+    topics: [heap, array, neetcode150]
+    status: L3_MASTERED
+    refinement_focus: |
+      #1: One-shot.
+
   - id: 217
     title: "Contains Duplicate"
     link: "./problems/217_contains_duplicate/"
