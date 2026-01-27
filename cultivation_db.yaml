@@ -369,6 +369,15 @@ problems:
       #1: Brute force but got TLE. Then used sliding window. I don't know when to use sliding window or brute force. The note is written in the #3719 solution.
       #2: I can implement the solution using a map counter, but this is not very elegant. The best solution is to use a vector as a dictionary, plus using a total count variable to track all characters in t. Expand and shrink the window based on the total count.
 
+  - id: 80
+    title: "Remove Duplicates from Sorted Array II"
+    link: "./problems/080_remove_duplicates_from_sorted_array_ii/"
+    leetcode-difficulty: medium
+    topics: [array, two-pointer, neetcode150]
+    status: L2_STRUGGLE
+    refinement_focus: |
+      #1: passed with duplicate count, but there are better ways to do it.
+
   - id: 84
     title: "Largest Rectangle in Histogram"
     link: "./problems/084_largest_rectangle_in_histogram/"
