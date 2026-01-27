@@ -241,6 +241,15 @@ problems:
     status: L2_STRUGGLE
     refinement_focus: |
 
+  - id: 26
+    title: "Remove Duplicates from Sorted Array"
+    link: "./problems/026_remove_duplicates_from_sorted_array/"
+    leetcode-difficulty: easy
+    topics: [array, two-pointer]
+    status: L2_STRUGGLE
+    refinement_focus: |
+      #1: Initially attempted using erase() backwards (influenced by LISP/Racket), but the two-pointer approach is the correct O(N) solution.
+
   - id: 33
     title: "Search in Rotated Sorted Array"
     link: "./problems/033_search_in_rotated_sorted_array/"
