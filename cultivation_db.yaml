@@ -250,6 +250,15 @@ problems:
     refinement_focus: |
       #1: Initially attempted using erase() backwards (influenced by LISP/Racket), but the two-pointer approach is the correct O(N) solution.
 
+  - id: 27
+    title: "Remove Element"
+    link: "./problems/027_remove_element/"
+    leetcode-difficulty: easy
+    topics: [array, two-pointer]
+    status: L2_STRUGGLE
+    refinement_focus:
+      #1: Simple, but made mistakes in return value and casting. Also learned std::remove()
+
   - id: 33
     title: "Search in Rotated Sorted Array"
     link: "./problems/033_search_in_rotated_sorted_array/"
