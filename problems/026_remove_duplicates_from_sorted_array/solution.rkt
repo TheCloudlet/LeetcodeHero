@@ -1,3 +1,4 @@
+;; Leetcode 26: Remove Duplicates from Sorted Array
 #lang racket
 
 (define (remove-duplicates nums)
