@@ -256,8 +256,17 @@ problems:
     leetcode-difficulty: easy
     topics: [array, two-pointer]
     status: L2_STRUGGLE
-    refinement_focus:
+    refinement_focus: |
       #1: Simple, but made mistakes in return value and casting. Also learned std::remove()
+
+  - id: 28
+    title: "Implement strStr()"
+    link: "./problems/028_find_the_index_of_the_first_occurrence_in_a_string/"
+    leetcode-difficulty: easy
+    topics: [string, kmp-algorithm]
+    status: L3_MASTERED
+    refinement_focus: |
+      #1: std::string::find() and verbose explain KMP algorithm
 
   - id: 33
     title: "Search in Rotated Sorted Array"
