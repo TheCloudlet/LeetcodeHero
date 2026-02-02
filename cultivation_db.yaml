@@ -868,6 +868,15 @@ problems:
     status: L2_STRUGGLE
     refinement_focus: "Use HashMap to count frequency, then use Min-Heap or Bucket Sort to get top K. Bucket sort is optimal O(n), but I forget how to implement it"
 
+  - id: 394
+    title: "Decode String"
+    link: "./problems/394_decode_string/"
+    leetcode-difficulty: medium
+    topics: [stack, string, recursion]
+    status: L1_FORGOT
+    refinement_focus: |
+      #1: Should not be hard but I froze.
+
   - id: 416
     title: "Partition Equal Subset Sum"
     link: "./problems/416_partition_equal_subset_sum/"
