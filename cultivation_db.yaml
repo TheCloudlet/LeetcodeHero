@@ -866,7 +866,10 @@ problems:
     leetcode-difficulty: medium
     topics: [hashtable, heap, bucket-sort, neetcode150]
     status: L2_STRUGGLE
-    refinement_focus: "Use HashMap to count frequency, then use Min-Heap or Bucket Sort to get top K. Bucket sort is optimal O(n), but I forget how to implement it"
+    refinement_focus: |
+      #1: Use HashMap to count frequency, then use Min-Heap or Bucket Sort to get top K. Bucket sort is optimal O(n), but I forget how to implement it
+      #2: std::priority queue
+      #3: almost correct using heap, write bucket sort. (remember buckect 0 should be empty)
 
   - id: 394
     title: "Decode String"

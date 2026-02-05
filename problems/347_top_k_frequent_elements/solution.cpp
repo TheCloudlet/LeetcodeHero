@@ -24,15 +24,16 @@ class Solution {
     };
 
     // Be super careful for declaration of priority queue. Error prone.
-    std::priority_queue<std::pair<int, int>,
-        std::vector<std::pair<int, int>>, decltype(cmp)> maxHeap(cmp);
+    std::priority_queue<std::pair<int, int>, std::vector<std::pair<int, int>>,
+                        decltype(cmp)>
+        maxHeap(cmp);
 
     for (const auto& elem : freq) {
       maxHeap.emplace(elem);
     }
 
     std::vector<int> result;
-    result.reserve(k); // Reserve capacity upfront to avoid reallocations
+    result.reserve(k);  // Reserve capacity upfront to avoid reallocations
 
     for (int i = 1; i <= k; ++i) {
       // For primitive types, prefer push_back: clearer intent (copying value)
@@ -67,11 +68,12 @@ class Solution {
 
     auto cmp = [](const std::pair<int, int>& lhs,
                   const std::pair<int, int>& rhs) {
-      return lhs.second > rhs.second; // change to minHeap
+      return lhs.second > rhs.second;  // change to minHeap
     };
 
-    std::priority_queue<std::pair<int, int>,
-        std::vector<std::pair<int, int>>, decltype(cmp)> minHeap(cmp);
+    std::priority_queue<std::pair<int, int>, std::vector<std::pair<int, int>>,
+                        decltype(cmp)>
+        minHeap(cmp);
 
     for (const auto& elem : freq) {
       minHeap.emplace(elem);
@@ -91,4 +93,44 @@ class Solution {
     return result;
   }
 };
+#endif
+
+#if defined(bucket_sort)
+// Time Complexity: O(N)
+// Space Complexity: O(N)
+//   where N is size of nums
+
+#include <vector>
+
+class Solution {
+ public:
+  std::vector<int> topKFrequent(std::vector<int>& nums, int k) {
+    std::unordered_map<int, int> freq;
+
+    for (const auto& num : nums) {
+      ++freq[num];
+    }
+
+    // Bucket
+    std::vector<std::vector<int>> bucket(nums.size());
+
+    for (const auto& [val, count] : freq) {
+      bucket[count].push_back(val);
+    }
+
+    std::vector<int> result;
+    for (int count = static_cast<int>(nums.size()) - 1; count >= 1 && k > 0;
+         --count) {
+      for (const auto& val : bucket[count]) {
+        result.push_back(val);
+        if (--k == 0) {
+          return result;
+        }
+      }
+    }
+
+    return result;
+  }
+};
+
 #endif
