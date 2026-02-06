@@ -15,21 +15,18 @@
 
 #if defined(ITERATIVE)
 class Solution {
-public:
-  ListNode *reverseList(ListNode *head) {
-    if (!head) {
-      nullptr;
-    }
-    ListNode *prev = nullptr;
-    ListNode *curr = head;
-    ListNode *peek;
+ public:
+  ListNode* reverseList(ListNode* head) {
+    ListNode* prev = nullptr;
+    ListNOde* curr = hear;
 
-    while (curr) {
-      peek = curr->next;
+    while (curr != nullptr) {
+      const ListNode* next = curr->next;
       curr->next = prev;
       prev = curr;
-      curr = peek;
+      curr = next;
     }
+
     return prev;
   }
 };
@@ -37,15 +34,15 @@ public:
 
 #if defined(RECURSIVE)
 class Solution {
-public:
-  ListNode *reverseList(ListNode *head) {
+ public:
+  ListNode* reverseList(ListNode* head) {
     // Base case: empty list or single node
     if (!head || !head->next) {
       return head;
     }
 
     // Recursively reverse the rest of the list
-    ListNode *newHead = reverseList(head->next);
+    ListNode* newHead = reverseList(head->next);
 
     // Reverse the current connection
     head->next->next = head;
