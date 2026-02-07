@@ -1,3 +1,5 @@
+// Leetcode 310. Minimum Height Trees
+//
 // Thinking:
 // Prune graph node from outer to inner
 
@@ -42,3 +44,4 @@ public:
     return leaves;
   }
 };
+

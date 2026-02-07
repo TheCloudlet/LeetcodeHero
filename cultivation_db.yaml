@@ -861,7 +861,9 @@ problems:
     leetcode-difficulty: medium
     topics: [graph, bfs, tree, neetcode150]
     status: L2_STRUGGLE
-    refinement_focus: "Peel off the leaves layer by layer until 1 or 2 nodes left"
+    refinement_focus: |
+      #1: Peel off the leaves layer by layer until 1 or 2 nodes left
+      #2: I'm fucking retarted.
 
   - id: 322
     title: "Coin Change"
