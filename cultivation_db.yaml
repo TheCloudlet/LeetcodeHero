@@ -568,19 +568,21 @@ problems:
     link: "./problems/145_binary_tree_postorder_traversal/"
     leetcode-difficulty: easy
     topics: [tree, dfs]
-    status: L1_FORGOT
+    status: L2_STRUGGLE
     refinement_focus: |
-      Attempt 1: This is definatly hard if you want to use iterative solution but you didn't come up the `std::reverse` trick.
+      #1: This is definatly hard if you want to use iterative solution but you didn't come up the `std::reverse` trick.
+      #2: I use lambda for helper
 
   - id: 146
     title: "LRU Cache"
     link: "./problems/146_lru_cache/"
     leetcode-difficulty: medium
     topics: [design, linked-list, hashtable, neetcode150]
-    status: L1_FORGOT
+    status: L2_STRUGGLE
     refinement_focus: |
       #1: Always practice. Use std::list + std::unordered_map. please understand why use list
       #2: failed the second time, the reason is `iterator usage`, `splice` and reusing the last node.
+      #3: failed.
 
   - id: 150
     title: "Evaluate Reverse Polish Notation"
