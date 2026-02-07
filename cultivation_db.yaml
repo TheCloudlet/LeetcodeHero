@@ -118,8 +118,10 @@ problems:
     link: "./problems/011_container_with_most_water/"
     leetcode-difficulty: medium
     topics: [two-pointer, array, greedy, neetcode150]
-    status: L2_STRUGGLE
-    refinement_focus: "find the smallest of the two sides, and move the pointer"
+    status: L3_MASTERED
+    refinement_focus: |
+      #1: find the smallest of the two sides, and move the pointer
+      #2: one-shot
 
   - id: 12
     title: "Integer to Roman"
@@ -426,8 +428,10 @@ problems:
     link: "./problems/094_binary_tree_inorder_traversal/"
     leetcode-difficulty: easy
     topics: [tree, dfs]
-    status: L2_STRUGGLE
-    refinement_focus: "Just finish after #230 so it is a one shot. But I still recomment to practice more."
+    status: L3_MASTERED
+    refinement_focus:
+      #1: Just finish after #230 so it is a one shot. But I still recomment to practice more.
+      #2: one-shot using recursion
 
   - id: 96
     title: "Unique Binary Search Trees"
