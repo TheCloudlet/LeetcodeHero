@@ -520,6 +520,15 @@ problems:
     status: L2_STRUGGLE
     refinement_focus: "sort is O(n log n), use HashSet to achieve O(n). Check only sequence starters"
 
+  - id: 130
+    title: "Surrounded Regions"
+    link: "./problems/130_surrounded_regions/"
+    leetcode-difficulty: medium
+    topics: [dfs, array, matrix, neetcode150]
+    status: L3_MASTERED
+    refinement_focus: |
+      #1: one-shot.
+
   - id: 138
     title: "Copy List with Random Pointer"
     link: "./problems/138_copy_list_with_random_pointer/"
