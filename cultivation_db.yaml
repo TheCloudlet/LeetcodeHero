@@ -1058,6 +1058,15 @@ problems:
     refinement_focus: |
       Attempt 1: Very fun. I thought of using mono-stack, but it is not necessary. Just pass down the max value from root to leaf.
 
+  - id: 3634
+    title: "Minimum Removals to Balance Array"
+    link: "./problems/3635_minimum_removals_to_balance_array/"
+    leetcode-difficulty: medium
+    topics: [array, sorting, two-pointer, sliding-window]
+    status: L2_STRUGGLE
+    refinement_focus: |
+      #1: I first use greedy left right pointer at each end to find. But the problem is actually a sliding window problem.
+
   - id: 3701
     title: "Compute Alternating Sum"
     link: "./problems/3701_compute_alternating_sum/"
