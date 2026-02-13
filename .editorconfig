@@ -11,8 +11,30 @@ trim_trailing_whitespace = true
 [*.{cpp,h,hpp,cc}]
 indent_size = 2
 
-[*.{py,yaml,yml}]
+[*.{yaml,yml}]
+indent_size = 2
+
+[*.py]
+indent_size = 4
+
+[*.org]
+indent_size = 2
+
+[*.{hs,lhs}]
+indent_size = 2
+
+[*.rkt]
+indent_size = 2
+
+[*.md]
+indent_size = 2
+
+[*.{json,jsonc}]
+indent_size = 2
+
+[*.sh]
 indent_size = 2
 
 [Makefile]
 indent_style = tab
+tab_width = 8

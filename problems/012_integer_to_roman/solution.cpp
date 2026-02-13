@@ -1,4 +1,4 @@
-// Leecode 12. Integer to Roman
+// LeetCode 12. Integer to Roman
 //
 // NOTE: Use greedy algorithm
 //

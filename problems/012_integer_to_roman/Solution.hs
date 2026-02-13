@@ -1,4 +1,4 @@
--- | Leecode 12. Integer to Roman
+-- | LeetCode 12. Integer to Roman
 intToRoman :: Int -> Maybe String
 intToRoman n
   | n <= 0 || n > 3999 = error "Input out of Roman numeral range (1–3999)"

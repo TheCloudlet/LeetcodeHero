@@ -1,4 +1,4 @@
-// Leecode 3634. Minimum Removals to Balance Array
+// LeetCode 3634. Minimum Removals to Balance Array
 //
 // NOTE:
 // Initially attempted a greedy approach with left and right pointers, but the

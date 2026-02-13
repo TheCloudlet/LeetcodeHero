@@ -1,4 +1,4 @@
-// Leecode 547. Number of Provinces
+// LeetCode 547. Number of Provinces
 
 // Time Complexity: O(N^2)
 //   We iterate through the upper triangle of the N*N adjacency matrix,
