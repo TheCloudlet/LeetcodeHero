@@ -91,7 +91,7 @@ problems:
     title: "Reverse Integer"
     link: "./problems/007_reverse_integer/"
     leetcode-difficulty: medium
-    topics: [integer, signed, boundary]
+    topics: [integer, signed, boundary, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: "The key is boundary + minus"
 
@@ -155,7 +155,7 @@ problems:
     leetcode-difficulty: medium
     topics: [two-pointer, neetcode150]
     status: L2_STRUGGLE
-    refinement_focus: "Dupicates handling is tricky"
+    refinement_focus: "Duplicates handling is tricky"
 
   - id: 16
     title: "3 Sum Closest"
@@ -169,7 +169,7 @@ problems:
     title: "Letter Combinations of a Phone Number"
     link: "./problems/017_letter_combinations_of_a_phone_number/"
     leetcode-difficulty: medium
-    topics: [hashtable, backtracking, string]
+    topics: [hashtable, backtracking, string, neetcode150]
     status: L3_MASTERED
     refinement_focus: "Write a good helper pure function"
 
@@ -204,18 +204,18 @@ problems:
     topics: [linked-list, indirect-pointer, neetcode150]
     status: L3_MASTERED
     refinement_focus: |
-      Attempt 1: Normal dummy node is okay. But I forget indirect-pointer usage. Always use `ListNode *result;` then `ListNode **indirect = &result;`
+      #1: Normal dummy node is okay. But I forget indirect-pointer usage. Always use `ListNode *result;` then `ListNode **indirect = &result;`
 
-      Attempt 2: One-shot using indirect pointer. But a little uncertain when doing it in a sprint.
+      #2: One-shot using indirect pointer. But a little uncertain when doing it in a sprint.
 
   - id: 22
     title: "Generate Parentheses"
     link: "./problems/022_generate_parentheses/"
     leetcode-difficulty: medium
-    topics: [backtracking, string]
+    topics: [backtracking, string, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: |
-      Attempt 1: I know the core idea, implement has some flaws.
+      #1: I know the core idea, implement has some flaws.
 
   - id: 23
     title: "Merge k Sorted Lists"
@@ -224,7 +224,7 @@ problems:
     topics: [linked-list, heap, priority-queue, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: |
-      Attempt 1: Not really hard, but I need to review how to initialize a priority queue and also prevent adding nullptr to the queue. There are also one way to use merge sort to merge k lists.
+      #1: Not really hard, but I need to review how to initialize a priority queue and also prevent adding nullptr to the queue. There are also one way to use merge sort to merge k lists.
 
   - id: 24
     title: "Swap Nodes in Pairs"
@@ -273,7 +273,7 @@ problems:
     title: "Search in Rotated Sorted Array"
     link: "./problems/033_search_in_rotated_sorted_array/"
     leetcode-difficulty: medium
-    topics: [binary-search, array, sorting]
+    topics: [binary-search, array, sorting, neetcode150]
     status: L1_FORGOT
     refinement_focus: |
       #1: (1) we should check whether is left sorted or right sorted (monotonic)
@@ -315,7 +315,7 @@ problems:
     title: "Rotate Image"
     link: "./problems/048_rotate_image/"
     leetcode-difficulty: medium
-    topics: [matrix]
+    topics: [matrix, neetcode150]
     status: L3_MASTERED
     refinement_focus: "Transpose + Reverse"
 
@@ -334,7 +334,7 @@ problems:
     topics: [dp, array, neetcode150, kadane-algorithm]
     status: L3_MASTERED
     refinement_focus: |
-      Attempt 1: One shot Kadane's algorithm after praticing LeetCode #152.
+      #1: One shot Kadane's algorithm after praticing LeetCode #152.
 
   - id: 56
     title: "Merge Intervals"
@@ -359,16 +359,16 @@ problems:
     leetcode-difficulty: medium
     topics: [linked-list, two-pointer, indirect-pointer]
     status: L3_MASTERED
-    refinement_focus: "Make the list circular first. There are optimiazations like if k == length, do nothing"
+    refinement_focus: "Make the list circular first. There are optimizations like if k == length, do nothing"
 
   - id: 66
     title: "Plus One"
     link: "./problems/066_plus_one/"
     leetcode-difficulty: easy
-    topics: [array, math]
+    topics: [array, math, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: |
-      Attempt 1: (Pass 15) But the simplest way is to use vector::insert to insert 1 at the beginning if there is a carry at the end.
+      #1: (Pass 15) But the simplest way is to use vector::insert to insert 1 at the beginning if there is a carry at the end.
 
   - id: 70
     title: "Climbing Stairs"
@@ -392,7 +392,7 @@ problems:
     title: "Remove Duplicates from Sorted Array II"
     link: "./problems/080_remove_duplicates_from_sorted_array_ii/"
     leetcode-difficulty: medium
-    topics: [array, two-pointer, neetcode150]
+    topics: [array, two-pointer]
     status: L2_STRUGGLE
     refinement_focus: |
       #1: passed with duplicate count, but there are better ways to do it.
@@ -404,7 +404,7 @@ problems:
     topics: [stack, array, monotonic-stack, neetcode150]
     status: L1_FORGOT
     refinement_focus: |
-      Attempt 1: (Fail 15 + 45) The key is to find the nearest smaller element on both sides for each bar. Use monotonic stack to achieve O(n) time complexity.
+      #1: (Fail 15 + 45) The key is to find the nearest smaller element on both sides for each bar. Use monotonic stack to achieve O(n) time complexity.
 
   - id: 91
     title: "Decode Ways"
@@ -418,7 +418,7 @@ problems:
     title: "Reverse Linked List II"
     link: "./problems/092_reverse_linked_list_ii/"
     leetcode-difficulty: medium
-    topics: [linked-list, neetcode150]
+    topics: [linked-list]
     status: L2_STRUGGLE
     refinement_focus: |
       #1: Use dummy node or indirect pointer!
@@ -430,14 +430,14 @@ problems:
     topics: [tree, dfs]
     status: L3_MASTERED
     refinement_focus:
-      #1: Just finish after #230 so it is a one shot. But I still recomment to practice more.
+      #1: Just finish after #230 so it is a one shot. But I still recommend to practice more.
       #2: one-shot using recursion
 
   - id: 96
     title: "Unique Binary Search Trees"
     link: "./problems/096_unique_binary_search_trees/"
     leetcode-difficulty: medium
-    topics: [dp, math, neetcode150]
+    topics: [dp, math]
     status: L2_STRUGGLE
     refinement_focus: "dp[n] means number of unique BST that can be built with n nodes. dp[n] = sum of dp[i-1]*dp[n-i] for i in [1..n]. Catalan number"
 
@@ -448,7 +448,7 @@ problems:
     topics: [tree, dfs, binary-tree, neetcode150]
     status: L1_FORGOT
     refinement_focus: |
-      Attempt 1: I only validate all nodes (node->val vs node->left->val) recursively. But actually we need to pass down the valid range (min, max) from root to leaf.
+      #1: I only validate all nodes (node->val vs node->left->val) recursively. But actually we need to pass down the valid range (min, max) from root to leaf.
 
   - id: 100
     title: "Same Tree"
@@ -465,7 +465,7 @@ problems:
     topics: [tree, traversal, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: |
-      Attempt 1: Use nullptr in a queue to mark level end. But I forget to check if the current queue is empty which means we are done. So it causes infinite loop.
+      #1: Use nullptr in a queue to mark level end. But I forget to check if the current queue is empty which means we are done. So it causes infinite loop.
 
   - id: 105
     title: "Construct Binary Tree from Preorder and Inorder Traversal"
@@ -474,7 +474,7 @@ problems:
     topics: [tree, dfs, recursion, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: |
-      Attempt 1: I know the idea, but I cannot implement it fluently. The key is to correctly manage the indices of preorder and inorder arrays. Forgot to check if the current subtree is empty (preStart > preEnd || inStart > inEnd)
+      #1: I know the idea, but I cannot implement it fluently. The key is to correctly manage the indices of preorder and inorder arrays. Forgot to check if the current subtree is empty (preStart > preEnd || inStart > inEnd)
 
   - id: 110
     title: "Balanced Binary Tree"
@@ -483,7 +483,7 @@ problems:
     topics: [tree, dfs, bfs, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: |
-      Attempt 1: Reviewed the definition of balanced biniary tree. Implementation is smooth, but I forgot to (add 1) when calculating height.
+      #1: Reviewed the definition of balanced binary tree. Implementation is smooth, but I forgot to (add 1) when calculating height.
 
   - id: 104
     title: "Maximum Depth of Binary Tree"
@@ -491,7 +491,7 @@ problems:
     leetcode-difficulty: easy
     topics: [tree, dfs, bfs, neetcode150]
     status: L3_MASTERED
-    refinement_focus: "Basic DP"
+    refinement_focus: "Recursion/DFS"
 
   - id: 124
     title: "Binary Tree Maximum Path Sum"
@@ -536,7 +536,7 @@ problems:
     topics: [linked-list, hashtable, neetcode150]
     status: L3_MASTERED
     refinement_focus: |
-      Attempt 1: One-shot with HashMap.
+      #1: One-shot with HashMap.
 
   - id: 139
     title: "Word Break"
@@ -544,7 +544,7 @@ problems:
     leetcode-difficulty: medium
     topics: [dp, string, neetcode150]
     status: L2_STRUGGLE
-    refinement_focus: "Not absolutely sure I can get this right during interview, but I know the idea. ip[i] means s[i..end] can be segmented. Need a helper function isPrefix and a recursive function with memo"
+    refinement_focus: "Not absolutely sure I can get this right during interview, but I know the idea. dp[i] means s[i..end] can be segmented. Need a helper function isPrefix and a recursive function with memo"
 
   - id: 141
     title: "Linked List Cycle"
@@ -553,9 +553,9 @@ problems:
     topics: [linked-list, two-pointer, fast-and-slow-pointer, neetcode150]
     status: L3_MASTERED
     refinement_focus: |
-      Attempt 1: I know the fast/slow pointer idea, but I cannot implement it fluently. The key is to check if fast and fast->next are nullptr directly in the while loop condition.
+      #1: I know the fast/slow pointer idea, but I cannot implement it fluently. The key is to check if fast and fast->next are nullptr directly in the while loop condition.
 
-      Attempt 2: One-shot
+      #2: One-shot
 
   - id: 143
     title: "Reorder List"
@@ -565,7 +565,7 @@ problems:
       [linked-list, two-pointer, fast-and-slow-pointer, reverse, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: |
-      Attempt 1: I know the big picture. But failed at finding the mid node. I used `while (fast && fast->next)` which makes slow point to the second middle node in even-length list. So when merging, the first half is longer than the second half by one node, which causes problem.
+      #1: I know the big picture. But failed at finding the mid node. I used `while (fast && fast->next)` which makes slow point to the second middle node in even-length list. So when merging, the first half is longer than the second half by one node, which causes problem.
 
   - id: 144
     title: "Binary Tree Preorder Traversal"
@@ -574,7 +574,7 @@ problems:
     topics: [tree, dfs]
     status: L2_STRUGGLE
     refinement_focus: |
-      Attempt 1: Easier than inorder or Postorder iterative solution. But I still have problems with the structure of while loop. I need to practice more.
+      #1: Easier than inorder or Postorder iterative solution. But I still have problems with the structure of while loop. I need to practice more.
 
   - id: 145
     title: "Binary Tree Postorder Traversal"
@@ -583,7 +583,7 @@ problems:
     topics: [tree, dfs]
     status: L2_STRUGGLE
     refinement_focus: |
-      #1: This is definatly hard if you want to use iterative solution but you didn't come up the `std::reverse` trick.
+      #1: This is definitely hard if you want to use iterative solution but you didn't come up the `std::reverse` trick.
       #2: I use lambda for helper
 
   - id: 146
@@ -603,7 +603,7 @@ problems:
     leetcode-difficulty: medium
     topics: [stack, array, neetcode150]
     status: L3_MASTERED
-    refinement_focus: "Edge case are tricky, but the idea is straightforward. Alwasy think when the input is invalid"
+    refinement_focus: "Edge case are tricky, but the idea is straightforward. Always think when the input is invalid"
 
   - id: 152
     title: "Maximum Product Subarray"
@@ -612,9 +612,9 @@ problems:
     topics: [dp, array, neetcode150, kadane-algorithm]
     status: L2_STRUGGLE
     refinement_focus: |
-      Attempt 1: The dp logic is not straightforward. The key is the remember three conditions: positve, negative, zero. Using DP to find max positive and min negative
+      #1: The dp logic is not straightforward. The key is to remember three conditions: positive, negative, zero. Using DP to find max positive and min negative
 
-      Attempt 2: The dp logic is smooth. The problem is the initial value of globalMax, localMax, and localMin, I didn't init it to nums[0] in the first place can cause overflow. After fixing, I use ranged based for, so index 0 is calculated twice which is not acceptable.
+      #2: The dp logic is smooth. The problem is the initial value of globalMax, localMax, and localMin, I didn't init it to nums[0] in the first place can cause overflow. After fixing, I use ranged based for, so index 0 is calculated twice which is not acceptable.
 
   - id: 153
     title: "Find Minimum in Rotated Sorted Array"
@@ -632,9 +632,9 @@ problems:
     topics: [stack, design, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: |
-      Attempt 1: Don't understand the problem
+      #1: Don't understand the problem
 
-      Attempt 2: I know the key is to maintain two stacks, and I think through the logic, and slowly implement the code correctly. But cannot do it in a flash.
+      #2: I know the key is to maintain two stacks, and I think through the logic, and slowly implement the code correctly. But cannot do it in a flash.
 
   - id: 162
     title: "Find Peak Element"
@@ -668,16 +668,16 @@ problems:
     topics: [tree, bfs, dfs, neetcode150]
     status: L3_MASTERED
     refinement_focus: |
-      Attempt 1: Almost one shot. Only forgot to check the root node is nullptr.
+      #1: Almost one shot. Only forgot to check the root node is nullptr.
 
   - id: 200
     title: "Number of Islands"
     link: "./problems/200_number_of_islands/"
     leetcode-difficulty: medium
-    topics: [array, depth-first-search, matrix]
+    topics: [array, dfs, matrix, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: |
-      Attempt 1: One-shot, but ugly. Key is `constexpr dirs[4][2]` and use `auto dfs = [&](auto &&dfs, int r, int c) -> void`.
+      #1: One-shot, but ugly. Key is `constexpr dirs[4][2]` and use `auto dfs = [&](auto &&dfs, int r, int c) -> void`.
 
   - id: 206
     title: "Reverse Linked List"
@@ -686,11 +686,11 @@ problems:
     topics: [linked-list, iteration, recursion, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: |
-      Attempt 1: Every time I do this, I feel very frustrated. I know the idea.
+      #1: Every time I do this, I feel very frustrated. I know the idea.
         - Iterative: use 3 pointers prev, curr, next. But I cannot implement correctly.
         - Recursive: In Haskell, this is easy `reverse (x:xs) = (reverse xs) ++ [x]`, but I cannot implement it in C++. It is `head->next->next = head; head->next = nullptr; return newHead;`...
 
-      Attempt 2: I use iterative. It is almost an one-shot. Only return I should return prev instead of curr.
+      #2: I use iterative. It is almost an one-shot. Only return I should return prev instead of curr.
 
   - id: 207
     title: "Course Schedule"
@@ -707,7 +707,7 @@ problems:
     title: "Minimum Size Subarray Sum"
     link: "./problems/209_minimum_size_subarray_sum/"
     leetcode-difficulty: medium
-    topics: [sliding-window, array, neetcode150]
+    topics: [sliding-window, array]
     status: L3_MASTERED
     refinement_focus: |
       #1: One-shot.
@@ -730,9 +730,9 @@ problems:
     topics: [trie, backtracking, design, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: |
-      When doing rirst time seeing Trie, need to re-learn. The key is the struct (data)
+      When doing first time seeing Trie, need to re-learn. The key is the struct (data)
 
-      Second time re-learn, I found myself forgetting the important details, like using `std::unique_ptr`. Also, rememeber to use `auto it = map.emplace(...).first`. Emplace returns a pair<iterator, bool>. We can add (void) infront of emplace if we don't care about the return value.
+      Second time re-learn, I found myself forgetting the important details, like using `std::unique_ptr`. Also, remember to use `auto it = map.emplace(...).first`. Emplace returns a pair<iterator, bool>. We can add (void) infront of emplace if we don't care about the return value.
 
   - id: 213
     title: "House Robber II"
@@ -774,7 +774,7 @@ problems:
     topics: [two-pointer, linked-list-cycle, array, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: |
-      Attempt 1: For simple map solution, I can implement it fluently. For the two-pointer solution, this is not intuitive at all. The key is to treat the array as a linked list, and the duplicate number is the entry point of the cycle. Then use Floyd's Tortoise and Hare algorithm to find the entry point.
+      #1: For simple map solution, I can implement it fluently. For the two-pointer solution, this is not intuitive at all. The key is to treat the array as a linked list, and the duplicate number is the entry point of the cycle. Then use Floyd's Tortoise and Hare algorithm to find the entry point.
 
   - id: 230
     title: "Kth Smallest Element in a BST"
@@ -783,11 +783,11 @@ problems:
     topics: [tree, dfs, binary-search-tree, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: |
-      Attempt 1: I know the concept, but implementation has a lot of problems.
+      #1: I know the concept, but implementation has a lot of problems.
         - Recursive solution: I didn't make k and result function arguments as references. I was thinking to put result as return value, but it is not a good idea.
         - Iterative solution: The structure of while loop is totally wrong. I need to practice more.
 
-      Attempt 2: I know the big structure but I have problems with the iterative solution. The key is using `while (curr || !stack.empty())` as the main iterating method, and we should not prevent curr from being null. In fact, we want to see curr is null so that we use pop to backtrack, then go to the right child.
+      #2: I know the big structure but I have problems with the iterative solution. The key is using `while (curr || !stack.empty())` as the main iterating method, and we should not prevent curr from being null. In fact, we want to see curr is null so that we use pop to backtrack, then go to the right child.
 
   - id: 238
     title: "Product of Array Except Self"
@@ -804,17 +804,17 @@ problems:
     topics: [monotonic-queue, array, sliding-window, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: |
-      Attempt 1: WTF
-      Attempt 2: I can quickly write the whole solution. But there are 2 problems. First, indices are wrong. Second, I caused overflow by not checking (idx >= k) when calculating std::size_t. Be extra cautious when using unsigned types.
+      #1: WTF
+      #2: I can quickly write the whole solution. But there are 2 problems. First, indices are wrong. Second, I caused overflow by not checking (idx >= k) when calculating std::size_t. Be extra cautious when using unsigned types.
 
   - id: 235
     title: "Lowest Common Ancestor of a Binary Search Tree"
     link: "./problems/235_lowest_common_ancestor_of_a_binary_search_tree/"
     leetcode-difficulty: medium
-    topics: [tree, monotonic, dfs, binary-tree, neetcode150]
+    topics: [tree, dfs, binary-search-tree, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: |
-      Attempt 1: I didn't write the code correctly in a sprint. But I reframe the question and solve it correctly.
+      #1: I didn't write the code correctly in a sprint. But I reframe the question and solve it correctly.
 
   - id: 236
     title: "Lowest Common Ancestor of a Binary Tree"
@@ -823,13 +823,13 @@ problems:
     topics: [tree, dfs, binary-tree]
     status: L2_STRUGGLE
     refinement_focus: |
-      #1: My soultion is to trace all path to p, and trace all path to q. Then iterate the longest two vector. But this best solution is the use recusive found or not.
+      #1: My solution is to trace all path to p, and trace all path to q. Then iterate the longest two vector. But the best solution is to use recursive found or not.
 
   - id: 252
     title: "Meeting Rooms"
     link: "./problems/252_meeting_rooms/"
     leetcode-difficulty: easy
-    topics: [greedy, sorting]
+    topics: [greedy, sorting, neetcode150]
     status: L3_MASTERED
     refinement_focus: |
       #1: Sort by start time. Then iterate to check.
@@ -838,7 +838,7 @@ problems:
     title: "Meeting Rooms II"
     link: "./problems/253_meeting_rooms_ii/"
     leetcode-difficulty: medium
-    topics: [greedy, sorting, priority-queue]
+    topics: [greedy, sorting, priority-queue, neetcode150]
     status: L1_FORGOT
     refinement_focus: |
       #1: Hint: Priority Queue.
@@ -847,7 +847,7 @@ problems:
     title: "First Bad Version"
     link: "./problems/278_first_bad_version/"
     leetcode-difficulty: easy
-    topics: [binary-search, neetcode150]
+    topics: [binary-search]
     status: L3_MASTERED
     refinement_focus: "Just standard [start, end) binary search to change the predicate"
 
@@ -858,7 +858,7 @@ problems:
     topics: [tree, bfs, dfs, binary-tree, design, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: |
-      Attempt 1: Core tree logic (BFS traversal) was fine. My main friction point was implementing the string tokenizer from scratch quickly. Need to internalize the `stringstream` + `getline` pattern. Also, remember to handle the trailing comma from serialize.
+      #1: Core tree logic (BFS traversal) was fine. My main friction point was implementing the string tokenizer from scratch quickly. Need to internalize the `stringstream` + `getline` pattern. Also, remember to handle the trailing comma from serialize.
 
   - id: 300
     title: "Longest Increasing Subsequence"
@@ -872,11 +872,11 @@ problems:
     title: "Minimum Height Trees"
     link: "./problems/310_minimum_height_trees/"
     leetcode-difficulty: medium
-    topics: [graph, bfs, tree, neetcode150]
+    topics: [graph, bfs, tree]
     status: L2_STRUGGLE
     refinement_focus: |
       #1: Peel off the leaves layer by layer until 1 or 2 nodes left
-      #2: I'm fucking retarted.
+      #2: I struggled with this.
 
   - id: 322
     title: "Coin Change"
@@ -895,7 +895,7 @@ problems:
     refinement_focus: |
       #1: Use HashMap to count frequency, then use Min-Heap or Bucket Sort to get top K. Bucket sort is optimal O(n), but I forget how to implement it
       #2: std::priority queue
-      #3: almost correct using heap, write bucket sort. (remember buckect 0 should be empty)
+      #3: almost correct using heap, write bucket sort. (remember bucket 0 should be empty)
 
   - id: 394
     title: "Decode String"
@@ -910,8 +910,8 @@ problems:
     title: "Evaluate Division"
     link: "./problems/399_evaluate_division/"
     leetcode-difficulty: medium
-    topics: [graph, dfs, bfs, neetcode150]
-    status: L1_STRUGGLE
+    topics: [graph, dfs, bfs]
+    status: L2_STRUGGLE
     refinement_focus: |
       #1: Understand the concept, but creating the correct graph is using unordered_map<string, unordered_map<string, double>>. Not trying to write string to int conversion then find the map. Also, bfs needs careful handling of the visited set.
 
@@ -922,9 +922,9 @@ problems:
     topics: [dp, knapsack, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: |
-      Attempt 1: The first time I need to learn from the answer and learn knapsack. dp[i][j] means using nums[0..i], can we fill a knapsack of capacity j. dp[i][j] = dp[i-1][j] || dp[i-1][j-nums[i]]"
+      #1: The first time I need to learn from the answer and learn knapsack. dp[i][j] means using nums[0..i], can we fill a knapsack of capacity j. dp[i][j] = dp[i-1][j] || dp[i-1][j-nums[i]]"
 
-      Attempt 2: Fast implement. Forget to set dp[0] = true. Forget std::accumulate need to add accumulator 0 and include numeric. Should be L2~L3. But I set to L2. Lets practice later.
+      #2: Fast implement. Forget to set dp[0] = true. Forget std::accumulate need to add accumulator 0 and include numeric. Should be L2~L3. But I set to L2. Lets practice later.
 
   - id: 435
     title: "Non-overlapping Intervals"
@@ -939,7 +939,7 @@ problems:
     title: "Next Greater Element I"
     link: "./problems/496_next_greater_element_i/"
     leetcode-difficulty: easy
-    topics: [monotonic-stack, hashtable, array, neetcode150]
+    topics: [monotonic-stack, hashtable, array]
     status: L2_STRUGGLE
     refinement_focus: "Monotonic stack."
 
@@ -947,7 +947,7 @@ problems:
     title: "Next Greater Element II"
     link: "./problems/503_next_greater_element_ii/"
     leetcode-difficulty: medium
-    topics: [monotonic-stack, array, circular, neetcode150]
+    topics: [monotonic-stack, array, circular]
     status: L2_STRUGGLE
     refinement_focus: "Monotonic stack. Circular array can be simulated by iterating 2 times"
 
@@ -955,7 +955,7 @@ problems:
     title: "Fibonacci Number"
     link: "./problems/509_fibonacci_number/"
     leetcode-difficulty: easy
-    topics: [dp, recursion, neetcode150]
+    topics: [dp, recursion]
     status: L3_MASTERED
     refinement_focus: "Recursion with memo or bottom-up DP"
 
@@ -971,7 +971,7 @@ problems:
     title: "Number of Provinces"
     link: "./problems/547_number_of_provinces/"
     leetcode-difficulty: medium
-    topics: [union-find, neetcode150]
+    topics: [union-find]
     status: L2_STRUGGLE
     refinement_focus:
       #1: One-shot union find, but recommended to practice more
@@ -983,7 +983,7 @@ problems:
     topics: [tree, dfs, bfs, neetcode150]
     status: L3_MASTERED
     refinement_focus: |
-      Attempt 1: Recusive and helper is same funciton can solve the problem. But I think what if we can use KMF algorithm way like structure?
+      #1: Recursive and helper is same function can solve the problem. But I think what if we can use KMF algorithm way like structure?
 
   - id: 647
     title: "Palindromic Substrings"
@@ -1026,7 +1026,7 @@ problems:
     title: "Peak Index in a Mountain Array"
     link: "./problems/852_peak_index_in_a_mountain_array/"
     leetcode-difficulty: easy
-    topics: [binary-search, array, neetcode150]
+    topics: [binary-search, array]
     status: L2_STRUGGLE
     refinement_focus: |
       #1: Binary search to find the first location where arr[i] > arr[i+1]
@@ -1036,7 +1036,7 @@ problems:
     title: "Rotting Oranges"
     link: "./problems/994_rotting_oranges/"
     leetcode-difficulty: medium
-    topics: [array, breadth-first-search, matrix]
+    topics: [array, bfs, matrix, neetcode150]
     status: L3_MASTERED
     refinement_focus: |
       #1: I used simulation with a queue to store the oranges that are going to rot, then update the grid. But this is slow. I should use *multi-source BFS* to speed up the simulation. (level order traversal one example for multi-source BFS)
@@ -1056,11 +1056,11 @@ problems:
     topics: [tree, dfs, binary-tree, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: |
-      Attempt 1: Very fun. I thought of using mono-stack, but it is not necessary. Just pass down the max value from root to leaf.
+      #1: Very fun. I thought of using mono-stack, but it is not necessary. Just pass down the max value from root to leaf.
 
   - id: 3634
     title: "Minimum Removals to Balance Array"
-    link: "./problems/3635_minimum_removals_to_balance_array/"
+    link: "./problems/3634_minimum_removals_to_balance_array/"
     leetcode-difficulty: medium
     topics: [array, sorting, two-pointer, sliding-window]
     status: L2_STRUGGLE
@@ -1082,7 +1082,7 @@ problems:
     topics: [bit-manipulation, leetcode-contest]
     status: L1_FORGOT
     refinement_focus: |
-      Attempt 1: There are only 3 cases, but I thought we can only solve it by DP.
+      #1: There are only 3 cases, but I thought we can only solve it by DP.
 
   - id: 3703
     title: "Remove K-Balanced Substrings"
@@ -1091,7 +1091,7 @@ problems:
     topics: [string, leetcode-contest]
     status: L2_STRUGGLE
     refinement_focus: |
-      Attempt 1: Didn't finish during contest. Use vector<pair<char, int>> to store (char, count) pairs. Then simulate the removal of k-balanced substrings.
+      #1: Didn't finish during contest. Use vector<pair<char, int>> to store (char, count) pairs. Then simulate the removal of k-balanced substrings.
 
   - id: 3712
     title: "Sum of Elements With Frequency Divisible by K"
@@ -1108,7 +1108,7 @@ problems:
     topics: [string, brute-force, leetcode-contest]
     status: L1_FORGOT
     refinement_focus: |
-      Attempt 1: Didn't finish during contest. I don't even identify this as a brute-force problem.
+      #1: Didn't finish during contest. I don't even identify this as a brute-force problem.
 
   - id: 3718
     title: Smallest Missing Multiple of K
@@ -1117,36 +1117,38 @@ problems:
     topics: [math, hashtable, iteration, leetcode-contest]
     status: L3_MASTERED
     refinement_focus: |
-      Attempt 1: The return value might be tricky when the largest value is K's multiple.
+      #1: The return value might be tricky when the largest value is K's multiple.
 
   - id: 3719
     title: "Longest Balanced Subarray i"
     link: "./problems/3719_longest_balanced_subarray_i/"
     leetcode-difficulty: medium
-    topics: [array, hash-set, two-pointer, sliding-window, enumeration]
+    topics: [array, hashset, two-pointer, sliding-window, enumeration]
     status: L2_STRUGGLE
     refinement_focus: |
-      Attempt 1: Starting, when I read the problem, I missed the "distinct" keyword. So I thought of using frequency map to track counts of each number in the window and try to use prefix sum to optimize. But it is too complicated. After realizing "distinct", I can use two-pointer sliding window to solve it easily.
+      #1: Starting, when I read the problem, I missed the "distinct" keyword. So I thought of using frequency map to track counts of each number in the window and try to use prefix sum to optimize. But it is too complicated. After realizing "distinct", I can use two-pointer sliding window to solve it easily.
 
   - id: 3720
     title: "3720. Lexicographically Smallest Permutation Greater Than Target"
     link: "./problems/3720_lexicographically_smallest_permutation_greater_than_target/"
     leetcode-difficulty: medium
-    topics: [string, greedy, sorting, counting, hash-table]
+    topics: [string, greedy, sorting, counting, hashtable]
     status: L1_FORGOT
     refinement_focus: |
-      Attempt 1: Although I know the basic idea, I cannot correctly implement the greedy algorithm. Even struggled for the whole afternoon. I got very frustrated and tired, and even cannot understand the solution from genmin.
+      #1: Although I know the basic idea, I cannot correctly implement the greedy algorithm. Even struggled for the whole afternoon. I got very frustrated and tired, and even cannot understand the solution from Gemini.
 
   - id: 3726
     title: "Remove Zeros in Decimal Representation"
     link: "./problems/3726_remove_zeros_in_decimal_representation/"
+    leetcode-difficulty: easy
     topics: [string, weekly-contest]
     status: L3_MASTERED
-    refinement_focus: "Simple std::to_string and std::stll"
+    refinement_focus: "Simple std::to_string and std::stoll"
 
   - id: 3727
     title: "Maximum Alternating Sum of Squares"
     link: "./problems/3727_maximum_alternating_sum_of_squares/"
+    leetcode-difficulty: medium
     topics: [greedy, sorting, weekly-contest]
     status: L3_MASTERED
     refinement_focus: "Greedy"
@@ -1154,7 +1156,8 @@ problems:
   - id: 3728
     title: "Stable Subarrays With Equal Boundary and Interior Sum"
     link: "./problems/3728_stable_subarrays_with_equal_boundary_and_interior_sum/"
+    leetcode-difficulty: medium
     topics: [prefix-sum, subarray, weekly-contest]
     status: L2_STRUGGLE
     refinement_focus: |
-      Attempt 1: Tried brute-force first, TLE. Then, prefix-sum, TLE. Then, prefix-sum + hash-map for same l,r value, TLE. Gemini's solution is not very intuitive. It keeps track of prefix-sum and index in a hash-map, so that we can find all possible pairs for every r.
+      #1: Tried brute-force first, TLE. Then, prefix-sum, TLE. Then, prefix-sum + hash-map for same l,r value, TLE. Gemini's solution is not very intuitive. It keeps track of prefix-sum and index in a hash-map, so that we can find all possible pairs for every r.
