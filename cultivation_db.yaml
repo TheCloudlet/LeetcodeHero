@@ -1094,6 +1094,15 @@ problems:
       #1: Binary search to find the first location where arr[i] > arr[i+1]
       #2: I thought I can aced it... AC, but has flaws. I used while (lo <= hi) and use double way check which is not needed.
 
+  - id: 978
+    title: "Longest Turbulent Subarray"
+    link: "./problems/978_longest_turbulent_subarray/"
+    leetcode-difficulty: medium
+    topics: [array, dp, sliding-window, neetcode150]
+    status: L2_STRUGGLE
+    refinement_focus: |
+      #1: TODO.
+
   - id: 994
     title: "Rotting Oranges"
     link: "./problems/994_rotting_oranges/"
