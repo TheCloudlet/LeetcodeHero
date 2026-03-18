@@ -653,6 +653,15 @@ problems:
     refinement_focus: |
       #1: Easy solution after doing LC33, LC153, LC704 in a row.
 
+  - id: 191
+    title: "Number of 1 Bits"
+    link: "./problems/191_number_of_1_bits/"
+    leetcode-difficulty: easy
+    topics: [bit-manipulation]
+    status: L2_STRUGGLE
+    refinement_focus: |
+      #1: use __builtin_popcount or Brian Kernighan algorithm
+
   - id: 167
     title: "Two Sum II - Input Array Is Sorted"
     link: "./problems/167_two_sum_ii_input_array_is_sorted/"
