@@ -903,6 +903,15 @@ problems:
     status: L2_STRUGGLE
     refinement_focus: "dp[i] means the minimum coins to make amount i"
 
+  - id: 338
+    title: "Counting Bits"
+    link: "./problems/338_counting_bits/"
+    leetcode-difficulty: easy
+    topics: [dp, bit-manipulation, neetcode150]
+    status: L2_STRUGGLE
+    refinement_focus: |
+      #1: I used matrix count to count bits, but it is O(n^2). The soultion is to use DP `dp[i] = dp[i >> 1] + (i & 1)`.
+
   - id: 347
     title: "Top K Frequent Elements"
     link: "./problems/347_top_k_frequent_elements/"
