@@ -653,6 +653,15 @@ problems:
     refinement_focus: |
       #1: Easy solution after doing LC33, LC153, LC704 in a row.
 
+  - id: 190
+    title: "Reverse Bits"
+    link: "./problems/190_reverse_bits/"
+    leetcode-difficulty: easy
+    topics: [bit-manipulation]
+    status: L2_STRUGGLE
+    refinement_focus: |
+      #1: I know the sequential bit manipulation. But there are two more ways that I cannot think of. Also, not familiar with `(x >> ?) | (x << x)` syntax and Immediately Invoked Function Expression.
+
   - id: 191
     title: "Number of 1 Bits"
     link: "./problems/191_number_of_1_bits/"
