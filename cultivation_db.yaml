@@ -529,6 +529,15 @@ problems:
     refinement_focus: |
       #1: one-shot.
 
+  - id: 137
+    title: "Single Number II"
+    link: "./problems/137_single_number_ii/"
+    leetcode-difficulty: medium
+    topics: [bit-manipulation, array]
+    status: L2_STRUGGLE
+    refinement_focus: |
+      #1: two solutions. FSM (best) and bit count modulo 3 (also good)
+
   - id: 136
     title: "Single Number"
     link: "./problems/136_single_number/"
