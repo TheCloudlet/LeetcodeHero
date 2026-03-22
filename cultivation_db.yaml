@@ -878,6 +878,15 @@ problems:
     refinement_focus: |
       #1: Hint: Priority Queue.
 
+  - id: 260
+    title: "Single Number III"
+    link: "./problems/260_single_number_iii/"
+    leetcode-difficulty: medium
+    topics: [bit-manipulation, array, math]
+    status: L1_FORGOT
+    refinement_focus: |
+      #1: Hint: XOR properties, and partition
+
   - id: 278
     title: "First Bad Version"
     link: "./problems/278_first_bad_version/"
