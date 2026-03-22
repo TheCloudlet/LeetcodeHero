@@ -887,6 +887,15 @@ problems:
     refinement_focus: |
       #1: Hint: XOR properties, and partition
 
+  - id: 268
+    title: "Missing Number"
+    link: "./problems/268_missing_number/"
+    leetcode-difficulty: easy
+    topics: [array, math, bit-manipulation, neetcode150]
+    status: L2_STRUGGLE
+    refinement_focus: |
+      #1: Peek the solution. The key is to use XOR properties.
+
   - id: 278
     title: "First Bad Version"
     link: "./problems/278_first_bad_version/"
