@@ -959,6 +959,15 @@ problems:
       #2: std::priority queue
       #3: almost correct using heap, write bucket sort. (remember bucket 0 should be empty)
 
+  - id: 371
+    title: "Sum of Two Integers"
+    link: "./problems/371_sum_of_two_integers"
+    leetcode-difficulity: medium
+    topics: [bitops]
+    status: L2_STRUGGLE
+    refinement_focus: |
+      #1: RCA & parallel RCA. (maybe need review)
+
   - id: 394
     title: "Decode String"
     link: "./problems/394_decode_string/"
