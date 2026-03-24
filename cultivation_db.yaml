@@ -1138,6 +1138,15 @@ problems:
     refinement_focus: |
       #1: Very fun. I thought of using mono-stack, but it is not necessary. Just pass down the max value from root to leaf.
 
+  - id: 3613
+    title: "Find the Minimum Possible Sum of a Beautiful Array"
+    link: "./problems/3613_find_the_minimum_possible_sum_of_a_beautiful_array/"
+    leetcode-difficulty: medium
+    topics: [array, greedy, math]
+    status: L2_STRUGGLE
+    refinement_focus: |
+      #1: meet in interview. DSU + Kruskal's algorithm.
+
   - id: 3634
     title: "Minimum Removals to Balance Array"
     link: "./problems/3634_minimum_removals_to_balance_array/"
