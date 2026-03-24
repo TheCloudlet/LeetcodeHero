@@ -1,0 +1,91 @@
+#+TITLE: 17-BitOps
+#+AUTHOR: Yi-Ping Pan (Cloudlet)
+#+DATE: 2026-03-24
+
+* 1. Primitives
+- AND (=&=) :: Extraction and Masking. Used to filter out specific bits, acting as a precise sieve within the data stream.
+- OR (=|=) :: Fusion and Setting. Used to forcefully set specific bits to 1, injecting state into the system.
+- XOR (=^=) :: Toggling and Cancellation. The most elegant operation in BitOps. In Haskell, this acts as an involution; logically, when two identical states collide, they annihilate each other and return to "Emptiness" (0).
+- NOT (=~=) :: Inversion. Reversing all states—the fundamental primitive for deriving the Two's Complement.
+- Shift (=<<=, =>>=) :: Spatial Translation. Within the ALU, it takes only a single clock cycle to execute the equivalent of multiplying or dividing by powers of 2.
+
+* 2. Means of Combination & Abstraction
+** 2.1 Single Bit Targeting
+Surgically targeting a specific index within a 32-bit state machine.
+
+*** Set a Bit
+#+BEGIN_SRC cpp
+n |= (1 << i);
+#+END_SRC
+*** Clear a Bit
+#+BEGIN_SRC cpp
+n &= ~(1 << i);
+#+END_SRC
+*** Toggle a Bit
+#+BEGIN_SRC cpp
+n ^= (1 << i)
+#+END_SRC
+*** Test a Bit
+#+BEGIN_SRC
+(n >> i) & 1
+#+END_SRC
+
+** 2.2 Field Extraction & Masking
+Going beyond single bits, this deals with contiguous Bit Fields. In VHDL, this is known as Wire Slicing.
+*** Get Right/Left Most Byte (=& 0xFF=)
+Extracting specific 8-bit boundaries.
+#+BEGIN_SRC cpp
+uint8_t lsb_byte = n & 0xFF;         // Masking the lower 8 bits
+uint8_t msb_byte = (n >> 24) & 0xFF; // Shift then mask
+#+END_SRC
+
+*** BEXTR (Bit Field Extract)
+The generalized pattern for slicing any [start, start + length) range.
+#+BEGIN_SRC cpp
+// Traditional C++ implementation
+uint32_t mask = (1U << length) - 1;
+uint32_t field = (n >> start) & mask;
+#+END_SRC
+
+** 2.3 LSB/MSB Isolation & Properties
+Leveraging the mathematical properties of Two's Complement to instantly isolate the boundary states of the system. This forms the foundation of advanced data structures like the Fenwick Tree.
+*** [#A] Get Right Most 1 Bit (LSB Extraction)
+#+BEGIN_SRC
+n & (-n)
+#+END_SRC
+*** [#A] Remove the Right Most 1 Bit
+#+BEGIN_SRC
+n & (n - 1)
+#+END_SRC
+
+*** Check Power of 2
+#+BEGIN_SRC
+if (n & (n - 1) == 0) {
+  std::printf("Is Power of 2");
+}
+#+END_SRC
+
+** 2.4 Hardware Intrinsics & Global Aggregation
+Performing macroscopic scanning and state aggregation across an entire Word (32/64 bits). Modern C++ encourages using the `<bit>` standard library, as these functions are typically mapped directly by the compiler to singular CPU instructions (e.g., x86's BSR, TZCNT, POPCNT).
+*** CLZ (Count Leading Zero / =std::countl_zero=)
+*** CTZ (Count Trailing Zero / =std::countr_zero=)
+*** POPCNT (Population Count / =std::popcount=)
+*** RBIT (Reverse Bits)
+
+* 3. Classic Problems
+** CAT 1: Data Abstraction & Symbolic Cancellation
+Focusing on SICP Chapter 2. We treat integers as symbolic sets or sequences, seeking "singularities" through symmetry.
+- 136. Single Number :: The "Identity" element in a XOR-summation stream.
+- 268. Missing Number :: Symbolic cancellation between two sequences (Index vs. Value).
+- 260. Single Number III :: Partitioning a large problem into two independent sub-problems using a "Predicate" (the LSB).
+
+** CAT 2: Modeling Digital Circuits & State Machines
+Focusing on SICP Chapter 3.3.4. Treating bitwise logic not as arithmetic, but as a simulation of signals and wires.
+- 371. Sum of Two Integers :: A functional simulation of a Half-Adder logic gate.
+- 137. Single Number II :: Modeling a Modulo-3 Counter as a Finite State Machine (FSM).
+
+** CAT 3: Recursive Processes & Memoization
+Focusing on SICP Chapter 1 and 3. Addressing the optimal substructure within the binary representation of numbers.
+- 191. Number of 1 Bits :: The iterative process of reducing problem size by stripping the LSB.
+- 338. Counting Bits :: Utilizing the recursive relationship where state $n$ depends on previously computed state $n/2$.
+- 190. Reverse Bits :: Devide and conquer using masks and or.
