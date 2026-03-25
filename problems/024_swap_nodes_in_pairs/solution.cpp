@@ -1,15 +1,17 @@
 // Leetcode 24. Swap Nodes in Pairs
 
 // Definition for singly-linked list.
-struct ListNode {
-  int val;
-  ListNode* next;
-  ListNode() : val(0), next(nullptr) {}
-  ListNode(int x) : val(x), next(nullptr) {}
-  ListNode(int x, ListNode* next) : val(x), next(next) {}
-};
+// struct ListNode {
+//  int val;
+//  ListNode* next;
+//  ListNode() : val(0), next(nullptr) {}
+//  ListNode(int x) : val(x), next(nullptr) {}
+//  ListNode(int x, ListNode* next) : val(x), next(next) {}
+//};
 
+#if defined(DUMMY_NODE)
 class Solution {
+ public:
   ListNode* swapPairs(ListNode* head) {
     ListNode dummy(0);
     dummy.next = head;
@@ -31,3 +33,27 @@ class Solution {
     return dummy.next;
   }
 };
+#endif
+
+#if defined(INDIRECT)
+class Solution {
+ public:
+  ListNode* swapPairs(ListNode* head) {
+    ListNode** indirect = &head;
+
+    while (*indirect && (*indirect)->next) {
+      ListNode* first = *indirect;
+      ListNode* second = (*indirect)->next;
+
+      // Swap
+      first->next = second->next;
+      second->next = first;
+      *indirect = second;
+
+      indirect = &(first->next);
+    }
+
+    return head;  // CAUTION
+  }
+};
+#endif
