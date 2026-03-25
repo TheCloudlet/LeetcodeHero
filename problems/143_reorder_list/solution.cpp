@@ -36,7 +36,7 @@ public:
       fast = fast->next->next;
     }
 
-    // Step 2: Split the list into two parts
+    // Step 2: Split the list into two halves
     ListNode *second = slow->next;
     slow->next = nullptr;  // Cut the connection
 
@@ -51,11 +51,10 @@ public:
       curr = next;
     }
 
+    second = prev;  // prev is now the head of reversed second half
+
     // Step 4: Merge the two lists alternately (in-place)
     ListNode *first = head;
-    second = prev;  // prev is now the head of reversed second half
-    ListNode *list1 = first;
-    ListNode *list2 = second;
 
     while (second) {
       ListNode *temp1 = first->next;
