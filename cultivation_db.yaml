@@ -554,6 +554,7 @@ problems:
     status: L3_MASTERED
     refinement_focus: |
       #1: One-shot with HashMap.
+      #2: Did not even comprehend the problem correctly and only implemented basic deep copy.
 
   - id: 139
     title: "Word Break"

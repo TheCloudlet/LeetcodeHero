@@ -2,24 +2,22 @@
 // @tag: linked-list, neetcode150
 // @difficulty: medium
 
-/*
-// Definition for a Node.
 class Node {
-public:
-    int val;
-    Node* next;
-    Node* random;
+ public:
+  int val;
+  Node *next;
+  Node *random;
 
-    Node(int _val) {
-        val = _val;
-        next = NULL;
-        random = NULL;
-    }
+  Node(int _val) {
+    val = _val;
+    next = NULL;
+    random = NULL;
+  }
 };
-*/
 
+#if defined(HASH_MAP)
 class Solution {
-public:
+ public:
   Node *copyRandomList(Node *head) {
     if (!head) {
       return nullptr;
@@ -53,6 +51,7 @@ public:
     return newHead;
   }
 };
+#endif
 
 // NOTE: Alternative O(1) Space Solution
 //
@@ -67,3 +66,47 @@ public:
 // pointer can be found via `curr->next->random = curr->random->next`.
 //
 // 3. Unweave: Separate the combined list back into two distinct lists.
+
+#if defined(INTERWEAVING)
+class Solution {
+ public:
+  Node *copyRandomList(Node *head) {
+    // Phase 1: Clone every node and weave old/cloned lists together.
+    // old: A -> B -> C  =>  A -> A' -> B -> B' -> C -> C'
+    Node *curr = head;
+    while (curr) {
+      Node *old_next = curr->next;
+      curr->next = new Node(curr->val);
+      curr->next->next = old_next;
+      curr = old_next;
+    }
+
+    // Phase 2: Set random pointers for cloned nodes.
+    // cloned->random = old->random->next (the clone of old->random)
+    curr = head;
+    while (curr && curr->next) {
+      if (curr->random) {
+        curr->next->random = curr->random->next;
+      }
+      curr = curr->next->next;
+    }
+
+    // Phase 3: Separate cloned list from old list.
+    curr = head;
+    Node dummy(0);
+    Node *cloned_tail = &dummy;
+
+    while (curr && curr->next) {
+      Node *old_next = curr->next->next;
+      cloned_tail->next = curr->next;
+      cloned_tail = cloned_tail->next;
+      cloned_tail->next = nullptr;
+
+      curr->next = old_next;
+      curr = old_next;
+    }
+
+    return dummy.next;
+  }
+};
+#endif
