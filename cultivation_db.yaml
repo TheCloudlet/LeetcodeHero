@@ -807,7 +807,7 @@ problems:
     title: "Find the Duplicate Number"
     link: "./problems/287_find_the_duplicate_number/"
     leetcode-difficulty: medium
-    topics: [two-pointer, linked-list-cycle, array, neetcode150]
+    topics: [two-pointer, linked-list, array, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: |
       #1: For simple map solution, I can implement it fluently. For the two-pointer solution, this is not intuitive at all. The key is to treat the array as a linked list, and the duplicate number is the entry point of the cycle. Then use Floyd's Tortoise and Hare algorithm to find the entry point.
