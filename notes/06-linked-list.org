@@ -179,7 +179,7 @@ while (curr && curr->next) {
 ** 3.2 Medium
 - [medium] 002. Add Two Numbers :: ZIP + dummy-head
 - [medium] 019. Remove Nth Node From End of List :: Fast-Slow Pointer
-- [medium] 024. Swap Nodes in Pairs :: while(curr && curr->next)
+- [X] [medium] 024. Swap Nodes in Pairs :: while(curr && curr->next) + dummy-head + in-place
 - [medium] 061. Rotate List ::
 - [medium] 092. Reverse Linked List II :: REVERSE
 - [medium] 138. Copy List with Random Pointer :: SPLIT (Interweaving) + SPLIT (Unzip)
@@ -188,3 +188,16 @@ while (curr && curr->next) {
 ** 3.3 Hard
 - [hard] 023. Merge k Sorted Lists :: Heap + MERGE
 - [hard] 025. Reverse Nodes in k-Group :: REVERSE
+
+
+* 4. Debug
+
+* 5. Common Mistakes
+- Missing State Advancement :: Forgetting ~p = p->next~ causes infinite loop (most common!)
+- Forgetting to Backup :: Save ~nxt = p->next~ before modifying pointers
+- Missing Temp Variable :: Like in LC026, without proper temp variable (first, second) the readibity will be bad.
+- Missing Base Case :: Always check ~!head~ or ~!head->next~ at start
+- Left vs Right Middle :: Use correct while condition for even-length lists
+- Mutating Head Parameter :: Don't move ~head~, use a separate pointer like ~curr~
+- Inplace vs New List :: Decide before coding: use ~prev~ for inplace, ~tail~ for new list
+- Wrong Dummy Access :: Return ~dummy.next~ not ~dummy->next~ (dot vs arrow)

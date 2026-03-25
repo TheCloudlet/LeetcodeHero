@@ -232,7 +232,9 @@ problems:
     leetcode-difficulty: medium
     topics: [linked-list, indirect-pointer, recursion]
     status: L2_STRUGGLE
-    refinement_focus: "While loop or helper recursion"
+    refinement_focus: |
+      #1: While loop or helper recursion
+      #2: not fully correct
 
   - id: 25
     title: "Reverse Nodes in k-Group"
@@ -1150,8 +1152,8 @@ problems:
       #1: Very fun. I thought of using mono-stack, but it is not necessary. Just pass down the max value from root to leaf.
 
   - id: 3613
-    title: "Find the Minimum Possible Sum of a Beautiful Array"
-    link: "./problems/3613_find_the_minimum_possible_sum_of_a_beautiful_array/"
+    title: "Minimize Maximum Component Cost"
+    link: "./problems/3613_minimize_maximum_component_cost/"
     leetcode-difficulty: medium
     topics: [array, greedy, math]
     status: L2_STRUGGLE
