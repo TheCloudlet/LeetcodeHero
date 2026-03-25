@@ -584,6 +584,7 @@ problems:
     status: L2_STRUGGLE
     refinement_focus: |
       #1: I know the big picture. But failed at finding the mid node. I used `while (fast && fast->next)` which makes slow point to the second middle node in even-length list. So when merging, the first half is longer than the second half by one node, which causes problem.
+      #2: Fuck-up (1) middle point. (2) merging next missing because set to nullptr. (2) Not checking the input condition.
 
   - id: 144
     title: "Binary Tree Preorder Traversal"

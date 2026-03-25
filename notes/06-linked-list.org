@@ -116,13 +116,45 @@ while (curr) {
 ListNode* middleNode(ListNode* head) {
   ListNode* slow = head;
   ListNode* fast = head;
-  while (fast && fast->next) {
+  while (fast && fast->next) {  // Middle right in even-length list.
+  // while (fast && fast->next) {  // Middle left in even-length list.
     slow = slow->next;
     fast = fast->next->next;
   }
   return slow;
 }
 #+END_SRC
+
+*This is very important!*
+
+#+NAME: while (fast && fast->next)
+#+BEGIN_EXAMPLE
+Step 0:  1 -> 2 -> 3 -> 4 -> nullptr
+         ^
+         S,F
+Step 1:  1 -> 2 -> 3 -> 4 -> nullptr
+              ^         ^
+              S         F
+Step 2:  1 -> 2 -> 3 -> 4 -> nullptr
+                   ^              ^
+                   S              F (nullptr, stop!)
+Result: slow = 3 (right middle)
+#+END_EXAMPLE
+
+LC143: Reorder List
+
+#+NAME: while (fast->next && fast->next->next)
+#+BEGIN_EXAMPLE
+Step 0:  1 -> 2 -> 3 -> 4 -> nullptr
+         ^
+         S,F
+
+Step 1:  1 -> 2 -> 3 -> 4 -> nullptr
+              ^         ^
+              S         F
+
+         fast->next = 4, fast->next->next = nullptr (stop!)
+#+END_EXAMPLE
 
 *** 2.4.2 UNZIP (separate interleaved)
 #+NAME: 138. Copy List with Random Pointer (Phase 3)
