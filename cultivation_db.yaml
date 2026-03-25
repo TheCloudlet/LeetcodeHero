@@ -205,8 +205,8 @@ problems:
     status: L3_MASTERED
     refinement_focus: |
       #1: Normal dummy node is okay. But I forget indirect-pointer usage. Always use `ListNode *result;` then `ListNode **indirect = &result;`
-
       #2: One-shot using indirect pointer. But a little uncertain when doing it in a sprint.
+      #3: One-shot.
 
   - id: 22
     title: "Generate Parentheses"

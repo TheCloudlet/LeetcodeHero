@@ -15,7 +15,7 @@
 
 #if defined(SIMPLE)
 class Solution {
-public:
+ public:
   ListNode *mergeTwoLists(ListNode *list1, ListNode *list2) {
     if (!list1) {
       return list2;
@@ -50,10 +50,10 @@ public:
 
 #if defined(INDIRECT)
 class Solution {
-public:
+ public:
   ListNode *mergeTwoLists(ListNode *list1, ListNode *list2) {
     ListNode *result = nullptr;
-    ListNode **indirect = &result;
+    ListNode **indirect = &result;  // Or nextp
 
     while (list1 && list2) {
       if (list1->val < list2->val) {
