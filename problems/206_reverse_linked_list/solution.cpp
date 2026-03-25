@@ -52,3 +52,23 @@ class Solution {
   }
 }
 #endif
+
+#if defined(TAIL_RECURSION)
+// Haskell reverse
+class Solution {
+ public:
+  ListNode* reverseList(ListNode* head) { return revHelper(head, nullptr); }
+
+ private:
+  ListNode* revHelper(ListNode* curr, ListNode* acc) {
+    if (!curr) {
+      return acc;
+    }
+
+    ListNode* curr_next = curr->next;
+    curr->next = acc;
+
+    return revHelper(curr_next, curr);
+  }
+};
+#endif
