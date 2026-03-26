@@ -8,9 +8,8 @@
 #include <vector>
 
 class Solution {
-public:
-  std::vector<int> nextGreaterElements(std::vector<int> &nums) {
-
+ public:
+  std::vector<int> nextGreaterElements(std::vector<int>& nums) {
     std::stack<int> monoStack;
     std::vector<int> result(nums.size(), -1);
 
@@ -20,7 +19,7 @@ public:
         result[monoStack.top()] = nums[circularIdx];
         monoStack.pop();
       }
-      if (i < nums.size()) { // second round we don't insert to stack
+      if (i < nums.size()) {  // second round we don't insert to stack
         monoStack.emplace(circularIdx);
       }
     }

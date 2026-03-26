@@ -14,7 +14,7 @@ class Solution {
       return 0;
     }
 
-    size_t slow = 0; // The prev insertion position
+    size_t slow = 0;  // The prev insertion position
     int dup_count = 0;
 
     for (size_t fast = 1; fast < nums.size(); ++fast) {

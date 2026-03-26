@@ -20,7 +20,7 @@
 #include <string>
 
 class Solution {
-public:
+ public:
   std::string convert(std::string s, int numRows) {
     assert(numRows > 0);
     if (1 == numRows) {
@@ -29,23 +29,23 @@ public:
     int numChar = s.size();
     std::string result;
     // NOTE: please change `i` to `row` for clarity
-    for (int i = 0; i < numRows; ++i) { // outer iter
+    for (int i = 0; i < numRows; ++i) {  // outer iter
       const int last = numRows - 1;
-      if (0 == i) { // first row
+      if (0 == i) {  // first row
         for (int j = i; j < numChar; j += 2 * numRows - 2) {
           result.push_back(s[j]);
         }
-      } else if (numRows - 1 == i) { // last row
+      } else if (numRows - 1 == i) {  // last row
         for (int j = i; j < numChar; j += 2 * numRows - 2) {
           result.push_back(s[j]);
         }
-      } else {                 // other row
-        bool direction = true; // true: up, false: down
+      } else {                  // other row
+        bool direction = true;  // true: up, false: down
         int j = i;
         while (j < numChar) {
           result.push_back(s[j]);
           if (direction) {
-            j += 2 * (numRows - i - 1); // NOTE: forget to -1 here
+            j += 2 * (numRows - i - 1);  // NOTE: forget to -1 here
             direction = false;
           } else {
             j += 2 * i;

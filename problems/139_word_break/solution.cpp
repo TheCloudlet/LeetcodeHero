@@ -11,8 +11,8 @@
 #include <vector>
 
 class Solution {
-public:
-  bool wordBreak(std::string s, std::vector<std::string> &wordDict) {
+ public:
+  bool wordBreak(std::string s, std::vector<std::string>& wordDict) {
     // Memoization array for optimization: once we determine that a substring
     // from index i to the end cannot be broken into valid words, we cache
     // this result to avoid redundant computation.
@@ -23,21 +23,21 @@ public:
     return canBreak(s, 0, wordDict, cannotSplit);
   }
 
-private:
-  bool canBreak(const std::string &s, std::size_t start,
-                const std::vector<std::string> &wordDict,
-                std::vector<bool> &cannotSplit) {
+ private:
+  bool canBreak(const std::string& s, std::size_t start,
+                const std::vector<std::string>& wordDict,
+                std::vector<bool>& cannotSplit) {
     if (start == s.size()) {
-      return true; // Reached the end, successful split
+      return true;  // Reached the end, successful split
     }
     if (cannotSplit[start]) {
-      return false; // Already determined cannot split from this index
+      return false;  // Already determined cannot split from this index
     }
 
-    for (const auto &word : wordDict) {
+    for (const auto& word : wordDict) {
       if (isPrefix(s.substr(start), word)) {
         if (canBreak(s, start + word.size(), wordDict, cannotSplit)) {
-          return true; // Found a valid split
+          return true;  // Found a valid split
         }
       }
     }
@@ -47,7 +47,7 @@ private:
     return false;
   }
 
-  bool isPrefix(const std::string &text, const std::string &prefix) {
+  bool isPrefix(const std::string& text, const std::string& prefix) {
     if (text.size() < prefix.size()) {
       return false;
     }

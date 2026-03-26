@@ -16,11 +16,11 @@
 // };
 
 class Solution {
-public:
-  ListNode *addTwoNumbers(ListNode *l1, ListNode *l2) {
-    ListNode *resultHead = nullptr;
-    ListNode **indirect = &resultHead;
-    int c = 0; // carry
+ public:
+  ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+    ListNode* resultHead = nullptr;
+    ListNode** indirect = &resultHead;
+    int c = 0;  // carry
 
     while (l1 || l2 || c) {
       int a = l1 ? l1->val : 0;
@@ -31,10 +31,8 @@ public:
       (*indirect) = new ListNode(sum % 10);
       indirect = &(*indirect)->next;
 
-      if (l1)
-        l1 = l1->next;
-      if (l2)
-        l2 = l2->next;
+      if (l1) l1 = l1->next;
+      if (l2) l2 = l2->next;
     }
     return resultHead;
   }

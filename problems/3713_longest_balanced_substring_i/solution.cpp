@@ -11,8 +11,8 @@
 #include <vector>
 
 class Solution {
-public:
-  int longestBalancedSubstring(const std::string &s) {
+ public:
+  int longestBalancedSubstring(const std::string& s) {
     auto pireltonak = s;
     int n = pireltonak.length();
     int maxLength = 0;
@@ -30,8 +30,8 @@ public:
     return maxLength;
   }
 
-private:
-  bool isBalanced(const std::unordered_map<char, int> &counts) {
+ private:
+  bool isBalanced(const std::unordered_map<char, int>& counts) {
     if (counts.empty()) {
       return true;
     }
@@ -39,7 +39,7 @@ private:
     int targetCount = counts.begin()->second;
 
     // Check if all other characters have the same count
-    for (const auto &[_, count] : counts) {
+    for (const auto& [_, count] : counts) {
       if (count != targetCount) {
         return false;
       }

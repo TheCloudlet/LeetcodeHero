@@ -13,15 +13,15 @@
  * };
  */
 class Solution {
-public:
-  void reorderList(ListNode *head) {
+ public:
+  void reorderList(ListNode* head) {
     if (!head || !head->next) {
       return;
     }
 
     // Step 1: Find the middle of the list
-    ListNode *slow = head;
-    ListNode *fast = head;
+    ListNode* slow = head;
+    ListNode* fast = head;
 
     // Use fast->next && fast->next->next instead of fast && fast->next.
     // This ensures we check two nodes ahead before advancing fast by 2 steps,
@@ -37,15 +37,15 @@ public:
     }
 
     // Step 2: Split the list into two halves
-    ListNode *second = slow->next;
+    ListNode* second = slow->next;
     slow->next = nullptr;  // Cut the connection
 
     // Step 3: Reverse the second half
-    ListNode *prev = nullptr;
-    ListNode *curr = second;
+    ListNode* prev = nullptr;
+    ListNode* curr = second;
 
     while (curr) {
-      ListNode *next = curr->next;
+      ListNode* next = curr->next;
       curr->next = prev;
       prev = curr;
       curr = next;
@@ -54,11 +54,11 @@ public:
     second = prev;  // prev is now the head of reversed second half
 
     // Step 4: Merge the two lists alternately (in-place)
-    ListNode *first = head;
+    ListNode* first = head;
 
     while (second) {
-      ListNode *temp1 = first->next;
-      ListNode *temp2 = second->next;
+      ListNode* temp1 = first->next;
+      ListNode* temp2 = second->next;
 
       first->next = second;
       second->next = temp1;

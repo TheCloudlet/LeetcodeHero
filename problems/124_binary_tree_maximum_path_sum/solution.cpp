@@ -39,4 +39,3 @@ class Solution {
     return {new_global_max, new_contrib};
   }
 };
-

@@ -9,11 +9,11 @@
 #include <vector>
 
 class Solution {
-public:
-  int missingMultiple(vector<int> &nums, int k) {
+ public:
+  int missingMultiple(vector<int>& nums, int k) {
     std::unordered_set<int> numSet;
     int maxNum = std::numeric_limits<int>::min();
-    for (const auto &num : nums) {
+    for (const auto& num : nums) {
       maxNum = std::max(maxNum, num);
       numSet.insert(num);
     }

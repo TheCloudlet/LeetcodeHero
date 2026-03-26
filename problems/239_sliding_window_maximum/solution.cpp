@@ -8,10 +8,10 @@
 #include <vector>
 
 class Solution {
-public:
-  std::vector<int> maxSlidingWindow(std::vector<int> &nums, int k) {
+ public:
+  std::vector<int> maxSlidingWindow(std::vector<int>& nums, int k) {
     assert(k <= nums.size());
-    std::deque<std::size_t> monoQueue; // Non-increasing monotonic queue
+    std::deque<std::size_t> monoQueue;  // Non-increasing monotonic queue
     std::vector<int> result;
     result.reserve(nums.size() - k + 1);
 

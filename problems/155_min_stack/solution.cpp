@@ -20,12 +20,12 @@
 #include <stack>
 
 class MinStack {
-private:
+ private:
   std::stack<int> mainStack;
-  std::stack<int> monoMin; // Monotonic min stack.
-                           // getMin() works when mainStack is not empty
+  std::stack<int> monoMin;  // Monotonic min stack.
+                            // getMin() works when mainStack is not empty
 
-public:
+ public:
   MinStack() {}
 
   void push(int val) {

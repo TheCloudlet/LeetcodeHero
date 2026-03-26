@@ -31,8 +31,8 @@
 #include <vector>
 
 class Solution {
-public:
-  int lengthOfLIS(const std::vector<int> &nums) {
+ public:
+  int lengthOfLIS(const std::vector<int>& nums) {
     std::size_t n = nums.size();
     assert(n >= 1 && n <= 2500);
     if (n == 1) {
@@ -43,7 +43,7 @@ public:
     // dp[i] is initialized with 1 because every element forms a LIS of length 1
     // by itself
     std::vector<int> dp(n, 1);
-    int globalMaxLIS = 1; // Minimum LIS length is 1
+    int globalMaxLIS = 1;  // Minimum LIS length is 1
 
     for (std::size_t end = 0; end < n; ++end) {
       for (std::size_t pos = 0; pos < end; ++pos) {

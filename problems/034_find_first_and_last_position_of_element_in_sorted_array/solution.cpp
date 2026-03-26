@@ -18,39 +18,39 @@
 #include <vector>
 
 class Solution {
-public:
-    std::vector<int> searchRange(const std::vector<int>& nums, int target) {
-        int lower = -1, upper = -1;
-        int left = 0, right = nums.size();
-        int mid;
+ public:
+  std::vector<int> searchRange(const std::vector<int>& nums, int target) {
+    int lower = -1, upper = -1;
+    int left = 0, right = nums.size();
+    int mid;
 
-        // Pass 1: find lower
-        while (left < right) {
-            mid = left + (right - left) / 2;
-            if (nums[mid] < target) {
-                left = mid + 1;
-            } else {
-                right = mid;
-            }
-        }
-        if (left >= nums.size() || nums[left] != target) {
-            return {-1, -1}; // target does not exsist in nums
-        }
-        lower = left;
-
-        // Pass 2: find upper
-        left = lower; // don't need to find from index 0
-        right = nums.size();
-        while (left < right) {
-            mid = left + (right - left) / 2;
-            if (nums[mid] <= target) {
-                left = mid + 1;
-            } else {
-                right = mid;
-            }
-        }
-        upper = left - 1;
-
-        return {lower, upper};
+    // Pass 1: find lower
+    while (left < right) {
+      mid = left + (right - left) / 2;
+      if (nums[mid] < target) {
+        left = mid + 1;
+      } else {
+        right = mid;
+      }
     }
+    if (left >= nums.size() || nums[left] != target) {
+      return {-1, -1};  // target does not exsist in nums
+    }
+    lower = left;
+
+    // Pass 2: find upper
+    left = lower;  // don't need to find from index 0
+    right = nums.size();
+    while (left < right) {
+      mid = left + (right - left) / 2;
+      if (nums[mid] <= target) {
+        left = mid + 1;
+      } else {
+        right = mid;
+      }
+    }
+    upper = left - 1;
+
+    return {lower, upper};
+  }
 };

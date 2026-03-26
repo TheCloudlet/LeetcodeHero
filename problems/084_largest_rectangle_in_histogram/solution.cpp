@@ -53,7 +53,7 @@ class Solution {
       int left_edge = left_smaller[idx];
       // The real boundary is left_edge + 1 and right_edge - 1
       // So the width is $(right_edge - 1) - (left_edge + 1) + 1$
-      int width = right_edge - left_edge - 1; 
+      int width = right_edge - left_edge - 1;
       max_area = std::max(max_area, heights[idx] * width);
     }
 

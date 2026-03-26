@@ -1,12 +1,13 @@
 // Leetcode 13. Roman to Integer
 
 #include <assert.h>
+
 #include <string>
 #include <unordered_map>
 
 class Solution {
-public:
-  int romanToInt(const std::string &s) {
+ public:
+  int romanToInt(const std::string& s) {
     assert(!s.empty());
     std::unordered_map<char, int> charToValue = {
         {'I', 1},   {'V', 5},   {'X', 10},  {'L', 50},

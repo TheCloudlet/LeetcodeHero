@@ -21,7 +21,7 @@
 #include <string>
 
 class Solution {
-public:
+ public:
   std::string longestPalindrome(std::string s) {
     std::size_t longestLen = 0;
     std::size_t longestStartPos = 0;
@@ -42,8 +42,8 @@ public:
     return std::string(s, longestStartPos, longestLen);
   }
 
-private:
-  std::pair<std::size_t, std::size_t> expandAroundCenter(const std::string &s,
+ private:
+  std::pair<std::size_t, std::size_t> expandAroundCenter(const std::string& s,
                                                          std::size_t left,
                                                          std::size_t right) {
     int l = static_cast<int>(left);
@@ -89,14 +89,14 @@ private:
 #include <vector>
 
 class Solution {
-public:
+ public:
   std::string longestPalindrome(std::string s) {
     std::size_t n = s.size();
     if (n < 2) {
       return s;
     }
     std::size_t maxStartPos = 0;
-    std::size_t maxLen = 1; // Initialize to 1 for single char
+    std::size_t maxLen = 1;  // Initialize to 1 for single char
 
     // dp[i][j] stores whether s[i..j] is a palindrome
     std::vector<std::vector<bool>> dp(n, std::vector<bool>(n, false));

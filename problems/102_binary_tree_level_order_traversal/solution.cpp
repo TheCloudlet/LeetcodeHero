@@ -4,13 +4,13 @@
 
 class Solution {
  public:
-  std::vector<std::vector<int>> levelOrder(TreeNode *root) {
+  std::vector<std::vector<int>> levelOrder(TreeNode* root) {
     if (!root) {
       return {};  // Handles the null tree case cleanly
     }
 
     std::vector<std::vector<int>> result;
-    std::queue<TreeNode *> nodeQueue;
+    std::queue<TreeNode*> nodeQueue;
     nodeQueue.push(root);
 
     while (!nodeQueue.empty()) {
@@ -18,7 +18,7 @@ class Solution {
       std::vector<int> currentLevel;
 
       for (int i = 0; i < levelSize; ++i) {
-        TreeNode *node = nodeQueue.front();
+        TreeNode* node = nodeQueue.front();
         nodeQueue.pop();
         currentLevel.push_back(node->val);
 

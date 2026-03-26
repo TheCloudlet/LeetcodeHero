@@ -22,22 +22,22 @@
 #include <vector>
 
 class Solution {
-public:
-  bool canPartition(const std::vector<int> &nums) {
+ public:
+  bool canPartition(const std::vector<int>& nums) {
     int sum = std::accumulate(nums.begin(), nums.end(), 0);
     if (sum % 2 != 0) {
-      return false; // Odd, cannot partition
+      return false;  // Odd, cannot partition
     }
 
     int targetSum = sum / 2;
     // Base case: the empty set can always form a sum of 0.
     std::unordered_set<int> possibleSums = {0};
 
-    for (const auto &num : nums) {
+    for (const auto& num : nums) {
       // Create a temporary vector to hold new sums to avoid modifying
       // possibleSums while iterating over it.
       std::vector<int> toAdd;
-      for (const auto &sum : possibleSums) {
+      for (const auto& sum : possibleSums) {
         int newSum = sum + num;
         if (newSum == targetSum) {
           return true;
@@ -47,7 +47,7 @@ public:
         }
       }
       // Updade with new sums
-      for (const auto &newSum : toAdd) {
+      for (const auto& newSum : toAdd) {
         possibleSums.insert(newSum);
       }
     }
@@ -84,11 +84,11 @@ public:
 #include <vector>
 
 class Solution {
-public:
-  bool canPartition(const std::vector<int> &Nums) {
+ public:
+  bool canPartition(const std::vector<int>& Nums) {
     int totalSum = std::accumulate(Nums.begin(), Nums.end(), 0);
     if (totalSum % 2 != 0) {
-      return false; // Odd, cannot partition
+      return false;  // Odd, cannot partition
     }
 
     const int targetSum = totalSum / 2;
@@ -139,11 +139,11 @@ public:
 #include <vector>
 
 class Solution {
-public:
-  bool canPartition(const std::vector<int> &nums) {
+ public:
+  bool canPartition(const std::vector<int>& nums) {
     int sum = std::accumulate(nums.begin(), nums.end(), 0);
     if (sum % 2 != 0) {
-      return false; // Odd, cannot partition
+      return false;  // Odd, cannot partition
     }
 
     const int targetSum = sum / 2;

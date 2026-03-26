@@ -5,16 +5,16 @@
 // Serilize and KMP
 #if defined(SERIALIZE_AND_KMP)
 class Solution {
-public:
-  bool isSubtree(TreeNode *root, TreeNode *subRoot) {
+ public:
+  bool isSubtree(TreeNode* root, TreeNode* subRoot) {
     std::string s1, s2;
     serialize(root, s1);
     serialize(subRoot, s2);
     return s1.find(s2) != std::string::npos;
   }
 
-private:
-  void serialize(TreeNode *root, std::string &output) {
+ private:
+  void serialize(TreeNode* root, std::string& output) {
     if (!root) {
       output.append("#");
       return;
@@ -30,8 +30,8 @@ private:
 // Basic soution:
 #if defined(BASIC)
 class Solution {
-public:
-  bool isSubtree(TreeNode *root, TreeNode *subRoot) {
+ public:
+  bool isSubtree(TreeNode* root, TreeNode* subRoot) {
     if (!subRoot) {
       return true;
     }
@@ -45,8 +45,8 @@ public:
     return isSubtree(root->left, subRoot) || isSubtree(root->right, subRoot);
   }
 
-private:
-  bool isSameTree(TreeNode *s, TreeNode *t) {
+ private:
+  bool isSameTree(TreeNode* s, TreeNode* t) {
     if (!s && !t) {
       return true;
     }

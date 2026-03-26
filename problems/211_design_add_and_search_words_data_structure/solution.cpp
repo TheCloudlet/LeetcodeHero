@@ -76,7 +76,7 @@
 #include <unordered_map>
 
 class WordDictionary {
-public:
+ public:
   WordDictionary() : isEndOfString(false) {}
 
   void addWord(std::string_view word) {
@@ -103,23 +103,23 @@ public:
     if (c == '.') {
       // For a wildcard, we check every child. If any path leads to a match,
       // we return true. This is like a logical OR.
-      for (const auto &pair : child) {
+      for (const auto& pair : child) {
         if (pair.second->search(rest)) {
           return true;
         }
       }
-      return false; // No child path resulted in a match
+      return false;  // No child path resulted in a match
     } else {
       // For a regular character, we follow the single designated path.
       auto it = child.find(c);
       if (it == child.end()) {
-        return false; // Path doesn't exist
+        return false;  // Path doesn't exist
       }
-      return it->second->search(rest); // Continue search down the path
+      return it->second->search(rest);  // Continue search down the path
     }
   }
 
-private:
+ private:
   bool isEndOfString;
   std::unordered_map<char, std::unique_ptr<WordDictionary>> child;
 };
@@ -134,7 +134,7 @@ private:
 #include <unordered_map>
 
 class WordDictionary {
-private:
+ private:
   struct TrieNode {
     bool isEnOfWords;
     std::unordered_map<char, std::unique_ptr<TrieNode>> next;
@@ -144,8 +144,8 @@ private:
 
   std::unique_ptr<TrieNode> root;
 
-  bool searchHelper(const std::string &word, size_t index,
-                    const TrieNode *currNode) {
+  bool searchHelper(const std::string& word, size_t index,
+                    const TrieNode* currNode) {
     if (index == word.size()) {
       return currNode->isEnOfWords;
     }
@@ -160,7 +160,7 @@ private:
     }
 
     // if c == '.'
-    for (const auto &pair : currNode->next) {
+    for (const auto& pair : currNode->next) {
       if (searchHelper(word, index + 1, pair.second.get())) {
         return true;
       }
@@ -169,13 +169,13 @@ private:
     return false;
   }
 
-public:
+ public:
   WordDictionary() { root = std::make_unique<TrieNode>(); }
 
-  void addWord(const std::string &word) {
-    TrieNode *currNode = root.get();
+  void addWord(const std::string& word) {
+    TrieNode* currNode = root.get();
 
-    for (const auto &c : word) {
+    for (const auto& c : word) {
       // Found
       if (auto it = currNode->next.find(c); it != currNode->next.end()) {
         currNode = it->second.get();
@@ -188,7 +188,7 @@ public:
     currNode->isEnOfWords = true;
   }
 
-  bool search(const std::string &word) {
+  bool search(const std::string& word) {
     return searchHelper(word, 0, root.get());
   }
 };

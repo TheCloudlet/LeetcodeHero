@@ -7,12 +7,12 @@
 #include <vector>
 
 class Solution {
-public:
+ public:
   std::string removeSubstring(std::string s, int k) {
     std::vector<std::pair<char, int>> intermidiate;
     intermidiate.reserve(s.length());
 
-    for (const auto &ch : s) {
+    for (const auto& ch : s) {
       if (intermidiate.empty() && ch == '(') {
         intermidiate.push_back({ch, 1});
         continue;
@@ -29,14 +29,14 @@ public:
         } else {
           intermidiate.push_back({ch, 1});
         }
-      } else { // ch == ')'
+      } else {  // ch == ')'
         if (prevCh == '(' && cnt >= k) {
           intermidiate.push_back({ch, 1});
         } else if (prevCh == '(' && cnt < k) {
           intermidiate.push_back({ch, 0});
         } else if (prevCh == ')' && cnt != 0) {
           intermidiate.push_back({ch, cnt + 1});
-        } else { // prevCh == ')' && cnt == -1
+        } else {  // prevCh == ')' && cnt == -1
           intermidiate.push_back({ch, 0});
         }
       }
@@ -50,7 +50,7 @@ public:
 
     std::string result;
     result.reserve(intermidiate.size());
-    for (const auto &[ch, _] : intermidiate) {
+    for (const auto& [ch, _] : intermidiate) {
       result.push_back(ch);
     }
 

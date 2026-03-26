@@ -28,9 +28,9 @@ class Solution {
 
     static constexpr int kDirs[4][2] = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
 
-    int minutes_elapsed = 0; // Notes: for google way, usually adding a new line
-                             // above this because this mutable variable not
-                             // related to kDir
+    int minutes_elapsed = 0;  // Notes: for google way, usually adding a new
+                              // line above this because this mutable variable
+                              // not related to kDir
 
     while (!bfs_queue.empty() && fresh_count > 0) {
       const int level_size = bfs_queue.size();
@@ -42,8 +42,8 @@ class Solution {
         for (const auto& [dr, dc] : kDirs) {
           const int next_row = curr_row + dr;
           const int next_col = curr_col + dc;
-          if (next_row >= 0 && next_row < rows && next_col >= 0
-              && next_col < cols && grid[next_row][next_col] == 1) {
+          if (next_row >= 0 && next_row < rows && next_col >= 0 &&
+              next_col < cols && grid[next_row][next_col] == 1) {
             grid[next_row][next_col] = 2;
             --fresh_count;
             bfs_queue.emplace(next_row, next_col);

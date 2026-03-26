@@ -19,28 +19,28 @@
 #include <vector>
 
 class Solution {
-public:
-  std::vector<int> preorderTraversal(TreeNode *root) {
+ public:
+  std::vector<int> preorderTraversal(TreeNode* root) {
     if (!root) {
       return {};
     }
 
     std.vector<int> result;
-    std.stack<TreeNode *> traversalStack;
+    std.stack<TreeNode*> traversalStack;
     traversalStack.push(root);
 
     while (!traversalStack.empty()) {
-      TreeNode *curr = traversalStack.top();
+      TreeNode* curr = traversalStack.top();
       traversalStack.pop();
 
-      result.push_back(curr->val); // Process (Root)
+      result.push_back(curr->val);  // Process (Root)
 
       // Push right child first, so left is processed first
       if (curr->right) {
-        traversalStack.push(curr->right); // (Right)
+        traversalStack.push(curr->right);  // (Right)
       }
       if (curr->left) {
-        traversalStack.push(curr->left); // (Left)
+        traversalStack.push(curr->left);  // (Left)
       }
     }
     return result;

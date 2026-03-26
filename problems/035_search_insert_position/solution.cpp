@@ -19,8 +19,8 @@
 
 #include <vector>
 class Solution {
-public:
-  int searchInsert(const std::vector<int> &nums, int target) {
+ public:
+  int searchInsert(const std::vector<int>& nums, int target) {
     // `low` and `high` to indicate this is boundary not index
     int low = 0;
     int high = nums.size();

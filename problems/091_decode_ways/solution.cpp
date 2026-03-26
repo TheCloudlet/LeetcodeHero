@@ -6,8 +6,8 @@
 #include <vector>
 
 class Solution {
-public:
-  int numDecodings(const std::string &s) {
+ public:
+  int numDecodings(const std::string& s) {
     if (s.empty()) {
       return 0;
     }
@@ -15,9 +15,9 @@ public:
     return possibleDecodings(s, 0, memo);
   }
 
-private:
-  int possibleDecodings(const std::string &s, const std::size_t index,
-                        std::vector<int> &memo) {
+ private:
+  int possibleDecodings(const std::string& s, const std::size_t index,
+                        std::vector<int>& memo) {
     if (index >= s.size()) {
       return 1;
     }

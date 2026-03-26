@@ -26,12 +26,12 @@ class Solution {
       // YOUR CODE: if (nums[mid] > nums[left])
       //
       // ANALYSIS:
-      // When the window shrinks to 2 elements (e.g., [3, 1]), 'left' is at index 0
-      // and 'mid' is also at index 0 (integer division).
-      // In this case, nums[mid] == nums[left] (3 == 3).
-      // * Your condition (3 > 3) evaluates to FALSE, incorrectly forcing execution
-      // into the 'else' block (logic for right-sorted), even though the left side
-      // is technically valid/sorted.
+      // When the window shrinks to 2 elements (e.g., [3, 1]), 'left' is at
+      // index 0 and 'mid' is also at index 0 (integer division). In this case,
+      // nums[mid] == nums[left] (3 == 3).
+      // * Your condition (3 > 3) evaluates to FALSE, incorrectly forcing
+      // execution into the 'else' block (logic for right-sorted), even though
+      // the left side is technically valid/sorted.
       //
       // FIX: Use '>=' to handle the case where mid and left overlap.
       if (nums[mid] > nums[left]) {

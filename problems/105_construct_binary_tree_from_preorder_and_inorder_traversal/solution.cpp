@@ -9,8 +9,8 @@
 #include <vector>
 
 class Solution {
-public:
-  TreeNode *buildTree(std::vector<int> &preorder, std::vector<int> &inorder) {
+ public:
+  TreeNode* buildTree(std::vector<int>& preorder, std::vector<int>& inorder) {
     assert(preorder.size() == inorder.size());
     int nodeCount = preorder.size();
     if (nodeCount == 0) {
@@ -20,15 +20,15 @@ public:
                            nodeCount - 1);
   }
 
-private:
-  TreeNode *buildTreeHelper(std::vector<int> &preorder, size_t preStart,
-                            size_t preEnd, std::vector<int> &inorder,
+ private:
+  TreeNode* buildTreeHelper(std::vector<int>& preorder, size_t preStart,
+                            size_t preEnd, std::vector<int>& inorder,
                             size_t inStart, size_t inEnd) {
     if (preStart > preEnd || inStart > inEnd) {
       return nullptr;
     }
     int rootVal = preorder[preStart];
-    TreeNode *root = new TreeNode(rootVal);
+    TreeNode* root = new TreeNode(rootVal);
 
     // Find the left and right region of inorder
     size_t inorderRootIdx = inStart;

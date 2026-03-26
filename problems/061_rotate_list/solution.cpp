@@ -16,13 +16,13 @@
 #include <cstddef>
 
 class Solution {
-public:
-  ListNode *rotateRight(ListNode *head, int k) {
+ public:
+  ListNode* rotateRight(ListNode* head, int k) {
     if (!head || !head->next) {
       return head;
     }
-    ListNode **indirect = &head;
-    ListNode *tail = head;
+    ListNode** indirect = &head;
+    ListNode* tail = head;
     std::size_t listLength = 0;
 
     // Chain the linked list to a circular linked list
@@ -30,7 +30,7 @@ public:
       tail = tail->next;
       ++listLength;
     }
-    ++listLength; // Count the last node
+    ++listLength;  // Count the last node
 
     // OPTIMIZATION: This early return skips making the list circular - safe
     // since no rotation needed
@@ -47,7 +47,7 @@ public:
       indirect = &(*indirect)->next;
     }
 
-    ListNode *newHead = *indirect;
+    ListNode* newHead = *indirect;
     (*indirect) = nullptr;
 
     return newHead;

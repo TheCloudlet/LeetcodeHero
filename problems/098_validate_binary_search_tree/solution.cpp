@@ -3,13 +3,11 @@
 // @difficulty: medium
 
 class Solution {
-public:
-  bool isValidBST(TreeNode *root) {
-    return validate(root, LONG_MIN, LONG_MAX);
-  }
+ public:
+  bool isValidBST(TreeNode* root) { return validate(root, LONG_MIN, LONG_MAX); }
 
-private:
-  bool validate(TreeNode *node, long minVal, long maxVal) {
+ private:
+  bool validate(TreeNode* node, long minVal, long maxVal) {
     if (!node) {
       return true;
     }

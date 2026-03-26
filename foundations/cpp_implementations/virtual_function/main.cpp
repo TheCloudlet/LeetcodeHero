@@ -4,7 +4,7 @@
 
 // Base class
 class Shape {
-public:
+ public:
   // Add virtual keyword
   virtual void draw() const {
     std::cout << "Drawing a Generic Shape" << std::endl;
@@ -15,13 +15,13 @@ public:
 
 // Derived class
 class Circle : public Shape {
-public:
+ public:
   // Override the base class function
   void draw() const override { std::cout << "Drawing a Circle" << std::endl; }
 };
 
 class Square : public Shape {
-public:
+ public:
   void draw() const override { std::cout << "Drawing a Square" << std::endl; }
 };
 
@@ -32,8 +32,8 @@ int main() {
   shapes.push_back(std::make_unique<Square>());
 
   // Call draw() through base class pointer Shape*
-  for (const auto &shape : shapes) {
-    shape->draw(); // << Because draw() is virtual, dynamic binding occurs here
+  for (const auto& shape : shapes) {
+    shape->draw();  // << Because draw() is virtual, dynamic binding occurs here
   }
 
   return 0;

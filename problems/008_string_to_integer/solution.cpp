@@ -8,7 +8,7 @@
 #include <string>
 
 class Solution {
-public:
+ public:
   int myAtoi(std::string s) {
     int i = 0;
     int n = s.length();
@@ -24,7 +24,7 @@ public:
     }
 
     // Use long long to accumulate
-    long long result = 0; // int64_t
+    long long result = 0;  // int64_t
     while (i < n && std::isdigit(s[i])) {
       int digit = s[i] - '0';
       result = result * 10 + digit;

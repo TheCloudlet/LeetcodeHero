@@ -10,15 +10,15 @@
 #include <utility>
 
 class Solution {
-public:
-  int diameterOfBinaryTree(TreeNode *root) {
+ public:
+  int diameterOfBinaryTree(TreeNode* root) {
     auto [depth, diameter] = getDepthAndDiameter(root);
     return diameter;
   }
 
-private:
+ private:
   // return (depth, diameter)
-  std::pair<int, int> getDepthAndDiameter(TreeNode *root) {
+  std::pair<int, int> getDepthAndDiameter(TreeNode* root) {
     if (!root) {
       return {0, 0};
     }

@@ -9,14 +9,14 @@
 #include <utility>
 
 class Solution {
-public:
-  bool isBalanced(TreeNode *root) {
+ public:
+  bool isBalanced(TreeNode* root) {
     auto [_, _isBalanced] = getHeightAndBalanced(root);
     return _isBalanced;
   }
 
-private:
-  std::pair<int, bool> getHeightAndBalanced(TreeNode *root) {
+ private:
+  std::pair<int, bool> getHeightAndBalanced(TreeNode* root) {
     if (!root) {
       return {0, true};
     }
@@ -42,32 +42,32 @@ private:
 // otherwise. So we only need one return value, not a pair.
 #if defined(GEMINI)
 class Solution {
-public:
-  bool isBalanced(TreeNode *root) { return checkHeight(root) != -1; }
+ public:
+  bool isBalanced(TreeNode* root) { return checkHeight(root) != -1; }
 
-private:
+ private:
   // Returns the height of the tree if it's balanced.
   // Otherwise, returns -1.
-  int checkHeight(TreeNode *root) {
+  int checkHeight(TreeNode* root) {
     if (!root) {
-      return 0; // Height of a null tree is 0
+      return 0;  // Height of a null tree is 0
     }
 
     // Recursively check left subtree
     int heightL = checkHeight(root->left);
     if (heightL == -1) {
-      return -1; // Left is unbalanced, propagate failure up
+      return -1;  // Left is unbalanced, propagate failure up
     }
 
     // Recursively check right subtree
     int heightR = checkHeight(root->right);
     if (heightR == -1) {
-      return -1; // Right is unbalanced, propagate failure up
+      return -1;  // Right is unbalanced, propagate failure up
     }
 
     // Check current node's balance
     if (std::abs(heightL - heightR) > 1) {
-      return -1; // Current node is unbalanced
+      return -1;  // Current node is unbalanced
     }
 
     // Return height if balanced

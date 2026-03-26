@@ -5,8 +5,8 @@
 class Node {
  public:
   int val;
-  Node *next;
-  Node *random;
+  Node* next;
+  Node* random;
 
   Node(int _val) {
     val = _val;
@@ -18,20 +18,20 @@ class Node {
 #if defined(HASH_MAP)
 class Solution {
  public:
-  Node *copyRandomList(Node *head) {
+  Node* copyRandomList(Node* head) {
     if (!head) {
       return nullptr;
     }
 
-    std::unordered_map<Node *, Node *> map;
+    std::unordered_map<Node*, Node*> map;
 
-    Node *newHead = nullptr;
-    Node **indirect = &newHead;
+    Node* newHead = nullptr;
+    Node** indirect = &newHead;
 
     // First pass: create nodes and build mapping.
-    Node *curr = head;
+    Node* curr = head;
     while (curr) {
-      Node *newNode = new Node(curr->val);
+      Node* newNode = new Node(curr->val);
       map[curr] = newNode;
       *indirect = newNode;
       curr = curr->next;
@@ -42,7 +42,7 @@ class Solution {
     curr = head;
     while (curr) {
       if (map.find(curr) != map.end() && map.find(curr->random) != map.end()) {
-        Node *newNode = map[curr];
+        Node* newNode = map[curr];
         newNode->random = map[curr->random];
       }
       curr = curr->next;
@@ -70,12 +70,12 @@ class Solution {
 #if defined(INTERWEAVING)
 class Solution {
  public:
-  Node *copyRandomList(Node *head) {
+  Node* copyRandomList(Node* head) {
     // Phase 1: Clone every node and weave old/cloned lists together.
     // old: A -> B -> C  =>  A -> A' -> B -> B' -> C -> C'
-    Node *curr = head;
+    Node* curr = head;
     while (curr) {
-      Node *old_next = curr->next;
+      Node* old_next = curr->next;
       curr->next = new Node(curr->val);
       curr->next->next = old_next;
       curr = old_next;
@@ -94,10 +94,10 @@ class Solution {
     // Phase 3: Separate cloned list from old list.
     curr = head;
     Node dummy(0);
-    Node *cloned_tail = &dummy;
+    Node* cloned_tail = &dummy;
 
     while (curr && curr->next) {
-      Node *old_next = curr->next->next;
+      Node* old_next = curr->next->next;
       cloned_tail->next = curr->next;
       cloned_tail = cloned_tail->next;
       cloned_tail->next = nullptr;

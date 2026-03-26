@@ -36,7 +36,7 @@ class Solution {
 // Better solution
 // Can jump left directly to the next posisiton
 #if defined(better)
-#include <algorithm> // for std::min
+#include <algorithm>  // for std::min
 #include <vector>
 
 class Solution {

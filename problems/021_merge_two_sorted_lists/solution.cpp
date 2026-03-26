@@ -16,15 +16,15 @@
 #if defined(SIMPLE)
 class Solution {
  public:
-  ListNode *mergeTwoLists(ListNode *list1, ListNode *list2) {
+  ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
     if (!list1) {
       return list2;
     }
     if (!list2) {
       return list1;
     }
-    ListNode *dummy = new ListNode();
-    ListNode *last = dummy;
+    ListNode* dummy = new ListNode();
+    ListNode* last = dummy;
 
     while (list1 && list2) {
       if (list1->val < list2->val) {
@@ -40,7 +40,7 @@ class Solution {
 
     last->next = *list1 ? list1 : list2;
 
-    ListNode *result = dummy->next;
+    ListNode* result = dummy->next;
     delete dummy;
 
     return result;
@@ -51,9 +51,9 @@ class Solution {
 #if defined(INDIRECT)
 class Solution {
  public:
-  ListNode *mergeTwoLists(ListNode *list1, ListNode *list2) {
-    ListNode *result = nullptr;
-    ListNode **indirect = &result;  // Or nextp
+  ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
+    ListNode* result = nullptr;
+    ListNode** indirect = &result;  // Or nextp
 
     while (list1 && list2) {
       if (list1->val < list2->val) {

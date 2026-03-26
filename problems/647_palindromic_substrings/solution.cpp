@@ -3,12 +3,12 @@
 // @difficulty: medium
 
 #include <string>
-#include <utility> // For std::pair and std::move
+#include <utility>  // For std::pair and std::move
 #include <vector>
 
 class Solution {
-public:
-  int countSubstrings(const std::string &s) {
+ public:
+  int countSubstrings(const std::string& s) {
     int n = s.size();
     if (n <= 1) {
       return n;
@@ -24,7 +24,7 @@ public:
     // layerKMinus1 holds the results for substrings of length (k-1).
     // Initially, k=3, so this holds results for length 2.
     std::vector<bool> layerKMinus1(n - 1, false);
-    int prevLayerCount = 0; // For the early exit optimization
+    int prevLayerCount = 0;  // For the early exit optimization
     for (int pos = 0; pos < n - 1; ++pos) {
       if (s[pos] == s[pos + 1]) {
         layerKMinus1[pos] = true;
@@ -51,12 +51,12 @@ public:
     return palindromeCount;
   }
 
-private:
+ private:
   // This is now a pure function with no side effects.
   // It is marked const because it doesn't modify the object's state.
-  std::pair<std::vector<bool>, int>
-  buildLayer(const std::string &s, int k,
-             const std::vector<bool> &layerKMinus2) const {
+  std::pair<std::vector<bool>, int> buildLayer(
+      const std::string& s, int k,
+      const std::vector<bool>& layerKMinus2) const {
     int n = s.size();
     std::vector<bool> currentLayer(n - k + 1, false);
     int count = 0;

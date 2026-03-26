@@ -5,12 +5,12 @@
 // Reframe the quetion. How can we find a node that splits p->val and q->val
 #if defined(RECURSION)
 class Solution {
-public:
-  TreeNode *lowestCommonAncestor(TreeNode *root, TreeNode *p, TreeNode *q) {
+ public:
+  TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
     if (!root || !p || !q) {
       return nullptr;
     }
-    if (root == p || root == q) { // NOTE: this is redundant
+    if (root == p || root == q) {  // NOTE: this is redundant
       return root;
     }
     // If both nodes are in the right subtree
@@ -28,15 +28,15 @@ public:
 
 #if defined(ITERATION)
 class Solution {
-public:
-  TreeNode *lowestCommonAncestor(TreeNode *root, TreeNode *p, TreeNode *q) {
+ public:
+  TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
     if (!root || !p || !q) {
       return nullptr;
     }
-    TreeNode *curr = root;
+    TreeNode* curr = root;
     while (curr) {
       if (curr == p || curr == q) {
-        return curr; // NOTE: this is redundant
+        return curr;  // NOTE: this is redundant
       }
       if (curr->val < p->val && curr->val < q->val) {
         curr = curr->right;

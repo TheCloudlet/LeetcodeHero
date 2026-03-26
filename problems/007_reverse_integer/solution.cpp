@@ -27,9 +27,7 @@ class Solution {
 
 class Solution {
  public:
-  int reverse(int x) {
-    return reverseHelper(x, 0);
-  }
+  int reverse(int x) { return reverseHelper(x, 0); }
 
  private:
   int reverseHelper(int x, int rev) {

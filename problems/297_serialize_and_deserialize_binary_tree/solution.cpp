@@ -20,18 +20,18 @@
 #include <vector>
 
 class Codec {
-public:
+ public:
   // Encodes a tree to a single string.
-  std::string serialize(TreeNode *root) {
+  std::string serialize(TreeNode* root) {
     if (!root) {
       return "null";
     }
     std::string result;
-    std::queue<TreeNode *> nextNode;
+    std::queue<TreeNode*> nextNode;
     nextNode.push(root);
 
     while (!nextNode.empty()) {
-      TreeNode *curr = nextNode.front();
+      TreeNode* curr = nextNode.front();
       nextNode.pop();
 
       if (!curr) {
@@ -48,7 +48,7 @@ public:
   }
 
   // Decodes your encoded data to tree.
-  TreeNode *deserialize(std::string data) {
+  TreeNode* deserialize(std::string data) {
     std::vector<std::optional<int>> tokens;
     // 1. Find tokens and add to token list
     tokenize(data, tokens);
@@ -59,13 +59,13 @@ public:
       return nullptr;
     }
 
-    TreeNode *root = new TreeNode(tokens[0].value());
-    std::queue<TreeNode *> nextNode;
+    TreeNode* root = new TreeNode(tokens[0].value());
+    std::queue<TreeNode*> nextNode;
     nextNode.push(root);
 
-    std::size_t idx = 1; // iterate tokens
+    std::size_t idx = 1;  // iterate tokens
     while (!nextNode.empty()) {
-      TreeNode *curr = nextNode.front();
+      TreeNode* curr = nextNode.front();
       nextNode.pop();
 
       // Process left child
@@ -87,9 +87,9 @@ public:
     return root;
   }
 
-private:
-  void tokenize(const std::string &data,
-                std::vector<std::optional<int>> &tokens) {
+ private:
+  void tokenize(const std::string& data,
+                std::vector<std::optional<int>>& tokens) {
     std::stringstream ss(data);
     std::string token;
 

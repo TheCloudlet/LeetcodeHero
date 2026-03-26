@@ -6,18 +6,19 @@
 //   2. query and return
 
 #include <assert.h>
+
 #include <stack>
 #include <unordered_map>
 #include <vector>
 
 class Solution {
-public:
-  std::vector<int> nextGreaterElement(std::vector<int> &nums1,
-                                      std::vector<int> &nums2) {
+ public:
+  std::vector<int> nextGreaterElement(std::vector<int>& nums1,
+                                      std::vector<int>& nums2) {
     assert(nums1.size() < nums2.size());
     std::stack<int> monoStack;
     std::unordered_map<int, int> nextGreater;
-    for (const auto &num : nums2) { // NOTE: we don't need index
+    for (const auto& num : nums2) {  // NOTE: we don't need index
       while (!monoStack.empty() && monoStack.top() < num) {
         nextGreater[monoStack.top()] = num;
         monoStack.pop();
@@ -27,7 +28,7 @@ public:
 
     std::vector<int> res;
     res.reserve(nums1.size());
-    for (const auto &num : nums1) {
+    for (const auto& num : nums1) {
       auto it = nextGreater.find(num);
       if (it != nextGreater.end()) {
         res.emplace_back(it->second);

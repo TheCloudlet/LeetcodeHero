@@ -31,15 +31,15 @@
 #include <vector>
 
 class Solution {
-public:
-  int maxProduct(const std::vector<int> &nums) {
+ public:
+  int maxProduct(const std::vector<int>& nums) {
     int n = nums.size();
     assert(n != 0);
 
     int globalMax = nums[0];
     int localMax = nums[0];
     int localMin = nums[0];
-    for (int idx = 1; idx < n; idx++) { // Start with idx 1
+    for (int idx = 1; idx < n; idx++) {  // Start with idx 1
       // Three conditions: the current is `-`, 0, `+`
       int num = nums[idx];
       int prevMax = localMax;

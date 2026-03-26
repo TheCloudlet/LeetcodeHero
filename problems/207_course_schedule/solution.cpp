@@ -8,16 +8,16 @@
 //     `std::function<bool(int)> dfs = [&](int u) -> bool { ... }`
 //     this is a total functional programming style.
 #if defined(DFS_COLORING)
-#include <vector>
 #include <cassert>
+#include <vector>
 
 class Solution {
-public:
+ public:
   bool canFinish(int numCourses,
-                 const std::vector<std::vector<int>> &prerequisites) {
+                 const std::vector<std::vector<int>>& prerequisites) {
     // Initialize adjacency list with proper size
     std::vector<std::vector<int>> adjVec(numCourses);
-    for (const auto &pair : prerequisites) {
+    for (const auto& pair : prerequisites) {
       int course = pair[0];
       int prerequisite = pair[1];
       adjVec[prerequisite].push_back(course);
@@ -29,23 +29,23 @@ public:
     for (int node = 0; node < numCourses; ++node) {
       if (colors[node] == DFSColor::unvisited) {
         if (!dfsHelper(adjVec, colors, node)) {
-          return false; // Found cycle
+          return false;  // Found cycle
         }
       }
     }
     return true;
   }
 
-private:
+ private:
   enum class DFSColor { unvisited, visiting, visited };
 
-  bool dfsHelper(const std::vector<std::vector<int>> &adjVec,
-                 std::vector<DFSColor> &colors, int currNode) {
+  bool dfsHelper(const std::vector<std::vector<int>>& adjVec,
+                 std::vector<DFSColor>& colors, int currNode) {
     colors[currNode] = DFSColor::visiting;
 
-    for (const auto &neighbor : adjVec[currNode]) {
+    for (const auto& neighbor : adjVec[currNode]) {
       if (colors[neighbor] == DFSColor::visiting) {
-        return false; // Found cycle
+        return false;  // Found cycle
       }
       if (colors[neighbor] == DFSColor::unvisited &&
           !dfsHelper(adjVec, colors, neighbor)) {

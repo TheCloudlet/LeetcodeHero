@@ -22,8 +22,8 @@
 #include <vector>
 
 class Solution {
-public:
-  int coinChange(const std::vector<int> &coins, const int amount) {
+ public:
+  int coinChange(const std::vector<int>& coins, const int amount) {
     int n = coins.size();
     if (n == 0) {
       return -1;
@@ -31,7 +31,7 @@ public:
     std::vector<int> sortedCoins = coins;
     std::sort(sortedCoins.begin(), sortedCoins.end(), std::greater<>());
     std::vector<int> memo(amount + 1, -1);
-    memo[0] = 0; // base case
+    memo[0] = 0;  // base case
 
     auto res = findSmallestChange(sortedCoins, amount, memo);
     if (res.has_value()) {
@@ -41,24 +41,24 @@ public:
     return -1;
   }
 
-private:
-  std::optional<int> findSmallestChange(std::vector<int> &coins, int amount,
-                                        std::vector<int> &memo) {
+ private:
+  std::optional<int> findSmallestChange(std::vector<int>& coins, int amount,
+                                        std::vector<int>& memo) {
     if (amount < 0) {
       return std::nullopt;
     }
     if (amount == 0) {
       return 0;
     }
-    if (memo[amount] != -1) { // means already cached
-      if (memo[amount] == INT_MAX) { // means inpossible
+    if (memo[amount] != -1) {         // means already cached
+      if (memo[amount] == INT_MAX) {  // means inpossible
         return std::nullopt;
       }
       return memo[amount];
     }
 
     int minCount = INT_MAX;
-    for (const auto &coin : coins) {
+    for (const auto& coin : coins) {
       auto res = findSmallestChange(coins, amount - coin, memo);
       if (res.has_value()) {
         minCount = std::min(minCount, 1 + res.value());
@@ -68,7 +68,7 @@ private:
     memo[amount] = minCount;
 
     if (minCount == INT_MAX) {
-      return std::nullopt; // not possible
+      return std::nullopt;  // not possible
     }
     return minCount;
   }

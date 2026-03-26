@@ -6,20 +6,20 @@
 #include <vector>
 
 class Solution {
-public:
-  std::vector<int> rightSideView(TreeNode *root) {
+ public:
+  std::vector<int> rightSideView(TreeNode* root) {
     if (!root) {
       return {};
     }
 
     std::vector<int> result;
-    std::queue<TreeNode *> levelNodeQueue;
+    std::queue<TreeNode*> levelNodeQueue;
     levelNodeQueue.push(root);
 
     while (!levelNodeQueue.empty()) {
       int levelCount = levelNodeQueue.size();
       for (int idx = 0; idx < levelCount; ++idx) {
-        TreeNode *node = levelNodeQueue.front();
+        TreeNode* node = levelNodeQueue.front();
         levelNodeQueue.pop();
 
         if (node->left) {

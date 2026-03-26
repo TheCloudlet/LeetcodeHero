@@ -5,14 +5,14 @@
 // Note:
 // This contest problem is fun!
 
-#include <algorithm> // std::max
-#include <climits>   // INT_MIN
+#include <algorithm>  // std::max
+#include <climits>    // INT_MIN
 
 class Solution {
-public:
-  int goodNodes(TreeNode *root) { return countGoodNode(root, INT_MIN); }
+ public:
+  int goodNodes(TreeNode* root) { return countGoodNode(root, INT_MIN); }
 
-  int countGoodNode(TreeNode *node, int prevMax) {
+  int countGoodNode(TreeNode* node, int prevMax) {
     if (!node) {
       return 0;
     }

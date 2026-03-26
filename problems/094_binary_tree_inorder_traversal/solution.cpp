@@ -15,19 +15,19 @@
  * };
  */
 
-#include <vector>
 #include <stack>
+#include <vector>
 
 class Solution {
-public:
-  std::vector<int> inorderTraversal(TreeNode *root) {
+ public:
+  std::vector<int> inorderTraversal(TreeNode* root) {
     if (!root) {
       return {};
     }
     std::vector<int> result;
 
-    TreeNode *curr = root;
-    std::stack<TreeNode *> traversalStack;
+    TreeNode* curr = root;
+    std::stack<TreeNode*> traversalStack;
 
     while (curr || !traversalStack.empty()) {
       while (curr) {

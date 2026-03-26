@@ -11,7 +11,7 @@
 #include <unordered_map>
 
 class LRUCache {
-private:
+ private:
   size_t capacity;
 
   // Doubly linked list: most recent at front, least recent at back
@@ -19,7 +19,7 @@ private:
   // Hash map: key -> iterator to list node
   std::unordered_map<int, std::list<std::pair<int, int>>::iterator> map;
 
-public:
+ public:
   explicit LRUCache(int capacity_) : capacity(capacity_) {}
 
   int get(int key) {

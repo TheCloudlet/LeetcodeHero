@@ -12,10 +12,10 @@ int peakIndexInMountainArray(std::vector<int>& arr) {
   while (left < right) {
     int mid = left + (right - left) / 2;
     if (arr[mid] < arr[mid + 1]) {
-      left = mid + 1; // peak is to the right
+      left = mid + 1;  // peak is to the right
     } else {
-      right = mid;    // peak is at mid or to the left
+      right = mid;  // peak is at mid or to the left
     }
   }
-  return left; // left == right == peak index
+  return left;  // left == right == peak index
 }

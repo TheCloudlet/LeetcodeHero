@@ -1,7 +1,8 @@
-#include "MySharedPtr.h"
 #include <iostream>
 
-void print(const char *label, const MySharedPtr<int> &p) {
+#include "MySharedPtr.h"
+
+void print(const char* label, const MySharedPtr<int>& p) {
   std::cout << label << " -> ";
   std::cout << "value: ";
   if (p.get()) {

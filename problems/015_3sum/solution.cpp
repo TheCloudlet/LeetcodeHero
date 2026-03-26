@@ -6,8 +6,8 @@
 #include <vector>
 
 class Solution {
-public:
-  std::vector<std::vector<int>> threeSum(std::vector<int> &nums) {
+ public:
+  std::vector<std::vector<int>> threeSum(std::vector<int>& nums) {
     if (nums.size() < 3) {
       return {};
     }
@@ -16,8 +16,7 @@ public:
     std::sort(nums.begin(), nums.end());
     for (size_t pivot = 0; pivot < nums.size() - 2; ++pivot) {
       // Skip duplicate pivot values
-      if (pivot > 0 && nums[pivot] == nums[pivot - 1])
-        continue;
+      if (pivot > 0 && nums[pivot] == nums[pivot - 1]) continue;
 
       int target = -nums[pivot];
       int left = pivot + 1;

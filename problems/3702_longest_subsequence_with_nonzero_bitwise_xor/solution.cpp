@@ -7,8 +7,8 @@
 // So I tried to use DP to solve it, which is overkill.
 
 class Solution {
-public:
-  int longestSubsequence(std::vector<int> &nums) {
+ public:
+  int longestSubsequence(std::vector<int>& nums) {
     int numCount = nums.size();
     int zeroCount = 0;
     int xorAll = 0;

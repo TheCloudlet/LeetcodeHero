@@ -15,7 +15,7 @@
 #include <string>
 
 class Solution {
-public:
+ public:
   std::string intToRoman(int num) {
     const std::array<std::string, 13> romanChar = {
         "M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"};

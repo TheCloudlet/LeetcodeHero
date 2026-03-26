@@ -4,15 +4,15 @@
 
 #if define(RECURSIVE)
 class Solution {
-public:
-  int kthSmallest(TreeNode *root, int k) {
+ public:
+  int kthSmallest(TreeNode* root, int k) {
     int result = -1;
     inorderTraversal(root, k, result);
     return result;
   }
 
-public:
-  void inorderTraversal(TreeNode *root, int &k, int &result) {
+ public:
+  void inorderTraversal(TreeNode* root, int& k, int& result) {
     if (!root) {
       return;
     }
@@ -34,10 +34,10 @@ public:
 
 #if define(ITERATIVE)
 class Solution {
-public:
-  int kthSmallest(TreeNode *root, int k) {
-    std::stack<TreeNode *> nodeStack;
-    TreeNode *curr = root;
+ public:
+  int kthSmallest(TreeNode* root, int k) {
+    std::stack<TreeNode*> nodeStack;
+    TreeNode* curr = root;
 
     while (curr != nullptr || !nodeStack.empty()) {
       // 1. Go as far left as possible from the current node.
@@ -60,7 +60,7 @@ public:
       // find the leftmost node of this new subtree.
       curr = curr->right;
     }
-    return -1; // Should not be reached
+    return -1;  // Should not be reached
   }
 };
 #endif

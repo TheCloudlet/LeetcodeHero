@@ -59,13 +59,13 @@
 //     to discard search space linearly.
 
 #include <algorithm>
-#include <cmath> // Required for std::abs
+#include <cmath>  // Required for std::abs
 #include <limits>
 #include <vector>
 
 class Solution {
-public:
-  int threeSumClosest(std::vector<int> &nums, int target) {
+ public:
+  int threeSumClosest(std::vector<int>& nums, int target) {
     std::sort(nums.begin(), nums.end());
 
     // Initial with a first guess

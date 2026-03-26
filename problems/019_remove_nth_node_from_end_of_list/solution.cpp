@@ -24,10 +24,10 @@
 /// 1. Creates a gap of n nodes between fast and slow pointers
 /// 2. When fast reaches the end, slow points to the node before the target
 /// 3. Using double pointers (**) simplifies edge cases like removing the head
-ListNode *removeNthFromEnd(ListNode *head, int n) {
+ListNode* removeNthFromEnd(ListNode* head, int n) {
   // Using indirect pointers for more elegant pointer manipulation
-  ListNode **fast = &head;
-  ListNode **slow = &head;
+  ListNode** fast = &head;
+  ListNode** slow = &head;
 
   // Advance fast pointer n steps ahead
   int steps_taken = 0;
@@ -49,7 +49,7 @@ ListNode *removeNthFromEnd(ListNode *head, int n) {
   }
 
   // Remove the target node
-  ListNode *nodeToDelete = *slow;
+  ListNode* nodeToDelete = *slow;
   *slow = (*slow)->next;
   delete nodeToDelete;
 

@@ -2,12 +2,12 @@
 // @tag: dp, neetcode150
 // @difficulty: medium
 
-#include <algorithm> // For std::max
+#include <algorithm>  // For std::max
 #include <vector>
 
 class Solution {
-public:
-  int rob(std::vector<int> &nums) {
+ public:
+  int rob(std::vector<int>& nums) {
     int n = nums.size();
     if (n == 0) {
       return 0;
@@ -21,10 +21,10 @@ public:
     return std::max(skipFirst, skipLast);
   }
 
-private:
-  int robLinear(std::vector<int> &nums, int start, int end) {
-    int prevTwo = 0; // Max money two positions back
-    int prevOne = 0; // Max money one position back
+ private:
+  int robLinear(std::vector<int>& nums, int start, int end) {
+    int prevTwo = 0;  // Max money two positions back
+    int prevOne = 0;  // Max money one position back
 
     for (int i = start; i <= end; i++) {
       int current = std::max(prevTwo + nums[i], prevOne);

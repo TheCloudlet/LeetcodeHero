@@ -3,14 +3,15 @@
 // @difficulty: medium
 
 // NOTE:
-// The solution is called Kadane's Algorithm, which efficiently finds the maximum
-// sum of any contiguous subarray in O(n) time and O(1) space.
+// The solution is called Kadane's Algorithm, which efficiently finds the
+// maximum sum of any contiguous subarray in O(n) time and O(1) space.
 //
 // Algorithm explanation:
 // - We maintain two variables: localMax (max sum ending at current position)
 //   and globalMax (maximum sum seen so far across all positions)
 // - At each position, we decide whether to:
-//   1. Start a new subarray from current element (if current > localMax + current)
+//   1. Start a new subarray from current element (if current > localMax +
+//   current)
 //   2. Extend the existing subarray (if localMax + current > current)
 // - This is equivalent to: localMax = max(current, localMax + current)
 // - We update globalMax with the maximum value seen so far
@@ -28,8 +29,8 @@
 #include <vector>
 
 class Solution {
-public:
-  int maxSubArray(vector<int> &nums) {
+ public:
+  int maxSubArray(vector<int>& nums) {
     assert(!nums.empty());
 
     int globalMax = nums[0];

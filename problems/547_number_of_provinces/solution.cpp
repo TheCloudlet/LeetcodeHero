@@ -9,7 +9,8 @@
 // Space Complexity: O(N)
 //   where N is the number of cities (nodes).
 //   We need O(N) auxiliary space for the DSU 'parent' and 'size' vectors.
-//   The recursion stack for 'find' is negligible (O(alpha(N))) due to path compression.
+//   The recursion stack for 'find' is negligible (O(alpha(N))) due to path
+//   compression.
 
 #include <cassert>
 #include <numeric>

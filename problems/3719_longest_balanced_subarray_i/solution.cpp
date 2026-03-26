@@ -21,7 +21,6 @@
 // shorter subarrays doesn't help compute the answer for longer ones).
 // So we use brute-force to enumerate all subarrays.
 
-
 #include <algorithm>
 #include <unordered_set>
 #include <vector>

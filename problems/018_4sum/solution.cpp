@@ -7,8 +7,8 @@
 #include <vector>
 
 class Solution {
-public:
-  std::vector<std::vector<int>> fourSum(std::vector<int> &nums, int target) {
+ public:
+  std::vector<std::vector<int>> fourSum(std::vector<int>& nums, int target) {
     std::vector<std::vector<int>> result;
     if (nums.size() < 4) {
       return result;

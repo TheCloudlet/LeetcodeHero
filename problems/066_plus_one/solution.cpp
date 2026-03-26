@@ -10,7 +10,7 @@ class Solution {
     for (int idx = result.size() - 1; idx >= 0; --idx) {
       if (result[idx] < 9) {
         result[idx]++;
-        return result; // Early exit, very efficient for [1, 2, 3]
+        return result;  // Early exit, very efficient for [1, 2, 3]
       }
       result[idx] = 0;
     }

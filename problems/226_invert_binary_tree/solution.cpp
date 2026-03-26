@@ -15,11 +15,11 @@
  * };
  */
 
-#include <algorithm> // for std::swap
+#include <algorithm>  // for std::swap
 
 class Solution {
-public:
-  TreeNode *invertTree(TreeNode *root) {
+ public:
+  TreeNode* invertTree(TreeNode* root) {
     if (!root) {
       return nullptr;
     }
