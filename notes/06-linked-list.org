@@ -1,6 +1,7 @@
 #+TITLE: 06-linked-list
 #+AUTHOR: Yi-Ping Pan (Cloudlet)
 #+DATE: 2026-03-25
+#+DESCRIPTION: Conquering DSA using SICP's approach
 
 * 1. Primitives
 ** 1.1 Struct

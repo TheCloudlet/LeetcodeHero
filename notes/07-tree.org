@@ -1,0 +1,235 @@
+#+TITLE: 07-Tree
+#+AUTHOR: Yi-Ping Pan (Cloudlet)
+#+DATE: 2026-03-26
+#+DESCRIPTION: Conquering DSA using SICP's approach
+
+* 1. Primitives
+** 1.1 Basic Structure
+#+NAME: Haskell's Binary Tree
+#+BEGIN_SRC haskell
+data Tree a
+  = Empty
+  | Node a (Tree a) (Tree a)
+  deriving (Show, Eq)
+#+END_SRC
+
+#+NAME: Cpp's Binary Tree
+#+BEGIN_SRC cpp
+struct TreeNode {
+  int val;
+  TreeNode *left;
+  TreeNode *right;
+  TreeNode(int value) : val(value), left(nullptr), right(nullptr) {}
+};
+#+END_SRC
+
+* 2. Means of Combination & Abstraction
+** 2.1 Traversal
+*** 2.1.1 DFS
+Depth-first search (DFS) ::
+Process the current node, recur into subtrees, return when reaching Empty.
+
+Order of handling for each nodes:
+
+1. In-order :: left -> mid -> right
+2. Pre-order :: mid -> left -> right
+3. Post-order :: left -> right -> mid
+
+Very elegant haskell way to implement the traversal.
+
+#+NAME: Haskell Tree Traversal
+#+BEGIN_SRC haskell
+-- DFS traversals
+inorder :: Tree a -> [a]
+inorder Empty        = []
+inorder (Node x l r) = inorder l ++ [x] ++ inorder r
+
+preorder :: Tree a -> [a]
+preorder Empty        = []
+preorder (Node x l r) = [x] ++ preorder l ++ preorder r
+
+postorder :: Tree a -> [a]
+postorder Empty        = []
+postorder (Node x l r) = postorder l ++ postorder r ++ [x]
+#+END_SRC
+
+cpp way to implement the traversal.
+
+#+NAME: LC94/144/145 Binary Tree Inorder/Preorder/Postorder Traversal
+#+BEGIN_SRC cpp
+// Recursive
+void preorder(TreeNode *root) {
+  if (!root) return;
+  // visit root->val here (pre)
+  preorder(root->left);
+  preorder(root->right);
+}
+
+void inorder(TreeNode *root) {
+  if (!root) return;
+  inorder(root->left);
+  // visit root->val here (in)
+  inorder(root->right);
+}
+
+void postorder(TreeNode *root) {
+  if (!root) return;
+  postorder(root->left);
+  postorder(root->right);
+  // visit root->val here (post)
+}
+#+END_SRC
+
+For iterative implementation: (FIXME: Not fluent yet)
+
+- Pre-order :: Stack; handle current node first, then push right then left (LIFO reverses order)
+- In-order :: Stack + pointer; go left until null, pop, handle current node, then go right
+- Post-order :: Modified pre-order (push left then right), reverse result at end
+
+*** 2.1.2 BFS
+
+Breadth-first search (BFS) ::
+Process the current frontier, collect children as the new frontier, recur until empty.
+
+#+NAME: SICP's Perspective
+#+BEGIN_EXAMPLE
+Pass 1:
+frontier = [1]
+handled = []
+      1
+     / \
+    2   3
+   / \ / \
+  4  5 6  7
+
+Pass 2:
+frontier = [2, 3]
+handled = [1]
+     (1)
+     / \
+    2   3
+   / \ / \
+  4  5 6  7
+
+Pass 3:
+frontier = [4, 5, 6, 7]
+handled = [1, 2, 3]
+      1
+     / \
+    2   3
+   / \ / \
+  4  5 6  7 <- frontier
+
+Pass 4:
+frontier = []
+handled = [1, 2, 3, 4, 5, 6, 7]
+      1
+     / \
+    2   3
+   / \ / \
+  4  5 6  7
+#+END_EXAMPLE
+
+Basic BFS:
+
+#+NAME: Cpp Tree Traversal (BFS)
+#+BEGIN_SRC cpp
+// Recursive
+void bfs(TreeNode *root, std::queue<TreeNode *> &nexts) {
+  if (!root) return;
+
+  // Visit value here // mid
+  if (root->left) nexts.push(root->left);
+  if (root->right) nexts.push(root->right);
+
+  if (!nexts.empty()) {
+    TreeNode *next = nexts.front();
+    nexts.pop();
+    bfs(next, nexts);
+  }
+}
+#+END_SRC
+
+Tree Level Order Traversal:
+
+(This is the same alogrithm hanlding expanding graphs)
+
+#+NAME: LC102 Binary Tree Level Order Traversal
+#+BEGIN_SRC cpp
+// Iterative (Preferred)
+std::vector<std::vector<int>> levelOrder(TreeNode *root) {
+  if (!root) return {};
+
+  std::queue<TreeNode *> nexts;
+  std::vector<std::vector<int>> ans;
+  nexts.push(root);
+
+  while (!nexts.empty()) {
+    int level_count = nexts.size();  // Key of level order traversal
+    std::vector<int> level;
+    for (int i = 0; i < level_count; ++i) {
+      TreeNode *front = nexts.front();
+      nexts.pop();
+      level.push_back(front->val);
+
+      // Add children to nexts
+      if (front->left) nexts.push(front->left);
+      if (front->right) nexts.push(front->right);
+    }
+    ans.emplace_back(std::move(level));
+  }
+
+  return ans;
+}
+#+END_SRC
+
+*** 2.1.3 Moris Traversal (FIXME)
+
+* 3. Classic Problems
+#+NAME: Tree Problem Categories
+#+BEGIN_EXAMPLE
+Tree Problems
+├── DFS
+│   ├── Pass-down (propagate state from root to leaves)
+│   ├── Return-up (aggregate results from leaves to root)
+│   └── In/Pre/Post-order (traversal order)
+├── BFS
+│   └── Level-order (breadth-first traversal)
+└── BST Property (leverage left < root < right)
+#+END_EXAMPLE
+
+** 3.1 DFS
+*** 3.1.1 Pass-down
+- [ ] [medium] 098. Validate BST :: pass-down (range), also solvable via in-order
+- [ ] [medium] 1448. Count Good Nodes in Binary Tree :: pass max value seen so far
+
+*** 3.1.2 Return-up
+- [ ] [easy] 100. Same Tree :: return bool
+- [ ] [easy] 104. Maximum Depth of Binary Tree :: return height
+- [ ] [easy] 226. Invert Binary Tree :: return swapped node
+- [ ] [easy] 543. Diameter of Binary Tree :: return height, track max diameter
+- [ ] [easy] 572. Subtree of Another Tree :: return bool
+- [ ] [medium] 110. Balanced Binary Tree :: return height, check balance
+- [ ] [medium] 236. Lowest Common Ancestor of a Binary Tree :: return found node
+- [ ] [hard] 124. Binary Tree Maximum Path Sum :: return max single path, track global max
+
+*** 3.1.3 Traversal Order
+- [X] [easy] 094. Binary Tree Inorder Traversal :: in-order
+- [X] [easy] 144. Binary Tree Preorder Traversal :: pre-order
+- [X] [easy] 145. Binary Tree Postorder Traversal :: post-order
+- [ ] [medium] 105. Construct Binary Tree from Preorder and Inorder Traversal :: use order properties
+- [ ] [medium] 230. Kth Smallest Element in a BST :: in-order gives sorted
+- [ ] [medium] 297. Serialize and Deserialize Binary Tree :: pre-order or level-order
+
+** 3.2 BFS (Level-order)
+- [ ] [medium] 102. Binary Tree Level Order Traversal :: basic level-order
+- [ ] [medium] 199. Binary Tree Right Side View :: rightmost of each level
+
+** 3.3 BST Property
+- [ ] [medium] 096. Unique Binary Search Trees :: DP (Catalan number)
+- [ ] [medium] 098. Validate BST :: pass-down (range), also solvable via in-order
+- [ ] [medium] 230. Kth Smallest Element in a BST :: in-order is sorted
+- [ ] [medium] 235. Lowest Common Ancestor of a Binary Search Tree :: use BST to navigate
+
+* 4. Debug
+* 5. Common Mistakes

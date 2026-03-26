@@ -1,6 +1,7 @@
 #+TITLE: 17-BitOps
 #+AUTHOR: Yi-Ping Pan (Cloudlet)
 #+DATE: 2026-03-24
+#+DESCRIPTION: Conquering DSA using SICP's approach
 
 * 1. Primitives
 - AND (=&=) :: Extraction and Masking. Used to filter out specific bits, acting as a precise sieve within the data stream.
