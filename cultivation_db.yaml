@@ -462,6 +462,15 @@ problems:
       #1: One-shot.
       #2: Almost. Not checking the null pointer.
 
+  - id: 101
+    title: "Symmetric Tree"
+    link: "./problems/101_symmetric_tree/"
+    leetcode-difficulty: easy
+    topics: [tree, dfs]
+    status: L2_STRUGGLE
+    refinement_focus: |
+      #1: Almost. Arm's length Recursion (bad)
+
   - id: 102
     title: "Binary Tree Level Order Traversal"
     link: "./problems/102_binary_tree_level_order_traversal/"
