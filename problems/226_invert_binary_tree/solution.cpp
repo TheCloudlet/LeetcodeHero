@@ -15,6 +15,7 @@
  * };
  */
 
+#if defined(SWAP)
 #include <algorithm>  // for std::swap
 
 class Solution {
@@ -29,3 +30,21 @@ class Solution {
     return root;
   }
 };
+#endif
+
+#if defined(DIRECT)
+#include <algorithm>  // for std::swap
+
+class Solution {
+ public:
+  TreeNode* invertTree(TreeNode* root) {
+    if (!root) return nullptr;
+
+    TreeNode* tmp = root->left;
+    root->left = invertTree(root->right);
+    root->right = invertTree(tmp);
+
+    return root;
+  }
+};
+#endif

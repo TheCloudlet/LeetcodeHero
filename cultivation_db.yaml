@@ -458,7 +458,9 @@ problems:
     leetcode-difficulty: easy
     topics: [tree, dfs, bfs, neetcode150]
     status: L3_MASTERED
-    refinement_focus: "Recursion"
+    refinement_focus:
+      #1: One-shot.
+      #2: Almost. Not checking the null pointer.
 
   - id: 102
     title: "Binary Tree Level Order Traversal"
@@ -804,7 +806,9 @@ problems:
     leetcode-difficulty: easy
     topics: [tree, dfs, bfs, neetcode150]
     status: L3_MASTERED
-    refinement_focus: "Recursion or Iteration"
+    refinement_focus: |
+      #1: One-shot.
+      #2: One-shot.
 
   - id: 287
     title: "Find the Duplicate Number"

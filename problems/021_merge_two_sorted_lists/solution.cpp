@@ -69,11 +69,6 @@ class Solution {
     // Attach remaining nodes
     *indirect = list1 ? list1 : list2;
 
-    // list1 and list2 should not be accessable after calling this function
-    // (But it does not really affect caller's pointer)
-    list1 = nullptr;
-    list2 = nullptr;
-
     return result;
   }
 };
