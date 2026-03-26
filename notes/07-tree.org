@@ -204,9 +204,10 @@ Tree Problems
 - [ ] [medium] 1448. Count Good Nodes in Binary Tree :: pass max value seen so far
 
 *** 3.1.2 Return-up
-- [ ] [easy] 100. Same Tree :: return bool
+- [X] [easy] 100. Same Tree :: return bool
+- [X] [easy] 101. Symmetric Tree :: return bool
 - [ ] [easy] 104. Maximum Depth of Binary Tree :: return height
-- [ ] [easy] 226. Invert Binary Tree :: return swapped node
+- [X] [easy] 226. Invert Binary Tree :: return swapped node
 - [ ] [easy] 543. Diameter of Binary Tree :: return height, track max diameter
 - [ ] [easy] 572. Subtree of Another Tree :: return bool
 - [ ] [medium] 110. Balanced Binary Tree :: return height, check balance
@@ -233,3 +234,27 @@ Tree Problems
 
 * 4. Debug
 * 5. Common Mistakes
+** Arm's-length Recursion
+
+Trust the next stack frame to handle nullptr — don't peek ahead.
+
+| Context        | Action                       | Why                         |
+|----------------+------------------------------+-----------------------------|
+| Tree Recursion | Only check ~if (!root)~        | Callee handles nullptr      |
+| List Iteration | Check ~curr->next~ before move | No stack frame to catch you |
+
+#+NAME: 101. Symmetric Tree
+#+BEGIN_SRC cpp
+// LC101. Symmetric Tree
+// BAD: Dereferencing child without null check -> segfault
+if (a->left->val != b->right->val) {
+  return false;
+}
+
+// GOOD: Let recursion handle it
+if (a->val != b->val) {
+  return false;
+}
+
+return isMirror(a->left, b->right) && isMirror(a->right, b->left);
+#+END_SRC
