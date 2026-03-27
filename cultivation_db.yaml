@@ -781,8 +781,8 @@ problems:
     status: L2_STRUGGLE
     refinement_focus: |
       First time, now forget how to trace the path
-
       Second time re-learn. Khan's algorithm is easy to implement. The error I made is indeg[course] == 0, I wrote indeg[course] != 0.
+      [2026-03-27]: Alomost. Indegree wrong and loop detection should just check `ans.size() == numCourses`
 
   - id: 211
     title: "Design Add and Search Words Data Structure"

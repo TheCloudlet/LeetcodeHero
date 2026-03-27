@@ -2,3 +2,265 @@
 #+AUTHOR: Yi-Ping Pan (Cloudlet)
 #+DATE: 2026-03-27
 #+DESCRIPTION: Conquering DSA using SICP's approach
+
+* 1. Primitives
+** 1.1 Vertex & Edge
+- Vertex (Node) :: the basic unit of the graph that contains data (visited, color, etc.)
+- Edge :: the connection between two vertices
+  + Directed / Undirected
+  + Weighted / Unweighted
+
+** 1.2 Adjacency Relation (getNeighbors)
+The way to answer: "I'm at node u, which nodes can I reach?"
+
+** 1.3 Visited State
+Track visited nodes to avoid infinite loops in cyclic graphs.
+
+* 2. Means of Combination & Abstraction
+** 2.1 Graph Representations
+*** 2.1.1 Adjacency List (most common)
+
+Core question:
+
+#+BEGIN_QUOTE
+I'm standing on a node. What are the nodes I can reach?
+#+END_QUOTE
+
+Characteristic:
+- Explicitly stores edges (from -> to)
+- Space: O(V + E)
+- Fast neighbor iteration: O(degree)
+- Edge lookup: O(degree) for vector, O(1) for unordered_map
+
+Use when:
+- Sparse graph (E << V^2)
+- Iterating neighbors frequently
+- Dynamic graph (adding/removing edges)
+
+Real-world Examples:
+- Social networks (followers, friends)
+- Web page links
+- File system directory structure
+- Course prerequisites
+
+#+NAME: Adjacency List
+#+BEGIN_SRC cpp
+// adj_list[u] = list of neighbors
+vector<vector<int>> adj_list = {
+  {1, 2},  // node 0
+  {2},     // node 1
+  {0, 3},  // node 2
+  {},      // node 3
+};
+
+// Nodes are string
+unordered_map<string, unordered_map<string, double>> adj_list;
+#+END_SRC
+
+*** 2.1.2 Adjacency Matrix (dense / Floyd-Warshall)
+
+Use when:
+- Dense graph (E ~ V^2)
+- Floyd-Warshall (all-pairs shortest path)
+- O(1) edge lookup needed without hash overhead
+
+#+NAME: Adjacency Matrix
+#+BEGIN_SRC cpp
+// adj_matrix[i][j] = weight of edge i -> j (0 = no edge)
+int adj_matrix[4][4] = {
+  {0, 4, 3, 0},
+  {0, 0, 3, 0},
+  {0, 0, 0, 1},
+  {0, 0, 0, 0},
+};
+#+END_SRC
+
+*** 2.1.3 Edge List (Kruskal)
+
+Core question:
+
+#+BEGIN_QUOTE
+We need to process edges in bulk (e.g., sort by weight).
+#+END_QUOTE
+
+Use when:
+- Kruskal's algorithm (sorting edges by weight)
+- Sorting edges for offline processing
+- Graph given as edge list format
+
+#+NAME: Edge List
+#+BEGIN_SRC cpp
+// [from, to, weight]
+vector<vector<int>> edge_list = {
+  {0, 1, 5},
+  {0, 2, 3},
+  {1, 2, 2},
+};
+#+END_SRC
+
+*** 2.1.4 Implicit Graph (grid, state space)
+
+Core question:
+
+#+BEGIN_QUOTE
+We care about the whole picture, not just the edges.
+#+END_QUOTE
+
+Characteristic:
+- Not saving edges explicitly
+- Neighbors are calculated (4-dir, 8-dir)
+- Commonly seen in: 2D grid, maze, chessboard, state space
+
+Use when:
+- Position/coordinate matters (row, col)
+- Neighbors are implicit
+- Dense grid (most cells are valid)
+
+Real-world Examples:
+- Linux framebuffer (memory-mapped display)
+- Image processing (pixel grid)
+- Game of Life / cellular automata
+
+#+NAME: Implicit Graph
+#+BEGIN_SRC cpp
+int grid[4][5] = {
+  {1, 1, 0, 0, 0},
+  {1, 1, 1, 0, 0},
+  {0, 0, 1, 0, 0},
+  {0, 0, 0, 1, 1},
+};
+
+// 4-directional neighbors
+int dirs[4][2] = {{0,1}, {0,-1}, {1,0}, {-1,0}};
+#+END_SRC
+
+*** 2.1.5 Node-based (clone problems)
+
+#+NAME: Node-based
+#+BEGIN_SRC cpp
+class Node {
+ public:
+  int val;
+  vector<Node*> neighbors;
+};
+#+END_SRC
+
+Use when:
+- Clone graph problems
+- Graph given as node pointers
+- Tree-like structure with explicit neighbors
+
+*** 2.1.6 When to use which
+
+| Representation   | Space    | Edge Lookup | Iterate Neighbors | Best For                     |
+|------------------+----------+-------------+-------------------+------------------------------|
+| Adjacency List   | O(V + E) | O(degree)   | O(degree)         | Sparse graphs, most problems |
+| Adjacency Matrix | O(V^2)   | O(1)        | O(V)              | Dense graphs, Floyd-Warshall |
+| Edge List        | O(E)     | O(E)        | O(E)              | Kruskal, edge sorting        |
+| Implicit (Grid)  | O(V)     | O(1)        | O(1)              | 2D grids, mazes              |
+| Node-based       | O(V + E) | O(degree)   | O(degree)         | Clone problems               |
+
+** 2.2 Traversal Patterns
+*** 2.2.1 DFS (recursive / iterative)
+*** 2.2.2 BFS (level-order, shortest path unweighted)
+*** 2.2.3 Bidirectional BFS
+
+** 2.3 Graph Properties
+*** 2.3.1 Connected Components
+Using DFS/BFS + visited
+*** 2.3.2 Cycle Detection
+- Directed: 3-color DFS or topological sort
+- Undirected: Union-Find or parent tracking
+*** 2.3.3 Topological Order
+
+** 2.4 Algorithmic Patterns
+*** 2.4.1 Union-Find (DSU)
+*** 2.4.2 Dijkstra (priority queue)
+*** 2.4.3 Bellman-Ford (edge relaxation)
+*** 2.4.4 Floyd-Warshall (DP on matrix)
+*** 2.4.5 Kruskal / Prim (MST)
+
+* 3. Classic Problems (by abstraction)
+| Core Question            | Abstraction       | Algorithm               |
+|--------------------------+-------------------+-------------------------|
+| Can I reach?             | Connectivity      | DFS/BFS, Union-Find     |
+| How many groups?         | Components        | DFS/BFS, Union-Find     |
+| Is there a loop?         | Cycle Detection   | 3-color DFS, Union-Find |
+| What order to process?   | Topological Order | Kahn's, DFS post-order  |
+| What's the shortest way? | Path (unweighted) | BFS                     |
+| What's the cheapest way? | Path (weighted)   | Dijkstra, Bellman-Ford  |
+| How to connect all?      | Spanning Tree     | Kruskal, Prim           |
+
+** 3.1 Connectivity & Components
+Core question:
+
+#+BEGIN_QUOTE
+Can I reach node B from node A? How many groups?
+#+END_QUOTE
+
+*** 3.1.1 Grid-based (Implicit Graph)
+- [ ] [medium] 130. Surrounded Regions :: DFS from border
+- [ ] [medium] 200. Number of Islands :: DFS/BFS flood fill
+- [ ] [medium] 994. Rotting Oranges :: multi-source BFS
+
+*** 3.1.2 Union-Find
+- [ ] [medium] 547. Number of Provinces :: basic union-find
+- [ ] [medium] 684. Redundant Connection :: detect cycle with union-find
+
+** 3.2 Cycle Detection
+Core question:
+#+BEGIN_QUOTE
+Does the graph contain a cycle?
+#+END_QUOTE
+
+- [ ] [medium] 207. Course Schedule :: 3-color DFS or Kahn's algorithm
+
+** 3.3 Topological Order
+Core question:
+#+BEGIN_QUOTE
+In what order should I process nodes?
+#+END_QUOTE
+
+- [X] [medium] 210. Course Schedule II :: Kahn's algorithm (BFS)
+- [ ] [medium] 310. Minimum Height Trees :: peel leaves layer by layer
+
+** 3.4 Path Problems
+Core question:
+#+BEGIN_QUOTE
+What is the (shortest/cheapest) path from A to B?
+#+END_QUOTE
+
+*** 3.4.1 Unweighted (BFS)
+(BFS gives shortest path when all edges have equal weight)
+
+*** 3.4.2 Weighted
+- [ ] [medium] 399. Evaluate Division :: weighted graph, DFS/BFS with multiplication
+
+*** 3.4.3 Negative Weights
+(Bellman-Ford, Floyd-Warshall)
+
+** 3.5 Spanning Trees
+Core question:
+#+BEGIN_QUOTE
+How to connect all nodes with minimum cost?
+#+END_QUOTE
+
+- [ ] [medium] 3613. Minimize Maximum Component Cost :: DSU + Kruskal's
+
+** 3.6 Advanced
+- Eulerian Path/Circuit :: visit all edges exactly once
+- Hamiltonian Path :: visit all vertices exactly once (NP-complete)
+- Travelling Salesman :: shortest Hamiltonian cycle (NP-hard)
+- Strongly Connected Components :: Kosaraju or Tarjan
+
+* 4. Debug
+* 5. Common Mistakes
+** 5.1 Tree in computer science is /Arborescence/:
+- Directed
+- Acyclic (DAG)
+- Connected (all nodes reachable from root)
+- Unique root node
+- Every node (except root) has in-degree = 1
+- Root has in-degree = 0
+
+** 5.2 Heap = /Complete Binary Tree/ + /Heap-order property/
