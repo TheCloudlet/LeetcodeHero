@@ -2,7 +2,15 @@
 #+AUTHOR: Yi-Ping Pan (Cloudlet)
 #+DATE: 2026-03-25
 
-* ALWAYS UNDERSTAND THE QUESTION
+* 1. ALWAYS UNDERSTAND THE QUESTION
+- Identify the Core Question :: Before writing any code, pinpoint the fundamental problem abstraction (e.g., "Is there a loop?" or "How many groups?").
+- Verify Input & Output Constraints :: Explicitly clarify the data range, boundary conditions (e.g., empty input, $N=1$), and the required return type.
+- Trace a Sample Case :: Manually dry-run the logic with a simple test case to ensure the mental model matches the problem's reality.
+
+* 2. APPLY SYSTEMATIC ABSTRACTION (SICP STYLE)
+- Wishful Thinking :: Assume the existence of the sub-procedures you need. Define the high-level logic (e.g., ~expand frontier~) first, and implement the "Primitives" later. This prevents getting bogged down in implementation details while the architecture is still forming.
+- Data-flow & Iterative State :: Treat algorithms as a sequence of state transformations ($S_{i} \to S_{i+1}$). Use clear "Frontiers" or "States" to represent the current snapshot of the world, and ensure each iteration is a pure transition from the previous one.
+- Avoid Micro-management :: Trust the "Means of Combination" (like the Call Stack or DSU's internal path compression) to handle the complexity. Don't fight the natural flow of the data with unnecessary global state resets.
 
 * Template
 #+NAME: Template
