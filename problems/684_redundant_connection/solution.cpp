@@ -7,16 +7,15 @@ class Solution {
   struct DSU {
     std::vector<int> parent;
     std::vector<int> size;
-    int num_components;
+    int component_count;
 
-    explicit DSU(int n) : parent(n), size(n, 1), num_components(n) {
+    // According to the description, we are 1-indexed
+    explicit DSU(int n) : parent(n + 1), size(n + 1, 1), component_count(n) {
       std::iota(parent.begin(), parent.end(), 0);
     }
 
     int find(int x) {
-      if (parent[x] == x) {
-        return x;
-      }
+      if (parent[x] == x) return x;
       return parent[x] = find(parent[x]);
     }
 
@@ -24,39 +23,40 @@ class Solution {
       int root_x = find(x);
       int root_y = find(y);
 
-      if (root_x == root_y) {
-        return false;
-      }
+      if (root_x == root_y) return false;
 
-      if (size[root_x] > size[root_y]) {
+      // To avoid the tree becomes linked list
+      if (size[root_x] < size[root_y]) {
         std::swap(root_x, root_y);
       }
-      parent[root_x] = root_y;
-      size[root_y] += size[root_x];
-      --num_components;
+      parent[root_y] = root_x;
+      size[root_x] += size[root_y];
+      --component_count;
+
       return true;
     }
-
-    int getSize(int x) { return size[find(x)]; }
-
-    int getNumComponents() { return num_components; }
   };
 
  public:
   std::vector<int> findRedundantConnection(
-      std::vector<std::vector<int>>& edges) {
-    if (edges.empty()) {
-      return {};
-    }
-
+      const std::vector<std::vector<int>>& edges) {
     DSU dsu(static_cast<int>(edges.size()));
 
     for (const auto& edge : edges) {
-      if (!dsu.unite(edge[0] - 1, edge[1] - 1)) {  // -1 is because 1-indexed
+      if (!dsu.unite(edge[0], edge[1])) {
         return edge;
       }
     }
 
-    return {};  // Should not reach here
+    // For cpp20
+    // auto it = std::ranges::find_if(edges, [&dsu](const auto& edge) {
+    //   return !dsu.unite(edge[0], edge[1]);
+    // });
+
+    // if (it != edges.end()) {
+    //     return *it;
+    // }
+
+    return {};
   }
 };

@@ -1101,6 +1101,7 @@ problems:
     status: L2_STRUGGLE
     refinement_focus: |
       #1: text book union find
+      [2026-03-27]: review template. for unite the return value should be bool
 
   - id: 704
     title: "Binary Search"

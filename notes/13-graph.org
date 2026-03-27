@@ -213,7 +213,7 @@ Core question:
 Does the graph contain a cycle?
 #+END_QUOTE
 
-- [ ] [medium] 207. Course Schedule :: 3-color DFS or Kahn's algorithm
+- [X] [#A] [medium] 207. Course Schedule :: 3-color DFS or Kahn's algorithm
 
 ** 3.3 Topological Order
 Core question:
@@ -221,7 +221,7 @@ Core question:
 In what order should I process nodes?
 #+END_QUOTE
 
-- [X] [medium] 210. Course Schedule II :: Kahn's algorithm (BFS)
+- [X] [#A] [medium] 210. Course Schedule II :: Kahn's algorithm (BFS)
 - [ ] [medium] 310. Minimum Height Trees :: peel leaves layer by layer
 
 ** 3.4 Path Problems
