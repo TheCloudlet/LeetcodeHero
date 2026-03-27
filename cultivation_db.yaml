@@ -885,6 +885,7 @@ problems:
     status: L2_STRUGGLE
     refinement_focus: |
       #1: My solution is to trace all path to p, and trace all path to q. Then iterate the longest two vector. But the best solution is to use recursive found or not.
+      #2: Not fluent.
 
   - id: 252
     title: "Meeting Rooms"
