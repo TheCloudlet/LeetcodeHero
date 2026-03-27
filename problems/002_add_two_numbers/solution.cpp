@@ -17,23 +17,24 @@
 
 class Solution {
  public:
-  ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
-    ListNode* resultHead = nullptr;
-    ListNode** indirect = &resultHead;
-    int c = 0;  // carry
+  ListNode* addTwoNumbers(ListNode* a, ListNode* b) {
+    if (!a || !b) return a ? a : b;
 
-    while (l1 || l2 || c) {
-      int a = l1 ? l1->val : 0;
-      int b = l2 ? l2->val : 0;
-      int sum = (a + b + c);
-      c = (a + b + c) / 10;
+    ListNode* ans = nullptr;
+    ListNode** nextp = &ans;
 
-      (*indirect) = new ListNode(sum % 10);
-      indirect = &(*indirect)->next;
+    int carry = 0;
+    while (a || b || carry) {
+      const int sum = (a ? a->val : 0) + (b ? b->val : 0) + carry;
 
-      if (l1) l1 = l1->next;
-      if (l2) l2 = l2->next;
+      *nextp = new ListNode(sum % 10);  // CAUTION: not &(new ListNode())
+      carry = sum / 10;
+
+      if (a) a = a->next;
+      if (b) b = b->next;
+      nextp = &((*nextp)->next);
     }
-    return resultHead;
+
+    return ans;
   }
 };

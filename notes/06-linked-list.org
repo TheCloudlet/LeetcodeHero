@@ -178,7 +178,7 @@ while (curr && curr->next) {
 - [X] [easy] 206. Reverse Linked List :: REVERSE
 - [X] [easy] 876. Middle of the Linked List :: SPLIT (Fast-Slow Pointer)
 ** 3.2 Medium
-- [medium] 002. Add Two Numbers :: ZIP + dummy-head
+- [X] [medium] 002. Add Two Numbers :: ZIP + dummy-head
 - [medium] 019. Remove Nth Node From End of List :: Fast-Slow Pointer
 - [X] [medium] 024. Swap Nodes in Pairs :: while(curr && curr->next) + dummy-head + in-place
 - [medium] 061. Rotate List ::

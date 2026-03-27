@@ -3,3 +3,13 @@
 #+DATE: 2026-03-25
 
 * ALWAYS UNDERSTAND THE QUESTION
+
+* Template
+#+NAME: Template
+#+BEGIN_COMMENT
+//* 1. Primitives
+//* 2. Means of Combination & Abstraction
+//* 3. Classic Problems
+//* 4. Debug
+//* 5. Common Mistakes
+#+END_COMMENT

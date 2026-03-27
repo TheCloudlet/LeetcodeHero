@@ -206,13 +206,13 @@ Tree Problems
 *** 3.1.2 Return-up
 - [X] [easy] 100. Same Tree :: return bool
 - [X] [easy] 101. Symmetric Tree :: return bool
-- [ ] [easy] 104. Maximum Depth of Binary Tree :: return height
+- [X] [easy] 104. Maximum Depth of Binary Tree :: return height
 - [X] [easy] 112. Path Sum :: return bool
 - [X] [easy] 226. Invert Binary Tree :: return swapped node
 - [ ] [easy] 543. Diameter of Binary Tree :: return height, track max diameter
 - [ ] [easy] 572. Subtree of Another Tree :: return bool
 - [ ] [medium] 110. Balanced Binary Tree :: return height, check balance
-- [ ] [medium] 236. Lowest Common Ancestor of a Binary Tree :: return found node
+- [X] [#A] [medium] 236. Lowest Common Ancestor of a Binary Tree :: return found node
 - [ ] [hard] 124. Binary Tree Maximum Path Sum :: return max single path, track global max
 
 *** 3.1.3 Traversal Order

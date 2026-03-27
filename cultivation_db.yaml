@@ -58,8 +58,8 @@ problems:
     status: L2_STRUGGLE
     refinement_focus: |
       Try 1: Indirect-pointer and sum/carry handling
-
       Try 2: Sum/carry is correctly handled, but indirect pointer usage is incorrect. The resultHead and indirect-pointer declarations are poorly structured. Also, (*indirect) = new ListNode(val); is unclear. I incorrectly wrote indirect = &(new ListNode());
+      [2026-03-27]: almost correct. &(new ListNode()) still happened
 
   - id: 3
     title: "Longest Substring Without Repeating Characters"
@@ -486,7 +486,9 @@ problems:
     leetcode-difficulty: easy
     topics: [tree, dfs, bfs, neetcode150]
     status: L3_MASTERED
-    refinement_focus: "Recursion/DFS"
+    refinement_focus: |
+      #1:
+      [2026-03-27]: one-shot.
 
   - id: 105
     title: "Construct Binary Tree from Preorder and Inorder Traversal"
@@ -885,7 +887,7 @@ problems:
     status: L2_STRUGGLE
     refinement_focus: |
       #1: My solution is to trace all path to p, and trace all path to q. Then iterate the longest two vector. But the best solution is to use recursive found or not.
-      #2: Not fluent.
+      [2026-03-27]: Not fluent.
 
   - id: 252
     title: "Meeting Rooms"
