@@ -760,9 +760,9 @@ problems:
     topics: [graph, bfs, dfs, topological-sort, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: |
-      BFS or DFS coloring to detect cycle. Or use Kahn's algorithm to do topological sort.
-
-      2nd time re-learn. I use enum-class to define colors. And get it almost right
+      #1: BFS or DFS coloring to detect cycle. Or use Kahn's algorithm to do topological sort.
+      #2: I use enum-class to define colors. And get it almost right
+      [2026-03-27]: half correct. the states should be recusive and set Visising, recursive, Visited.
 
   - id: 209
     title: "Minimum Size Subarray Sum"
