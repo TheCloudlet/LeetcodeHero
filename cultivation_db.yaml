@@ -763,6 +763,7 @@ problems:
       #1: BFS or DFS coloring to detect cycle. Or use Kahn's algorithm to do topological sort.
       #2: I use enum-class to define colors. And get it almost right
       [2026-03-27]: half correct. the states should be recusive and set Visising, recursive, Visited.
+      [2026-03-28]: One-shot;
 
   - id: 209
     title: "Minimum Size Subarray Sum"
@@ -783,6 +784,7 @@ problems:
       First time, now forget how to trace the path
       Second time re-learn. Khan's algorithm is easy to implement. The error I made is indeg[course] == 0, I wrote indeg[course] != 0.
       [2026-03-27]: Alomost. Indegree wrong and loop detection should just check `ans.size() == numCourses`
+      [2026-03-28]: One-shot.
 
   - id: 211
     title: "Design Add and Search Words Data Structure"
@@ -888,6 +890,7 @@ problems:
     refinement_focus: |
       #1: My solution is to trace all path to p, and trace all path to q. Then iterate the longest two vector. But the best solution is to use recursive found or not.
       [2026-03-27]: Not fluent.
+      [2026-03-28]: One-shot in 5 lines.
 
   - id: 252
     title: "Meeting Rooms"

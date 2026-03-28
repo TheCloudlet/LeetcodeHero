@@ -21,7 +21,7 @@ class Solution {
 
     std::vector<State> state(numCourses, State::kUnvisited);
 
-    auto has_cycle = [&](auto self, int from) -> bool {
+    auto HasCycle = [&](auto self, int from) -> bool {
       if (state[from] == State::kVisiting) return true;
       if (state[from] == State::kVisited) return false;
 
@@ -37,7 +37,7 @@ class Solution {
     };
 
     for (int i = 0; i < numCourses; ++i) {
-      if (state[i] == State::kUnvisited && has_cycle(has_cycle, i)) {
+      if (state[i] == State::kUnvisited && HasCycle(HasCycle, i)) {
         return false;
       }
     }
