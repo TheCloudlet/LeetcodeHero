@@ -12,6 +12,19 @@
 - Data-flow & Iterative State :: Treat algorithms as a sequence of state transformations ($S_{i} \to S_{i+1}$). Use clear "Frontiers" or "States" to represent the current snapshot of the world, and ensure each iteration is a pure transition from the previous one.
 - Avoid Micro-management :: Trust the "Means of Combination" (like the Call Stack or DSU's internal path compression) to handle the complexity. Don't fight the natural flow of the data with unnecessary global state resets.
 
+* 3. NAMING (Google C++ Style)
+| Category          | Convention                    | Example                                       |
+|-------------------+-------------------------------+-----------------------------------------------|
+| Regular Functions | ~PascalCase~                  | ~HasCycle()~, ~FindRedundantConnection()~     |
+| Types             | ~PascalCase~                  | ~class Solution~, ~struct Edge~, ~enum Color~ |
+| Variables         | ~snake_case~                  | ~int course_count~, ~vector<int> indegrees~   |
+| Constants         | ~kPascalCase~                 | ~constexpr int kMaxNodes = 1000;~             |
+| Member variables  | ~snake_case_~  (trailing ~_~) | ~int size_;~, ~vector<int> adj_;~             |
+| Namespaces        | ~lowercase~                   | ~namespace graph_algos~                       |
+| Containers        | plural noun                   | ~vector<int> neighbors~                       |
+| Counters          | ~_count~ suffix or plural     | ~int edge_count~, ~vector<int> indegrees~     |
+| Iterators / temps | short ok in small scope       | ~i~, ~j~, ~it~                                |
+
 * Template
 #+NAME: Template
 #+BEGIN_COMMENT
