@@ -74,19 +74,27 @@ Performing macroscopic scanning and state aggregation across an entire Word (32/
 *** RBIT (Reverse Bits)
 
 * 3. Classic Problems
-** CAT 1: Data Abstraction & Symbolic Cancellation
-Focusing on SICP Chapter 2. We treat integers as symbolic sets or sequences, seeking "singularities" through symmetry.
-- 136. Single Number :: The "Identity" element in a XOR-summation stream.
-- 268. Missing Number :: Symbolic cancellation between two sequences (Index vs. Value).
-- 260. Single Number III :: Partitioning a large problem into two independent sub-problems using a "Predicate" (the LSB).
+#+NAME: BitOps Problem Categories
+#+BEGIN_EXAMPLE
+BitOps Problems
+├── CAT 1: Symbolic Cancellation  (XOR as identity/annihilation)
+├── CAT 2: Digital Circuit / FSM  (simulate gates and counters)
+└── CAT 3: Recursive Bit Processes (strip LSB, DP on bit repr)
+#+END_EXAMPLE
 
-** CAT 2: Modeling Digital Circuits & State Machines
-Focusing on SICP Chapter 3.3.4. Treating bitwise logic not as arithmetic, but as a simulation of signals and wires.
-- 371. Sum of Two Integers :: A functional simulation of a Half-Adder logic gate.
-- 137. Single Number II :: Modeling a Modulo-3 Counter as a Finite State Machine (FSM).
+** 3.1 Symbolic Cancellation
+SICP Ch.2 — treat integers as symbolic sets; seek "singularities" through symmetry.
+- [X] [easy]   136. Single Number     :: XOR-sum stream; identity element cancels duplicates
+- [X] [#C] [easy]   268. Missing Number    :: XOR cancel index vs. value across two sequences
+- [X] [medium] 260. Single Number III :: partition by LSB predicate → two independent sub-problems
 
-** CAT 3: Recursive Processes & Memoization
-Focusing on SICP Chapter 1 and 3. Addressing the optimal substructure within the binary representation of numbers.
-- 191. Number of 1 Bits :: The iterative process of reducing problem size by stripping the LSB.
-- 338. Counting Bits :: Utilizing the recursive relationship where state $n$ depends on previously computed state $n/2$.
-- 190. Reverse Bits :: Devide and conquer using masks and or.
+** 3.2 Digital Circuits & State Machines
+SICP Ch.3.3.4 — bitwise logic as signal/wire simulation, not arithmetic.
+- [X] [medium] 371. Sum of Two Integers  :: functional Half-Adder simulation
+- [X] [medium] 137. Single Number II     :: Modulo-3 counter as FSM (two-bit state machine)
+
+** 3.3 Recursive Bit Processes
+SICP Ch.1 & 3 — optimal substructure inside binary representation.
+- [X] [easy] 191. Number of 1 Bits :: iterative LSB-strip: ~n & (n-1)~ reduces problem size
+- [X] [easy] 338. Counting Bits    :: DP recurrence: ~bits[n] = bits[n >> 1] + (n & 1)~
+- [X] [easy] 190. Reverse Bits     :: divide-and-conquer with masks and shifts

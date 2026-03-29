@@ -561,6 +561,7 @@ problems:
     status: L2_STRUGGLE
     refinement_focus: |
       #1: two solutions. FSM (best) and bit count modulo 3 (also good)
+      [2026-03-29]: FSM don't understand. bit count sum not inited to zero.
 
   - id: 136
     title: "Single Number"
@@ -854,6 +855,7 @@ problems:
         - Iterative solution: The structure of while loop is totally wrong. I need to practice more.
 
       #2: I know the big structure but I have problems with the iterative solution. The key is using `while (curr || !stack.empty())` as the main iterating method, and we should not prevent curr from being null. In fact, we want to see curr is null so that we use pop to backtrack, then go to the right child.
+      [2026-03-29]: One-shot with recursive solution. Iterative not learned yet.
 
   - id: 238
     title: "Product of Array Except Self"
@@ -919,6 +921,8 @@ problems:
     status: L1_FORGOT
     refinement_focus: |
       #1: Hint: XOR properties, and partition
+      [2026-03-29]: almost correct. UB in (-int).
+          Should `~static_cast<int>(n) + 1`
 
   - id: 268
     title: "Missing Number"

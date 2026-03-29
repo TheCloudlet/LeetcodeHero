@@ -13,20 +13,16 @@
 class Solution {
  public:
   int singleNumber(const std::vector<int>& nums) {
-    int ans = 0;
+    int unique_num = 0;
     for (int bit = 0; bit < 32; ++bit) {
-      // Count how many numbers have the current bit set.
-      // Use accumulate to sum the extracted bit (0 or 1) across all numbers.
-      int cnt =
-          std::accumulate(nums.begin(), nums.end(), 0, [bit](int sum, int num) {
-            return sum + ((static_cast<unsigned int>(num) >> bit) & 1);
-          });
+      int bit_sum = 0;
+      for (const int num : nums) {
+        bit_sum += ((num >> bit) & 1);
+      }
 
-      // If the count modulo 3 equals 1, the target number has this bit set.
-      // So set the corresponding bit in the answer.
-      ans |= (cnt % 3) << bit;
+      if (bit_sum % 3 == 1) unique_num |= (1u << bit);
     }
-    return ans;
+    return unique_num;
   }
 };
 #endif

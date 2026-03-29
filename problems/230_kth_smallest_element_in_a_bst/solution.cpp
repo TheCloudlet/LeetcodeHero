@@ -6,28 +6,28 @@
 class Solution {
  public:
   int kthSmallest(TreeNode* root, int k) {
-    int result = -1;
-    inorderTraversal(root, k, result);
-    return result;
-  }
+    if (!root || k <= 0) return -1;
 
- public:
-  void inorderTraversal(TreeNode* root, int& k, int& result) {
-    if (!root) {
-      return;
-    }
+    int count = 0;
+    int kth_num = -1;
 
-    // Left
-    inorderTraversal(root->left, k, result);
+    auto inorder = [&count, &kth_num, k](auto self, TreeNode* root) {
+      if (!root) return;
+      if (count >= k) return;
 
-    // Middle
-    --k;
-    if (k == 0) {
-      result = root->val;
-    }
+      self(self, root->left);
 
-    // Right
-    inorderTraversal(root->right, k, result);
+      if (++count == k) {
+        kth_num = root->val;
+        return;
+      }
+
+      self(self, root->right);
+    };
+
+    inorder(inorder, root);
+
+    return kth_num;
   }
 };
 #endif
