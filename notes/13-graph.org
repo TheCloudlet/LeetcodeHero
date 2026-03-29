@@ -201,7 +201,7 @@ Can I reach node B from node A? How many groups?
 *** 3.1.1 Grid-based (Implicit Graph)
 - [ ] [medium] 130. Surrounded Regions :: DFS from border
 - [ ] [medium] 200. Number of Islands :: DFS/BFS flood fill
-- [ ] [medium] 994. Rotting Oranges :: multi-source BFS
+- [X] [#C] [medium] 994. Rotting Oranges :: multi-source BFS
 
 *** 3.1.2 Union-Find
 - [ ] [medium] 547. Number of Provinces :: basic union-find
@@ -213,7 +213,7 @@ Core question:
 Does the graph contain a cycle?
 #+END_QUOTE
 
-- [X] [#A] [medium] 207. Course Schedule :: 3-color DFS or Kahn's algorithm
+- [X] #C] [medium] 207. Course Schedule :: 3-color DFS or Kahn's algorithm
 
 ** 3.3 Topological Order
 Core question:
@@ -221,7 +221,7 @@ Core question:
 In what order should I process nodes?
 #+END_QUOTE
 
-- [X] [#A] [medium] 210. Course Schedule II :: Kahn's algorithm (BFS)
+- [X] [#C] [medium] 210. Course Schedule II :: Kahn's algorithm (BFS)
 - [ ] [medium] 310. Minimum Height Trees :: peel leaves layer by layer
 
 ** 3.4 Path Problems

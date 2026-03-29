@@ -1159,17 +1159,18 @@ problems:
     link: "./problems/994_rotting_oranges/"
     leetcode-difficulty: medium
     topics: [array, bfs, matrix, neetcode150]
-    status: L3_MASTERED
+    status: L2_STRUGGLE
     refinement_focus: |
       #1: I used simulation with a queue to store the oranges that are going to rot, then update the grid. But this is slow. I should use *multi-source BFS* to speed up the simulation. (level order traversal one example for multi-source BFS)
-      From SICP's view, the *multi-source BFS* is
-      #+begin_src racket
-      (define (expand frontier grid seen)
-        ;; returns next-frontier and updated seen
-      )
-      #+end_src
-      - process =expand= stays the same, initial state is kept changing
-      - initial state is the set of all rotten oranges
+          From SICP's view, the *multi-source BFS* is
+          #+begin_src racket
+          (define (expand frontier grid seen)
+            ;; returns next-frontier and updated seen
+          )
+          #+end_src
+          - process =expand= stays the same, initial state is kept changing
+          - initial state is the set of all rotten oranges
+      [2026-03-29]: 40%. Wrong structure. Should "Verify, Mutate, Push" in BFS
 
   - id: 1448
     title: "Count Good Nodes in Binary Tree"
