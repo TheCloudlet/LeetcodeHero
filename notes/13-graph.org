@@ -163,8 +163,8 @@ Use when:
 ** 2.2 Traversal Patterns
 *** 2.2.1 DFS (recursive / iterative)
 *** 2.2.2 BFS (level-order, shortest path unweighted)
-
 #+BEGIN_QUOTE
+(for neighbors)
 Verify -> Mutate -> Push
 #+END_QUOTE
 
@@ -181,9 +181,13 @@ Using DFS/BFS + visited
 ** 2.4 Algorithmic Patterns
 *** 2.4.1 Union-Find (DSU)
 *** 2.4.2 Dijkstra (priority queue)
-#+begin_quote
-Finding the shortest path from point A to point B for weighted directed graph
-#+end_quote
+Core Question:
+#+BEGIN_QUOTE
+Single-Source Shortest Path (SSSP): Finding the shortest path from one start node to ALL other reachable nodes in weighted directed graph.
+(One-to-one can be achieved by early return)
+#+END_QUOTE
+
+Approach: Greedy + Dynamic Programming
 
 Back to SICP:
 - BFS :: Synchronous simulation. All edges cost 1, so expand all neighbors at once (level by level).
@@ -192,6 +196,7 @@ Back to SICP:
 Both BFS and Dijkstra follow the same loop pattern:
 
 #+BEGIN_QUOTE
+(for neighbors)
 Verify -> Mutate -> Push
 #+END_QUOTE
 
@@ -199,10 +204,27 @@ Dijkstra = BFS with priority queue. Greedily pick the nearest unvisited node, re
 
 #+NAME: LC743 Network Delay Time
 #+BEGIN_SRC cpp
-// Dijkstra
-// FIXME:
+while (!min_heap.empty()) {
+  auto [curr_weight, curr] = min_heap.top();
+  min_heap.pop();
+  // Skip stale entries (same node pushed multiple times)
+  if (visited[curr]) continue;
+
+  visited[curr] = true;
+  for (const auto& [edge_weight, next_node] : adj_list[curr]) {
+    int new_weight = curr_weight + edge_weight;
+    if (new_weight < min_dist[next_node]) {     // Verify
+      min_dist[next_node] = new_weight;         // Mutate
+      min_heap.emplace(new_weight, next_node);  // Push
+    }
+  }
+}
 #+END_SRC
 
+Noted that:
+
+1) this greedy algorithm is mathematcially proofed since the distance in the queue is always incresing.
+2) If we want to know the path, we create a parent vector.
 
 *** 2.4.3 Bellman-Ford (edge relaxation)
 *** 2.4.4 Floyd-Warshall (DP on matrix)
@@ -220,8 +242,8 @@ Dijkstra = BFS with priority queue. Greedily pick the nearest unvisited node, re
 | How to connect all?      | Spanning Tree     | Kruskal, Prim           |
 
 ** 3.1 Connectivity & Components
-Core question:
 
+- Core question:
 #+BEGIN_QUOTE
 Can I reach node B from node A? How many groups?
 #+END_QUOTE
@@ -263,6 +285,7 @@ What is the (shortest/cheapest) path from A to B?
 
 *** 3.4.2 Weighted
 - [ ] [medium] 399. Evaluate Division :: weighted graph, DFS/BFS with multiplication
+- [X] [medium] 743. Network delay time :: dijkstra
 
 *** 3.4.3 Negative Weights
 (Bellman-Ford, Floyd-Warshall)

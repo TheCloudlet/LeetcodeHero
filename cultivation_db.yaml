@@ -1123,6 +1123,15 @@ problems:
           - `while(lo < hi)` is for finding boundary
           - `while(lo <= hi)` is for exact match
 
+  - id: 743
+    title: "Network Delay Time"
+    link: "./problems/743_network_delay_time/"
+    leetcode-difficulty: medium
+    topics: [graph, bfs, dijkstra, neetcode150]
+    status: L1_FORGOT
+    refinement_focus: |
+      [2026-03-30]: implement dijkstrs's first time with guildance
+
   - id: 746
     title: "Min Cost Climbing Stairs"
     link: "./problems/746_min_cost_climbing_stairs/"

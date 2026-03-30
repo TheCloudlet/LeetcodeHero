@@ -8,6 +8,7 @@
 #include <vector>
 
 class Solution {
+ public:
   int networkDelayTime(const std::vector<std::vector<int>>& times, int n,
                        int k) {
     // Construct adj_list {weight, to}
@@ -26,13 +27,14 @@ class Solution {
                         std::greater<>>
         min_heap;
 
-    // Push the first adj nodes from k
+    min_dist[k] = 0;
     min_heap.emplace(0, k);
 
     while (!min_heap.empty()) {
       auto [curr_weight, curr] = min_heap.top();
       min_heap.pop();
 
+      // Skip stale entries (same node pushed multiple times)
       if (visited[curr]) continue;
 
       visited[curr] = true;
