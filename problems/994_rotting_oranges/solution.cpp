@@ -60,7 +60,17 @@ class Solution {
       }
     }
 
-    while (!rotten_queue.empty() && fresh_orange_count > 0) {
+    // NOTE from failing third time (wrong minutes_elapsed)
+    //
+    // #1: Init minutes_elapsed = -1; and ++minutes_elapsed under while
+    //     => fail when there are not rotten in the grid at all "-1"
+    // #2: Missing `fresh_orange_count > 0` in while. If we don't check if next
+    //     round has been added. The `minutes_elapsed` will increment once.
+    //
+    // So the most solid way to do is at (2) we set a new variable to
+    // check whether the next round is added.
+
+    while (!rotten_queue.empty() && fresh_orange_count > 0) {  // (1)
       // ==========================================
       // [MACRO SCOPE] Check Wave Size
       // ==========================================
@@ -77,17 +87,17 @@ class Solution {
           // ==========================================
           // [MICRO SCOPE] Find New Target
           // ==========================================
-          if (IsTargetable(next_row, next_col)) {
-            grid[next_row][next_col] = 2;
-            --fresh_orange_count;
-            rotten_queue.push({next_row, next_col});
+          if (IsTargetable(next_row, next_col)) {     // Verify
+            grid[next_row][next_col] = 2;             // Mutate
+            --fresh_orange_count;                     // Mutate
+            rotten_queue.push({next_row, next_col});  // Push
           }
         }
       }
       // ==========================================
       // [MACRO SCOPE] Global Elapsed + 1;
       // ==========================================
-      ++minutes_elapsed;
+      ++minutes_elapsed;  // (2)
     }
 
     return (fresh_orange_count == 0) ? minutes_elapsed : -1;

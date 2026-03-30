@@ -1176,6 +1176,7 @@ problems:
           - process =expand= stays the same, initial state is kept changing
           - initial state is the set of all rotten oranges
       [2026-03-29]: 40%. Wrong structure. Should "Verify, Mutate, Push" in BFS
+      [2026-03-30]: 70%. Wrong `minutes_elapsed`
 
   - id: 1448
     title: "Count Good Nodes in Binary Tree"

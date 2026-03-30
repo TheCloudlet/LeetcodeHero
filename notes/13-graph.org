@@ -163,6 +163,11 @@ Use when:
 ** 2.2 Traversal Patterns
 *** 2.2.1 DFS (recursive / iterative)
 *** 2.2.2 BFS (level-order, shortest path unweighted)
+
+#+BEGIN_QUOTE
+Verify -> Mutate -> Push
+#+END_QUOTE
+
 *** 2.2.3 Bidirectional BFS
 
 ** 2.3 Graph Properties
@@ -176,6 +181,29 @@ Using DFS/BFS + visited
 ** 2.4 Algorithmic Patterns
 *** 2.4.1 Union-Find (DSU)
 *** 2.4.2 Dijkstra (priority queue)
+#+begin_quote
+Finding the shortest path from point A to point B for weighted directed graph
+#+end_quote
+
+Back to SICP:
+- BFS :: Synchronous simulation. All edges cost 1, so expand all neighbors at once (level by level).
+- Dijkstra :: Event-driven simulation. Edges have different costs, so always process the nearest unvisited node first (priority queue).
+
+Both BFS and Dijkstra follow the same loop pattern:
+
+#+BEGIN_QUOTE
+Verify -> Mutate -> Push
+#+END_QUOTE
+
+Dijkstra = BFS with priority queue. Greedily pick the nearest unvisited node, relax edges, push updated neighbors.
+
+#+NAME: LC743 Network Delay Time
+#+BEGIN_SRC cpp
+// Dijkstra
+// FIXME:
+#+END_SRC
+
+
 *** 2.4.3 Bellman-Ford (edge relaxation)
 *** 2.4.4 Floyd-Warshall (DP on matrix)
 *** 2.4.5 Kruskal / Prim (MST)
@@ -200,12 +228,12 @@ Can I reach node B from node A? How many groups?
 
 *** 3.1.1 Grid-based (Implicit Graph)
 - [ ] [medium] 130. Surrounded Regions :: DFS from border
-- [ ] [medium] 200. Number of Islands :: DFS/BFS flood fill
-- [X] [#C] [medium] 994. Rotting Oranges :: multi-source BFS
+- [X] [medium] 200. Number of Islands :: DFS/BFS flood fill
+- [X] [#B] [medium] 994. Rotting Oranges :: multi-source BFS
 
 *** 3.1.2 Union-Find
 - [ ] [medium] 547. Number of Provinces :: basic union-find
-- [X] [medium] [#A] 684. Redundant Connection :: detect cycle with union-find
+- [X] [medium] [#C] 684. Redundant Connection :: detect cycle with union-find
 
 ** 3.2 Cycle Detection
 Core question:
@@ -213,7 +241,7 @@ Core question:
 Does the graph contain a cycle?
 #+END_QUOTE
 
-- [X] #C] [medium] 207. Course Schedule :: 3-color DFS or Kahn's algorithm
+- [X] [#C] [medium] 207. Course Schedule :: 3-color DFS or Kahn's algorithm
 
 ** 3.3 Topological Order
 Core question:

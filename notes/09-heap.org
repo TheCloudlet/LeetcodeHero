@@ -1,0 +1,64 @@
+#+TITLE: 09-Heap
+#+AUTHOR: Yi-Ping Pan (Cloudlet)
+#+DATE: 2026-03-30
+#+DESCRIPTION: Conquering DSA using SICP's approach
+
+* 1. Primitives
+** 1.1 Core problem:
+#+begin_quote
+Can we get the largest/smallest in O(1) time
+#+end_quote
+
+- The operation looks like a queue (push/pop)
+- The core idea is a complete tree
+- Since it is a complete tree, we oftern use "contiguous memory" like =std::vector<>= to store real data.
+- Sift up and sift down
+
+** 1.2 [#A] Using C++ =std::priority_queue<>=
+*The template declaration of std::priority_queue is non-trivial.*
+
+- [[https://en.cppreference.com/w/cpp/container/priority_queue.html][cppreference - std::priority_queue]]
+
+#+NAME: Snapshot from cppreference
+#+BEGIN_SRC cpp
+template<
+    class T,
+    class Container = std::vector<T>,
+    class Compare = std::less<typename Container::value_type>
+> class priority_queue;
+#+END_SRC
+
+- T :: typeof stored elements
+- Container :: SequenceContainer, in leetcode use =std::vector<T>= most of the time
+- *Compare* :: REMEMBER =std::less=, =return l < r=, smaller is at the lowest. Default is max-heap.
+
+#+NAME: Example Usage
+#+BEGIN_SRC
+const auto data = {1, 4, 3, 2};
+
+// (1) Pop: 1, 2, 3, 4
+std::priority_queue<int, std::vector<int>, std::greater<int>>
+    pq1(data.begin(), data.end());
+
+// (2) Pop: 4, 3, 2, 1
+struct {
+  bool operator()(const int l, const int r) const { return l > r };
+} customLess;
+
+std::priority_queue<int, std::vector<int>, customLess>
+    pq2(data.begin(), data.end(), customLess);
+
+// (3) Pop. 4, 3, 2, 1
+auto cmp = [](int left, int right) {
+  return left < right
+};
+std::priority_queue<int, std::vector<int>, decltype(cmp)> pq3(cmp);
+
+for (const int n : data) pq3.push(n);
+#+END_SRC
+
+
+* 2. Means of Combination & Abstraction
+* 3. Classic Problems
+* 4. Debug
+* 5. Common Mistakes
