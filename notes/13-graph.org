@@ -256,6 +256,7 @@ Can I reach node B from node A? How many groups?
 *** 3.1.2 Union-Find
 - [ ] [medium] 547. Number of Provinces :: basic union-find
 - [X] [medium] [#C] 684. Redundant Connection :: detect cycle with union-find
+- [X] [medium] 1631: Path With Minimum Effort
 
 ** 3.2 Cycle Detection
 Core question:

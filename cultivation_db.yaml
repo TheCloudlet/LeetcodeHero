@@ -1196,6 +1196,15 @@ problems:
     refinement_focus: |
       #1: Very fun. I thought of using mono-stack, but it is not necessary. Just pass down the max value from root to leaf.
 
+  - id: 1631
+    title: "Path With Minimum Effort"
+    link: "./problems/1631_path_with_minimum_effort/"
+    leetcode-difficulty: medium
+    topics: [graph, DSU, dijkstra]
+    status: L2_STRUGGLE
+    refinement_focus: |
+      [2026-03-30]: 90%, DSU. minor typos. might take a little to much time.
+
   - id: 3613
     title: "Minimize Maximum Component Cost"
     link: "./problems/3613_minimize_maximum_component_cost/"
