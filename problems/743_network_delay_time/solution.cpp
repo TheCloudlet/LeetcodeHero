@@ -49,7 +49,9 @@ class Solution {
       }
     }
 
-    int max_time = *std::max_element(min_dist.begin() + 1, min_dist.end());
+    // Remember to `+1` since index 0 is dummy
+    const int max_time =
+        *std::max_element(min_dist.begin() + 1, min_dist.end());
 
     return max_time != INT_MAX ? max_time : -1;
   }

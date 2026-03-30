@@ -1131,6 +1131,7 @@ problems:
     status: L1_FORGOT
     refinement_focus: |
       [2026-03-30]: implement dijkstrs's first time with guildance
+      [2026-03-30]: 90%, 18min. Wrong in `max_element`
 
   - id: 746
     title: "Min Cost Climbing Stairs"
