@@ -775,6 +775,7 @@ problems:
     status: L3_MASTERED
     refinement_focus: |
       #1: One-shot.
+      [2026-03-30]: 90% 8min. Boundary check and return value check (INT_MAX).
 
   - id: 210
     title: "Course Schedule II"
@@ -1092,6 +1093,15 @@ problems:
     status: L3_MASTERED
     refinement_focus: |
       #1: Recursive and helper is same function can solve the problem. But I think what if we can use KMF algorithm way like structure?
+
+  - id: 643
+    title: "Maximum Average Subarray I"
+    link: "./problems/643_maximum_average_subarray_i/"
+    leetcode-difficulty: easy
+    topics: [sliding-window, array]
+    status: L1_FORGOT
+    refinement_focus: |
+      [2026-03-31]: Failed.
 
   - id: 647
     title: "Palindromic Substrings"
