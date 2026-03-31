@@ -776,6 +776,7 @@ problems:
     refinement_focus: |
       #1: One-shot.
       [2026-03-30]: 90% 8min. Boundary check and return value check (INT_MAX).
+      [2026-03-31]: 95% 6min. Didn't read the problem again. If invalid should return 0, not -1.
 
   - id: 210
     title: "Course Schedule II"
@@ -1197,6 +1198,7 @@ problems:
           - initial state is the set of all rotten oranges
       [2026-03-29]: 40%. Wrong structure. Should "Verify, Mutate, Push" in BFS
       [2026-03-30]: 70%. Wrong `minutes_elapsed`
+      [2026-03-31]: 80%. Forget level order count.
 
   - id: 1448
     title: "Count Good Nodes in Binary Tree"
