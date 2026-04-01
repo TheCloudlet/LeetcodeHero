@@ -41,92 +41,8 @@ for (int right = 0; right < n; ++right) {
 }
 #+END_SRC
 
-<<<<<<< Updated upstream
 * 2. Means of Combination & Abstraction
-This layer demonstrates how to combine primitives into common sliding window patterns.
-** 2.1 Fixed-Length Window
-The window size is fixed to k, typically used for calculating moving averages, maximum values, etc.
-
-We can use the template to maintain the valid condition. But I think using accumulate is a better option.
-
-#+NAME: fixed-length-window
 #+BEGIN_SRC cpp
-// LC643. Maximum Average Subarray I
-double sum = std::accumulate(nums.begin(), nums.begin() + k, 0.0);
-double max_sum = sum;
-
-for (int pos = k; pos < n; ++pos) {
-  sum = sum + nums[pos] - nums[pos - k];
-  max_sum = std::max(max_sum, sum);
-}
-#+END_SRC
-
-** 2.2 Variable-Length Window (Finding Longest / Shortest)
-Longest substring: Expand until the condition is violated, then shrink until the condition is restored, recording the window length.
-Shortest substring: Expand until the condition is met, then shrink until the condition is just broken, recording the length.
-Classic problems: LC 3 (Longest Substring Without Repeating Characters), LC 209 (Minimum Size Subarray Sum).
-#+NAME:
-#+BEGIN_SRC cpp
-int left = 0;
-for (int right = 0; right < n; ++right) {
-  // add s[right] to window state
-  while (/* condition violated */) {
-    // remove s[left] from window state
-    left++;
-  }
-  // window is valid, update answer
-}
-#+END_SRC
-
-** 2.3 Counting Window (e.g., Shortest substring containing all characters)
-Use need and have counters to track the fulfillment of target characters.
-Classic problems: LC 438 (Find All Anagrams in a String), LC 567 (Permutation in String).
-#+NAME:
-#+BEGIN_SRC cpp
-int need = target.size(), have = 0;
-while (right < n) {
-  // expand
-  if (freq[s[right]]++ == 0) have++;
-  right++;
-
-  while (have == need) {
-    // shrink to find minimal
-    if (freq[s[left]]-- == 1) have--;
-    left++;
-  }
-}
-#+END_SRC
-
-** 2.4 Multi-Condition Window (e.g., At most k distinct characters)
-Use a frequency map to track the number of distinct characters; shrink when it exceeds k.
-Classic problems: LC 340 (Longest Substring with At Most K Distinct Characters), LC 904 (Fruit Into Baskets).
-
-** 2.5 Other Advanced Combinations
-Hash Map + Sliding Window (e.g., 76. Minimum Window Substring)
-
-Deque + Sliding Window (e.g., 239. Sliding Window Maximum)
-=======
-* 2. Means of Combination & Abstraction* 2. Means of Combination & Abstraction
-在定義了 Primitives 之後，我們需要將它們組合並抽象化。Sliding Window 本質上是一個維持不變性 (Invariant) 的狀態機 (State Machine)。
-
-** Means of Combination (組合的方法)
-我們透過控制流 (Control Flow) 將 Primitives 組合起來。最經典的組合方式是 =for= 迴圈包裹 =while= 迴圈：
-- *外層驅動 (The Clock)*：=right= 指標不斷前進，如同硬體的 Clock cycle，持續將新資料注入狀態機 (Expand)。
-- *內層反饋 (The Feedback Loop)*：當注入新資料導致狀態違反了 =is_valid()= 條件時，觸發 =while= 迴圈，持續推動 =left= 指標 (Shrink)，直到狀態機再次回到穩定合法 (Valid) 的狀態。
-
-這種組合方式保證了資料流過時，Window 內的狀態永遠會收斂到一個合法的區間。
-
-** Means of Abstraction (抽象的方法)
-
-#+BEGIN_SRC cpp
-// Abstraction Barrier: The Window State
-class WindowState {
-public:
- void add(char c);     // Expand primitive
- void remove(char c);  // Shrink primitive
- bool is_valid();      // Invariant check
-};
-
 // The General Process
 template <typename Action>
 void slidingWindowProcess(const string& s, WindowState& window,
@@ -144,7 +60,7 @@ void slidingWindowProcess(const string& s, WindowState& window,
   }
 }
 #+END_SRC
->>>>>>> Stashed changes
+
 
 * 3. Classic Problems
 - [ ] [medium] 3. Longest Substring Without Repeating Characters
@@ -153,6 +69,7 @@ void slidingWindowProcess(const string& s, WindowState& window,
 - [ ] [hard] 239. Sliding Window Maximum
 - [X] [medium] 438. Find All Anagrams in a string
 - [X] [easy] 643. Maximum Average Subarray I
+- [ ] 567
 - [ ] [medium] 978. Longest Turbulent Subarray
 - [ ] [medium] 3634. Minimum Removals to Balance Array
 - [ ] [medium] 3719. Longest Balanced Subarray i
