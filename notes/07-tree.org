@@ -224,7 +224,7 @@ Tree Problems
 - [ ] [medium] 297. Serialize and Deserialize Binary Tree :: pre-order or level-order
 
 ** 3.2 BFS (Level-order)
-- [ ] [medium] 102. Binary Tree Level Order Traversal :: basic level-order
+- [X] [medium] 102. Binary Tree Level Order Traversal :: basic level-order
 - [ ] [medium] 199. Binary Tree Right Side View :: rightmost of each level
 
 ** 3.3 BST Property

@@ -5,37 +5,37 @@
 // Solution
 // Two pointers
 
+#if defined(SLIDING_WINDOW)
+#include <algorithm>
 #include <string>
-#include <unordered_map>
+#include <vector>
 
 class Solution {
  public:
   int lengthOfLongestSubstring(const std::string& s) {
-    // If we are sure is ASCII, we can use array
-    // std::array<int, 128> freq{};  // zero-initialized
-    std::unordered_map<char, int> freq;
-    int left = 0, maxLength = 0;
+    if (s.empty()) return 0;
 
-    for (int right = 0; right < s.size(); ++right) {
-      const char& ch = s[right];
-      freq[ch]++;
+    int max_len = 0;
+    const int len = static_cast<int>(s.size());
+    std::vector<int> freq(128, 0);
 
-      // Shrink window until no duplicates
-      while (freq[ch] > 1) {
-        freq[s[left]]--;
-        left++;
+    int left = 0;
+    for (int right = 0; right < len; ++right) {
+      ++freq[s[right]];
+      while (freq[s[right]] > 1) {
+        --freq[s[left]];
+        ++left;
       }
-
-      maxLength = std::max(maxLength, right - left + 1);
+      max_len = std::max(max_len, right - left + 1);
     }
 
-    return maxLength;
+    return max_len;
   }
 };
 
 // Better solution
 // Can jump left directly to the next posisiton
-#if defined(better)
+#if defined(DP)
 #include <algorithm>  // for std::min
 #include <vector>
 

@@ -4,7 +4,7 @@
 #+DESCRIPTION: Conquering DSA using SICP's approach
 
 * TODO Read
-[[labuladong.online/en/algo/essential-technique/sliding-window-framework/]]
+labuladong.online/en/algo/essential-technique/sliding-window-framework/
 
 * 1. Primitives
 The basic elements of Sliding Window are not data structures, but conceptual atomic operations:
@@ -63,13 +63,13 @@ void slidingWindowProcess(const string& s, WindowState& window,
 
 
 * 3. Classic Problems
-- [ ] [medium] 3. Longest Substring Without Repeating Characters
+- [X] [medium] 3. Longest Substring Without Repeating Characters
 - [X] [hard] 76. Minimum Window Substring
 - [X] [medium] 209. Minimum Size Subarray Sum
 - [ ] [hard] 239. Sliding Window Maximum
 - [X] [medium] 438. Find All Anagrams in a string
 - [X] [easy] 643. Maximum Average Subarray I
-- [ ] 567
+- [X] [medium] 567. Permutation in String
 - [ ] [medium] 978. Longest Turbulent Subarray
 - [ ] [medium] 3634. Minimum Removals to Balance Array
 - [ ] [medium] 3719. Longest Balanced Subarray i
