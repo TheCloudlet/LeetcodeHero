@@ -1047,6 +1047,15 @@ problems:
     refinement_focus: |
       #1: Greedy. Sort by end time. Then iterate and merge overlaps."
 
+  - id: 438
+    title: "Find All Anagrams in a String"
+    link: "./problems/438_find_all_anagrams_in_a_string/"
+    leetcode-difficulty: medium
+    topics: [string, sliding-window, hashtable]
+    status: L1_FORGOT
+    refinement_focus: |
+      [2026-04-01]: 30% 16min. Structure correct. Wrong range, wrong logic, wrong index.
+
   - id: 496
     title: "Next Greater Element I"
     link: "./problems/496_next_greater_element_i/"

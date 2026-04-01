@@ -151,6 +151,7 @@ void slidingWindowProcess(const string& s, WindowState& window,
 - [X] [hard] 76. Minimum Window Substring
 - [X] [medium] 209. Minimum Size Subarray Sum
 - [ ] [hard] 239. Sliding Window Maximum
+- [X] [medium] 438. Find All Anagrams in a string
 - [X] [easy] 643. Maximum Average Subarray I
 - [ ] [medium] 978. Longest Turbulent Subarray
 - [ ] [medium] 3634. Minimum Removals to Balance Array
