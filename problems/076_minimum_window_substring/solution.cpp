@@ -2,6 +2,7 @@
 // @tag: sliding-window, hash-table, two-pointers, neetcode150
 // @difficulty: hard
 
+#if defined(SOL1)
 #include <string>
 #include <vector>
 
@@ -64,3 +65,58 @@ class Solution {
     return min_len == INT_MAX ? "" : s.substr(start, min_len);
   }
 };
+#endif
+
+#if defined(SOL2)
+#include <algorithm>
+#include <climits>
+#include <string>
+#include <unordered_map>
+#include <vector>
+
+class Solution {
+ public:
+  std::string minWindow(const std::string& s, const std::string& t) {
+    if (s.size() < t.size()) return "";
+
+    std::unordered_map<char, int> needed_count;
+    for (const char c : t) {
+      ++needed_count[c];
+    }
+
+    int missing_unique_chars = static_cast<int>(needed_count.size());
+
+    int start = 0;
+    int min_len = INT_MAX;
+
+    auto AddCharToWindow = [&](const char c) {
+      auto it = needed_count.find(c);
+      if (it == needed_count.end()) return;
+      if (--it->second == 0) --missing_unique_chars;
+    };
+
+    auto RemoveCharFromWindow = [&](const char c) {
+      auto it = needed_count.find(c);
+      if (it == needed_count.end()) return;
+      if (++it->second == 1) ++missing_unique_chars;
+    };
+
+    int left = 0;
+    for (int right = 0; right < static_cast<int>(s.size()); ++right) {
+      AddCharToWindow(s[right]);
+
+      while (missing_unique_chars == 0) {
+        // Valid window
+        if (right - left + 1 < min_len) {
+          min_len = right - left + 1;
+          start = left;
+        }
+        RemoveCharFromWindow(s[left]);
+        ++left;
+      }
+    }
+
+    return min_len == INT_MAX ? "" : s.substr(start, min_len);
+  }
+};
+#endif

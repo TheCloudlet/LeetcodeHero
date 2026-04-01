@@ -225,6 +225,7 @@ problems:
     status: L2_STRUGGLE
     refinement_focus: |
       #1: Not really hard, but I need to review how to initialize a priority queue and also prevent adding nullptr to the queue. There are also one way to use merge sort to merge k lists.
+      [2026-04-01] 60% 13min. Structure correct. Should save ListNode* not index. Should not use default construtor for pq or nullptr will sneak in.
 
   - id: 24
     title: "Swap Nodes in Pairs"
@@ -389,6 +390,7 @@ problems:
     refinement_focus: |
       #1: Brute force but got TLE. Then used sliding window. I don't know when to use sliding window or brute force. The note is written in the #3719 solution.
       #2: I can implement the solution using a map counter, but this is not very elegant. The best solution is to use a vector as a dictionary, plus using a total count variable to track all characters in t. Expand and shrink the window based on the total count.
+      [2026-04-01]: 95% 21min. Forget incr left and aming issue.
 
   - id: 80
     title: "Remove Duplicates from Sorted Array II"
@@ -1143,6 +1145,7 @@ problems:
     refinement_focus: |
       [2026-03-30]: implement dijkstrs's first time with guildance
       [2026-03-30]: 90%, 18min. Wrong in `max_element`
+      [2026-04-01]: 100% 18min.
 
   - id: 746
     title: "Min Cost Climbing Stairs"
@@ -1199,6 +1202,7 @@ problems:
       [2026-03-29]: 40%. Wrong structure. Should "Verify, Mutate, Push" in BFS
       [2026-03-30]: 70%. Wrong `minutes_elapsed`
       [2026-03-31]: 80%. Forget level order count.
+      [2026-04-01]: 95%. Minor typos.
 
   - id: 1448
     title: "Count Good Nodes in Binary Tree"

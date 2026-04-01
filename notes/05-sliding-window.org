@@ -25,7 +25,7 @@ These primitives can be demonstrated using pseudocode or C++ code:
 int left = 0, ans = 0; // 1. Window Boundaries
 State window;          // 2. Window State (e.g., unordered_map, sum)
 
-for (int right = 0; right < n; ++right) {  
+for (int right = 0; right < n; ++right) {
   // 3. Expand: Update window state with s[right]
   window.add(s[right]);
 
@@ -37,7 +37,7 @@ for (int right = 0; right < n; ++right) {
   }
 
   // Window [left, right] is now valid, process or record answer
-  ans = max(ans, right - left + 1); 
+  ans = max(ans, right - left + 1);
 }
 #+END_SRC
 
@@ -148,7 +148,7 @@ void slidingWindowProcess(const string& s, WindowState& window,
 
 * 3. Classic Problems
 - [ ] [medium] 3. Longest Substring Without Repeating Characters
-- [ ] [hard] 76. Minimum Window Substring
+- [X] [hard] 76. Minimum Window Substring
 - [X] [medium] 209. Minimum Size Subarray Sum
 - [ ] [hard] 239. Sliding Window Maximum
 - [X] [easy] 643. Maximum Average Subarray I
@@ -160,6 +160,7 @@ void slidingWindowProcess(const string& s, WindowState& window,
 - Print window boundaries: cout << left << ", " << right << endl;
 - Check window state: Verify if the frequency map is updated correctly.
 - Boundary conditions: Empty string, k=0, n<k, etc. 4. Debug
+
 * 5. Common Mistakes
 - Forgetting to update the answer after shrinking (only record when the window is valid).
 - Confusing the timing of expanding and shrinking.
