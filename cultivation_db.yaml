@@ -832,6 +832,16 @@ problems:
     status: L3_MASTERED
     refinement_focus: "HashSet"
 
+  - id: 219
+    title: "Contains Duplicate II"
+    link: "./problems/219_contains_duplicate_ii/"
+    leetcode-difficulty: easy
+    topics: [hashset, array, neetcode150]
+    status: L3_MASTERED
+    refinement_focus: |
+      [2026-04-02] 80% 8min. Range issue & `++left` But real solution
+          should use DP.
+
   - id: 226
     title: "Invert Binary Tree"
     link: "./problems/226_invert_binary_tree/"

@@ -66,10 +66,11 @@ void slidingWindowProcess(const string& s, WindowState& window,
 - [X] [medium] 3. Longest Substring Without Repeating Characters
 - [X] [hard] 76. Minimum Window Substring
 - [X] [medium] 209. Minimum Size Subarray Sum
+- [X] [easy] 219. Contains Duplicate II
 - [ ] [hard] 239. Sliding Window Maximum
 - [X] [medium] 438. Find All Anagrams in a string
-- [X] [easy] 643. Maximum Average Subarray I
 - [X] [medium] 567. Permutation in String
+- [X] [easy] 643. Maximum Average Subarray I
 - [ ] [medium] 978. Longest Turbulent Subarray
 - [ ] [medium] 3634. Minimum Removals to Balance Array
 - [ ] [medium] 3719. Longest Balanced Subarray i
