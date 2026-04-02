@@ -3,78 +3,188 @@
 #+DATE: 2026-03-26
 #+DESCRIPTION: Conquering DSA using SICP's approach
 
-* TODO Read
-labuladong.online/en/algo/essential-technique/sliding-window-framework/
-
 * 1. Primitives
-The basic elements of Sliding Window are not data structures, but conceptual atomic operations:
+In the SICP paradigm, the first step in building any system is identifying its indivisible atomic operations. For the Sliding Window, these primitives are not specific data structures, but conceptual components:
 
-- Window Boundaries (left, right) :: Define the range of the current window, usually represented by indices.
+- Window Boundaries (=left=, =right=) :: These define the current spatio-temporal scope. =right= acts as the vanguard exploring the unknown, while =left= represents the mindfulness of letting go of the past.
 
-- Window State :: The aggregated representation of data within the window (e.g., character frequency map, sum, set).
+- Window State :: The aggregated representation of the data within the window. It could be an =unordered_map= tracking character frequencies, an =int= maintaining a running sum, or a =std::set= ensuring uniqueness without phantom nodes.
 
-- Expand (right++) :: Expand the window to the right by one element.
+- State Transitions :: 
+  + Expand (Arising) :: As =right= advances, incorporate the new data into the current state.
+  + Shrink (Ceasing) :: As =left= advances, completely strip the obsolete data from the state.
 
-- Shrink (left++) :: Shrink the window from the left by one element.
-
-- Valid / Invalid Condition :: Determine whether the current window meets the problem requirements (e.g., all characters are unique, sum is less than the target).
-
-These primitives can be demonstrated using pseudocode or C++ code:
-
-#+BEGIN_SRC cpp
-int left = 0, ans = 0; // 1. Window Boundaries
-State window;          // 2. Window State (e.g., unordered_map, sum)
-
-for (int right = 0; right < n; ++right) {
-  // 3. Expand: Update window state with s[right]
-  window.add(s[right]);
-
-  // 5. Valid / Invalid Condition
-  while (!window.is_valid()) {
-    // 4. Shrink: Remove s[left] from state and increment left
-    window.remove(s[left]);
-    left++;
-  }
-
-  // Window [left, right] is now valid, process or record answer
-  ans = max(ans, right - left + 1);
-}
-#+END_SRC
+- Valid Condition (Invariant Check) :: A boolean evaluation that determines if the current Window State satisfies the problem's constraints.
 
 * 2. Means of Combination & Abstraction
+As the number of atomic operations increases, cognitive load spikes. We must build Abstraction Barriers to manage this complexity. 
+
+The main control loop should never micro-manage how a Map increments frequencies or how a Set calls =.erase()=. We encapsulate the Window State behind a clean interface, completely decoupling the "control flow of sliding pointers" from the "operations performed when the state is valid."
+
+In Functional Programming, this is analogous to a stateful, higher-order fold or reduce.
 #+BEGIN_SRC cpp
-// The General Process
+// 1. Abstraction Barrier: Encapsulating the State for different problems,
+// simply swap or implement this class. The main logic remains completely
+// untouched.
+class WindowState {
+ public:
+  void add(int val);     // Incorporate the present condition
+  void remove(int val);  // Let go of the past (Critical: ensure ghost nodes are
+                         // eradicated)
+  bool is_valid();       // Observe the current state invariant
+};
+
+// 2. Means of Combination: Solidifying the Control Flow
+// The sliding mechanics are hardcoded here, eliminating off-by-one errors
+// and pointer increment bugs.
 template <typename Action>
-void slidingWindowProcess(const string& s, WindowState& window,
+void slidingWindowProcess(const std::vector<int>& nums, WindowState& window,
                           Action on_valid_window) {
   int left = 0;
-  for (int right = 0; right < s.length(); ++right) {
-    window.add(s[right]);
+  for (int right = 0; right < static_cast<int>(nums.size()); ++right) {
+    // Expand: Courageously accept new data
+    window.add(nums[right]);
 
+    // Shrink: If the state loses balance, continuously let go of the past
+    // until equilibrium is restored
     while (!window.is_valid()) {
-      window.remove(s[left]);
-      left++;
+      window.remove(nums[left]);
+      ++left;
     }
 
+    // Action: When the state machine is in a valid range, execute the injected
+    // task (e.g., finding max/min, or recording an index)
     on_valid_window(left, right, window);
   }
 }
 #+END_SRC
 
 
+** 2.1 Fixed-Length Window
+- Core Logic :: The window size is physically hardcoded (e.g., length = =k=). As =right= advances, if the window overloads (=right - left + 1 > k=), =left= must immediately step forward to maintain the size.
+- Buddhist Perspective :: This resembles a bowl with a fixed capacity. When new water is poured in, old water must spill out to maintain an eternal steady state.
+- Classic Problems :: [Easy] 643. Maximum Average Subarray I or [Medium] 438. Find All Anagrams in a String.
+
+#+BEGIN_SRC cpp
+// Example: 643. Maximum Average Subarray I (Fixed window size k)
+class Solution {
+ public:
+  double findMaxAverage(const std::vector<int>& nums, int k) {
+    int n = static_cast<int>(nums.size());
+    if (n < k) return 0.0;
+
+    double max_sum = INT_MIN;
+    double sum = 0;
+    int left = 0;
+
+    for (int right = 0; right < n; ++right) {
+      sum += nums[right];
+      if (right - left + 1 == k) {
+        max_sum = std::max(max_sum, sum);
+        sum -= nums[left];
+        ++left;
+      }
+    }
+
+    return max_sum / k;
+  }
+};
+#+END_SRC
+
+** 2.2 Variable-Length - Find Longest
+- Core Logic :: Because we want to find the "longest", our nature is greedy (always try to =Expand=). We only reluctantly vomit it out (=Shrink=) when the window eats until it becomes "invalid" (=!valid=), continuing to shrink until it becomes valid again. The answer update strictly happens *after* Shrinking, ensuring the state is valid.
+- Buddhist Perspective :: Greed (=Expand=) leads to imbalance (=!valid=). We must strictly observe precepts (=while= loop to let go of the past) until the inner state regains purity. Only in this pure state can true achievements be recorded.
+- Classic Problems :: [Medium] 3. Longest Substring Without Repeating Characters.
+
+#+BEGIN_SRC cpp
+// Example: 3. Longest Substring Without Repeating Characters
+#include <algorithm>
+#include <string>
+#include <vector>
+
+class Solution {
+ public:
+  int lengthOfLongestSubstring(const std::string& s) {
+    if (s.empty()) return 0;
+
+    int max_len = 0;
+    const int len = static_cast<int>(s.size());
+    std::vector<int> freq(128, 0);
+
+    int left = 0;
+    for (int right = 0; right < len; ++right) {
+      ++freq[s[right]];
+      while (freq[s[right]] > 1) {
+        --freq[s[left]];
+        ++left;
+      }
+      max_len = std::max(max_len, right - left + 1);
+    }
+
+    return max_len;
+  }
+};
+#+END_SRC
+
+** 2.3 Variable-Length - Find Shortest
+- Core Logic :: Because we want to find the "shortest", we pursue minimalism. Once the window meets the target (=valid=), we immediately record the answer, then try to make it even more compact (=Shrink=) to see if we can squeeze the window shorter, until it becomes invalid.
+- Buddhist Perspective :: This is the wisdom of "Renunciation (Letting Go)". Once basic needs are met (=valid=), continuously let go of excess baggage (=++left=) to explore the minimum resources required to maintain the goal (=Minimum Size=).
+- Classic Problems :: [Medium] 209. Minimum Size Subarray Sum or [Hard] 76. Minimum Window Substring.
+
+#+BEGIN_SRC cpp
+// Example: 209. Minimum Size Subarray Sum
+#include <algorithm>
+#include <climits>
+#include <vector>
+
+class Solution {
+ public:
+  int minSubArrayLen(int target, std::vector<int>& nums) {
+    int left = 0;
+    int sum = 0;
+    int min_len = INT_MAX;
+
+    for (int right = 0; right < static_cast<int>(nums.size()); ++right) {
+      sum += nums[right];
+      while (sum >= target) {
+        min_len = std::min(min_len, right - left + 1);
+        sum -= nums[left];
+        ++left;
+      }
+    }
+
+    return (min_len == INT_MAX) ? 0 : min_len;
+  }
+};
+#+END_SRC
+
 * 3. Classic Problems
-- [X] [medium] 3. Longest Substring Without Repeating Characters
-- [X] [hard] 76. Minimum Window Substring
-- [X] [medium] 209. Minimum Size Subarray Sum
-- [X] [easy] 219. Contains Duplicate II
-- [X] [hard] 220. Contains Duplicate III :: sliding-window + set + lower_bound
-- [ ] [hard] 239. Sliding Window Maximum
+** 3.1 Fixed Length
+- [X] [easy] 219. Contains Duplicate II :: dp + sliding-window
 - [X] [medium] 438. Find All Anagrams in a string
 - [X] [medium] 567. Permutation in String
 - [X] [easy] 643. Maximum Average Subarray I
+
+** 3.2 Variable Length - Find Longest
+- [X] [medium] 3. Longest Substring Without Repeating Characters :: dp + sliding-window
 - [ ] [medium] 978. Longest Turbulent Subarray
-- [ ] [medium] 3634. Minimum Removals to Balance Array
 - [ ] [medium] 3719. Longest Balanced Subarray i
+
+** 3.3 Variable Length - Find Shortest
+- [X] [hard] 76. Minimum Window Substring
+- [X] [medium] 209. Minimum Size Subarray Sum
+
+** 3.4 Variable Length - Count Valid Subarrays (Exactly K = At Most K - At Most K-1)
+(Can add problems like 930, 992, 1248 here later)
+
+** 3.5 State with Monotonic Deque (Sliding Window Maximum/Minimum)
+- [ ] [hard] 239. Sliding Window Maximum
+
+** 3.6 State with Ordered Structures (BST / Two Heaps)
+- [X] [hard] 220. Contains Duplicate III :: sliding-window + set + lower_bound
+
+** 3.7 Other Advanced Combinations
+- [ ] [medium] 3634. Minimum Removals to Balance Array
 
 * 4. Debug
 - Print window boundaries: cout << left << ", " << right << endl;

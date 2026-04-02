@@ -72,6 +72,7 @@ problems:
       #2: re-learn using std::vector<int> last_seen(128, -1)
       [2026-04-01]: 90% 10min. Structure correct. Wrong using `c - 'a'`, minus a is not needed. Also didn't come-up with the DP solution.
       [2026-04-02]: 30% 10min. Fatal condition error in if.
+      [2026-04-03]: 70%. DP, Problem reading issue last_seen(128) not 26.
 
   - id: 5
     title: "Longest Palindromic Substring"
@@ -229,6 +230,7 @@ problems:
       #1: Not really hard, but I need to review how to initialize a priority queue and also prevent adding nullptr to the queue. There are also one way to use merge sort to merge k lists.
       [2026-04-01] 60% 13min. Structure correct. Should save ListNode* not index. Should not use default construtor for pq or nullptr will sneak in.
       [2026-04-02] 50% 10min. Maybe not very focused or in good statue. `cmp` forget to `left->val`, forget adding *. A lot of minor mistakes occurs.
+      [2026-04-03] 100% 8min.
 
   - id: 24
     title: "Swap Nodes in Pairs"
@@ -393,7 +395,8 @@ problems:
     refinement_focus: |
       #1: Brute force but got TLE. Then used sliding window. I don't know when to use sliding window or brute force. The note is written in the #3719 solution.
       #2: I can implement the solution using a map counter, but this is not very elegant. The best solution is to use a vector as a dictionary, plus using a total count variable to track all characters in t. Expand and shrink the window based on the total count.
-      [2026-04-01]: 95% 21min. Forget incr left and aming issue.
+      [2026-04-01]: 95% 21min. Forget incr left and naming issue.
+      [2026-04-02]: 95% 15min. `left - right + 1`.
 
   - id: 80
     title: "Remove Duplicates from Sorted Array II"
