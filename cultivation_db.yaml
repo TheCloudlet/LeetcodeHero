@@ -836,11 +836,19 @@ problems:
     title: "Contains Duplicate II"
     link: "./problems/219_contains_duplicate_ii/"
     leetcode-difficulty: easy
-    topics: [hashset, array, neetcode150]
+    topics: [hashset, array, sliding-window, dp]
     status: L3_MASTERED
     refinement_focus: |
-      [2026-04-02] 80% 8min. Range issue & `++left` But real solution
-          should use DP.
+      [2026-04-02] 80% 8min. Range issue & `++left` But real solution should use DP.
+
+  - id: 220
+    title: "Contains Duplicate III"
+    link: "./problems/220_contains_duplicate_iii/"
+    leetcode-difficulty: medium
+    topics: [hashset, array, sliding-window, binary-search]
+    status: L1_FORGOT
+    refinement_focus: |
+      [2026-04-03] Failed.
 
   - id: 226
     title: "Invert Binary Tree"

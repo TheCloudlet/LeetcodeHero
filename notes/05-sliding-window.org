@@ -67,6 +67,7 @@ void slidingWindowProcess(const string& s, WindowState& window,
 - [X] [hard] 76. Minimum Window Substring
 - [X] [medium] 209. Minimum Size Subarray Sum
 - [X] [easy] 219. Contains Duplicate II
+- [X] [hard] 220. Contains Duplicate III :: sliding-window + set + lower_bound
 - [ ] [hard] 239. Sliding Window Maximum
 - [X] [medium] 438. Find All Anagrams in a string
 - [X] [medium] 567. Permutation in String
