@@ -49,6 +49,7 @@ problems:
     refinement_focus: |
       Try 1: Use hashmap
       Try 2: I use sorted with pair, and two pointer
+      [2026-04-03]: 100%.
 
   - id: 2
     title: "Add Two Numbers"
@@ -543,7 +544,9 @@ problems:
     leetcode-difficulty: easy
     topics: [two-pointer, string, neetcode150]
     status: L3_MASTERED
-    refinement_focus: "isalnum() and tolower()"
+    refinement_focus: |
+      #1: isalnum() and tolower()
+      [2026-04-03]: 50%. Not reading problem carefully & didn't add correct `l < r` check in inner while loop.
 
   - id: 128
     title: "Longest Consecutive Sequence"
@@ -719,10 +722,12 @@ problems:
   - id: 167
     title: "Two Sum II - Input Array Is Sorted"
     link: "./problems/167_two_sum_ii_input_array_is_sorted/"
-    leetcode-difficulty: easy
+    leetcode-difficulty: medium
     topics: [two-pointer, array, neetcode150]
     status: L3_MASTERED
-    refinement_focus: "trivial two-pointer"
+    refinement_focus: |
+      #1: trivial two-pointer.
+      [2026-04-03]: 70%. Seems trivial but fucked up left, right and 1-indexed.
 
   - id: 198
     title: "House Robber"
@@ -847,7 +852,7 @@ problems:
   - id: 220
     title: "Contains Duplicate III"
     link: "./problems/220_contains_duplicate_iii/"
-    leetcode-difficulty: medium
+    leetcode-difficulty: hard
     topics: [hashset, array, sliding-window, binary-search]
     status: L1_FORGOT
     refinement_focus: |
@@ -1160,6 +1165,15 @@ problems:
     status: L2_STRUGGLE
     refinement_focus: "Very similar to 005_Longest_Palindromic_Substring. There are three ways: Expand, 2D-dp, or 1D-dp build up layer by layer"
 
+  - id: 653
+    title: "Two Sum IV - Input is a BST"
+    link: "./problems/653_two_sum_iv_input_is_a_bst/"
+    leetcode-difficulty: easy
+    topics: [tree, bst, dfs, two-pointer, neetcode150]
+    status: L2_STRUGGLE
+    refinement_focus: |
+      [2026-04-03]: 90%. Wrong traversal order.
+
   - id: 684
     title: "Redundant Connection"
     link: "./problems/684_redundant_connection/"
@@ -1271,7 +1285,7 @@ problems:
   - id: 3613
     title: "Minimize Maximum Component Cost"
     link: "./problems/3613_minimize_maximum_component_cost/"
-    leetcode-difficulty: medium
+    leetcode-difficulty: hard
     topics: [array, greedy, math-and-geometry]
     status: L2_STRUGGLE
     refinement_focus: |

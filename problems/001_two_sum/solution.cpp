@@ -16,22 +16,31 @@
 // as it reduces redundant operations and finds the solution as soon as
 // possible.
 
+#include <cassert>
 #include <unordered_map>
 #include <vector>
 
 class Solution {
  public:
-  std::vector<int> twoSum(std::vector<int>& nums, int target) {
-    std::unordered_map<int, int> value_to_index;
+  std::vector<int> twoSum(const std::vector<int>& nums, int target) {
+    if (nums.empty()) return {};
 
-    for (int i = 0; i < nums.size(); ++i) {
+    std::unordered_map<int, int> seen_indices;
+    seen_indices.reserve(nums.size());
+
+    for (int i = 0; i < static_cast<int>(nums.size()); ++i) {
       int complement = target - nums[i];
-      if (value_to_index.count(complement)) {
-        return {value_to_index[complement], i};
+
+      auto it = seen_indices.find(complement);
+      if (it != seen_indices.end()) {
+        return {it->second, i};
       }
-      value_to_index[nums[i]] = i;
+
+      seen_indices[nums[i]] = i;
     }
 
+    assert(false &&
+           "Unreachable: The problem guarantees exactly one solution.");
     return {};
   }
 };
