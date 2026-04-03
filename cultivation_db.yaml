@@ -78,7 +78,7 @@ problems:
     title: "Longest Palindromic Substring"
     link: "./problems/005_longest_palindromic_substring/"
     leetcode-difficulty: medium
-    topics: [iteration, dp, manachers-algorithm, string, neetcode150]
+    topics: [1d-dp, iteration, dp, manachers-algorithm, string, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: "Expand, DP, or Manacher's algorithm"
 
@@ -94,7 +94,7 @@ problems:
     title: "Reverse Integer"
     link: "./problems/007_reverse_integer/"
     leetcode-difficulty: medium
-    topics: [integer, signed, boundary, neetcode150]
+    topics: [bitops, integer, signed, boundary, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: "The key is boundary + minus"
 
@@ -215,7 +215,7 @@ problems:
     title: "Generate Parentheses"
     link: "./problems/022_generate_parentheses/"
     leetcode-difficulty: medium
-    topics: [backtracking, string, neetcode150]
+    topics: [stack, backtracking, string, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: |
       #1: I know the core idea, implement has some flaws.
@@ -307,7 +307,7 @@ problems:
     title: "Valid Sudoku"
     link: "./problems/036_valid_sudoku/"
     leetcode-difficulty: medium
-    topics: [hashset, matrix, simulation, neetcode150]
+    topics: [array, hashset, matrix, simulation, neetcode150]
     status: L3_MASTERED
     refinement_focus: "HashSet"
 
@@ -323,7 +323,7 @@ problems:
     title: "Rotate Image"
     link: "./problems/048_rotate_image/"
     leetcode-difficulty: medium
-    topics: [matrix, neetcode150]
+    topics: [math-and-geometry, matrix, neetcode150]
     status: L3_MASTERED
     refinement_focus: "Transpose + Reverse"
 
@@ -339,7 +339,7 @@ problems:
     title: "Maximum Subarray"
     link: "./problems/053_maximum_subarray/"
     leetcode-difficulty: medium
-    topics: [dp, array, neetcode150, kadane-algorithm]
+    topics: [greedy, dp, array, neetcode150, kadane-algorithm]
     status: L3_MASTERED
     refinement_focus: |
       #1: One shot Kadane's algorithm after praticing LeetCode #152.
@@ -348,7 +348,7 @@ problems:
     title: "Merge Intervals"
     link: "./problems/056_merge_intervals/"
     leetcode-difficulty: medium
-    topics: [array, sorting, neetcode150]
+    topics: [intervals, array, sorting, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: "Sorting + Iterate and Merge"
 
@@ -356,7 +356,7 @@ problems:
     title: "Insert Interval"
     link: "./problems/057_insert_interval/"
     leetcode-difficulty: medium
-    topics: [array, sorting, neetcode150]
+    topics: [intervals, array, sorting, neetcode150]
     status: L2_STRUGGLE
     refinement_focus:
       #1: Copy before insertion, merge overlaps, then append the rest
@@ -373,7 +373,7 @@ problems:
     title: "Plus One"
     link: "./problems/066_plus_one/"
     leetcode-difficulty: easy
-    topics: [array, math, neetcode150]
+    topics: [array, math-and-geometry, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: |
       #1: (Pass 15) But the simplest way is to use vector::insert to insert 1 at the beginning if there is a carry at the end.
@@ -382,7 +382,7 @@ problems:
     title: "Climbing Stairs"
     link: "./problems/070_climbing_stairs/"
     leetcode-difficulty: easy
-    topics: [dp, math, neetcode150]
+    topics: [1d-dp, dp, math-and-geometry, neetcode150]
     status: L3_MASTERED
     refinement_focus: "Fibonacci, bottom-up DP, top-down DP, or even math"
 
@@ -420,7 +420,7 @@ problems:
     title: "Decode Ways"
     link: "./problems/091_decode_ways/"
     leetcode-difficulty: medium
-    topics: [dp, string, backtracking, neetcode150]
+    topics: [1d-dp, dp, string, backtracking, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: "dp[i] means ways to decode s[0..i-1]. Also, we need to handle 1 digit and 2 digit separately"
 
@@ -447,7 +447,7 @@ problems:
     title: "Unique Binary Search Trees"
     link: "./problems/096_unique_binary_search_trees/"
     leetcode-difficulty: medium
-    topics: [dp, math]
+    topics: [dp, math-and-geometry]
     status: L2_STRUGGLE
     refinement_focus: "dp[n] means number of unique BST that can be built with n nodes. dp[n] = sum of dp[i-1]*dp[n-i] for i in [1..n]. Catalan number"
 
@@ -557,7 +557,7 @@ problems:
     title: "Surrounded Regions"
     link: "./problems/130_surrounded_regions/"
     leetcode-difficulty: medium
-    topics: [dfs, array, matrix, neetcode150]
+    topics: [graph, dfs, array, matrix, neetcode150]
     status: L3_MASTERED
     refinement_focus: |
       #1: one-shot.
@@ -566,7 +566,7 @@ problems:
     title: "Single Number II"
     link: "./problems/137_single_number_ii/"
     leetcode-difficulty: medium
-    topics: [bit-manipulation, array]
+    topics: [bitops, array]
     status: L2_STRUGGLE
     refinement_focus: |
       #1: two solutions. FSM (best) and bit count modulo 3 (also good)
@@ -576,7 +576,7 @@ problems:
     title: "Single Number"
     link: "./problems/136_single_number/"
     leetcode-difficulty: easy
-    topics: [bit-manipulation, array, neetcode150]
+    topics: [bitops, array, neetcode150]
     status: L3_MASTERED
     refinement_focus: "XOR"
 
@@ -594,7 +594,7 @@ problems:
     title: "Word Break"
     link: "./problems/139_word_break/"
     leetcode-difficulty: medium
-    topics: [dp, string, neetcode150]
+    topics: [1d-dp, dp, string, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: "Not absolutely sure I can get this right during interview, but I know the idea. dp[i] means s[i..end] can be segmented. Need a helper function isPrefix and a recursive function with memo"
 
@@ -662,7 +662,7 @@ problems:
     title: "Maximum Product Subarray"
     link: "./problems/152_maximum_product_subarray/"
     leetcode-difficulty: medium
-    topics: [dp, array, neetcode150, kadane-algorithm]
+    topics: [1d-dp, dp, array, neetcode150, kadane-algorithm]
     status: L2_STRUGGLE
     refinement_focus: |
       #1: The dp logic is not straightforward. The key is to remember three conditions: positive, negative, zero. Using DP to find max positive and min negative
@@ -702,7 +702,7 @@ problems:
     title: "Reverse Bits"
     link: "./problems/190_reverse_bits/"
     leetcode-difficulty: easy
-    topics: [bit-manipulation]
+    topics: [bitops, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: |
       #1: I know the sequential bit manipulation. But there are two more ways that I cannot think of. Also, not familiar with `(x >> ?) | (x << x)` syntax and Immediately Invoked Function Expression.
@@ -711,7 +711,7 @@ problems:
     title: "Number of 1 Bits"
     link: "./problems/191_number_of_1_bits/"
     leetcode-difficulty: easy
-    topics: [bit-manipulation]
+    topics: [bitops, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: |
       #1: use __builtin_popcount or Brian Kernighan algorithm
@@ -728,7 +728,7 @@ problems:
     title: "House Robber"
     link: "./problems/198_house_robber/"
     leetcode-difficulty: medium
-    topics: [dp, array, neetcode150]
+    topics: [1d-dp, dp, array, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: "dp[i] means max amount can be robbed from house[0..i]. dp[i] = max(dp[i-1], dp[i-2]+nums[i]). Use foldl to optimize space"
 
@@ -745,7 +745,7 @@ problems:
     title: "Number of Islands"
     link: "./problems/200_number_of_islands/"
     leetcode-difficulty: medium
-    topics: [array, dfs, matrix, neetcode150]
+    topics: [graph, array, dfs, matrix, neetcode150]
     status: L3_MASTERED
     refinement_focus: |
       #1: One-shot, but ugly. Key is `constexpr dirs[4][2]` and use `auto dfs = [&](auto &&dfs, int r, int c) -> void`.
@@ -814,7 +814,7 @@ problems:
     title: "House Robber II"
     link: "./problems/213_house_robber_ii/"
     leetcode-difficulty: medium
-    topics: [dp, circular, array, neetcode150]
+    topics: [1d-dp, dp, circular, array, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: "Arranged in circle. Two cases: rob house[0..n-2] or house[1..n-1]"
 
@@ -928,7 +928,7 @@ problems:
     title: "Meeting Rooms"
     link: "./problems/252_meeting_rooms/"
     leetcode-difficulty: easy
-    topics: [greedy, sorting, neetcode150]
+    topics: [intervals, greedy, sorting, neetcode150]
     status: L3_MASTERED
     refinement_focus: |
       #1: Sort by start time. Then iterate to check.
@@ -937,7 +937,7 @@ problems:
     title: "Meeting Rooms II"
     link: "./problems/253_meeting_rooms_ii/"
     leetcode-difficulty: medium
-    topics: [greedy, sorting, priority-queue, neetcode150]
+    topics: [intervals, greedy, sorting, priority-queue, neetcode150]
     status: L1_FORGOT
     refinement_focus: |
       #1: Hint: Priority Queue.
@@ -946,7 +946,7 @@ problems:
     title: "Single Number III"
     link: "./problems/260_single_number_iii/"
     leetcode-difficulty: medium
-    topics: [bit-manipulation, array, math]
+    topics: [bitops, array, math-and-geometry]
     status: L1_FORGOT
     refinement_focus: |
       #1: Hint: XOR properties, and partition
@@ -957,7 +957,7 @@ problems:
     title: "Missing Number"
     link: "./problems/268_missing_number/"
     leetcode-difficulty: easy
-    topics: [array, math, bit-manipulation, neetcode150]
+    topics: [array, math-and-geometry, bitops, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: |
       #1: Peek the solution. The key is to use XOR properties.
@@ -983,7 +983,7 @@ problems:
     title: "Longest Increasing Subsequence"
     link: "./problems/300_longest_increasing_subsequence/"
     leetcode-difficulty: medium
-    topics: [dp, binary-search, neetcode150]
+    topics: [1d-dp, dp, binary-search, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: "DP O(n^2) or Binary Search O(n log n). Binary search is never practiced. dp[i] means from nums[0..i], the longest increasing subsequence that ends with nums[i]"
 
@@ -1001,7 +1001,7 @@ problems:
     title: "Coin Change"
     link: "./problems/322_coin_change/"
     leetcode-difficulty: medium
-    topics: [dp, bfs, neetcode150]
+    topics: [1d-dp, dp, bfs, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: "dp[i] means the minimum coins to make amount i"
 
@@ -1009,7 +1009,7 @@ problems:
     title: "Counting Bits"
     link: "./problems/338_counting_bits/"
     leetcode-difficulty: easy
-    topics: [dp, bit-manipulation, neetcode150]
+    topics: [dp, bitops, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: |
       #1: I used matrix count to count bits, but it is O(n^2). The soultion is to use DP `dp[i] = dp[i >> 1] + (i & 1)`.
@@ -1018,7 +1018,7 @@ problems:
     title: "Top K Frequent Elements"
     link: "./problems/347_top_k_frequent_elements/"
     leetcode-difficulty: medium
-    topics: [hashtable, heap, bucket-sort, neetcode150]
+    topics: [array, hashtable, heap, bucket-sort, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: |
       #1: Use HashMap to count frequency, then use Min-Heap or Bucket Sort to get top K. Bucket sort is optimal O(n), but I forget how to implement it
@@ -1028,8 +1028,8 @@ problems:
   - id: 371
     title: "Sum of Two Integers"
     link: "./problems/371_sum_of_two_integers"
-    leetcode-difficulity: medium
-    topics: [bitops]
+    leetcode-difficulty: medium
+    topics: [bitops, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: |
       #1: RCA & parallel RCA. (maybe need review)
@@ -1056,7 +1056,7 @@ problems:
     title: "Partition Equal Subset Sum"
     link: "./problems/416_partition_equal_subset_sum/"
     leetcode-difficulty: medium
-    topics: [dp, knapsack, neetcode150]
+    topics: [1d-dp, dp, knapsack, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: |
       #1: The first time I need to learn from the answer and learn knapsack. dp[i][j] means using nums[0..i], can we fill a knapsack of capacity j. dp[i][j] = dp[i-1][j] || dp[i-1][j-nums[i]]"
@@ -1067,7 +1067,7 @@ problems:
     title: "Non-overlapping Intervals"
     link: "./problems/435_non_overlapping_intervals/"
     leetcode-difficulty: medium
-    topics: [greedy, sorting, neetcode150]
+    topics: [intervals, greedy, sorting, neetcode150]
     status: L1_FORGOT
     refinement_focus: |
       #1: Greedy. Sort by end time. Then iterate and merge overlaps."
@@ -1127,7 +1127,7 @@ problems:
     title: "Permutation in String"
     link: "./problems/567_permutation_in_string/"
     leetcode-difficulty: medium
-    topics: [sliding-window, hashtable, array]
+    topics: [sliding-window, hashtable, array, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: |
       [2026-04-02]: 100% 10min. But just finished 438, so it is fresh in my mind.
@@ -1156,7 +1156,7 @@ problems:
     title: "Palindromic Substrings"
     link: "./problems/647_palindromic_substrings/"
     leetcode-difficulty: medium
-    topics: [dp, string, neetcode150]
+    topics: [1d-dp, dp, string, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: "Very similar to 005_Longest_Palindromic_Substring. There are three ways: Expand, 2D-dp, or 1D-dp build up layer by layer"
 
@@ -1164,7 +1164,7 @@ problems:
     title: "Redundant Connection"
     link: "./problems/684_redundant_connection/"
     leetcode-difficulty: medium
-    topics: [union-find, neetcode150]
+    topics: [graph, union-find, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: |
       #1: text book union find
@@ -1186,7 +1186,7 @@ problems:
     title: "Network Delay Time"
     link: "./problems/743_network_delay_time/"
     leetcode-difficulty: medium
-    topics: [graph, bfs, dijkstra, neetcode150]
+    topics: [advanced-graph, graph, bfs, dijkstra, neetcode150]
     status: L1_FORGOT
     refinement_focus: |
       [2026-03-30]: implement dijkstrs's first time with guildance
@@ -1197,7 +1197,7 @@ problems:
     title: "Min Cost Climbing Stairs"
     link: "./problems/746_min_cost_climbing_stairs/"
     leetcode-difficulty: easy
-    topics: [dp, array, neetcode150]
+    topics: [1d-dp, dp, array, neetcode150]
     status: L3_MASTERED
     refinement_focus: "dp[i] means min cost to reach step i. dp[i] = min(dp[i-1]+cost[i-1], dp[i-2]+cost[i-2])"
 
@@ -1224,7 +1224,7 @@ problems:
     title: "Longest Turbulent Subarray"
     link: "./problems/978_longest_turbulent_subarray/"
     leetcode-difficulty: medium
-    topics: [array, dp, sliding-window, neetcode150]
+    topics: [array, dp, sliding-window]
     status: L2_STRUGGLE
     refinement_focus: |
       #1: TODO.
@@ -1233,7 +1233,7 @@ problems:
     title: "Rotting Oranges"
     link: "./problems/994_rotting_oranges/"
     leetcode-difficulty: medium
-    topics: [array, bfs, matrix, neetcode150]
+    topics: [graph, array, bfs, matrix, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: |
       #1: I used simulation with a queue to store the oranges that are going to rot, then update the grid. But this is slow. I should use *multi-source BFS* to speed up the simulation. (level order traversal one example for multi-source BFS)
@@ -1272,7 +1272,7 @@ problems:
     title: "Minimize Maximum Component Cost"
     link: "./problems/3613_minimize_maximum_component_cost/"
     leetcode-difficulty: medium
-    topics: [array, greedy, math]
+    topics: [array, greedy, math-and-geometry]
     status: L2_STRUGGLE
     refinement_focus: |
       #1: meet in interview. DSU + Kruskal's algorithm.
@@ -1298,7 +1298,7 @@ problems:
     title: "Longest Subsequence With Non-Zero Bitwise XOR"
     link: "./problems/3702_longest_subsequence_with_nonzero_bitwise_xor/"
     leetcode-difficulty: medium
-    topics: [bit-manipulation, leetcode-contest]
+    topics: [bitops, leetcode-contest]
     status: L1_FORGOT
     refinement_focus: |
       #1: There are only 3 cases, but I thought we can only solve it by DP.
@@ -1333,7 +1333,7 @@ problems:
     title: Smallest Missing Multiple of K
     link: "./problems/3718_smallest_missing_multiple_of_k/"
     leetcode-difficulty: easy
-    topics: [math, hashtable, iteration, leetcode-contest]
+    topics: [math-and-geometry, hashtable, iteration, leetcode-contest]
     status: L3_MASTERED
     refinement_focus: |
       #1: The return value might be tricky when the largest value is K's multiple.
