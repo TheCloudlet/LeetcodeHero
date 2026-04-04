@@ -410,6 +410,15 @@ problems:
     refinement_focus: |
       [2025-12-12]: Fibonacci, bottom-up DP, top-down DP, or even math
 
+  - id: 74
+    title: "Search a 2D Matrix"
+    link: "./problems/074_search_a_2d_matrix/"
+    leetcode-difficulty: medium
+    topics: [binary-search, matrix, neetcode150]
+    status: L2_STRUGGLE
+    refinement_focus: |
+      [2026-04-04]: 90%. GetColRow should be {index / num_cols, index % num_cols}.
+
   - id: 76
     title: "Minimum Window Substring"
     link: "./problems/076_minimum_window_substring/"
@@ -572,6 +581,7 @@ problems:
       [2025-12-12]: isalnum() and tolower()
       [2026-04-03]: 50%. Not reading problem carefully & didn't add correct `l < r` check in inner while loop.
       [2026-04-04]: 80%. The error is init right = 0, left = s.size() - 1. Very stupid.
+      [2026-04-05]: 55%. s[left] & ++left, --right.
 
   - id: 128
     title: "Longest Consecutive Sequence"
@@ -709,6 +719,7 @@ problems:
     status: L2_STRUGGLE
     refinement_focus: |
       [2025-12-12]: Used `while (left <= right)` and got AC, but Gemini suggested `while (left < right)` as it is less error-prone. Learned the binary search decision-making process. Plan to redo this.
+      [2026-04-05]: 100% 5min.
 
   - id: 155
     title: "Min Stack"
@@ -757,6 +768,7 @@ problems:
     refinement_focus: |
       [2025-12-12]: trivial two-pointer.
       [2026-04-03]: 70%. Seems trivial but fucked up left, right and 1-indexed.
+      [2026-04-05]: 100% 5min.
 
   - id: 198
     title: "House Robber"
@@ -1123,6 +1135,7 @@ problems:
     refinement_focus: |
       [2026-04-01]: 30% 16min. Structure correct. Wrong range, wrong logic, wrong index.
       [2026-04-02]: 0% directly failed.
+      [2026-04-05]: 100% 7min.
 
   - id: 496
     title: "Next Greater Element I"
@@ -1262,12 +1275,13 @@ problems:
   - id: 852
     title: "Peak Index in a Mountain Array"
     link: "./problems/852_peak_index_in_a_mountain_array/"
-    leetcode-difficulty: easy
+    leetcode-difficulty: medium
     topics: [binary-search, array]
     status: L2_STRUGGLE
     refinement_focus: |
       [2025-12-12]: Binary search to find the first location where arr[i] > arr[i+1]
       [2025-12-12]: I thought I can aced it... AC, but has flaws. I used while (lo <= hi) and use double way check which is not needed.
+      [2026-04-05]: 100% 5min. But just read the template. Need more practice.
 
   - id: 876
     title: "Middle of the Linked List"

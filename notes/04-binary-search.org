@@ -88,12 +88,12 @@ Data:        [ 1,   2,   3,   4,   5,   6 ]
 #+END_EXAMPLE
 
 
-| # | Search Space ~[L, R)~ | ~mid~ | ~val~ | SmallerThan4P | Action      |
-|---+-----------------------+-------+-------+----------------------+-------------|
-| 1 | ~[0, 6)~              | ~3~   | ~4~   | ~4 < 4~ (False)      | ~R = mid~   |
-| 2 | ~[0, 3)~              | ~1~   | ~2~   | ~2 < 4~ (True)       | ~L = mid+1~ |
-| 3 | ~[2, 3)~              | ~2~   | ~3~   | ~3 < 4~ (True)       | ~L = mid+1~ |
-| 4 | ~[3, 3)~              | -     | -     | ~L == R~             | Break       |
+| # | Search Space | ~mid~ | ~val~ | SmallerThan4P   | Action      |
+|---+--------------+-------+-------+-----------------+-------------|
+| 1 | ~[0, 6)~     | ~3~   | ~4~   | ~4 < 4~ (False) | ~R = mid~   |
+| 2 | ~[0, 3)~     | ~1~   | ~2~   | ~2 < 4~ (True)  | ~L = mid+1~ |
+| 3 | ~[2, 3)~     | ~2~   | ~3~   | ~3 < 4~ (True)  | ~L = mid+1~ |
+| 4 | ~[3, 3)~     | -     | -     | ~L == R~        | Break       |
 
 How to implement our own binary search exact match using lower bound template:
 1. Using half-open interval [0, 6)
@@ -152,6 +152,60 @@ class Solution {
   By simply flipping the argument order from ~(element, value)~ to ~(value, element)~, C++ elegantly derives the upper bound without ever needing to define a new ~<=~ or ~>~ comparison operator!
   #+END_QUOTE
 
+** 1.4. Find Gradient or Peak
+- *Goal*: Find a peak in a mountain array (where elements first increase, then decrease). We are guaranteed a peak exists.
+- *Strategy*: Use ~while (left < right)~ to continuously shrink the valid search space until exactly one element remains.
+
+** 1.4.1 Why ~while (left < right)~ instead of ~<=~?*
+For peak finding, we are not looking for an exact target that might not exist. Instead, we are guaranteed the peak exists within the bounds. Our goal isn't to return early; it's to cut off the invalid half of the mountain repeatedly until ~left~ and ~right~ collide (~left == right~). The sole survivor is our peak.
+
+** 1.4.2 How to determine the direction? (Checking the Local Gradient)*
+To decide whether to shrink the left or right, we must look at the "slope" by comparing our current position ~nums[mid]~ with its forward neighbor ~nums[mid + 1]~:
+- *Uphill (~nums[mid] < nums[mid + 1]~)*: We are still climbing. The peak must be strictly to our right. Therefore, we confidently discard the left half: ~left = mid + 1~.
+- *Downhill (~nums[mid] > nums[mid + 1]~)*: We have already crossed the peak and are descending. The peak must be to our left, or we might currently be standing exactly on it! We shrink the right boundary: ~right = mid~.
+
+** 1.4.3 Is checking ~nums[mid + 1]~ safe from Out-of-Bounds (Segfault)?*
+*Yes, it is 100% mathematically safe.* 
+Because we use ~while (left < right)~ and the integer division ~mid = left + (right - left) / 2~ inherently rounds down:
+- In the worst-case scenario where the search space shrinks to just 2 elements (e.g., ~left = 0, right = 1~).
+- ~mid~ will evaluate to ~0~.
+- ~mid + 1~ will evaluate to ~1~ (which is exactly ~right~).
+Therefore, ~mid + 1~ will never exceed ~right~. As long as our initial ~right~ starts within the bounds of the array (e.g., ~right = nums.size() - 1~), accessing ~nums[mid + 1]~ is foolproof and will never cause a segfault.
+
+Example:
+
+#+BEGIN_EXAMPLE
+Index:         0    1    2    3    4    5
+Data:        [ 1,   2,   5,   3,   2,   1 ]
+#+END_EXAMPLE
+
+| # | Search Space | ~mid~ | ~val~ | ~nums[m] < num[m + 1] | Action      |
+|---+--------------+-------+-------+-----------------------+-------------|
+| 1 | ~[0, 6)~     | ~3~   | ~3~   | ~4 > 5~ (False)       | ~R = mid~   |
+| 2 | ~[0, 3)~     | ~1~   | ~2~   | ~2 < 5~ (True)        | ~L = mid+1~ |
+| 3 | ~[2, 3)~     | ~2~   | ~3~   | ~5 < 3~ (False)       | ~R = mid~   |
+| 4 | ~[2, 2)~     | -     | -     | ~L == R~              | Break       |
+
+
+** 1.5. Decision Model
+#+BEGIN_EXAMPLE
+Steps:
+
+1) Is the answer guaranteed to be physically inside the array?
+   Yes: [left, right] --> right = nums.size() - 1;
+        (e.g., Peak Index, Find Min. Safely prevents mid+1 out-of-bounds.)
+   No:  [left, right) --> right = nums.size();
+        (e.g., Insert Position, Lower Bound. Needs a virtual sentinel at the end.)
+
+2) Are we looking for a specific number?
+   Yes: Exact Match --> ~while (l <= r)~
+        (Returns mid immediately if found, or -1 if cross.)
+   No:  Partition   --> ~while (l < r)~
+        (Shrinks the state space until left == right points to the answer.)
+
+3) Fill in the P where ~if (P) left = mid + 1; else right = mid;~
+#+END_EXAMPLE
+
 * 2. Means of Combination & Abstraction
 ** 2.1 Basic combination
 
@@ -169,20 +223,20 @@ nums: [1, 2, 2, 2, 4]
 * 3. Classic Problems
 ** 3.1 Foundational / Exact Match (尋找確切目標)
 - [X] [easy] 704. Binary Search
-- [ ] [medium] 74. Search a 2D Matrix
+- [X] [medium] 74. Search a 2D Matrix
 
 ** 3.2 Lower / Upper Bound (找邊界與範圍)
 - [X] [easy] 35. Search Insert Position (~lower_bound~ 裸題)
-- [ ] [easy] 278. First Bad Version (對 boolean 陣列找 Lower Bound)
+- [X] [easy] 278. First Bad Version (對 boolean 陣列找 Lower Bound)
 - [X] [medium] 34. Find First and Last Position of Element in Sorted Array
 
 ** 3.3 Rotated Sorted Arrays (旋轉矩陣)
-- [ ] [medium] 153. Find Minimum in Rotated Sorted Array
+- [X] [medium] 153. Find Minimum in Rotated Sorted Array
 - [ ] [medium] 33. Search in Rotated Sorted Array
 
 ** 3.4 Finding Peaks (找極值 - 以相鄰元素作條件)
-- [ ] [easy] 852. Peak Index in a Mountain Array
-- [ ] [medium] 162. Find Peak Element
+- [X] [medium] 852. Peak Index in a Mountain Array
+- [X] [medium] 162. Find Peak Element
 
 ** 3.5 Binary Search on Answers (對答案作二分搜)
 - [ ] [medium] 875. Koko Eating Bananas
