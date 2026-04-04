@@ -168,13 +168,13 @@ nums: [1, 2, 2, 2, 4]
 
 * 3. Classic Problems
 ** 3.1 Foundational / Exact Match (尋找確切目標)
-- [ ] [easy] 704. Binary Search
+- [X] [easy] 704. Binary Search
 - [ ] [medium] 74. Search a 2D Matrix
 
 ** 3.2 Lower / Upper Bound (找邊界與範圍)
-- [ ] [easy] 35. Search Insert Position (~lower_bound~ 裸題)
+- [X] [easy] 35. Search Insert Position (~lower_bound~ 裸題)
 - [ ] [easy] 278. First Bad Version (對 boolean 陣列找 Lower Bound)
-- [ ] [medium] 34. Find First and Last Position of Element in Sorted Array
+- [X] [medium] 34. Find First and Last Position of Element in Sorted Array
 
 ** 3.3 Rotated Sorted Arrays (旋轉矩陣)
 - [ ] [medium] 153. Find Minimum in Rotated Sorted Array

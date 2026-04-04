@@ -20,37 +20,69 @@
 class Solution {
  public:
   std::vector<int> searchRange(const std::vector<int>& nums, int target) {
-    int lower = -1, upper = -1;
-    int left = 0, right = nums.size();
-    int mid;
+    const int n = static_cast<int>(nums.size());
 
-    // Pass 1: find lower
+    int left = 0;
+    int right = n;
+
+    // Pass 1: find lower bound
     while (left < right) {
-      mid = left + (right - left) / 2;
+      const int mid = left + (right - left) / 2;
       if (nums[mid] < target) {
         left = mid + 1;
       } else {
         right = mid;
       }
     }
-    if (left >= nums.size() || nums[left] != target) {
-      return {-1, -1};  // target does not exsist in nums
-    }
-    lower = left;
 
-    // Pass 2: find upper
-    left = lower;  // don't need to find from index 0
-    right = nums.size();
+    // Check if target exists
+    if (left >= n || nums[left] != target) {
+      return {-1, -1};
+    }
+
+    const int lower = left;
+
+    // Pass 2: find upper bound
+    // Optimization: start from `lower` since target is at or after `lower`
+    left = lower;
+    right = n;
     while (left < right) {
-      mid = left + (right - left) / 2;
+      const int mid = left + (right - left) / 2;
       if (nums[mid] <= target) {
         left = mid + 1;
       } else {
         right = mid;
       }
     }
-    upper = left - 1;
+
+    // The upper bound points to the first element > target.
+    // Since target existed, the index before upper bound must be target.
+    const int upper = left - 1;
 
     return {lower, upper};
   }
 };
+
+#if defined(STL)
+#include <vector>
+#include <algorithm>
+#include <iterator>
+
+class Solution {
+ public:
+  std::vector<int> searchRange(const std::vector<int>& nums, int target) {
+    const auto it1 = std::lower_bound(nums.begin(), nums.end(), target);
+    if (it1 == nums.end() || *it1 != target) {
+        return {-1, -1};
+    }
+
+    // Optimiztion: starting from it1
+    const auto it2 = std::upper_bound(it1, nums.end(), target);
+
+    const int first = std::distance(nums.begin(), it1);
+    const int second = std::distance(nums.begin(), std::prev(it2));
+
+    return {first, second};
+  }
+};
+#endif
