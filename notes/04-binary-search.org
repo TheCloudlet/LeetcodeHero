@@ -1,0 +1,217 @@
+#+TITLE: 04 Binary Search
+#+AUTHOR: Yi-Ping Pan (Cloudlet)
+#+DATE: 2026-04-04
+#+DESCRIPTION: Conquering DSA using SICP's approach
+
+* 1. Primitives
+Usage: Finding a position, in a ordered container.
+
+** 1.1: Finding the exact number
+Finding the index of ~4~ in the sorted array:
+
+#+BEGIN_EXAMPLE
+Index:    0    1    2    3    4    5
+Data:   [ 1,   2,   3,   4,   5,   6 ]
+#+END_EXAMPLE
+
+Steps:
+1. Pick a middle.
+2. Check whether the number should be in the right or left side of the mid
+
+| # | ~[L, R]~ | ~mid~ | ~val~ | cmp  | Action  |
+|---+----------+-------+-------+------+---------|
+| 1 | ~[0, 5]~ | ~2~   | ~3~   | < 4  | =L=m+1= |
+| 2 | ~[3, 5]~ | ~4~   | ~5~   | > 4  | =R=m-1= |
+| 3 | ~[3, 3]~ | ~3~   | ~4~   | == 4 | Found!  |
+
+Code:
+
+#+NAME:
+#+BEGIN_SRC cpp
+// Leetcode 704 704. Binary Search
+#include <vector>
+
+class Solution {
+ public:
+  int search(const std::vector<int>& nums, int target) {
+    int n = static_cast<int>(nums.size());
+    int left = 0;
+    int right = n - 1;  // Closed-interval
+    while (left <= right) {
+      const int mid = left + (right - left) / 2;
+      if (nums[mid] == target)
+        return mid;
+      else if (nums[mid] < target)
+        left = mid + 1;
+      else
+        right = mid - 1;
+    }
+
+    return -1;  // Cannot find
+  }
+};
+#+END_SRC
+
+** 1.2 Lower Bound: *find the first false*
+
+std::lower_bound :: 在 ~[first, last)~ 半開區間中，尋找第一個「**不符合 (~False~)**」條件的元素。
+
+The concept is we *partition* the number into two halves.
+- things we care
+- things we don't care
+
+Finding the lower_bound of ~4~ in the sorted array:
+
+#+BEGIN_SRC cpp
+#include <algorithm>
+
+// `4` is passed as the `value` into the implicit predicate (element < value).
+// std::lower_bound searches for the first iterator where (element < 4) evaluates to False.
+auto it = std::lower_bound(nums.begin(), nums.end(), 4);
+
+// The above implicitly does exactly what the following Custom Comparator does:
+auto comp = [](int element, int value) {
+  return element < value;
+};
+
+// Don't forget to pass `comp` as the 4th argument!
+auto it2 = std::lower_bound(nums.begin(), nums.end(), 4, comp);
+#+END_SRC
+
+
+Predicate: isSmallerThan4
+
+#+BEGIN_EXAMPLE
+Index:         0    1    2    3    4    5
+Data:        [ 1,   2,   3,   4,   5,   6 ]
+> Predicate:   T    T    T    F    F    F
+#+END_EXAMPLE
+
+
+| # | Search Space ~[L, R)~ | ~mid~ | ~val~ | SmallerThan4P | Action      |
+|---+-----------------------+-------+-------+----------------------+-------------|
+| 1 | ~[0, 6)~              | ~3~   | ~4~   | ~4 < 4~ (False)      | ~R = mid~   |
+| 2 | ~[0, 3)~              | ~1~   | ~2~   | ~2 < 4~ (True)       | ~L = mid+1~ |
+| 3 | ~[2, 3)~              | ~2~   | ~3~   | ~3 < 4~ (True)       | ~L = mid+1~ |
+| 4 | ~[3, 3)~              | -     | -     | ~L == R~             | Break       |
+
+How to implement our own binary search exact match using lower bound template:
+1. Using half-open interval [0, 6)
+2. Predicate
+3. The ~left = mid + 1~ and ~right = mid~ used ~/2~ (round down) traits and cannot be changed.
+
+#+NAME:
+#+BEGIN_SRC cpp
+// Leetcode 35. Search Insert Position
+#include <vector>
+
+class Solution {
+ public:
+  int searchInsert(const std::vector<int>& nums, int target) {
+    int n = static_cast<int>(nums.size());
+
+    int left = 0;
+    int right = n;
+
+    while (left < right) {
+      const int mid = left + (right - left) / 2;
+      if (nums[mid] < target)  // Predicate
+        left = mid + 1;        // DON'T CHANGE SEQUENCE
+      else
+        right = mid;           // DON'T CHANGE SEQUENCE
+    }
+
+    return left;               // right == left, so return anything is okay
+  }
+};
+#+END_SRC
+
+** 1.3 Upper Bound
+- For our self defined binary search, by changing predicate (cmp) ~element < value~ (lower_bound) to ~element <= value~ can do the job
+
+- For ~std::upper_bound~ ... They re-implemented it to find the first True
+
+  ~[False, False, False, True, True]~  <- Finds the first True
+
+  #+BEGIN_QUOTE
+  *Why does C++ STL ~upper_bound~ feel so weird?*
+  
+  The C++ Standard Library relies exclusively on *Strict Weak Ordering* (using only ~std::less~ or ~operator<~). It fundamentally avoids demanding ~operator<=~ or ~operator>~ for custom structures.
+  
+  To find an element strictly greater than ~value~ (i.e., ~element > value~), C++ brilliantly flips the arguments and evaluates ~value < element~!
+  
+  - ~lower_bound~ evaluates: ~comp(element, value)~ -> Finds the first ~False~ (meaning ~element >= value~, including ~element == value~)
+  - ~upper_bound~ evaluates: ~comp(value, element)~ -> Finds the first ~True~ (meaning ~value < element~, strictly excluding ~element == value~ because it equals ~!(element <= value)~)
+  
+  Array Partition for ~upper_bound~ evaluating ~value < element~:
+
+  [False, False, False, True, True]
+                        ^
+                  Finds the first True
+
+  By simply flipping the argument order from ~(element, value)~ to ~(value, element)~, C++ elegantly derives the upper bound without ever needing to define a new ~<=~ or ~>~ comparison operator!
+  #+END_QUOTE
+
+* 2. Means of Combination & Abstraction
+** 2.1 Basic combination
+
+#+BEGIN_EXAMPLE
+nums: [1, 2, 2, 2, 4]
+
+1. Find element before 2
+2. Find first 2
+3. Find last 2
+4. Find element after 2
+5. Find 2 count
+#+END_EXAMPLE
+
+
+* 3. Classic Problems
+** 3.1 Foundational / Exact Match (尋找確切目標)
+- [ ] [easy] 704. Binary Search
+- [ ] [medium] 74. Search a 2D Matrix
+
+** 3.2 Lower / Upper Bound (找邊界與範圍)
+- [ ] [easy] 35. Search Insert Position (~lower_bound~ 裸題)
+- [ ] [easy] 278. First Bad Version (對 boolean 陣列找 Lower Bound)
+- [ ] [medium] 34. Find First and Last Position of Element in Sorted Array
+
+** 3.3 Rotated Sorted Arrays (旋轉矩陣)
+- [ ] [medium] 153. Find Minimum in Rotated Sorted Array
+- [ ] [medium] 33. Search in Rotated Sorted Array
+
+** 3.4 Finding Peaks (找極值 - 以相鄰元素作條件)
+- [ ] [easy] 852. Peak Index in a Mountain Array
+- [ ] [medium] 162. Find Peak Element
+
+** 3.5 Binary Search on Answers (對答案作二分搜)
+- [ ] [medium] 875. Koko Eating Bananas
+- [ ] [medium] 981. Time Based Key-Value Store
+
+** 3.6 Advanced Applications
+- [ ] [hard] 4. Median of Two Sorted Arrays
+- [ ] [medium] 300. Longest Increasing Subsequence (Patience sorting 搭配 ~lower_bound~)
+- [ ] [hard] 220. Contains Duplicate III (~std::set::lower_bound~)
+
+** 3.7 Math & Implicit Range (隱式數學單調區間)
+- 概念 :: 沒有實體的 Array，而是對一個連續的整數範圍 (如 1 到 N) 進行二分搜。利用數學函數本身的單調性 (Monotonicity) 來作為 Predicate。
+- [ ] [easy] 69. Sqrt(x) (找整數平方根)
+- [ ] [easy] 367. Valid Perfect Square
+
+** 3.8 Kth Element / Counting BS (計數型二分搜 - 第 K 大/小問題)
+- 概念 :: 這是 "Binary Search on Answers" 的地獄級變形。當無法輕易對陣列排序時，我們猜一個答案 `mid`，然後計算「陣列中有多少個元素 <= mid」。利用這個 Count 跟 K 比較，來決定要逼近左邊還是右邊。
+- [ ] [medium] 378. Kth Smallest Element in a Sorted Matrix
+- [ ] [hard] 719. Find K-th Smallest Pair Distance
+- [ ] [hard] 668. Kth Smallest Number in Multiplication Table
+
+** 3.9 Prefix Sum + Binary Search (前綴和與機率抽樣)
+- 概念 :: 把權重 (Weights) 轉換成 Prefix Sum 陣列（此時陣列必定是嚴格遞增），然後產生一個亂數，用 `upper_bound` 或 `lower_bound` 去找這個亂數落在哪個區間。這題是 **Meta 面試的超級必考題**。
+- [ ] [medium] 528. Random Pick with Weight
+
+** 3.10 DP + Binary Search (動態規劃 + 時序搜尋)
+- 概念 :: 當題目要求在時間軸上找出「不重疊的區間」，我們可以先按結束時間排序。在轉移狀態時，利用 `upper_bound` 搭配自訂 Comparator 快速往回找到「最後一個不會跟自己衝突的任務」。
+- [ ] [hard] 1235. Maximum Profit in Job Scheduling
+- [ ] [medium] 436. Find Right Interval
+
+* 4. Debug
+* 5. Common Mistakes
