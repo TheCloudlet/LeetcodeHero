@@ -1,0 +1,228 @@
+#+TITLE: 03 Stack
+#+AUTHOR: Yi-Ping Pan (Cloudlet)
+#+DATE: 2026-04-06
+#+DESCRIPTION: Conquering DSA using SICP's approach
+
+* 1. Primitives
+LIFO: Last In, First Out. That's it.
+
+- [[https://en.cppreference.com/w/cpp/container/stack.html][Cpp Reference]]
+
+#+BEGIN_SRC cpp
+std::stack<int> st;
+st.push(x);     
+st.top();       
+st.pop();       
+st.empty();     
+#+END_SRC
+
+The fundamental problem a Stack solves:
+*"What is the relationship between the item I am currently looking at, and the items I have seen before but have not yet resolved?"*
+
+The Function Call Stack is exactly this -- every caller is "unresolved" until the callee finishes.
+Parenthesis matching is also this -- every left parenthesis is "unresolved".
+
+Therefore, whenever you encounter a Stack problem, ask yourself three questions:
+1. *What exactly constitutes an "unresolved" state?* -> This is what goes into the ~push()~.
+2. *What exact event "resolves" it?* -> This forms the condition for ~pop()~.
+3. *At the exact moment of resolution (~pop~), what can I calculate?* -> This is usually the answer the problem is asking for.
+
+* 2. Means of Combination & Abstraction
+** 2.1 Matching
+"Unresolved" = An unmatched left half.
+Pop condition = Encountering the matching right half.
+
+#+BEGIN_EXAMPLE
+Input:  ( [ { } ] )
+
+Stack state trace:
+  push (     -> [ ( ]
+  push [     -> [ (, [ ]
+  push {     -> [ (, [, { ]
+  see }      -> } matches { -> pop -> [ (, [ ]
+  see ]      -> ] matches [ -> pop -> [ ( ]
+  see )      -> ) matches ( -> pop -> [ ]
+  empty      -> Valid!
+#+END_EXAMPLE
+
+#+BEGIN_SRC cpp
+// Leetcode 20. Valid Parentheses
+#+END_SRC
+
+** 2.2 Auxiliary Stack (Design)
+The main stack performs normal operations, while alongside it, an auxiliary stack is placed to track additional metadata (like the running minimum).
+The two stacks are synchronized in their ~push~ / ~pop~ operations.
+
+#+BEGIN_EXAMPLE
+Operations: push(3), push(1), push(2), pop()
+
+Main:     [ 3 ]  ->  [ 3, 1 ]  ->  [ 3, 1, 2 ]  ->  [ 3, 1 ]
+MinStack: [ 3 ]  ->  [ 3, 1 ]  ->  [ 3, 1, 1 ]  ->  [ 3, 1 ]
+                                       ^
+                          min(2, prev_min=1) = 1
+#+END_EXAMPLE
+
+#+BEGIN_SRC cpp
+// Leetcode 155. Min Stack
+#+END_SRC
+
+** 2.3 Monotonic Stack
+*This is the most powerful combination of a Stack.*
+
+Invariant: Elements inside the stack strictly maintain a monotonic increasing (or decreasing) order.
+When pushing a new element, we first ~pop~ all elements that "violate" this monotonicity.
+
+*Core Insight:*
+At the exact moment an element is popped, the popped element receives its answer.
+- Monotonic Increasing Stack -> During pop, we find the *next smaller* element.
+- Monotonic Decreasing Stack -> During pop, we find the *next greater* element.
+
+Because the element is popped, it signifies: "The newcomer is stronger (or weaker) than you. You are now resolved."
+
+*** 2.3.1 Next Greater Element (Template)
+
+#+BEGIN_EXAMPLE
+Problem: For each element, find the first element to its right that is greater than it.
+Data:   [ 2,  1,  2,  4,  3 ]
+Answer: [ 4,  2,  4, -1, -1 ]
+
+Scan from right to left, maintaining a strictly decreasing stack (decreasing from bottom to top):
+
+i=4: val=3, stack=[]        -> push 3         ans[4]=-1    stack=[3]
+i=3: val=4, stack=[3]       -> 3<4, pop 3     ans[3]=-1    stack=[4]
+                              push 4
+i=2: val=2, stack=[4]       -> 4>2, no pop    ans[2]=4     stack=[4, 2]
+i=1: val=1, stack=[4, 2]    -> 2>1, no pop    ans[1]=2     stack=[4, 2, 1]
+i=0: val=2, stack=[4, 2, 1] -> 1<2, pop 1
+                              2<=2, pop 2     ans[0]=4     stack=[4, 2]
+                              push 2
+#+END_EXAMPLE
+
+#+BEGIN_SRC cpp
+// Next Greater Element Template
+// Input: nums. Returns the next greater element for each position (or -1 if none exists).
+#+END_SRC
+
+*Cheat Sheet for Variants:*
+| Target           | Stack Monotonicity | Scan Direction | Pop Condition              |
+|------------------+--------------------+----------------+----------------------------|
+| Next Greater     | Decreasing         | Right -> Left  | ~nums[top] <= nums[i]~     |
+| Next Smaller     | Increasing         | Right -> Left  | ~nums[top] >= nums[i]~     |
+| Previous Greater | Decreasing         | Left -> Right  | ~nums[top] <= nums[i]~     |
+| Previous Smaller | Increasing         | Left -> Right  | ~nums[top] >= nums[i]~     |
+
+(Using ~<~ vs ~<=~ depends on whether we need *strictly* greater/smaller, and whether duplicate elements exist.)
+
+*** 2.3.2 Circular Array Handling
+Traverse the array twice (from ~i = 2n-1~ down to ~0~), and use ~i % n~ to obtain the real index.
+Only write answers during the second lap (when ~i < n~).
+
+#+BEGIN_SRC cpp
+// Leetcode 503. Next Greater Element II (Circular)
+std::vector<int> nextGreaterElements(const std::vector<int>& nums) {
+  int n = static_cast<int>(nums.size());
+  std::vector<int> ans(n, -1);
+  std::stack<int> st;
+
+  for (int i = 2 * n - 1; i >= 0; --i) {
+    int idx = i % n;
+    while (!st.empty() && nums[st.top()] <= nums[idx])
+      st.pop();
+    if (i < n && !st.empty())
+      ans[idx] = nums[st.top()];
+    st.push(idx);
+  }
+
+  return ans;
+}
+#+END_SRC
+
+*** 2.3.3 Using Monotonic Stack for Area -- Core Philosophy of LC84
+
+LC84 "Largest Rectangle in Histogram" is the ultimate boss problem for the monotonic stack.
+Its core insight: For every pillar, if I know exactly how far left it can extend, and how far right it can extend, 
+the area formed by this pillar is ~height[i] * (right_boundary - left_boundary - 1)~.
+
+"How far left it can extend" = index of the `previous smaller element`
+"How far right it can extend" = index of the `next smaller element`
+
+-> This perfectly matches the Monotonic Stack's ability to find the *smaller element in both directions*.
+
+An even more elegant approach: Maintain a monotonically *increasing* stack. At the exact moment a pillar is popped, we simultaneously discover both its left and right boundaries.
+
+#+BEGIN_EXAMPLE
+Data:   [ 2, 1, 5, 6, 2, 3 ]
+
+Maintain an increasing stack (storing indices):
+i=0: push 0                stack=[0]
+i=1: 1<2, pop 0            -> height=2, width=1(=i), area=2
+     push 1                stack=[1]
+i=2: 5>1, push 2           stack=[1, 2]
+i=3: 6>5, push 3           stack=[1, 2, 3]
+i=4: 2<6, pop 3            -> height=6, left=2, right=4, width=1, area=6
+     2<5, pop 2            -> height=5, left=1, right=4, width=2, area=10 *
+     2>=1, stop. push 4    stack=[1, 4]
+i=5: 3>2, push 5           stack=[1, 4, 5]
+Clear: pop 5               -> height=3, left=4, right=6, width=1, area=3
+     pop 4                 -> height=2, left=1, right=6, width=4, area=8
+     pop 1                 -> height=1, left=-1, right=6, width=6, area=6
+
+Max = 10
+#+END_EXAMPLE
+
+#+BEGIN_SRC cpp
+// Leetcode 84. Largest Rectangle in Histogram
+class Solution {
+ public:
+  int largestRectangleArea(const std::vector<int>& heights) {
+    int n = static_cast<int>(heights.size());
+    std::stack<int> st;  // Increasing stack, stores indices
+    int max_area = 0;
+
+    for (int i = 0; i <= n; ++i) {
+      // When i == n, use height=0 to force clear the stack
+      int cur_height = (i == n) ? 0 : heights[i];
+
+      while (!st.empty() && heights[st.top()] > cur_height) {
+        int h = heights[st.top()];  // Height of the popped pillar
+        st.pop();
+        int left = st.empty() ? -1 : st.top();  // Left boundary
+        int width = i - left - 1;               // Right boundary is i
+        max_area = std::max(max_area, h * width);
+      }
+
+      st.push(i);
+    }
+
+    return max_area;
+  }
+};
+#+END_SRC
+
+*What exactly happens at the moment of ~pop~?*
+The popped pillar ~h~ instantly learns:
+- Right boundary = ~i~ (the shorter pillar that forced it to pop)
+- Left boundary = ~st.top()~ (the pillar exposed in the stack right after it got popped)
+- Width = ~i - left - 1~
+
+This is the unparalleled power of the monotonic stack: *A single pop resolves both directions simultaneously.*
+
+* 3. Classic Problems
+** 3.1 Matching
+- [ ] [easy] 20. Valid Parentheses
+- [ ] [medium] 22. Generate Parentheses
+- [ ] [medium] 394. Decode String
+
+** 3.2 Auxiliary Design
+- [ ] [medium] 155. Min Stack
+- [ ] [medium] 150. Evaluate Reverse Polish Notation
+
+** 3.3 Monotonic Stack
+- [ ] [easy] 496. Next Greater Element I
+- [ ] [medium] 503. Next Greater Element II (Circular)
+- [ ] [medium] 739. Daily Temperatures
+- [ ] [hard] 84. Largest Rectangle in Histogram
+- [ ] [hard] 42. Trapping Rain Water (can also be solved via two-pointer)
+
+* 4. Debug
+* 5. Common Mistakes
