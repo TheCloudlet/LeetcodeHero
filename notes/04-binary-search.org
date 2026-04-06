@@ -232,7 +232,8 @@ nums: [1, 2, 2, 2, 4]
 
 ** 3.3 Rotated Sorted Arrays (旋轉矩陣)
 - [X] [medium] 153. Find Minimum in Rotated Sorted Array
-- [ ] [medium] 33. Search in Rotated Sorted Array
+- [X] [#C] [medium] 33. Search in Rotated Sorted Array
+- [X] [#C] [medium] 81. Search in Rotated Sorted Array II
 
 ** 3.4 Finding Peaks (找極值 - 以相鄰元素作條件)
 - [X] [medium] 852. Peak Index in a Mountain Array

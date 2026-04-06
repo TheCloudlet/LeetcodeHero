@@ -444,6 +444,19 @@ problems:
     refinement_focus: |
       [2025-12-12]: passed with duplicate count, but there are better ways to do it.
 
+  - id: 81
+    title: "Search in Rotated Sorted Array II"
+    link: "./problems/081_search_in_rotated_sorted_array_ii/"
+    leetcode-difficulty: medium
+    topics: [binary-search, array]
+    status: L2_STRUGGLE
+    refinement_focus: |
+      [2026-04-07]: 0%. Learning.
+          case compare (nums !! mid) (nums !! right) of
+            LT -> -- right sorted
+            GT -> -- left sorted
+            EQ -> -- right--
+
   - id: 84
     title: "Largest Rectangle in Histogram"
     link: "./problems/084_largest_rectangle_in_histogram/"
