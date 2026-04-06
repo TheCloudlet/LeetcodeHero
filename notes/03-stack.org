@@ -33,20 +33,55 @@ Therefore, whenever you encounter a Stack problem, ask yourself three questions:
 Pop condition = Encountering the matching right half.
 
 #+BEGIN_EXAMPLE
-Input:  ( [ { } ] )
+Input:  "( [ { } ] )"
 
-Stack state trace:
-  push (     -> [ ( ]
-  push [     -> [ (, [ ]
-  push {     -> [ (, [, { ]
-  see }      -> } matches { -> pop -> [ (, [ ]
-  see ]      -> ] matches [ -> pop -> [ ( ]
-  see )      -> ) matches ( -> pop -> [ ]
-  empty      -> Valid!
+Stack "expected" trace (pushes the expected closing bracket):
+  see '('  -> push ')'          expected = [ ) ]
+  see '['  -> push ']'          expected = [ ), ] ]
+  see '{'  -> push '}'          expected = [ ), ], } ]
+  see '}'  -> top == '}', pop     expected = [ ), ] ]
+  see ']'  -> top == ']', pop     expected = [ ) ]
+  see ')'  -> top == ')', pop     expected = [ ]
+  expected.empty() == true    -> Valid!
 #+END_EXAMPLE
 
 #+BEGIN_SRC cpp
 // Leetcode 20. Valid Parentheses
+#include <stack>
+#include <string>
+
+class Solution {
+ public:
+  bool isValid(const std::string& s) {
+    // Use != 0 instead of == 1 to safely handle the C++ signed modulo trap
+    // (e.g., -3 % 2 == -1)
+    if (s.length() % 2 != 0) return false;
+
+    std::stack<char> expected;
+
+    for (const char c : s) {
+      switch (c) {
+        case '(':
+          expected.push(')');
+          break;
+        case '[':
+          expected.push(']');
+          break;
+        case '{':
+          expected.push('}');
+          break;
+
+        default:
+          if (expected.empty() || expected.top() != c) {
+            return false;
+          }
+          expected.pop();
+      }
+    }
+
+    return expected.empty();
+  }
+};
 #+END_SRC
 
 ** 2.2 Auxiliary Stack (Design)
@@ -209,7 +244,7 @@ This is the unparalleled power of the monotonic stack: *A single pop resolves bo
 
 * 3. Classic Problems
 ** 3.1 Matching
-- [ ] [easy] 20. Valid Parentheses
+- [X] [easy] 20. Valid Parentheses
 - [ ] [medium] 22. Generate Parentheses
 - [ ] [medium] 394. Decode String
 
