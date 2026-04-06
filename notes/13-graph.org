@@ -249,7 +249,7 @@ Can I reach node B from node A? How many groups?
 #+END_QUOTE
 
 *** 3.1.1 Grid-based (Implicit Graph)
-- [ ] [medium] 130. Surrounded Regions :: DFS from border
+- [X] [medium] 130. Surrounded Regions :: DFS from border
 - [X] [medium] 200. Number of Islands :: DFS/BFS flood fill
 - [X] [#B] [medium] 994. Rotting Oranges :: multi-source BFS
 

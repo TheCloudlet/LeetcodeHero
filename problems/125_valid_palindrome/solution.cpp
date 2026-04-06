@@ -7,11 +7,12 @@
 
 class Solution {
  public:
-  bool isPalindrome(std::string s) {
+  bool isPalindrome(const std::string& s) {
     if (s.empty()) return false;
 
     int left = 0;
-    int right = static_cast<int>(s.size() - 1);
+    int right = static_cast<int>(s.size()) - 1;  // -1 should be in the back to
+                                                 // prevent overflow
 
     while (left < right) {
       while (left < right &&
