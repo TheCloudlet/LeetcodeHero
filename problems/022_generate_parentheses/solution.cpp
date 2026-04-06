@@ -2,6 +2,7 @@
 // @tag: string, backtracking, dp
 // @difficulty: medium
 #include <cassert>
+#include <stack>
 #include <string>
 #include <vector>
 
@@ -9,33 +10,33 @@ class Solution {
  public:
   std::vector<std::string> generateParenthesis(int n) {
     assert(n >= 0);
-    std::vector<std::string> candidates;
-    std::string currentStr;
-    backtrack(candidates, currentStr, 0, 0, n);
-    return candidates;
-  }
+    std::vector<std::string> ans;
+    std::string curr;
+    curr.reserve(2 * n);
 
- private:
-  // NOTE: Normally the arguments should be in this converntion order:
-  // [Output] -> [States] -> [Constants/Limits]
-  void backtrack(std::vector<std::string>& candidates, std::string& currentStr,
-                 int openCount, int closeCount, int maxPairs) {
-    assert(openCount >= closeCount);
-    if (currentStr.length() == maxPairs * 2) {
-      candidates.push_back(currentStr);
-      return;
-    }
+    auto backtrack = [&](auto& self, int open_count, int close_count) {
+      assert(open_count >= close_count);
 
-    if (openCount < maxPairs) {  // <-- WARNING
-      currentStr.push_back('(');
-      backtrack(candidates, currentStr, openCount + 1, closeCount, maxPairs);
-      currentStr.pop_back('(');
-    }
+      if (open_count == n && close_count == n) {
+        ans.push_back(curr);
+        return;
+      }
 
-    if (closeCount < openCount) {
-      currentStr.push_back(')');
-      backtrack(candidates, currentStr, openCount, closeCount + 1, maxPairs);
-      currentStr.pop_back(')');
-    }
+      if (open_count < n) {
+        curr.push_back('(');
+        self(self, open_count + 1, close_count);
+        curr.pop_back();
+      }
+
+      if (open_count > close_count) {
+        curr.push_back(')');
+        self(self, open_count, close_count + 1);
+        curr.pop_back();
+      }
+    };
+
+    backtrack(backtrack, 0, 0);
+
+    return ans;
   }
 };
