@@ -186,7 +186,6 @@ Data:        [ 1,   2,   5,   3,   2,   1 ]
 | 3 | ~[2, 3)~     | ~2~   | ~3~   | ~5 < 3~ (False)       | ~R = mid~   |
 | 4 | ~[2, 2)~     | -     | -     | ~L == R~              | Break       |
 
-
 ** 1.5. Decision Model
 #+BEGIN_EXAMPLE
 Steps:
@@ -218,7 +217,6 @@ nums: [1, 2, 2, 2, 4]
 4. Find element after 2
 5. Find 2 count
 #+END_EXAMPLE
-
 
 * 3. Classic Problems
 ** 3.1 Foundational / Exact Match (尋找確切目標)

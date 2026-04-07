@@ -213,6 +213,7 @@ problems:
     refinement_focus: |
       [2025-12-12]: I know the stack solution, but I cannot execute it fluently and elegantly
       [2026-04-06]: 90%. Typo. More to improve: use switch-stmt.
+      [2026-04-07]: 100% 10min.
 
   - id: 21
     title: "Merge Two Sorted Lists"
@@ -234,6 +235,7 @@ problems:
     refinement_focus: |
       [2025-12-12]: I know the core idea, implement has some flaws.
       [2026-04-06]: 0%. Practiced.
+      [2026-04-07]: 100% 7min.
 
   - id: 23
     title: "Merge k Sorted Lists"
@@ -303,6 +305,7 @@ problems:
           (1) we should check whether is left sorted or right sorted (monotonic)
           (2) we should be very careful about the boundary conditions if there are only 2 elements left
       [2026-04-06]: 30%. `while (l <= r)` + `<=`.
+      [2026-04-07]: 100% 6min.
 
   - id: 34
     title: "Find First and Last Position of Element in Sorted Array"
@@ -920,6 +923,15 @@ problems:
     status: L1_FORGOT
     refinement_focus: |
       [2026-04-03] Failed.
+
+  - id: 222
+    title: "Count Complete Tree Nodes"
+    link: "./problems/222_count_complete_tree_nodes/"
+    leetcode-difficulty: medium
+    topics: [tree, binary-search, dfs]
+    status: L1_FORGOT
+    refinement_focus: |
+      [2026-04-07] 0%. Just learned the trick. Go to left most and right most to find the height.
 
   - id: 226
     title: "Invert Binary Tree"
