@@ -87,6 +87,8 @@ SICP Ch.2 — treat integers as symbolic sets; seek "singularities" through symm
 - [X] [easy]   136. Single Number     :: XOR-sum stream; identity element cancels duplicates
 - [X] [#C] [easy]   268. Missing Number    :: XOR cancel index vs. value across two sequences
 - [X] [medium] 260. Single Number III :: partition by LSB predicate → two independent sub-problems
+- [X] [easy] 461. Hamming Distance
+- [X] [medium] 477. Total Hamming Distance
 
 ** 3.2 Digital Circuits & State Machines
 SICP Ch.3.3.4 — bitwise logic as signal/wire simulation, not arithmetic.

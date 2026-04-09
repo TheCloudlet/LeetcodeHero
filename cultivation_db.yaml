@@ -1169,6 +1169,24 @@ problems:
       [2026-04-02]: 0% directly failed.
       [2026-04-05]: 100% 7min.
 
+  - id: 461
+    title: "Hamming Distance"
+    link: "./problems/461_hamming_distance/"
+    leetcode-difficulty: easy
+    topics: [bit-manipulation, math-and-geometry]
+    status: L3_MASTERED
+    refinement_focus: |
+      [2026-04-09]: 100% 4min. Interview.
+
+  - id: 477
+    title: "Hamming Distance"
+    link: "./problems/477_hamming_distance/"
+    leetcode-difficulty: medium
+    topics: [bit-manipulation, math-and-geometry]
+    status: L2_STRUGGLE
+    refinement_focus: |
+      [2026-04-09]: 100% 4min. Interview. Faster way is `count_1 * count_0`.
+
   - id: 496
     title: "Next Greater Element I"
     link: "./problems/496_next_greater_element_i/"
