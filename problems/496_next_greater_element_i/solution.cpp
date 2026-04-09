@@ -5,38 +5,33 @@
 //   1. monotonic stack and save nums2 and it's max into a map
 //   2. query and return
 
-#include <assert.h>
-
 #include <stack>
 #include <unordered_map>
 #include <vector>
 
 class Solution {
  public:
-  std::vector<int> nextGreaterElement(std::vector<int>& nums1,
-                                      std::vector<int>& nums2) {
-    assert(nums1.size() < nums2.size());
-    std::stack<int> monoStack;
-    std::unordered_map<int, int> nextGreater;
-    for (const auto& num : nums2) {  // NOTE: we don't need index
-      while (!monoStack.empty() && monoStack.top() < num) {
-        nextGreater[monoStack.top()] = num;
-        monoStack.pop();
+  std::vector<int> nextGreaterElement(const std::vector<int>& query,
+                                      const std::vector<int>& nums) {
+    std::unordered_map<int, int> next_greater;
+    std::stack<int> pending;
+
+    for (const int val : nums) {
+      while (!pending.empty() && pending.top() < val) {
+        next_greater[pending.top()] = val;
+        pending.pop();
       }
-      monoStack.push(num);
+      pending.push(val);
     }
 
-    std::vector<int> res;
-    res.reserve(nums1.size());
-    for (const auto& num : nums1) {
-      auto it = nextGreater.find(num);
-      if (it != nextGreater.end()) {
-        res.emplace_back(it->second);
-      } else {
-        res.emplace_back(-1);
-      }
+    std::vector<int> ans;
+    ans.reserve(query.size());
+
+    for (const int q_val : query) {
+      const auto it = next_greater.find(q_val);
+      ans.push_back(it != next_greater.end() ? it->second : -1);
     }
 
-    return res;
+    return ans;
   }
 };

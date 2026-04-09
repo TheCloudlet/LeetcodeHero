@@ -253,7 +253,7 @@ This is the unparalleled power of the monotonic stack: *A single pop resolves bo
 - [ ] [medium] 150. Evaluate Reverse Polish Notation
 
 ** 3.3 Monotonic Stack
-- [ ] [easy] 496. Next Greater Element I
+- [X] [easy] 496. Next Greater Element I
 - [ ] [medium] 503. Next Greater Element II (Circular)
 - [ ] [medium] 739. Daily Temperatures
 - [ ] [hard] 84. Largest Rectangle in Histogram

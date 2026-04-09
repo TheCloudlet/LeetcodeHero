@@ -9,21 +9,22 @@
 
 class Solution {
  public:
-  std::vector<int> nextGreaterElements(std::vector<int>& nums) {
-    std::stack<int> monoStack;
-    std::vector<int> result(nums.size(), -1);
+  std::vector<int> nextGreaterElements(const std::vector<int>& nums) {
+    int n = static_cast<int>(nums.size());
+    std::vector<int> ans(nums.size(), -1);
+    std::stack<int> pending;
 
-    for (int i = 0; i < nums.size() * 2; i++) {
-      int circularIdx = i % nums.size();
-      while (!monoStack.empty() && nums[monoStack.top()] < nums[circularIdx]) {
-        result[monoStack.top()] = nums[circularIdx];
-        monoStack.pop();
+    for (int i = 0; i < n * 2; ++i) {
+      int idx = i % n;
+
+      while (!pending.empty() && nums[pending.top()] < nums[idx]) {
+        ans[pending.top()] = nums[idx];
+        pending.pop();
       }
-      if (i < nums.size()) {  // second round we don't insert to stack
-        monoStack.emplace(circularIdx);
-      }
+
+      if (ans[idx] == -1) pending.push(idx);
     }
 
-    return result;
+    return ans;
   }
 };
