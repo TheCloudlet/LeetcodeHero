@@ -178,11 +178,24 @@ LC84 "Largest Rectangle in Histogram" is the ultimate boss problem for the monot
 Its core insight: For every pillar, if I know exactly how far left it can extend, and how far right it can extend, 
 the area formed by this pillar is ~height[i] * (right_boundary - left_boundary - 1)~.
 
-"How far left it can extend" = index of the `previous smaller element`
-"How far right it can extend" = index of the `next smaller element`
+"How far left it can extend" = index of the =previous smaller element=
+"How far right it can extend" = index of the =next smaller element=
 
 -> This perfectly matches the Monotonic Stack's ability to find the *smaller element in both directions*.
 
+**** 2.3.3.1 Three Pass Solution
+#+BEGIN_EXAMPLE
+Data:      [ 2, 1, 5, 6, 2, 3]
+---------------------------------
+Min Left:  [-1,-1, 1, 2, 1, 4] <-- init with -1
+Min Right: [ 1, 6, 4, 4, 6, 6] <-- init with =height.size()=
+---------------------------------
+Width:     [ 1, 6, 2, 1, 4, 1] <-- KEY
+#+END_EXAMPLE
+
+The most important thing is to be aware of first smaller element front and back naturally uses *open-ended* range. So width calculation will be ~end - start - 1~. So initializing min left to =-1= and min right to =n= is very important.
+
+**** 2.3.3.2. One Pass Solution
 An even more elegant approach: Maintain a monotonically *increasing* stack. At the exact moment a pillar is popped, we simultaneously discover both its left and right boundaries.
 
 #+BEGIN_EXAMPLE

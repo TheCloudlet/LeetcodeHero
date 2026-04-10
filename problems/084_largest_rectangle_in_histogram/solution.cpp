@@ -2,6 +2,7 @@
 // @tag: array, stack, monotonic-stack, neetcode150
 // @difficulty: hard
 
+#if defined(THREE_PASSES)
 // NOTE:
 // The key concept is for every height in heights
 // the area of the height is using currently hight is $height * width$
@@ -60,3 +61,50 @@ class Solution {
     return max_area;
   }
 };
+#endif
+
+#if defined(ONE_PASS)
+#include <algorithm>
+#include <stack>
+#include <vector>
+
+class Solution {
+ public:
+  int largestRectangleArea(std::vector<int>& heights) {
+    // TRICK: Append a dummy bar of height 0 at the end.
+    // This acts as a sweeper to forcefully pop and evaluate all remaining
+    // elements in the stack when the loop reaches the end.
+    heights.push_back(0);
+
+    const int n = static_cast<int>(heights.size());
+    int max_area = 0;
+    std::stack<int> pending;  // Stores indices, not heights
+
+    for (int i = 0; i < n; ++i) {
+      // Maintain a monotonically increasing stack:
+      // If we encounter a bar shorter than the top of the stack, it acts as the
+      // "Next Smaller" trigger. We must stop and calculate the area for the
+      // stack top.
+      while (!pending.empty() && heights[i] < heights[pending.top()]) {
+        // 1. Determine Height:
+        // The bar being popped is the bottleneck height for this specific
+        // rectangle.
+        const int h = heights[pending.top()];
+        pending.pop();
+
+        // 2. Determine Width:
+        // Right boundary: The current index 'i' (the Next Smaller element that
+        // triggered the pop). Left boundary: The new stack top after popping
+        // (the Previous Smaller element). If the stack is empty, no bars to the
+        // left are shorter, so the width extends to index 0.
+        const int w = pending.empty() ? i : (i - pending.top() - 1);
+
+        max_area = std::max(max_area, h * w);
+      }
+      pending.push(i);
+    }
+
+    return max_area;
+  }
+};
+#endif

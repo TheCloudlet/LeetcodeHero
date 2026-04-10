@@ -468,6 +468,7 @@ problems:
     status: L1_FORGOT
     refinement_focus: |
       [2025-12-12]: (Fail 15 + 45) The key is to find the nearest smaller element on both sides for each bar. Use monotonic stack to achieve O(n) time complexity.
+      [2026-04-10]: 0%. Relearned.
 
   - id: 91
     title: "Decode Ways"
@@ -801,6 +802,7 @@ problems:
     status: L2_STRUGGLE
     refinement_focus: |
       [2025-12-12]: dp[i] means max amount can be robbed from house[0..i]. dp[i] = max(dp[i-1], dp[i-2]+nums[i]). Use foldl to optimize space
+      [2026-04-10]: 10%. Wrong definition, wrong transition function.
 
   - id: 199
     title: "Binary Tree Right Side View"
@@ -929,9 +931,10 @@ problems:
     link: "./problems/222_count_complete_tree_nodes/"
     leetcode-difficulty: medium
     topics: [tree, binary-search, dfs]
-    status: L1_FORGOT
+    status: L3_MASTERED
     refinement_focus: |
       [2026-04-07] 0%. Just learned the trick. Go to left most and right most to find the height.
+      [2026-04-10] 100% 5min.
 
   - id: 226
     title: "Invert Binary Tree"

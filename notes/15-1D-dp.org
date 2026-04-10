@@ -1,0 +1,60 @@
+#+TITLE: 04 1-D Dynamic Programming
+#+AUTHOR: Yi-Ping Pan (Cloudlet)
+#+DATE: 2026-04-10
+#+DESCRIPTION: Conquering DSA using SICP's approach
+
+* 0. Identify DP
+
+*When to use DP?*
+If you see "max / min / number of ways" + "take or skip / include or exclude / how to partition" → likely DP.
+
+*Three steps to solve:*
+1. Define ~dp[i]~ — describe in one sentence what it represents.
+2. Write the transition — ~dp[i] = f(dp[i-1], ...)~
+3. Set the base case — ~dp[0] = ?~
+
+*Two implementation styles:*
+
+| Style     | Approach                          | When to use               |
+|-----------+-----------------------------------+---------------------------|
+| Top-Down  | Recursion + memo (big → small)    | Sparse state space        |
+| Bottom-Up | For-loop tabulation (small → big) | Almost all 1D-DP problems |
+
+Top-Down 模板：
+#+BEGIN_SRC cpp
+std::vector<int> memo(n + 1, -1);
+
+int dp(int i) {
+  if (i <= 0) return /* base case */;
+  if (memo[i] != -1) return memo[i];
+  // transition
+  memo[i] = std::max(dp(i - 1), dp(i - 2) + nums[i]);
+  return memo[i];
+}
+#+END_SRC
+
+Bottom-Up 模板：
+#+BEGIN_SRC cpp
+std::vector<int> dp(n + 1, /* identity */);
+dp[0] = /* base case */;
+
+for (int i = 1; i <= n; ++i) {
+  // transition
+  dp[i] = std::max(dp[i - 1], dp[i - 2] + nums[i]);
+}
+
+return dp[n];
+#+END_SRC
+
+* 1. Primitives
+
+DP 解題三步驟：
+1. *定義 dp[i]* — 用一句話說清楚 dp[i] 是什麼
+2. *寫 transition* — dp[i] = f(dp[i-1], dp[i-2], ...)
+3. *設 base case* — dp[0] = ?, dp[1] = ?
+
+
+* 2. Means of Combination & Abstraction
+* 3. Classic Problems
+* 4. Debug
+* 5. Common Mistakes
