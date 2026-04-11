@@ -372,6 +372,7 @@ problems:
     status: L3_MASTERED
     refinement_focus: |
       [2025-12-12]: One shot Kadane's algorithm after praticing LeetCode #152.
+      [2026-04-11]: Re-learned.
 
   - id: 56
     title: "Merge Intervals"
@@ -735,8 +736,8 @@ problems:
     status: L2_STRUGGLE
     refinement_focus: |
       [2025-12-12]: The dp logic is not straightforward. The key is to remember three conditions: positive, negative, zero. Using DP to find max positive and min negative
-
       [2025-12-12]: The dp logic is smooth. The problem is the initial value of globalMax, localMax, and localMin, I didn't init it to nums[0] in the first place can cause overflow. After fixing, I use ranged based for, so index 0 is calculated twice which is not acceptable.
+      [2026-04-11]: 100% 12min.
 
   - id: 153
     title: "Find Minimum in Rotated Sorted Array"
@@ -807,6 +808,7 @@ problems:
     refinement_focus: |
       [2025-12-12]: dp[i] means max amount can be robbed from house[0..i]. dp[i] = max(dp[i-1], dp[i-2]+nums[i]). Use foldl to optimize space
       [2026-04-10]: 10%. Wrong definition, wrong transition function.
+      [2026-04-12]: 100% 4min.
 
   - id: 199
     title: "Binary Tree Right Side View"
@@ -982,6 +984,7 @@ problems:
     status: L2_STRUGGLE
     refinement_focus: |
       [2025-12-12]: Prefix and Suffix product arrays, or use output array as prefix product array to save space
+      [2026-04-12]: 50%. Correct in explicit prefix-suffix-sum. Failed in inplace.
 
   - id: 239
     title: "Sliding Window Maximum"
@@ -1099,7 +1102,10 @@ problems:
     status: L2_STRUGGLE
     refinement_focus: |
       [2025-12-12]: dp[i] means the minimum coins to make amount i
-      [2026-04-10]: Relearned. DFS, Top-Down, Botton-Up.
+      [2026-04-11]: Relearned. DFS, Top-Down, Botton-Up.
+      [2026-04-12]: 95% 14min.
+        Correct, but not smooth. Issue in init value not set.
+        Learned to swap two for-loops and set INF.
 
   - id: 338
     title: "Counting Bits"

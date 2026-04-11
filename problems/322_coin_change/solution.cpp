@@ -78,31 +78,26 @@ class Solution {
 
 #if defined(BOTTOM_UP_INF_BOUND)
 #include <algorithm>
-#include <climits>
 #include <vector>
 
 class Solution {
  public:
-  int coinChange(std::vector<int>& coins, int amount) {
-    int INF = amount + 1;
+  int coinChange(const std::vector<int>& coins, int amount) {
+    constexpr int INF = 1e9;
 
-    // The minimum number of coins to reach here
-    // tf: memo[i] = min(1 + memo[amount - Ci])
-    std::vector<int> memo(amount + 1, INF);
-    memo[0] = 0;
+    std::vector<int> dp(amount + 1, INF);
+    dp[0] = 0;
 
-    auto get_or_inf = [&](int idx, int coin) -> int {
-      if (idx - coin < 0) return INF;
-      return memo[idx - coin];
-    };
-
-    for (int i = 0; i < amount + 1; ++i) {
-      for (int coin : coins) {
-        memo[i] = std::min(memo[i], 1 + get_or_inf(i, coin));
+    // Key:
+    // 1) Flip this two for loops for better locality
+    // 2) Inner loop start with coin, to prevent index underflow
+    for (const int coin : coins) {
+      for (int i = coin; i <= amount; ++i) {
+        dp[i] = std::min(dp[i], dp[i - coin] + 1);
       }
     }
 
-    return (memo[amount] != INF) ? memo[amount] : -1;
+    return (dp[amount] == INF) ? -1 : dp[amount];
   }
 };
 #endif

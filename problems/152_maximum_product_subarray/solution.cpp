@@ -26,7 +26,9 @@
 // `nums[i]` (which would be 0) will be chosen as the new max/min, effectively
 // starting a new subarray calculation from that point.
 
+#if defined(FOLD_WITH_EXPLICIT_BASE)
 #include <algorithm>
+#include <cassert>
 #include <climits>
 #include <vector>
 
@@ -52,3 +54,31 @@ class Solution {
     return globalMax;
   }
 };
+#endif
+
+#if defined(FOLD_WITH_MONOID_IDENTITY)
+#include <algorithm>
+#include <cassert>
+#include <climits>
+#include <vector>
+
+class Solution {
+ public:
+  int maxProduct(const std::vector<int>& nums) {
+    assert(!nums.empty());
+
+    int global_max = INT_MIN;
+    int local_max = 1;  // IMPORTANT
+    int local_min = 1;  // IMPORTANT
+
+    for (const int num : nums) {
+      const int prev_max = local_max;
+      local_max = std::max({local_min * num, prev_max * num, num});
+      local_min = std::min({local_min * num, prev_max * num, num});
+      global_max = std::max({global_max, local_max, local_min});
+    }
+
+    return global_max;
+  }
+};
+#endif

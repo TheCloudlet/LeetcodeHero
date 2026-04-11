@@ -25,23 +25,48 @@
 // - LeetCode #918. Maximum Sum Circular Subarray
 // - LeetCode #363. Max Sum of Rectangle No Larger Than K
 
+#if defined(LEFT_FOLD_ACCUMULATOR)
 #include <algorithm>
+#include <cassert>
 #include <vector>
 
 class Solution {
  public:
-  int maxSubArray(vector<int>& nums) {
+  int maxSubArray(const std::vector<int>& nums) {
     assert(!nums.empty());
 
-    int globalMax = nums[0];
-    int localMax = nums[0];
+    int global_max = INT_MIN;  // IMPORTANT
+    int local_max = 0;         // IMPORTANT
 
-    for (int idx = 1; idx < nums.size(); ++idx) {
-      int num = nums[idx];
-      localMax = std::max(num, localMax + num);
-      globalMax = std::max(globalMax, localMax);
+    for (const int num : nums) {
+      local_max = std::max(local_max + num, num);
+      global_max = std::max(global_max, local_max);
     }
 
-    return globalMax;
+    return global_max;
   }
 };
+#endif
+
+#if defined(DP_BOTTOM_UP)
+#include <algorithm>
+#include <climits>
+#include <vector>
+
+class Solution {
+ public:
+  int maxSubArray(const std::vector<int>& nums) {
+    const int n = static_cast<int>(nums.size());
+
+    int global_max = INT_MIN;       // IMPORTANT
+    std::vector<int> dp(n + 1, 0);  // IMPORTANT
+
+    for (int i = 1; i < n + 1; ++i) {
+      dp[i] = std::max(nums[i - 1], dp[i - 1] + nums[i - 1]);
+      global_max = std::max(global_max, dp[i]);
+    }
+
+    return global_max;
+  }
+};
+#endif

@@ -81,8 +81,8 @@ DP 解題三步驟：
 - [ ] [medium] 279. Perfect Squares
 
 ** 3.4 Kadane's (contiguous subarray: extend or restart)
-- [ ] [medium] 53. Maximum Subarray
-- [ ] [medium] 152. Maximum Product Subarray
+- [X] [medium] 53. Maximum Subarray
+- [X] [medium] 152. Maximum Product Subarray
 
 ** 3.5 Subsequence (longest/optimal ending at i)
 - [X] [medium] 300. Longest Increasing Subsequence
