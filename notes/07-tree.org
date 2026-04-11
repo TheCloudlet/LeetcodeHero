@@ -152,7 +152,7 @@ void bfs(TreeNode *root, std::queue<TreeNode *> &nexts) {
 
 Tree Level Order Traversal:
 
-(This is the same alogrithm hanlding expanding graphs)
+(This is the same algorithm handling expanding graphs)
 
 #+NAME: LC102 Binary Tree Level Order Traversal
 #+BEGIN_SRC cpp

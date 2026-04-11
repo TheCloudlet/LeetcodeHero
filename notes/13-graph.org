@@ -223,7 +223,7 @@ while (!min_heap.empty()) {
 
 Noted that:
 
-1) this greedy algorithm is mathematcially proofed since the distance in the queue is always incresing.
+1) this greedy algorithm is mathematically proven since the distance in the queue is always increasing.
 2) If we want to know the path, we create a parent vector.
 
 *** 2.4.3 Bellman-Ford (edge relaxation)

@@ -11,7 +11,7 @@ Can we get the largest/smallest in O(1) time
 
 - The operation looks like a queue (push/pop)
 - The core idea is a complete tree
-- Since it is a complete tree, we oftern use "contiguous memory" like =std::vector<>= to store real data.
+- Since it is a complete tree, we often use "contiguous memory" like =std::vector<>= to store real data.
 - Sift up and sift down
 
 ** 1.2 [#A] Using C++ =std::priority_queue<>=
@@ -42,7 +42,7 @@ std::priority_queue<int, std::vector<int>, std::greater<int>>
 
 // (2) Pop: 4, 3, 2, 1
 struct {
-  bool operator()(const int l, const int r) const { return l > r };
+  bool operator()(const int l, const int r) const { return l > r; };
 } customLess;
 
 std::priority_queue<int, std::vector<int>, customLess>
@@ -50,7 +50,7 @@ std::priority_queue<int, std::vector<int>, customLess>
 
 // (3) Pop. 4, 3, 2, 1
 auto cmp = [](int left, int right) {
-  return left < right
+  return left < right;
 };
 std::priority_queue<int, std::vector<int>, decltype(cmp)> pq3(cmp);
 

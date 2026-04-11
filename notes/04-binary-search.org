@@ -26,7 +26,7 @@ Steps:
 
 Code:
 
-#+NAME:
+#+NAME: LC704 Binary Search
 #+BEGIN_SRC cpp
 // Leetcode 704 704. Binary Search
 #include <vector>
@@ -54,7 +54,7 @@ class Solution {
 
 ** 1.2 Lower Bound: *find the first false*
 
-std::lower_bound :: 在 ~[first, last)~ 半開區間中，尋找第一個「**不符合 (~False~)**」條件的元素。
+std::lower_bound :: In the half-open interval ~[first, last)~, find the first element where the predicate evaluates to *False*.
 
 The concept is we *partition* the number into two halves.
 - things we care
@@ -100,7 +100,7 @@ How to implement our own binary search exact match using lower bound template:
 2. Predicate
 3. The ~left = mid + 1~ and ~right = mid~ used ~/2~ (round down) traits and cannot be changed.
 
-#+NAME:
+#+NAME: LC35 Search Insert Position
 #+BEGIN_SRC cpp
 // Leetcode 35. Search Insert Position
 #include <vector>
@@ -156,15 +156,15 @@ class Solution {
 - *Goal*: Find a peak in a mountain array (where elements first increase, then decrease). We are guaranteed a peak exists.
 - *Strategy*: Use ~while (left < right)~ to continuously shrink the valid search space until exactly one element remains.
 
-** 1.4.1 Why ~while (left < right)~ instead of ~<=~?*
+*** 1.4.1 Why ~while (left < right)~ instead of ~<=~?
 For peak finding, we are not looking for an exact target that might not exist. Instead, we are guaranteed the peak exists within the bounds. Our goal isn't to return early; it's to cut off the invalid half of the mountain repeatedly until ~left~ and ~right~ collide (~left == right~). The sole survivor is our peak.
 
-** 1.4.2 How to determine the direction? (Checking the Local Gradient)*
+*** 1.4.2 How to determine the direction? (Checking the Local Gradient)
 To decide whether to shrink the left or right, we must look at the "slope" by comparing our current position ~nums[mid]~ with its forward neighbor ~nums[mid + 1]~:
 - *Uphill (~nums[mid] < nums[mid + 1]~)*: We are still climbing. The peak must be strictly to our right. Therefore, we confidently discard the left half: ~left = mid + 1~.
 - *Downhill (~nums[mid] > nums[mid + 1]~)*: We have already crossed the peak and are descending. The peak must be to our left, or we might currently be standing exactly on it! We shrink the right boundary: ~right = mid~.
 
-** 1.4.3 Is checking ~nums[mid + 1]~ safe from Out-of-Bounds (Segfault)?*
+*** 1.4.3 Is checking ~nums[mid + 1]~ safe from Out-of-Bounds (Segfault)?
 *Yes, it is 100% mathematically safe.* 
 Because we use ~while (left < right)~ and the integer division ~mid = left + (right - left) / 2~ inherently rounds down:
 - In the worst-case scenario where the search space shrinks to just 2 elements (e.g., ~left = 0, right = 1~).
@@ -219,50 +219,50 @@ nums: [1, 2, 2, 2, 4]
 #+END_EXAMPLE
 
 * 3. Classic Problems
-** 3.1 Foundational / Exact Match (尋找確切目標)
+** 3.1 Foundational / Exact Match
 - [X] [easy] 704. Binary Search
 - [X] [medium] 74. Search a 2D Matrix
 
-** 3.2 Lower / Upper Bound (找邊界與範圍)
-- [X] [easy] 35. Search Insert Position (~lower_bound~ 裸題)
-- [X] [easy] 278. First Bad Version (對 boolean 陣列找 Lower Bound)
+** 3.2 Lower / Upper Bound
+- [X] [easy] 35. Search Insert Position (bare ~lower_bound~)
+- [X] [easy] 278. First Bad Version (lower bound on boolean array)
 - [X] [medium] 34. Find First and Last Position of Element in Sorted Array
 
-** 3.3 Rotated Sorted Arrays (旋轉矩陣)
+** 3.3 Rotated Sorted Arrays
 - [X] [medium] 153. Find Minimum in Rotated Sorted Array
 - [X] [#C] [medium] 33. Search in Rotated Sorted Array
 - [X] [#C] [medium] 81. Search in Rotated Sorted Array II
 
-** 3.4 Finding Peaks (找極值 - 以相鄰元素作條件)
+** 3.4 Finding Peaks (gradient on adjacent elements)
 - [X] [medium] 852. Peak Index in a Mountain Array
 - [X] [medium] 162. Find Peak Element
 
-** 3.5 Binary Search on Answers (對答案作二分搜)
+** 3.5 Binary Search on Answers
 - [ ] [medium] 875. Koko Eating Bananas
 - [ ] [medium] 981. Time Based Key-Value Store
 
 ** 3.6 Advanced Applications
 - [ ] [hard] 4. Median of Two Sorted Arrays
-- [ ] [medium] 300. Longest Increasing Subsequence (Patience sorting 搭配 ~lower_bound~)
+- [ ] [medium] 300. Longest Increasing Subsequence (Patience sorting with ~lower_bound~)
 - [ ] [hard] 220. Contains Duplicate III (~std::set::lower_bound~)
 
-** 3.7 Math & Implicit Range (隱式數學單調區間)
-- 概念 :: 沒有實體的 Array，而是對一個連續的整數範圍 (如 1 到 N) 進行二分搜。利用數學函數本身的單調性 (Monotonicity) 來作為 Predicate。
-- [ ] [easy] 69. Sqrt(x) (找整數平方根)
+** 3.7 Math & Implicit Range
+- Concept :: No physical array. Binary search over a continuous integer range (e.g. 1 to N), using the monotonicity of a mathematical function as the predicate.
+- [ ] [easy] 69. Sqrt(x)
 - [ ] [easy] 367. Valid Perfect Square
 
-** 3.8 Kth Element / Counting BS (計數型二分搜 - 第 K 大/小問題)
-- 概念 :: 這是 "Binary Search on Answers" 的地獄級變形。當無法輕易對陣列排序時，我們猜一個答案 `mid`，然後計算「陣列中有多少個元素 <= mid」。利用這個 Count 跟 K 比較，來決定要逼近左邊還是右邊。
+** 3.8 Kth Element / Counting BS
+- Concept :: An advanced variant of "Binary Search on Answers". When sorting is infeasible, guess an answer =mid=, count how many elements are ≤ =mid=, then compare with K to decide direction.
 - [ ] [medium] 378. Kth Smallest Element in a Sorted Matrix
 - [ ] [hard] 719. Find K-th Smallest Pair Distance
 - [ ] [hard] 668. Kth Smallest Number in Multiplication Table
 
-** 3.9 Prefix Sum + Binary Search (前綴和與機率抽樣)
-- 概念 :: 把權重 (Weights) 轉換成 Prefix Sum 陣列（此時陣列必定是嚴格遞增），然後產生一個亂數，用 `upper_bound` 或 `lower_bound` 去找這個亂數落在哪個區間。這題是 **Meta 面試的超級必考題**。
+** 3.9 Prefix Sum + Binary Search
+- Concept :: Convert weights into a prefix sum array (strictly increasing), generate a random number, then use =upper_bound= or =lower_bound= to locate which interval it falls in.
 - [ ] [medium] 528. Random Pick with Weight
 
-** 3.10 DP + Binary Search (動態規劃 + 時序搜尋)
-- 概念 :: 當題目要求在時間軸上找出「不重疊的區間」，我們可以先按結束時間排序。在轉移狀態時，利用 `upper_bound` 搭配自訂 Comparator 快速往回找到「最後一個不會跟自己衝突的任務」。
+** 3.10 DP + Binary Search
+- Concept :: When the problem requires finding non-overlapping intervals on a timeline, sort by end time. During state transition, use =upper_bound= with a custom comparator to quickly find the last non-conflicting job.
 - [ ] [hard] 1235. Maximum Profit in Job Scheduling
 - [ ] [medium] 436. Find Right Interval
 

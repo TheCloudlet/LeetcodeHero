@@ -53,8 +53,21 @@ DP 解題三步驟：
 2. *寫 transition* — dp[i] = f(dp[i-1], dp[i-2], ...)
 3. *設 base case* — dp[0] = ?, dp[1] = ?
 
-
 * 2. Means of Combination & Abstraction
 * 3. Classic Problems
+- [ ] [easy] 70. Climbing Stairs
+- [ ] [easy] 746. Min Cost Climbing Stairs
+- [ ] [medium] 5. Longest Palindromic Substring
+- [ ] [medium] 53. Maximum Subarray (Kadane's algorithm)
+- [ ] [medium] 91. Decode Ways
+- [ ] [medium] 139. Word Break
+- [ ] [medium] 152. Maximum Product Subarray
+- [X] [medium] 198. House Robber
+- [ ] [medium] 213. House Robber II (circular)
+- [X] [medium] 300. Longest Increasing Subsequence
+- [X] [medium] 322. Coin Change
+- [ ] [medium] 416. Partition Equal Subset Sum (knapsack)
+- [ ] [medium] 647. Palindromic Substrings
+
 * 4. Debug
 * 5. Common Mistakes

@@ -179,17 +179,16 @@ while (curr && curr->next) {
 - [X] [easy] 876. Middle of the Linked List :: SPLIT (Fast-Slow Pointer)
 ** 3.2 Medium
 - [X] [medium] 002. Add Two Numbers :: ZIP + dummy-head
-- [medium] 019. Remove Nth Node From End of List :: Fast-Slow Pointer
+- [ ] [medium] 019. Remove Nth Node From End of List :: Fast-Slow Pointer
 - [X] [medium] 024. Swap Nodes in Pairs :: while(curr && curr->next) + dummy-head + in-place
-- [medium] 061. Rotate List ::
-- [medium] 092. Reverse Linked List II :: REVERSE
-- [medium] 138. Copy List with Random Pointer :: SPLIT (Interweaving) + SPLIT (Unzip)
+- [ ] [medium] 061. Rotate List ::
+- [ ] [medium] 092. Reverse Linked List II :: REVERSE
+- [ ] [medium] 138. Copy List with Random Pointer :: SPLIT (Interweaving) + SPLIT (Unzip)
 - [X] [medium] 143. Reorder List :: SPLIT + REVERSE + ZIP
-- [medium] 146. LRU Cache ::
+- [ ] [medium] 146. LRU Cache ::
 ** 3.3 Hard
-- [hard] 023. Merge k Sorted Lists :: Heap + MERGE
-- [hard] 025. Reverse Nodes in k-Group :: REVERSE
-
+- [ ] [hard] 023. Merge k Sorted Lists :: Heap + MERGE
+- [ ] [hard] 025. Reverse Nodes in k-Group :: REVERSE
 
 * 4. Debug
 

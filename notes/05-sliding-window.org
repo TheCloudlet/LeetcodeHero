@@ -189,7 +189,7 @@ class Solution {
 * 4. Debug
 - Print window boundaries: cout << left << ", " << right << endl;
 - Check window state: Verify if the frequency map is updated correctly.
-- Boundary conditions: Empty string, k=0, n<k, etc. 4. Debug
+- Boundary conditions: Empty string, k=0, n<k, etc.
 
 * 5. Common Mistakes
 - Forgetting to update the answer after shrinking (only record when the window is valid).
