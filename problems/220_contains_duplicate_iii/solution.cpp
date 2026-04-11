@@ -1,7 +1,8 @@
 // Leetcode 220. Contains Duplicate III
 //
 // The initial approach used a `std::map` to track the sliding window, following
-// the standard template (add, adjust, validate). Validation checked three cases:
+// the standard template (add, adjust, validate). Validation checked three
+// cases:
 //   1. Exact duplicates.
 //   2. Difference with `std::prev`.
 //   3. Difference with `std::next`.
@@ -22,31 +23,28 @@
 
 class Solution {
  public:
-  bool containsNearbyAlmostDuplicate(std::vector<int>& nums, int indexDiff,
-                                     int valueDiff) {
-    // Use long long as the container type to perfectly avoid Integer Overflow
+  bool containsNearbyAlmostDuplicate(const std::vector<int>& nums,
+                                     int indexDiff, int valueDiff) {
+    // Use long long to avoid integer overflow
     std::set<long long> window;
 
     for (int i = 0; i < static_cast<int>(nums.size()); ++i) {
-      // 1. Maintain window size: cleanly sever the past, leaving no Ghost Nodes
+      // 1. Maintain window size: remove the element that is out of range
       if (i > indexDiff) {
-        window.erase(nums[i - indexDiff - 1]);
+        window.erase(static_cast<long long>(nums[i - indexDiff - 1]));
       }
 
-      // 2. Find if there exists a lower bound satisfying the condition
-      // We want to find an x such that: nums[i] - valueDiff <= x <= nums[i] +
-      // valueDiff
-      auto it = window.lower_bound(static_cast<long long>(nums[i]) - valueDiff);
+      // 2. Find the smallest number >= nums[i] - valueDiff
+      const auto curr = static_cast<long long>(nums[i]);
+      auto it = window.lower_bound(curr - valueDiff);
 
-      // 3. Check if the found number is within the allowed upper bound
-      if (it != window.end() && *it - nums[i] <= valueDiff) {
-        return true;
-      }
+      // 3. Check if that number is within nums[i] + valueDiff
+      // (if it is smaller than curr, will be negative still works)
+      if (it != window.end() && *it - curr <= valueDiff) return true;
 
-      // 4. Insert the current number into the state machine only after checking
-      window.insert(nums[i]);
+      // 4. Insert current number after checking
+      window.insert(curr);
     }
-
     return false;
   }
 };

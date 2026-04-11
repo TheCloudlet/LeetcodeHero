@@ -55,18 +55,45 @@ DP 解題三步驟：
 
 * 2. Means of Combination & Abstraction
 * 3. Classic Problems
-- [ ] [easy] 70. Climbing Stairs
+
+| Pattern          | dp[i] 定義         | Transition                                        | Base Case                                   |
+|------------------+--------------------+---------------------------------------------------+---------------------------------------------|
+| Fibonacci        | 到第 i 階的方法數    | ~dp[i] = dp[i-1] + dp[i-2]~                       | ~dp[0]=0, dp[1]=1~                          |
+| Take or Skip     | 考慮 [0..i] 的最佳  | ~dp[i] = max(dp[i-1], dp[i-2] + nums[i])~         | ~dp[0]=nums[0], dp[1]=max(nums[0],nums[1])~ |
+| Reach Target     | 湊出金額 i 的最少次數 | ~dp[i] = min(dp[i-coin] + 1) for each coin~       | ~dp[0]=0~, 其餘 ~INT_MAX~                   |
+| Kadane's         | 以 i 結尾的最大連續和 | ~dp[i] = max(nums[i], dp[i-1] + nums[i])~         | ~dp[0]=nums[0]~                             |
+| Subsequence      | 以 i 結尾的 LIS 長度 | ~dp[i] = max(dp[j]+1)~ for ~j<i, nums[j]<nums[i]~ | ~dp[i]=1 for all i~                         |
+| Partition/Decode | s[0..i-1] 能否拆分  | ~dp[i] = any(dp[j] && s[j..i] valid)~             | ~dp[0]=true~                                |
+| Palindrome       | 以 i 為中心展開      | 從每個 center 往兩邊 expand                         | 每個字元本身是回文                             |
+
+** 3.1 Fibonacci (no choice, just accumulate)
+- [X] [easy] 70. Climbing Stairs
+- [ ] [easy] 509. Fibonacci Number
 - [ ] [easy] 746. Min Cost Climbing Stairs
-- [ ] [medium] 5. Longest Palindromic Substring
-- [ ] [medium] 53. Maximum Subarray (Kadane's algorithm)
-- [ ] [medium] 91. Decode Ways
-- [ ] [medium] 139. Word Break
-- [ ] [medium] 152. Maximum Product Subarray
+
+** 3.2 Take or Skip (each element: take or not)
 - [X] [medium] 198. House Robber
 - [ ] [medium] 213. House Robber II (circular)
-- [X] [medium] 300. Longest Increasing Subsequence
-- [X] [medium] 322. Coin Change
 - [ ] [medium] 416. Partition Equal Subset Sum (knapsack)
+
+** 3.3 Reach Target (use a set of items to hit a target)
+- [X] [medium] 322. Coin Change
+- [ ] [medium] 279. Perfect Squares
+
+** 3.4 Kadane's (contiguous subarray: extend or restart)
+- [ ] [medium] 53. Maximum Subarray
+- [ ] [medium] 152. Maximum Product Subarray
+
+** 3.5 Subsequence (longest/optimal ending at i)
+- [X] [medium] 300. Longest Increasing Subsequence
+- [ ] [medium] 673. Number of Longest Increasing Subsequence
+
+** 3.6 Partition / Decode (where to split the string)
+- [ ] [medium] 91. Decode Ways
+- [ ] [medium] 139. Word Break
+
+** 3.7 Palindrome (expand or contract)
+- [ ] [medium] 5. Longest Palindromic Substring
 - [ ] [medium] 647. Palindromic Substrings
 
 * 4. Debug

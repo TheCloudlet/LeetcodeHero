@@ -158,6 +158,7 @@ problems:
     refinement_focus: |
       [2025-12-12]: The clean solution is to take the first string as golden
       [2025-12-12]: misplaced inner and outer for-loop
+      [2026-04-11]: 100% 4min. PASSED BUT NO HIRE. bound issue.
 
   - id: 15
     title: "3 Sum"
@@ -416,6 +417,7 @@ problems:
     status: L3_MASTERED
     refinement_focus: |
       [2025-12-12]: Fibonacci, bottom-up DP, top-down DP, or even math
+      [2026-04-11]: 100% 4min.
 
   - id: 74
     title: "Search a 2D Matrix"
@@ -459,6 +461,7 @@ problems:
             LT -> -- right sorted
             GT -> -- left sorted
             EQ -> -- right--
+      [2026-04-11]: 100 5min.
 
   - id: 84
     title: "Largest Rectangle in Histogram"
@@ -469,6 +472,7 @@ problems:
     refinement_focus: |
       [2025-12-12]: (Fail 15 + 45) The key is to find the nearest smaller element on both sides for each bar. Use monotonic stack to achieve O(n) time complexity.
       [2026-04-10]: 0%. Relearned.
+      [2026-04-11]: 30%. Wrong while using 2 pass.
 
   - id: 91
     title: "Decode Ways"
@@ -925,6 +929,7 @@ problems:
     status: L1_FORGOT
     refinement_focus: |
       [2026-04-03] Failed.
+      [2026-04-11] 0% 20min. Know lower_bound. We only check indexDiff from past.
 
   - id: 222
     title: "Count Complete Tree Nodes"

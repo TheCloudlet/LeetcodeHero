@@ -8,24 +8,22 @@
 class Solution {
  public:
   std::string longestCommonPrefix(const std::vector<std::string>& strs) {
-    if (strs.empty() || strs[0].empty()) {
-      return "";
-    }
+    if (strs.empty()) return "";
 
-    const std::string& first = strs[0];
-    for (size_t charPos = 0; charPos < first.size(); ++charPos) {
-      for (size_t strIdx = 1; strIdx < strs.size(); ++strIdx) {
-        // Check if we've reached the end of current string
-        if (charPos >= strs[strIdx].size()) {
-          return first.substr(0, charPos);
-        }
-        // Check if characters match at current position
-        if (first[charPos] != strs[strIdx][charPos]) {
-          return first.substr(0, charPos);
+    std::string ans;
+    ans.reserve(strs[0].size());
+
+    for (std::size_t i = 0; i < strs[0].size(); ++i) {
+      const char ch = strs[0][i];
+
+      for (std::size_t j = 1; j < strs.size(); ++j) {
+        if (i == strs[j].size() || strs[j][i] != ch) {
+          return ans;
         }
       }
+      ans.push_back(ch);
     }
 
-    return first;
+    return ans;
   }
 };
