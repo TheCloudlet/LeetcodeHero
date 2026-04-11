@@ -1074,6 +1074,7 @@ problems:
     status: L2_STRUGGLE
     refinement_focus: |
       [2025-12-12]: DP O(n^2) or Binary Search O(n log n). Binary search is never practiced. dp[i] means from nums[0..i], the longest increasing subsequence that ends with nums[i]
+      [2026-04-11]: 0%. DP Relearned.
 
   - id: 310
     title: "Minimum Height Trees"
@@ -1093,6 +1094,7 @@ problems:
     status: L2_STRUGGLE
     refinement_focus: |
       [2025-12-12]: dp[i] means the minimum coins to make amount i
+      [2026-04-10]: Relearned. DFS, Top-Down, Botton-Up.
 
   - id: 338
     title: "Counting Bits"

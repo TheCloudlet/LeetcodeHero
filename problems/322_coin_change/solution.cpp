@@ -2,6 +2,7 @@
 // @tag: dp, bfs, neetcode150, need-review
 // @difficulty: medium
 
+#if defined(TOP_DOWN_OPTIONAL_MEMO)
 // NOTE:
 //
 // (1) Wrong assumption
@@ -73,3 +74,75 @@ class Solution {
     return minCount;
   }
 };
+#endif
+
+#if defined(BOTTOM_UP_INF_BOUND)
+#include <algorithm>
+#include <climits>
+#include <vector>
+
+class Solution {
+ public:
+  int coinChange(std::vector<int>& coins, int amount) {
+    int INF = amount + 1;
+
+    // The minimum number of coins to reach here
+    // tf: memo[i] = min(1 + memo[amount - Ci])
+    std::vector<int> memo(amount + 1, INF);
+    memo[0] = 0;
+
+    auto get_or_inf = [&](int idx, int coin) -> int {
+      if (idx - coin < 0) return INF;
+      return memo[idx - coin];
+    };
+
+    for (int i = 0; i < amount + 1; ++i) {
+      for (int coin : coins) {
+        memo[i] = std::min(memo[i], 1 + get_or_inf(i, coin));
+      }
+    }
+
+    return (memo[amount] != INF) ? memo[amount] : -1;
+  }
+};
+#endif
+
+#if defined(GREEDY_DFS_WITH_PRUNING)
+// Time Complexity:
+//   Worst: O(n^(amount/min_coin))
+//   Average: O(amount * n)
+#include <algorithm>
+#include <climits>
+#include <vector>
+
+class Solution {
+ public:
+  int coinChange(std::vector<int> coins, int amount) {
+    // Greedy sort descending + backtracking with pruning
+    std::sort(coins.rbegin(), coins.rend());
+    int num_coins = static_cast<int>(coins.size());
+    int best = INT_MAX;
+
+    // Depth-first search with pruning
+    auto dfs = [&](auto&& self, int remaining, int coin_index,
+                   int current_count) -> void {
+      if (remaining == 0) {
+        best = std::min(best, current_count);
+        return;
+      }
+      if (remaining < 0) return;
+
+      for (int i = coin_index; i < num_coins; ++i) {
+        // Optimistic estimation: use current coin as many as possible
+        int max_possible = remaining / coins[i];
+        if (current_count + max_possible >= best) break;  // Prune
+
+        self(self, remaining - coins[i], i, current_count + 1);
+      }
+    };
+
+    dfs(dfs, amount, 0, 0);
+    return (best != INT_MAX) ? best : -1;
+  }
+};
+#endif
