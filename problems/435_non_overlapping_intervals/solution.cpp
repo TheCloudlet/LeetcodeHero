@@ -15,10 +15,15 @@
 class Solution {
  public:
   int eraseOverlapIntervals(std::vector<std::vector<int>>& intervals) {
-    if (intervals.empty()) {
-      return 0;
-    }
+    const int n = static_cast<int>(intervals.size());
 
+    if (n <= 1) return 0;
+
+    // [Performance Optimization] Custom Lambda Comparator
+    // Overrides the default lexicographical comparison, forcing the sort
+    // to strictly evaluate the start time (interval[0]).
+    // Treats identical start times as a tie, completely eliminating the CPU
+    // cycles and unnecessary cache accesses required to compare the end times.
     std::sort(intervals.begin(), intervals.end(),
               [](const std::vector<int>& a, const std::vector<int>& b) {
                 return a[0] < b[0];
@@ -28,7 +33,7 @@ class Solution {
     int prev_end = intervals[0][1];
 
     // Greedy remove the longer end when merging
-    for (size_t i = 1; i < intervals.size(); ++i) {
+    for (int i = 1; i < n; ++i) {
       const int curr_start = intervals[i][0];
       const int curr_end = intervals[i][1];
 

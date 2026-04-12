@@ -383,6 +383,7 @@ problems:
     status: L2_STRUGGLE
     refinement_focus: |
       [2025-12-12]: Sorting + Iterate and Merge
+      [2026-04-12]: 100%. Slightly ugly with the syntax and didn't use std::move.
 
   - id: 57
     title: "Insert Interval"
@@ -619,6 +620,7 @@ problems:
     status: L2_STRUGGLE
     refinement_focus: |
       [2025-12-12]: sort is O(n log n), use HashSet to achieve O(n). Check only sequence starters
+      [2026-04-12]: 30%. I used a hashmap, but will back to O(n^2) if the sequence is not friendly.
 
   - id: 130
     title: "Surrounded Regions"
@@ -986,6 +988,7 @@ problems:
     refinement_focus: |
       [2025-12-12]: Prefix and Suffix product arrays, or use output array as prefix product array to save space
       [2026-04-12]: 50%. Correct in explicit prefix-suffix-sum. Failed in inplace.
+      [2026-04-13]: 100% 10min. Not one-shot, problem with the set sequence.
 
   - id: 239
     title: "Sliding Window Maximum"
@@ -1127,6 +1130,7 @@ problems:
       [2025-12-12]: Use HashMap to count frequency, then use Min-Heap or Bucket Sort to get top K. Bucket sort is optimal O(n), but I forget how to implement it
       [2025-12-12]: std::priority queue
       [2025-12-12]: almost correct using heap, write bucket sort. (remember bucket 0 should be empty)
+      [2026-04-13]: 100%. Not one-shot. pq.emplace(num, count) args should be reversed.
 
   - id: 371
     title: "Sum of Two Integers"
@@ -1174,6 +1178,7 @@ problems:
     status: L1_FORGOT
     refinement_focus: |
       [2025-12-12]: Greedy. Sort by end time. Then iterate and merge overlaps."
+      [2026-04-12]: 60% 14min. Should record `prev_end = min(prev_end, curr[1])`.
 
   - id: 438
     title: "Find All Anagrams in a String"
