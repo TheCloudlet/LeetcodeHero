@@ -29,7 +29,7 @@ class Solution {
 
     for (const int q_val : query) {
       const auto it = next_greater.find(q_val);
-      ans.push_back(it != next_greater.end() ? it->second : -1);
+      ans.push_back(it == next_greater.end() ? -1 : it->second);
     }
 
     return ans;

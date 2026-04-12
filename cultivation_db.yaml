@@ -159,6 +159,7 @@ problems:
       [2025-12-12]: The clean solution is to take the first string as golden
       [2025-12-12]: misplaced inner and outer for-loop
       [2026-04-11]: 100% 4min. PASSED BUT NO HIRE. bound issue.
+      [2026-04-12]: 100% 7min. Not passed first time. `s.substr(start, len)`
 
   - id: 15
     title: "3 Sum"

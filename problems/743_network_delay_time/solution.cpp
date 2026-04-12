@@ -53,6 +53,6 @@ class Solution {
     const int max_time =
         *std::max_element(min_dist.begin() + 1, min_dist.end());
 
-    return max_time != INT_MAX ? max_time : -1;
+    return max_time == INT_MAX ? -1 : max_time;
   }
 };

@@ -137,7 +137,7 @@ class Solution {
     };
 
     dfs(dfs, amount, 0, 0);
-    return (best != INT_MAX) ? best : -1;
+    return (best == INT_MAX) ? -1 : best;
   }
 };
 #endif
