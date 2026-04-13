@@ -205,6 +205,7 @@ problems:
     status: L2_STRUGGLE
     refinement_focus: |
       [2025-12-12]: Indirect-pointer and fast/slow pointer
+      [2026-04-13]: 30%. Removal node assiged wrong, didn't delete memory.
 
   - id: 20
     title: "Valid Parentheses"
@@ -216,6 +217,7 @@ problems:
       [2025-12-12]: I know the stack solution, but I cannot execute it fluently and elegantly
       [2026-04-06]: 90%. Typo. More to improve: use switch-stmt.
       [2026-04-07]: 100% 10min.
+      [2026-04-14]: 100% 5min. Return value and pop() not set correctly in first shot.
 
   - id: 21
     title: "Merge Two Sorted Lists"
@@ -844,6 +846,7 @@ problems:
         - Recursive: In Haskell, this is easy `reverse (x:xs) = (reverse xs) ++ [x]`, but I cannot implement it in C++. It is `head->next->next = head; head->next = nullptr; return newHead;`...
 
       [2025-12-12]: I use iterative. It is almost an one-shot. Only return I should return prev instead of curr.
+      [2026-04-13]: 100% 2min.
 
   - id: 207
     title: "Course Schedule"
@@ -1057,6 +1060,7 @@ problems:
     status: L2_STRUGGLE
     refinement_focus: |
       [2025-12-12]: Peek the solution. The key is to use XOR properties.
+      [2026-04-13]: 100% 5min.
 
   - id: 278
     title: "First Bad Version"
@@ -1119,6 +1123,7 @@ problems:
     status: L2_STRUGGLE
     refinement_focus: |
       [2025-12-12]: I used matrix count to count bits, but it is O(n^2). The soultion is to use DP `dp[i] = dp[i >> 1] + (i & 1)`.
+      [2026-04-13]: 0%. Wrong interpretation of the problem.
 
   - id: 347
     title: "Top K Frequent Elements"

@@ -84,8 +84,8 @@ BitOps Problems
 
 ** 3.1 Symbolic Cancellation
 SICP Ch.2 — treat integers as symbolic sets; seek "singularities" through symmetry.
-- [X] [easy]   136. Single Number     :: XOR-sum stream; identity element cancels duplicates
-- [X] [#C] [easy]   268. Missing Number    :: XOR cancel index vs. value across two sequences
+- [X] [easy] 136. Single Number :: XOR-sum stream; identity element cancels duplicates
+- [X] [#C] [easy] 268. Missing Number :: XOR cancel index vs. value across two sequences
 - [X] [medium] 260. Single Number III :: partition by LSB predicate → two independent sub-problems
 - [X] [easy] 461. Hamming Distance
 - [X] [medium] 477. Total Hamming Distance

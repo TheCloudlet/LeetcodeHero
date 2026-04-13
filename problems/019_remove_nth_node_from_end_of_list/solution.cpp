@@ -12,46 +12,31 @@
  *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
+class Solution {
+ public:
+  ListNode* removeNthFromEnd(ListNode* head, int n) {
+    if (n == 0) return head;
 
-/// Removes the nth node from the end of a linked list.
-///
-/// Uses a two-pointer approach with double pointers (pointer to pointer) for
-/// elegant handling of all cases including removing the head.
-///
-/// \complexity O(n) time with a single pass, O(1) space
-///
-/// \details
-/// 1. Creates a gap of n nodes between fast and slow pointers
-/// 2. When fast reaches the end, slow points to the node before the target
-/// 3. Using double pointers (**) simplifies edge cases like removing the head
-ListNode* removeNthFromEnd(ListNode* head, int n) {
-  // Using indirect pointers for more elegant pointer manipulation
-  ListNode** fast = &head;
-  ListNode** slow = &head;
+    ListNode** slow = &head;
+    ListNode* fast = head;
 
-  // Advance fast pointer n steps ahead
-  int steps_taken = 0;
-  for (; steps_taken < n && *fast; ++steps_taken) {
-    fast = &(*fast)->next;
-  }
+    int count = 0;
+    while (fast && count < n) {
+      fast = fast->next;
+      ++count;
+    }
 
-  // Handle case where n is greater than list length
-  if (steps_taken < n) {
+    if (count < n) return head;
+
+    while (fast) {
+      slow = &((*slow)->next);
+      fast = fast->next;
+    }
+
+    ListNode* node_to_delete = *slow;
+    *slow = (*slow)->next;
+    delete node_to_delete;
+
     return head;
   }
-
-  // Move both pointers until fast reaches the end
-  // When fast points to nullptr, slow will point to the node before the nth
-  // node from end
-  while (*fast) {
-    fast = &(*fast)->next;
-    slow = &(*slow)->next;
-  }
-
-  // Remove the target node
-  ListNode* nodeToDelete = *slow;
-  *slow = (*slow)->next;
-  delete nodeToDelete;
-
-  return head;
-}
+};

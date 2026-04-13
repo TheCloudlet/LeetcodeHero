@@ -118,7 +118,7 @@ ListNode* middleNode(ListNode* head) {
   ListNode* slow = head;
   ListNode* fast = head;
   while (fast && fast->next) {  // Middle right in even-length list.
-  // while (fast && fast->next) {  // Middle left in even-length list.
+  // while (fast-> && fast->next->) {  // Middle left in even-length list.
     slow = slow->next;
     fast = fast->next->next;
   }
@@ -127,6 +127,9 @@ ListNode* middleNode(ListNode* head) {
 #+END_SRC
 
 *This is very important!*
+
+~while (fast && fast->next)~
+
 
 #+NAME: while (fast && fast->next)
 #+BEGIN_EXAMPLE
@@ -142,10 +145,12 @@ Step 2:  1 -> 2 -> 3 -> 4 -> nullptr
 Result: slow = 3 (right middle)
 #+END_EXAMPLE
 
-LC143: Reorder List
+~while (fast->next && fast->next->next)~
 
 #+NAME: while (fast->next && fast->next->next)
 #+BEGIN_EXAMPLE
+(LC143: Reorder List, we need to find the last node and set to nullptr)
+
 Step 0:  1 -> 2 -> 3 -> 4 -> nullptr
          ^
          S,F
@@ -160,6 +165,7 @@ Step 1:  1 -> 2 -> 3 -> 4 -> nullptr
 *** 2.4.2 UNZIP (separate interleaved)
 #+NAME: 138. Copy List with Random Pointer (Phase 3)
 #+BEGIN_SRC cpp
+// LC138. Copy List with Random Pointer (Phase 3)
 // A -> A' -> B -> B' -> C -> C'  =>  A -> B -> C, A' -> B' -> C'
 while (curr && curr->next) {
   Node* old_next = curr->next->next;
@@ -179,7 +185,7 @@ while (curr && curr->next) {
 - [X] [easy] 876. Middle of the Linked List :: SPLIT (Fast-Slow Pointer)
 ** 3.2 Medium
 - [X] [medium] 002. Add Two Numbers :: ZIP + dummy-head
-- [ ] [medium] 019. Remove Nth Node From End of List :: Fast-Slow Pointer
+- [X] [medium] 019. Remove Nth Node From End of List :: Fast-Slow Pointer
 - [X] [medium] 024. Swap Nodes in Pairs :: while(curr && curr->next) + dummy-head + in-place
 - [ ] [medium] 061. Rotate List ::
 - [ ] [medium] 092. Reverse Linked List II :: REVERSE
