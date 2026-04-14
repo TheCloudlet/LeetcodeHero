@@ -118,8 +118,8 @@ problems:
     topics: [iteration]
     status: L3_MASTERED
     refinement_focus: |
-      [2025-12-12]: std::to_string while
-      [2025-12-12]: Count: 2
+      [2026-01-06]: std::to_string while
+      [2026-01-06]: Count: 2
 
   - id: 11
     title: "Container With Most Water"
@@ -147,7 +147,7 @@ problems:
     topics: [array]
     status: L2_STRUGGLE
     refinement_focus: |
-      [2025-12-12]: Need to peek next, to know current is + or -
+      [2026-01-07]: Need to peek next, to know current is + or -
 
   - id: 14
     title: "Longest Common Prefix"
@@ -278,7 +278,7 @@ problems:
     topics: [array, two-pointer]
     status: L2_STRUGGLE
     refinement_focus: |
-      [2025-12-12]: Initially attempted using erase() backwards (influenced by LISP/Racket), but the two-pointer approach is the correct O(N) solution.
+      [2026-01-26]: Initially attempted using erase() backwards (influenced by LISP/Racket), but the two-pointer approach is the correct O(N) solution.
 
   - id: 27
     title: "Remove Element"
@@ -303,7 +303,7 @@ problems:
     link: "./problems/033_search_in_rotated_sorted_array/"
     leetcode-difficulty: medium
     topics: [binary-search, array, sorting, neetcode150]
-    status: L1_FORGOT
+    status: L2_STRUGGLE
     refinement_focus: |
       [2025-12-12]:
           (1) we should check whether is left sorted or right sorted (monotonic)
@@ -396,7 +396,7 @@ problems:
     topics: [intervals, array, sorting, neetcode150]
     status: L2_STRUGGLE
     refinement_focus:
-      [2025-12-12]: Copy before insertion, merge overlaps, then append the rest
+      [2026-01-19]: Copy before insertion, merge overlaps, then append the rest
 
   - id: 61
     title: "Rotate List"
@@ -454,7 +454,7 @@ problems:
     topics: [array, two-pointer]
     status: L2_STRUGGLE
     refinement_focus: |
-      [2025-12-12]: passed with duplicate count, but there are better ways to do it.
+      [2026-01-26]: passed with duplicate count, but there are better ways to do it.
 
   - id: 81
     title: "Search in Rotated Sorted Array II"
@@ -475,7 +475,7 @@ problems:
     link: "./problems/084_largest_rectangle_in_histogram/"
     leetcode-difficulty: hard
     topics: [stack, array, monotonic-stack, neetcode150]
-    status: L1_FORGOT
+    status: L2_STRUGGLE
     refinement_focus: |
       [2025-12-12]: (Fail 15 + 45) The key is to find the nearest smaller element on both sides for each bar. Use monotonic stack to achieve O(n) time complexity.
       [2026-04-10]: 0%. Relearned.
@@ -600,8 +600,8 @@ problems:
     topics: [tree, dfs, binary-tree, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: |
-      [2025-12-12]: I have a clear understanding of the code structure, i.e., need a helper function that returns two values as an accumulator. There are two parts that I did not handle correctly. First, if there is only one negative value node, my base case will cause the max path to be 0. So the base case should return INT_MIN. Second, if a node has one negative child path and one positive child path, we need to discard the negative one, i.e., use std::max(0, lPathToLeaf). In sum, this needs more practice.
-      [2025-12-12]: basically correct, but I need to be more careful about the base case. We should return {INT_MIN, 0} instead of {0, 0}
+      [2026-01-13]: I have a clear understanding of the code structure, i.e., need a helper function that returns two values as an accumulator. There are two parts that I did not handle correctly. First, if there is only one negative value node, my base case will cause the max path to be 0. So the base case should return INT_MIN. Second, if a node has one negative child path and one positive child path, we need to discard the negative one, i.e., use std::max(0, lPathToLeaf). In sum, this needs more practice.
+      [2026-01-13]: basically correct, but I need to be more careful about the base case. We should return {INT_MIN, 0} instead of {0, 0}
 
   - id: 125
     title: "Valid Palindrome"
@@ -721,9 +721,9 @@ problems:
     topics: [design, linked-list, hashtable, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: |
-      [2025-12-12]: Always practice. Use std::list + std::unordered_map. please understand why use list
-      [2025-12-12]: failed the second time, the reason is `iterator usage`, `splice` and reusing the last node.
-      [2025-12-12]: failed.
+      [2026-01-15]: Always practice. Use std::list + std::unordered_map. please understand why use list
+      [2026-02-08]: failed the second time, the reason is `iterator usage`, `splice` and reusing the last node.
+      [2026-02-08]: failed.
 
   - id: 150
     title: "Evaluate Reverse Polish Notation"
@@ -910,7 +910,7 @@ problems:
     topics: [heap, array, neetcode150]
     status: L3_MASTERED
     refinement_focus: |
-      [2025-12-12]: One-shot.
+      [2026-01-23]: One-shot.
 
   - id: 217
     title: "Contains Duplicate"
@@ -1050,7 +1050,7 @@ problems:
     topics: [intervals, greedy, sorting, priority-queue, neetcode150]
     status: L1_FORGOT
     refinement_focus: |
-      [2025-12-12]: Hint: Priority Queue.
+      [2026-01-19]: Hint: Priority Queue.
 
   - id: 260
     title: "Single Number III"
@@ -1164,7 +1164,7 @@ problems:
     topics: [stack, string, recursion]
     status: L1_FORGOT
     refinement_focus: |
-      [2025-12-12]: Should not be hard but I froze.
+      [2026-01-27]: Should not be hard but I froze.
 
   - id: 399
     title: "Evaluate Division"
@@ -1173,7 +1173,7 @@ problems:
     topics: [graph, dfs, bfs]
     status: L2_STRUGGLE
     refinement_focus: |
-      [2025-12-12]: Understand the concept, but creating the correct graph is using unordered_map<string, unordered_map<string, double>>. Not trying to write string to int conversion then find the map. Also, bfs needs careful handling of the visited set.
+      [2026-01-26]: Understand the concept, but creating the correct graph is using unordered_map<string, unordered_map<string, double>>. Not trying to write string to int conversion then find the map. Also, bfs needs careful handling of the visited set.
 
   - id: 416
     title: "Partition Equal Subset Sum"
@@ -1252,7 +1252,7 @@ problems:
     topics: [dp, recursion]
     status: L3_MASTERED
     refinement_focus: |
-      [2025-12-12]: Recursion with memo or bottom-up DP
+      [2026-01-07]: Recursion with memo or bottom-up DP
 
   - id: 543
     title: "Diameter of Binary Tree"
@@ -1270,7 +1270,7 @@ problems:
     topics: [union-find]
     status: L2_STRUGGLE
     refinement_focus:
-      [2025-12-12]: One-shot union find, but recommended to practice more
+      [2026-01-17]: One-shot union find, but recommended to practice more
 
   - id: 567
     title: "Permutation in String"
@@ -1295,11 +1295,12 @@ problems:
     link: "./problems/643_maximum_average_subarray_i/"
     leetcode-difficulty: easy
     topics: [sliding-window, array]
-    status: L1_FORGOT
+    status: L3_MASTERED
     refinement_focus: |
       [2026-03-31]: Failed.
       [2026-04-01]: 30%. Problem is the valid state without `if`. sum_max init value is wrong.
       [2026-04-02]: 95% 5min. Missing `++left`.
+      [2026-04-14]: 99% 5min. `glob_max` should init to NINF.
 
   - id: 647
     title: "Palindromic Substrings"
@@ -1352,6 +1353,7 @@ problems:
       [2026-03-30]: implement dijkstrs's first time with guildance
       [2026-03-30]: 90%, 18min. Wrong in `max_element`
       [2026-04-01]: 100% 18min.
+      [2026-04-14]: 20%. Failed.
 
   - id: 746
     title: "Min Cost Climbing Stairs"
@@ -1360,7 +1362,7 @@ problems:
     topics: [1d-dp, dp, array, neetcode150]
     status: L3_MASTERED
     refinement_focus: |
-      [2025-12-12]: dp[i] means min cost to reach step i. dp[i] = min(dp[i-1]+cost[i-1], dp[i-2]+cost[i-2])
+      [2026-01-07]: dp[i] means min cost to reach step i. dp[i] = min(dp[i-1]+cost[i-1], dp[i-2]+cost[i-2])
 
   - id: 852
     title: "Peak Index in a Mountain Array"
