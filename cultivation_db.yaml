@@ -226,9 +226,9 @@ problems:
     topics: [linked-list, indirect-pointer, neetcode150]
     status: L3_MASTERED
     refinement_focus: |
-      [2025-12-12]: Normal dummy node is okay. But I forget indirect-pointer usage. Always use `ListNode *result;` then `ListNode **indirect = &result;`
-      [2025-12-12]: One-shot using indirect pointer. But a little uncertain when doing it in a sprint.
-      [2025-12-12]: One-shot.
+      [2026-03-25]: Normal dummy node is okay. But I forget indirect-pointer usage. Always use `ListNode *result;` then `ListNode **indirect = &result;`
+      [2026-03-25]: One-shot using indirect pointer. But a little uncertain when doing it in a sprint.
+      [2026-03-26]: One-shot.
 
   - id: 22
     title: "Generate Parentheses"
@@ -260,8 +260,8 @@ problems:
     topics: [linked-list, indirect-pointer, recursion]
     status: L2_STRUGGLE
     refinement_focus: |
-      [2025-12-12]: While loop or helper recursion
-      [2025-12-12]: not fully correct
+      [2026-03-25]: While loop or helper recursion
+      [2026-03-26]: not fully correct
 
   - id: 25
     title: "Reverse Nodes in k-Group"
@@ -506,8 +506,8 @@ problems:
     topics: [tree, dfs]
     status: L3_MASTERED
     refinement_focus:
-      [2025-12-12]: Just finish after #230 so it is a one shot. But I still recommend to practice more.
-      [2025-12-12]: one-shot using recursion
+      [2026-03-26]: Just finish after #230 so it is a one shot. But I still recommend to practice more.
+      [2026-03-26]: one-shot using recursion
 
   - id: 96
     title: "Unique Binary Search Trees"
@@ -534,8 +534,8 @@ problems:
     topics: [tree, dfs, bfs, neetcode150]
     status: L3_MASTERED
     refinement_focus:
-      [2025-12-12]: One-shot.
-      [2025-12-12]: Almost. Not checking the null pointer.
+      [2026-03-26]: One-shot.
+      [2026-03-26]: Almost. Not checking the null pointer.
 
   - id: 101
     title: "Symmetric Tree"
@@ -544,7 +544,7 @@ problems:
     topics: [tree, dfs]
     status: L2_STRUGGLE
     refinement_focus: |
-      [2025-12-12]: Almost. Arm's length Recursion (bad)
+      [2026-03-26]: Almost. Arm's length Recursion (bad)
 
   - id: 102
     title: "Binary Tree Level Order Traversal"
@@ -591,7 +591,7 @@ problems:
     topics: [tree, dfs]
     status: L2_STRUGGLE
     refinement_focus: |
-      [2025-12-12]: Check only at leaf, not nullptr.
+      [2026-03-26]: Check only at leaf, not nullptr.
 
   - id: 124
     title: "Binary Tree Maximum Path Sum"
@@ -653,7 +653,7 @@ problems:
     topics: [bitops, array, neetcode150]
     status: L3_MASTERED
     refinement_focus: |
-      [2025-12-12]: XOR
+      [2026-03-24]: XOR
 
   - id: 138
     title: "Copy List with Random Pointer"
@@ -681,9 +681,8 @@ problems:
     topics: [linked-list, two-pointer, fast-and-slow-pointer, neetcode150]
     status: L3_MASTERED
     refinement_focus: |
-      [2025-12-12]: I know the fast/slow pointer idea, but I cannot implement it fluently. The key is to check if fast and fast->next are nullptr directly in the while loop condition.
-
-      [2025-12-12]: One-shot
+      [2026-03-25]: I know the fast/slow pointer idea, but I cannot implement it fluently. The key is to check if fast and fast->next are nullptr directly in the while loop condition.
+      [2026-03-25]: One-shot
 
   - id: 143
     title: "Reorder List"
@@ -693,8 +692,8 @@ problems:
       [linked-list, two-pointer, fast-and-slow-pointer, reverse, neetcode150]
     status: L2_STRUGGLE
     refinement_focus: |
-      [2025-12-12]: I know the big picture. But failed at finding the mid node. I used `while (fast && fast->next)` which makes slow point to the second middle node in even-length list. So when merging, the first half is longer than the second half by one node, which causes problem.
-      [2025-12-12]: Fuck-up (1) middle point. (2) merging next missing because set to nullptr. (2) Not checking the input condition.
+      [2026-03-25]: I know the big picture. But failed at finding the mid node. I used `while (fast && fast->next)` which makes slow point to the second middle node in even-length list. So when merging, the first half is longer than the second half by one node, which causes problem.
+      [2026-03-25]: Fuck-up (1) middle point. (2) merging next missing because set to nullptr. (2) Not checking the input condition.
 
   - id: 144
     title: "Binary Tree Preorder Traversal"
@@ -703,7 +702,7 @@ problems:
     topics: [tree, dfs]
     status: L2_STRUGGLE
     refinement_focus: |
-      [2025-12-12]: Easier than inorder or Postorder iterative solution. But I still have problems with the structure of while loop. I need to practice more.
+      [2026-03-26]: Easier than inorder or Postorder iterative solution. But I still have problems with the structure of while loop. I need to practice more.
 
   - id: 145
     title: "Binary Tree Postorder Traversal"
@@ -712,8 +711,8 @@ problems:
     topics: [tree, dfs]
     status: L2_STRUGGLE
     refinement_focus: |
-      [2025-12-12]: This is definitely hard if you want to use iterative solution but you didn't come up the `std::reverse` trick.
-      [2025-12-12]: I use lambda for helper
+      [2026-03-26]: This is definitely hard if you want to use iterative solution but you didn't come up the `std::reverse` trick.
+      [2026-03-26]: I use lambda for helper
 
   - id: 146
     title: "LRU Cache"
@@ -958,8 +957,8 @@ problems:
     topics: [tree, dfs, bfs, neetcode150]
     status: L3_MASTERED
     refinement_focus: |
-      [2025-12-12]: One-shot.
-      [2025-12-12]: One-shot.
+      [2026-03-26]: One-shot.
+      [2026-03-26]: One-shot.
 
   - id: 287
     title: "Find the Duplicate Number"
@@ -1381,7 +1380,7 @@ problems:
     topics: [linked-list]
     status: L2_STRUGGLE
     refinement_focus: |
-      [2025-12-12]: while-loop issue.
+      [2026-03-25]: while-loop issue.
 
   - id: 978
     title: "Longest Turbulent Subarray"
