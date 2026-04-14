@@ -1011,6 +1011,7 @@ problems:
     refinement_focus: |
       [2025-12-12]: WTF
       [2025-12-12]: I can quickly write the whole solution. But there are 2 problems. First, indices are wrong. Second, I caused overflow by not checking (idx >= k) when calculating std::size_t. Be extra cautious when using unsigned types.
+      [2026-04-14]: Huge WTF. Learned again. (1). Deque. (2). Fixed window, use const int left in for-loop.
 
   - id: 235
     title: "Lowest Common Ancestor of a Binary Search Tree"
