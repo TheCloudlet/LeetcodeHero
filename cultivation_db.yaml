@@ -366,6 +366,7 @@ problems:
     status: L3_MASTERED
     refinement_focus: |
       [2025-12-12]: Sorting
+      [2026-04-14]: Don't think of hashmap.
 
   - id: 53
     title: "Maximum Subarray"
@@ -376,6 +377,7 @@ problems:
     refinement_focus: |
       [2025-12-12]: One shot Kadane's algorithm after praticing LeetCode #152.
       [2026-04-11]: Re-learned.
+      [2026-04-14]: 100% 5min.
 
   - id: 56
     title: "Merge Intervals"

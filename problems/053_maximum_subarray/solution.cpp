@@ -63,6 +63,8 @@ class Solution {
 
     for (int i = 1; i < n + 1; ++i) {
       dp[i] = std::max(nums[i - 1], dp[i - 1] + nums[i - 1]);
+      //               ^curr_val    ^prev       ^curr_val
+      //         (start from new) or (reuse the old)
       global_max = std::max(global_max, dp[i]);
     }
 
