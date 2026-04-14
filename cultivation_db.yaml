@@ -762,8 +762,8 @@ problems:
     status: L2_STRUGGLE
     refinement_focus: |
       [2025-12-12]: Don't understand the problem
-
       [2025-12-12]: I know the key is to maintain two stacks, and I think through the logic, and slowly implement the code correctly. But cannot do it in a flash.
+      [2026-04-14]: 100 10min. One-shot.
 
   - id: 162
     title: "Find Peak Element"
@@ -992,6 +992,15 @@ problems:
       [2025-12-12]: Prefix and Suffix product arrays, or use output array as prefix product array to save space
       [2026-04-12]: 50%. Correct in explicit prefix-suffix-sum. Failed in inplace.
       [2026-04-13]: 100% 10min. Not one-shot, problem with the set sequence.
+
+  - id: 232
+    title: "Implement Queue using Stacks"
+    link: "./problems/232_implement_queue_using_stacks/"
+    leetcode-difficulty: easy
+    topics: [stack, neetcode150]
+    status: L2_STRUGGLE
+    refinement_focus: |
+      [2026-04-14]: Peek answer, wrong with the helper function.
 
   - id: 239
     title: "Sliding Window Maximum"

@@ -262,6 +262,7 @@ This is the unparalleled power of the monotonic stack: *A single pop resolves bo
 - [ ] [medium] 394. Decode String
 
 ** 3.2 Auxiliary Design
+- [X] [easy] 232. Implement Queue using Stacks
 - [ ] [medium] 155. Min Stack
 - [ ] [medium] 150. Evaluate Reverse Polish Notation
 

@@ -21,36 +21,38 @@
 
 class MinStack {
  private:
-  std::stack<int> mainStack;
-  std::stack<int> monoMin;  // Monotonic min stack.
-                            // getMin() works when mainStack is not empty
+  std::stack<int> main_st;
+  std::stack<int> min_st;
 
  public:
-  MinStack() {}
+  MinStack() = default;
 
   void push(int val) {
-    if (monoMin.empty() || val <= monoMin.top()) {
-      monoMin.push(val);
+    main_st.push(val);
+
+    if (min_st.empty() || min_st.top() >= val) {
+      min_st.push(val);
     }
-    mainStack.push(val);
   }
 
   void pop() {
-    int removedVal = mainStack.top();
-    mainStack.pop();
-    if (!monoMin.empty() && monoMin.top() == removedVal) {
-      monoMin.pop();
+    assert(!main_st.empty());
+    int removed_val = main_st.top();
+    main_st.pop();
+
+    if (min_st.top() == removed_val) {
+      min_st.pop();
     }
   }
 
   int top() {
-    assert(!mainStack.empty());
-    return mainStack.top();
+    assert(!main_st.empty());
+    return main_st.top();
   }
 
   int getMin() {
-    assert(!monoMin.empty());
-    return monoMin.top();
+    assert(!min_st.empty());
+    return min_st.top();
   }
 };
 
