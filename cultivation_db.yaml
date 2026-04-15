@@ -1412,6 +1412,15 @@ problems:
     refinement_focus: |
       [2026-03-25]: while-loop issue.
 
+  - id: 977
+    title: "Squares of a Sorted Array"
+    link: "./problems/977_squares_of_a_sorted_array/"
+    leetcode-difficulty: easy
+    topics: [array, two-pointers, sorting]
+    status: L3_MASTERED
+    refinement_focus: |
+      [2026-04-15]: 99% 10min. Almost. (-INT_MIN cause underflow)
+
   - id: 978
     title: "Longest Turbulent Subarray"
     link: "./problems/978_longest_turbulent_subarray/"
