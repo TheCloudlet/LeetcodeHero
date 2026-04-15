@@ -1,4 +1,4 @@
-// 287. Find the Duplicate Number
+// Leetcode 287. Find the Duplicate Number
 // @tag array, binary-search, linked-list, two-pointer, counting
 // @difficulty medium
 

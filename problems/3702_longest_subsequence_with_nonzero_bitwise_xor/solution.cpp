@@ -1,4 +1,4 @@
-// 3702. Longest Subsequence With Non-Zero Bitwise XOR
+// Leetcode 3702. Longest Subsequence With Non-Zero Bitwise XOR
 // @tag: weekly-contest470
 
 #include <vector>

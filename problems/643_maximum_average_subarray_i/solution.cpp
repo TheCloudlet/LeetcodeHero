@@ -1,4 +1,4 @@
-// 643. Maximum Average Subarray I
+// Leetcode 643. Maximum Average Subarray I
 
 #if defined(PATTERN)
 #include <vector>
