@@ -636,6 +636,15 @@ problems:
       [2025-12-12]: one-shot.
       [2026-04-06]: 100% 10min.
 
+  - id: 136
+    title: "Single Number"
+    link: "./problems/136_single_number/"
+    leetcode-difficulty: easy
+    topics: [bitops, array, neetcode150]
+    status: L3_MASTERED
+    refinement_focus: |
+      [2026-03-24]: XOR
+
   - id: 137
     title: "Single Number II"
     link: "./problems/137_single_number_ii/"
@@ -645,15 +654,6 @@ problems:
     refinement_focus: |
       [2025-12-12]: two solutions. FSM (best) and bit count modulo 3 (also good)
       [2026-03-29]: FSM don't understand. bit count sum not inited to zero.
-
-  - id: 136
-    title: "Single Number"
-    link: "./problems/136_single_number/"
-    leetcode-difficulty: easy
-    topics: [bitops, array, neetcode150]
-    status: L3_MASTERED
-    refinement_focus: |
-      [2026-03-24]: XOR
 
   - id: 138
     title: "Copy List with Random Pointer"
@@ -776,6 +776,17 @@ problems:
       [2025-12-12]: Easy solution after doing LC33, LC153, LC704 in a row.
       [2026-04-06]: 100% 5min.
 
+  - id: 167
+    title: "Two Sum II - Input Array Is Sorted"
+    link: "./problems/167_two_sum_ii_input_array_is_sorted/"
+    leetcode-difficulty: medium
+    topics: [two-pointer, array, neetcode150]
+    status: L3_MASTERED
+    refinement_focus: |
+      [2025-12-12]: trivial two-pointer.
+      [2026-04-03]: 70%. Seems trivial but fucked up left, right and 1-indexed.
+      [2026-04-05]: 100% 5min.
+
   - id: 190
     title: "Reverse Bits"
     link: "./problems/190_reverse_bits/"
@@ -793,17 +804,6 @@ problems:
     status: L2_STRUGGLE
     refinement_focus: |
       [2025-12-12]: use __builtin_popcount or Brian Kernighan algorithm
-
-  - id: 167
-    title: "Two Sum II - Input Array Is Sorted"
-    link: "./problems/167_two_sum_ii_input_array_is_sorted/"
-    leetcode-difficulty: medium
-    topics: [two-pointer, array, neetcode150]
-    status: L3_MASTERED
-    refinement_focus: |
-      [2025-12-12]: trivial two-pointer.
-      [2026-04-03]: 70%. Seems trivial but fucked up left, right and 1-indexed.
-      [2026-04-05]: 100% 5min.
 
   - id: 198
     title: "House Robber"
@@ -960,15 +960,6 @@ problems:
       [2026-03-26]: One-shot.
       [2026-03-26]: One-shot.
 
-  - id: 287
-    title: "Find the Duplicate Number"
-    link: "./problems/287_find_the_duplicate_number/"
-    leetcode-difficulty: medium
-    topics: [two-pointer, linked-list, array, neetcode150]
-    status: L2_STRUGGLE
-    refinement_focus: |
-      [2025-12-12]: For simple map solution, I can implement it fluently. For the two-pointer solution, this is not intuitive at all. The key is to treat the array as a linked list, and the duplicate number is the entry point of the cycle. Then use Floyd's Tortoise and Hare algorithm to find the entry point.
-
   - id: 230
     title: "Kth Smallest Element in a BST"
     link: "./problems/230_kth_smallest_element_in_a_bst/"
@@ -983,17 +974,6 @@ problems:
       [2025-12-12]: I know the big structure but I have problems with the iterative solution. The key is using `while (curr || !stack.empty())` as the main iterating method, and we should not prevent curr from being null. In fact, we want to see curr is null so that we use pop to backtrack, then go to the right child.
       [2026-03-29]: One-shot with recursive solution. Iterative not learned yet.
 
-  - id: 238
-    title: "Product of Array Except Self"
-    link: "./problems/238_product_of_array_except_self/"
-    leetcode-difficulty: medium
-    topics: [array, prefix-sum, neetcode150]
-    status: L2_STRUGGLE
-    refinement_focus: |
-      [2025-12-12]: Prefix and Suffix product arrays, or use output array as prefix product array to save space
-      [2026-04-12]: 50%. Correct in explicit prefix-suffix-sum. Failed in inplace.
-      [2026-04-13]: 100% 10min. Not one-shot, problem with the set sequence.
-
   - id: 232
     title: "Implement Queue using Stacks"
     link: "./problems/232_implement_queue_using_stacks/"
@@ -1002,17 +982,6 @@ problems:
     status: L2_STRUGGLE
     refinement_focus: |
       [2026-04-14]: Peek answer, wrong with the helper function.
-
-  - id: 239
-    title: "Sliding Window Maximum"
-    link: "./problems/239_sliding_window_maximum/"
-    leetcode-difficulty: hard
-    topics: [monotonic-queue, array, sliding-window, neetcode150]
-    status: L2_STRUGGLE
-    refinement_focus: |
-      [2025-12-12]: WTF
-      [2025-12-12]: I can quickly write the whole solution. But there are 2 problems. First, indices are wrong. Second, I caused overflow by not checking (idx >= k) when calculating std::size_t. Be extra cautious when using unsigned types.
-      [2026-04-14]: Huge WTF. Learned again. (1). Deque. (2). Fixed window, use const int left in for-loop.
 
   - id: 235
     title: "Lowest Common Ancestor of a Binary Search Tree"
@@ -1033,6 +1002,28 @@ problems:
       [2025-12-12]: My solution is to trace all path to p, and trace all path to q. Then iterate the longest two vector. But the best solution is to use recursive found or not.
       [2026-03-27]: Not fluent.
       [2026-03-28]: One-shot in 5 lines.
+
+  - id: 238
+    title: "Product of Array Except Self"
+    link: "./problems/238_product_of_array_except_self/"
+    leetcode-difficulty: medium
+    topics: [array, prefix-sum, neetcode150]
+    status: L2_STRUGGLE
+    refinement_focus: |
+      [2025-12-12]: Prefix and Suffix product arrays, or use output array as prefix product array to save space
+      [2026-04-12]: 50%. Correct in explicit prefix-suffix-sum. Failed in inplace.
+      [2026-04-13]: 100% 10min. Not one-shot, problem with the set sequence.
+
+  - id: 239
+    title: "Sliding Window Maximum"
+    link: "./problems/239_sliding_window_maximum/"
+    leetcode-difficulty: hard
+    topics: [monotonic-queue, array, sliding-window, neetcode150]
+    status: L2_STRUGGLE
+    refinement_focus: |
+      [2025-12-12]: WTF
+      [2025-12-12]: I can quickly write the whole solution. But there are 2 problems. First, indices are wrong. Second, I caused overflow by not checking (idx >= k) when calculating std::size_t. Be extra cautious when using unsigned types.
+      [2026-04-14]: Huge WTF. Learned again. (1). Deque. (2). Fixed window, use const int left in for-loop.
 
   - id: 252
     title: "Meeting Rooms"
