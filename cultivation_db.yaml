@@ -594,6 +594,15 @@ problems:
     refinement_focus: |
       [2025-12-12]: Reviewed the definition of balanced binary tree. Implementation is smooth, but I forgot to (add 1) when calculating height.
 
+  - id: 111
+    title: "Minimum Depth of Binary Tree"
+    link: "./problems/111_minimum_depth_of_binary_tree/"
+    leetcode-difficulty: easy
+    topics: [tree, bfs, dfs]
+    status: L2_STRUGGLE
+    refinement_focus: |
+      [2026-04-15]: 100% 10min. Using DFS. The optimal is BFS, and I placed wrong the swap(curr_level, next_level), should be in end of for-loop.
+
   - id: 112
     title: "Path Sum"
     link: "./problems/112_path_sum/"
