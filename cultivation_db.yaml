@@ -920,6 +920,7 @@ problems:
     status: L3_MASTERED
     refinement_focus: |
       [2025-12-12]: HashSet
+      [2026-04-15]: 100% 3min.
 
   - id: 219
     title: "Contains Duplicate II"
@@ -1025,6 +1026,15 @@ problems:
       [2025-12-12]: I can quickly write the whole solution. But there are 2 problems. First, indices are wrong. Second, I caused overflow by not checking (idx >= k) when calculating std::size_t. Be extra cautious when using unsigned types.
       [2026-04-14]: Huge WTF. Learned again. (1). Deque. (2). Fixed window, use const int left in for-loop.
 
+  - id: 242
+    title: "Valid Anagram"
+    link: "./problems/242_valid_anagram/"
+    leetcode-difficulty: easy
+    topics: [hashtable, string, sorting, neetcode150]
+    status: L3_MASTERED
+    refinement_focus: |
+      [2026-04-15]: 15min 2 solutions. Passed but missing check length in the front.
+
   - id: 252
     title: "Meeting Rooms"
     link: "./problems/252_meeting_rooms/"
@@ -1083,6 +1093,15 @@ problems:
     status: L2_STRUGGLE
     refinement_focus: |
       [2026-04-15]: 100% 10min. Didn't increment ++slow. Learn std::fill.
+
+  - id: 287
+    title: "Find the Duplicate Number"
+    link: "./problems/287_find_the_duplicate_number/"
+    leetcode-difficulty: medium
+    topics: [two-pointer, linked-list, array, neetcode150]
+    status: L2_STRUGGLE
+    refinement_focus: |
+      [2025-12-12]: For simple map solution, I can implement it fluently. For the two-pointer solution, this is not intuitive at all. The key is to treat the array as a linked list, and the duplicate number is the entry point of the cycle. Then use Floyd's Tortoise and Hare algorithm to find the entry point.
 
   - id: 297
     title: "Serialize and Deserialize Binary Tree"
@@ -1217,8 +1236,8 @@ problems:
       [2026-04-09]: 100% 4min. Interview.
 
   - id: 477
-    title: "Hamming Distance"
-    link: "./problems/477_hamming_distance/"
+    title: "Total Hamming Distance"
+    link: "./problems/477_total_hamming_distance/"
     leetcode-difficulty: medium
     topics: [bit-manipulation, math-and-geometry]
     status: L2_STRUGGLE
