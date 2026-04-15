@@ -1084,6 +1084,15 @@ problems:
         Just standard [start, end) binary search to change the predicate
       [2026-04-04]: 100% 6min.
 
+  - id: 283
+    title: "Move Zeroes"
+    link: "./problems/283_move_zeroes/"
+    leetcode-difficulty: easy
+    topics: [array, two-pointers]
+    status: L2_STRUGGLE
+    refinement_focus: |
+      [2026-04-15]: 100% 10min. Didn't increment ++slow. Learn std::fill.
+
   - id: 297
     title: "Serialize and Deserialize Binary Tree"
     link: "./problems/297_serialize_and_deserialize_binary_tree/"
