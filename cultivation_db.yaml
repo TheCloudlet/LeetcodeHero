@@ -1355,6 +1355,15 @@ problems:
       [2026-04-01]: 100% 18min.
       [2026-04-14]: 20%. Failed.
 
+  - id: 744
+    title: "Find Smallest Letter Greater Than Target"
+    link: "./problems/744_find_smallest_letter_greater_than_target/"
+    leetcode-difficulty: easy
+    topics: [binary-search, array]
+    status: L3_MASTERED
+    refinement_focus: |
+      [2026-04-15]: 100% 6min. One-shot.
+
   - id: 746
     title: "Min Cost Climbing Stairs"
     link: "./problems/746_min_cost_climbing_stairs/"
