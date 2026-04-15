@@ -470,6 +470,15 @@ problems:
             EQ -> -- right--
       [2026-04-11]: 100 5min.
 
+  - id: 83
+    title: "Remove Duplicates from Sorted List"
+    link: "./problems/083_remove_duplicates_from_sorted_list/"
+    leetcode-difficulty: easy
+    topics: [linked-list, two-pointer]
+    status: L3_MASTERED
+    refinement_focus: |
+      [2026-04-15]: 80% 10min. Missing `continue` cause dereferce nullptr.
+
   - id: 84
     title: "Largest Rectangle in Histogram"
     link: "./problems/084_largest_rectangle_in_histogram/"
@@ -565,6 +574,7 @@ problems:
     refinement_focus: |
       [2025-12-12]:
       [2026-03-27]: one-shot.
+      [2026-04-15]: 100% 2min.
 
   - id: 105
     title: "Construct Binary Tree from Preorder and Inorder Traversal"
