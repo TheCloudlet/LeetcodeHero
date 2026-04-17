@@ -1327,6 +1327,16 @@ problems:
     status: L3_MASTERED
     refinement_focus: |
       [2025-12-12]: Recursive and helper is same function can solve the problem. But I think what if we can use KMF algorithm way like structure?
+      [2026-04-17]: 90%. Peek and serialized, recursive call forget to add output buffer.
+
+  - id: 617
+    title: "Merge Two Binary Trees"
+    link: "./problems/617_merge_two_binary_trees/"
+    leetcode-difficulty: easy
+    topics: [tree, dfs, bfs, binary-tree, neetcode150]
+    status: L3_MASTERED
+    refinement_focus: |
+      [2026-04-17]: 90%. Handled value null, but forget to handle node null.
 
   - id: 637
     title: "Average of Levels in Binary Tree"
