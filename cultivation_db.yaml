@@ -1442,6 +1442,15 @@ problems:
     refinement_focus: |
       [2026-01-07]: dp[i] means min cost to reach step i. dp[i] = min(dp[i-1]+cost[i-1], dp[i-2]+cost[i-2])
 
+  - id: 844
+    title: "Backspace String Compare"
+    link: "./problems/844_backspace_string_compare/"
+    leetcode-difficulty: easy
+    topics: [string, stack, two-pointer]
+    status: L2_STRUGGLE
+    refinement_focus: |
+      [2026-04-17]: 30%. I don't think this is an easy problem. Initially, I wasn't sure how to approach it, so I tried iterating backwards, counting consecutive '#' characters and decreasing the index accordingly. However, this failed on corner cases like "1#22#2##" because it incorrectly skipped the '#'. I then switched to a stack-based approach but mistakenly placed the boundary check in the wrong 'if' condition, which caused additional bugs. Finally solved the problem.
+
   - id: 852
     title: "Peak Index in a Mountain Array"
     link: "./problems/852_peak_index_in_a_mountain_array/"
