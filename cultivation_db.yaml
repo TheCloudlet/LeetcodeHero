@@ -611,6 +611,7 @@ problems:
     status: L2_STRUGGLE
     refinement_focus: |
       [2026-03-26]: Check only at leaf, not nullptr.
+      [2026-04-17]: Passed. Noted that "leaf" means check "if (curr && !curr->left && !curr->right)"
 
   - id: 124
     title: "Binary Tree Maximum Path Sum"
@@ -784,6 +785,7 @@ problems:
       [2025-12-12]: Don't understand the problem
       [2025-12-12]: I know the key is to maintain two stacks, and I think through the logic, and slowly implement the code correctly. But cannot do it in a flash.
       [2026-04-14]: 100 10min. One-shot.
+      [2026-04-17]: 100 5min. One-shot.
 
   - id: 162
     title: "Find Peak Element"
@@ -1071,6 +1073,15 @@ problems:
     status: L1_FORGOT
     refinement_focus: |
       [2026-01-19]: Hint: Priority Queue.
+
+  - id: 257
+    title: "Binary Tree Paths"
+    link: "./problems/257_binary_tree_paths/"
+    leetcode-difficulty: easy
+    topics: [tree, dfs, binary-tree]
+    status: L2_STRUGGLE
+    refinement_focus: |
+      [2026-04-17]: 40%. Got the wrong answer twice. The first failure occurred because I allowed the DFS to accept a `nullptr` and returned the path, which incorrectly printed all nodes instead of just leaf paths. The second failure happened when I incorrectly returned immediately after adding a valid leaf path to the result, without popping the last element off the path string first.
 
   - id: 260
     title: "Single Number III"
