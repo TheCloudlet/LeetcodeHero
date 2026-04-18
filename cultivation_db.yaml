@@ -1537,6 +1537,15 @@ problems:
     refinement_focus: |
       [2026-03-30]: 90%, DSU. minor typos. might take a little to much time.
 
+  - id: 2022
+    title: "2022. Convert 1D Array Into 2D Array"
+    link: "./problems/2022_convert_1d_array_into_2d_array/"
+    leetcode-difficulty: easy
+    topics: [array, matrix]
+    status: L2_STRUGGLE
+    refinement_focus: |
+      [2026-04-18]: Initially thought I could just `reinterpret_cast` the 1D array into a 2D array, but C++ uses `std::vector<std::vector<int>>` which is not contiguous in memory. Because of this, I needed to construct it manually. At first, I pre-allocated the vector and assigned values using `ans[row][col]`, but this was slow due to an unnecessary default initialization followed by assignments. The correct, more efficient approach is to construct the inner vectors directly using `emplace_back` with iterator ranges.
+
   - id: 3613
     title: "Minimize Maximum Component Cost"
     link: "./problems/3613_minimize_maximum_component_cost/"
