@@ -856,6 +856,15 @@ problems:
       [2025-12-12]: One-shot, but ugly. Key is `constexpr dirs[4][2]` and use `auto dfs = [&](auto &&dfs, int r, int c) -> void`.
       [2026-03-29]: One-shot.
 
+  - id: 203
+    title: "Remove Linked List Elements"
+    link: "./problems/203_remove_linked_list_elements/"
+    leetcode-difficulty: easy
+    topics: [linked-list, iteration]
+    status: L3_MASTERED
+    refinement_focus: |
+      [2026-04-18]: 99% 3min. One shot with indirect pointer.
+
   - id: 206
     title: "Reverse Linked List"
     link: "./problems/206_reverse_linked_list/"
@@ -1449,7 +1458,7 @@ problems:
     topics: [string, stack, two-pointer]
     status: L2_STRUGGLE
     refinement_focus: |
-      [2026-04-17]: 30%. I don't think this is an easy problem. Initially, I wasn't sure how to approach it, so I tried iterating backwards, counting consecutive '#' characters and decreasing the index accordingly. However, this failed on corner cases like "1#22#2##" because it incorrectly skipped the '#'. I then switched to a stack-based approach but mistakenly placed the boundary check in the wrong 'if' condition, which caused additional bugs. Finally solved the problem.
+      [2026-04-17]: 30%. I don't think this is an easy problem. Initially, I wasn't sure how to approach it, so I tried iterating backwards, counting consecutive '#' characters and decreasing the index accordingly. However, this failed on corner cases like "1#22#2##" because it incorrectly skipped the '#'. I then switched to a stack-based approach but mistakenly placed the boundary check in the wrong 'if' condition, which caused additional bugs. Finally solved the problem. (Also, I think the 'if' statements should be replaced with a 'switch' to explicitly indicate we are pattern matching).
 
   - id: 852
     title: "Peak Index in a Mountain Array"
