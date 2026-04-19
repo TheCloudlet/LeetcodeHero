@@ -1265,6 +1265,15 @@ problems:
       [2026-04-02]: 0% directly failed.
       [2026-04-05]: 100% 7min.
 
+  - id: 448
+    title: "Find All Numbers Disappeared in an Array"
+    link: "./problems/448_find_all_numbers_disappeared_in_an_array/"
+    leetcode-difficulty: easy
+    topics: [array, hashmap]
+    status: L2_STRUGGLE
+    refinement_focus: |
+      [2026-04-01]: Forget to (n + 1) in vector constructor.
+
   - id: 461
     title: "Hamming Distance"
     link: "./problems/461_hamming_distance/"
