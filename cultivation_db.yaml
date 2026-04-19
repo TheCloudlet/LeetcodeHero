@@ -1014,6 +1014,15 @@ problems:
     refinement_focus: |
       [2026-04-14]: Peek answer, wrong with the helper function.
 
+  - id: 234
+    title: "Palindrome Linked List"
+    link: "./problems/234_palindrome_linked_list/"
+    leetcode-difficulty: easy
+    topics: [linked-list, fast-slow-pointer, stack]
+    status: L2_STRUGGLE
+    refinement_focus: |
+      [2026-04-19]: Concept is correct, made tons of mistake implementing.
+
   - id: 235
     title: "Lowest Common Ancestor of a Binary Search Tree"
     link: "./problems/235_lowest_common_ancestor_of_a_binary_search_tree/"
