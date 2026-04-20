@@ -1,7 +1,7 @@
 // Compile:
 //   g++ -std=c++17 -DSINGLE_THREAD -o scheduler main.cpp && ./scheduler
 
-#define SINGLE_THREAD
+#define MULTI_THREAD
 #include <chrono>
 #include <iostream>
 
