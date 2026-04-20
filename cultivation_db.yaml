@@ -1537,6 +1537,15 @@ problems:
       [2026-03-31]: 80%. Forget level order count.
       [2026-04-01]: 95%. Minor typos.
 
+  - id: 1188
+    title: "Design Bounded Blocking Queue"
+    link: "./problems/1188_design_bounded_blocking_queue/"
+    leetcode-difficulty: medium
+    topics: [design, concurrency, queue]
+    status: L1_FORGOT
+    refinement_focus: |
+      [2026-04-20]: Learning. Fun.
+
   - id: 1448
     title: "Count Good Nodes in Binary Tree"
     link: "./problems/1448_count_good_nodes_in_binary_tree/"
