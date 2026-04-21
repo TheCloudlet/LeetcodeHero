@@ -1171,6 +1171,15 @@ problems:
       [2025-12-12]: DP O(n^2) or Binary Search O(n log n). Binary search is never practiced. dp[i] means from nums[0..i], the longest increasing subsequence that ends with nums[i]
       [2026-04-11]: 0%. DP Relearned.
 
+  - id: 303
+    title: "Range Sum Query - Immutable"
+    link: "./problems/303_range_sum_query_immutable/"
+    leetcode-difficulty: easy
+    topics: [prefix-sum, array, neetcode150]
+    status: L3_MASTERED
+    refinement_focus: |
+      [2026-04-17]: 100% 5min.
+
   - id: 310
     title: "Minimum Height Trees"
     link: "./problems/310_minimum_height_trees/"
