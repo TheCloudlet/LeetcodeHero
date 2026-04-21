@@ -1538,6 +1538,15 @@ problems:
       [2026-03-31]: 80%. Forget level order count.
       [2026-04-01]: 95%. Minor typos.
 
+  - id: 1117
+    title: "Building H2O"
+    link: "./problems/1117_building_h2o/"
+    leetcode-difficulty: medium
+    topics: [concurrency, semaphore, threading]
+    status: L1_FORGOT
+    refinement_focus: |
+      [2026-04-21]: Learning. Fun.
+
   - id: 1188
     title: "Design Bounded Blocking Queue"
     link: "./problems/1188_design_bounded_blocking_queue/"
