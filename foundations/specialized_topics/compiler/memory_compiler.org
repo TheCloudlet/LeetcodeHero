@@ -1,0 +1,390 @@
+#+TITLE: Memory Compiler
+#+AUTHOR: Yi-Ping Pan (Cloudlet)
+#+DATE: 2026-04-21
+
+* 1. SRAM & Operations
+
+Static RAM
+
+- SRAM will hold its data permanently in the presence of power, while data in DRAM decays in seconds and thus must be periodically refreshed.
+- SRAM is faster than DRAM but it is more expensive in terms of silicon area and cost.
+- Typically, SRAM is used for the cache and internal registers of a CPU while DRAM is used for a computer's main memory.
+
+#+BEGIN_EXAMPLE
+                  WL
+  ══════════════════╦══════════════════════════════╦════════
+                    ║                              ║
+              ┌─────╫──────────────────────────────╫─────┐
+              │   [ M5 ]                         [ M6 ]  │
+              │     │                              │     │
+         BL ──┼─────●───── Q               Q' ─────●─────┼── BLB
+              │            │               │             │
+              │            │   ┌───────┐   │             │
+              │            ├─►─┤ INV_R ├───┤             │
+              │            │   │(M2,M4)│   │             │
+              │            │   └───────┘   │             │
+              │            │               │             │
+              │            │   ┌───────┐   │             │
+              │            ├───┤ INV_L ├─◄─┤             │
+              │            │   │(M1,M3)│   │             │
+              │            │   └───────┘   │             │
+              │                                          │
+              │                bitcell (6T)              │
+              └──────────────────────────────────────────┘
+
+Layout note:
+- INV_R: input = Q,  output = Q'  (pulls Q' to 0 when Q is 1)
+- INV_L: input = Q', output = Q   (pulls Q to 0 when Q' is 1)
+- Positive feedback loop -> bistable -> stores 1 bit
+- M5, M6 are access (pass) transistors gated by WL
+- BL / BLB are complementary bitlines
+
+Counting transistors:
+- INV_L: 2 (PMOS pull-up M3 + NMOS pull-down M1)
+- INV_R: 2 (PMOS pull-up M4 + NMOS pull-down M2)
+- Access: 2 (M5, M6)
+- Total: 6 -> "6T" cell
+#+END_EXAMPLE
+
+
+Three operations:
+
+1. Read:
+   1) Precharge BL and BLB to Vdd
+   2) Assert WL high, access transistors turn on
+   3) The side storing 0 pulls its bit line down slightly (~100mV)
+   4) Sense amplifier amplifies the small differential -> outputs 1 bit
+
+2. Write:
+   1) Write driver forces BL and BLB to target values (one high, one low)
+   2) Assert WL high
+   3) Write driver strength > cell pull-up -> flips the cell state
+   4) This sizing tradeoff is called pull-up ratio / cell ratio
+
+3. Standby/Hold:
+   - WL is 0, access transistors off
+   - Cross-coupled inverters hold state on their own; only leakage current flows
+
+#+NAME: my-question
+#+begin_quote
+Q: Why do we call Hold an "operation"? It is a state, not an operation.
+
+A: You are correct — Hold/Standby is strictly a state, not an operation.
+   It is listed alongside Read/Write as a documentation convention: datasheets
+   need to specify leakage current and power consumption during standby so that
+   circuit designers can budget power even when no access is occurring.
+   It describes electrical behavior, not a user-initiated action.
+#+end_quote
+
+#+NAME: my-question
+#+begin_quote
+Q: I don't understand how cross-coupled inverters lock a bit. Can you explain in detail? Where exactly is the stored bit?
+
+A: This is due to the mechanism of *Positive Feedback*. The function of an inverter is to flip the input voltage (1 to 0, 0 to 1). When we connect two inverters head-to-tail (Cross-coupled), here is what happens:
+
+1. Assume the internal node Q is currently 1 (high voltage, Vdd).
+2. The first inverter receives Q=1 and outputs 0 to node Q' (Q-bar).
+3. The second inverter receives Q'=0 and outputs 1 back to node Q.
+4. This 1 perfectly maintains the original state of Q!
+
+This forms a *Bistable* loop. The two inverters mutually support each other's state, creating an infinite loop that firmly locks the data in place.
+
+As for "Where is the stored bit?":
+It physically exists simply as the *voltage states* on the internal nodes (Q and Q'). As long as the power supply (Vdd) is maintained, these two nodes will hold steady at opposite high and low voltages, like a jammed seesaw. This is why SRAM is called "Static"—unlike DRAM, it does not rely on tiny capacitors, nor does it need to be constantly refreshed to retain its data.
+#+end_quote
+
+#+NAME: my-question
+#+begin_quote
+Looking at this graph:
+[[https://pic3.zhimg.com/v2-fef6068f2a0fe51c1ea08e9c82213b56_1440w.jpg]]
+
+Q: Won't the current from BLB pull up the voltage on the side storing 0?
+
+A: You've asked an incredibly insightful question! This is exactly the most dangerous moment for an SRAM cell, involving *Read Disturbance* and *Read Static Noise Margin (Read SNM)*.
+
+When the WL is turned on, the high-voltage BLB is indeed physically connected to the internal node storing 0 (Q'). Current flows from BLB through the Access transistor (M6), and then down through the internal Pull-down NMOS (M2) to GND. Due to this current and the resulting voltage divider effect, *the voltage at Q' is indeed pulled up slightly* (we call this slight voltage bump $V_{read}$).
+
+If it gets pulled up too high, exceeding the switching threshold of the other inverter (INV_L), INV_L will mistakenly interpret Q' as a 1. It will then wrongly pull Q down to 0, ultimately causing the entire cell to accidentally flip state. This failure mechanism is called a *Destructive Read*.
+
+*How do we prevent this? This is exactly why transistor sizing is strictly regulated:*
+To ensure the voltage bump isn't pulled too high, we must make the *Pull-down NMOS (M2), which is responsible for holding the voltage at 0, "stronger" (wider width, lower resistance) than the external Access transistor (M6)*.
+Because M2 is stronger, it wins this electrical tug-of-war, keeping Q' safely suppressed at a low voltage well below the trip point of the other inverter. In SRAM design, the ratio of these strengths is called the *Beta Ratio* ($\beta = \frac{W_{pull-down}}{W_{access}}$), which must typically be greater than 1. This is precisely why the 6 transistors inside a standard SRAM bitcell are not all the same size!
+#+end_quote
+
+* 2. What is Memory Compiler?
+
+A memory compiler is a program that takes memory parameters as input and
+automatically generates all views needed to use that memory in a chip design.
+
+#+BEGIN_EXAMPLE
+                 ┌──────────────────────────────┐
+                 │        Memory Compiler       │
+                 │                              │
+  depth      ───>│                              │───> .gds / .oas
+  width      ───>│                              │───> .lef
+  port       ───>│                              │───> .lib
+  mux factor ───>│                              │───> .v  (Verilog)
+  corner     ───>│                              │───> .sp / .cdl
+  (PVT:          │                              │───> .cpf / .upf
+   voltage,  ───>│                              │───> .pat  (ATPG/MBIST)
+   temp)         │                              │───> .pdf  (Datasheet)
+                 └──────────────────────────────┘
+#+END_EXAMPLE
+
+** Inputs
+
+| Parameter | Meaning                           | Example             |
+|-----------+-----------------------------------+---------------------|
+| depth     | Number of words (rows)            | 1024                |
+| width     | Bits per word (columns)           | 32                  |
+| port      | 1-port (RW) or 2-port (R+W)       | 1P / 2P             |
+| mux       | Column mux ratio (area vs. speed) | 4, 8, 16            |
+| corner    | PVT corner for timing/power       | TT/SS/FF @ 0.8V 25C |
+
+#+BEGIN_EXAMPLE
+                    BL_0  BL_1  BL_2  BL_3  BL_4  BL_5  BL_6  BL_7
+                     │     │     │     │     │     │     │     │
+  addr[A-1:M]        ▼     ▼     ▼     ▼     ▼     ▼     ▼     ▼
+  (high bits)   ┌────────────────────────────────────────────────────┐
+  ┌───────┐     │   ┌──┐  ┌──┐  ┌──┐  ┌──┐  ┌──┐  ┌──┐  ┌──┐  ┌──┐   │
+  │   R   │────►│   └──┘  └──┘  └──┘  └──┘  └──┘  └──┘  └──┘  └──┘   │◄─ WL_0
+  │   o   │     │   ┌──┐  ┌──┐  ┌──┐  ┌──┐  ┌──┐  ┌──┐  ┌──┐  ┌──┐   │
+  │   w   │────►│   └──┘  └──┘  └──┘  └──┘  └──┘  └──┘  └──┘  └──┘   │◄─ WL_1
+  │       │     │   ┌──┐  ┌──┐  ┌──┐  ┌──┐  ┌──┐  ┌──┐  ┌──┐  ┌──┐   │
+  │   D   │────►│   └──┘  └──┘  └──┘  └──┘  └──┘  └──┘  └──┘  └──┘   │◄─ WL_2
+  │   e   │     │   ┌──┐  ┌──┐  ┌──┐  ┌──┐  ┌──┐  ┌──┐  ┌──┐  ┌──┐   │
+  │   c   │────►│   └──┘  └──┘  └──┘  └──┘  └──┘  └──┘  └──┘  └──┘   │◄─ WL_3
+  └───────┘     │     6T bitcell array (depth rows × width cols)     │
+                └────────────────────────────────────────────────────┘
+                     │     │     │     │     │     │     │     │
+                     ▼     ▼     ▼     ▼     ▼     ▼     ▼     ▼
+                ┌────────────────────────────────────────────────────┐
+                │         Sense Amplifiers (one per BL pair)         │
+                └─────────────────────────┬──────────────────────────┘
+                                          │  (mux=2: 8 cols → 4 sense amps → 4 outputs)
+  addr[M-1:0]                             ▼
+  (low bits)    ┌────────────────────────────────────────────────────┐
+  select col    │                Column MUX / Decoder                │
+                └─────────────────────────┬──────────────────────────┘
+                                          │
+                                          ▼
+                                Data I/O (width bits)
+#+END_EXAMPLE
+
+
+
+*** depth × width — the array shape
+
+#+BEGIN_EXAMPLE
+        <──── width = 32 bits ────>
+   ┌──┬──┬──┬──┬──┬──┬──┬── ... ──┐  ↑
+   │  │  │  │  │  │  │  │         │  │
+   ├──┼──┼──┼──┼──┼──┼──┼── ... ──┤  │
+   │  │  │  │  │  │  │  │         │  depth = 1024 words
+   ├──┼──┼──┼──┼──┼──┼──┼── ... ──┤  │
+   │  │  │  │  │  │  │  │         │  │
+   └──┴──┴──┴──┴──┴──┴──┴── ... ──┘  ↓
+   Total bits = depth × width = 1024 × 32 = 32768 bits
+#+END_EXAMPLE
+
+*** port — how many read/write ports
+
+A port is one independent access channel into the memory. Think of a port as a "teller window" at a bank: it comes with its own address bus (which account), data bus (the money), and control signals (deposit or withdraw).
+
+- *1-Port (Single Port, 1P / 1RW)*: 
+  There is only one access window. In a single clock cycle, you can either Read *OR* Write, but never both simultaneously. 
+  - *Hardware Cost*: Uses the standard *6T bitcell* (highly dense, minimal area).
+  - *Application*: L1, L2, L3 Processor Caches. Caches require massive storage capacities, so architects happily sacrifice parallel access to achieve maximum bit density.
+
+- *2-Port (Two Port, 1R1W)*: 
+  The memory has two completely independent windows: one dedicated strictly to Reading, and one strictly to Writing. 
+  - *Concurrency*: You can Read from address A and simultaneously Write to address B in the exact same clock cycle. 
+  - *Hardware Cost*: A standard 6T cell cannot handle this without read/write collisions. It requires introducing logically isolated read and write paths, typically transforming the memory cell into an *8T bitcell* (adding a separate read port). The extra transistors and additional routing overhead (a second set of Wordlines and Bitlines) mean a 2P array consumes roughly *1.5x to 2.0x the physical area* of a 1P array.
+  - *Application*: CPU Register Files, FIFO queues in networking.
+
+*Why do CPU Registers absolutely require Multi-Port arrays?*
+Consider a standard assembly instruction: ~ADD R1, R2, R3~ (R1 = R2 + R3)
+For a CPU to execute this smoothly in a pipelined fashion, the hardware must physically read the values of ~R2~ and ~R3~ simultaneously, while also potentially writing back the result of a previous operation into ~R1~. If the register file were built using a cheap 1-Port SRAM, this simple instruction would take at least 3 clock cycles just to queue up the memory accesses! This is why registers willingly pay the massive area penalty for 2-Port, 3-Port, or even highly customized multi-port architectures.
+
+| Feature        | 1-Port (1P / 1RW)   | 2-Port (2P / 1R1W)                      |
+|----------------+---------------------+-----------------------------------------|
+| Address Busses | 1 Address Bus       | 2 Address Buses (Read Addr, Write Addr) |
+| Concurrency    | Read OR Write       | Read AND Write simultaneously           |
+| Bitcell        | 6T standard bitcell | 8T bitcell (isolated read/write)        |
+| Profile        | High density        | Area penalty (1.5x-2.0x)                |
+| Applications   | L1, L2, L3 Caches   | CPU Register Files                      |
+
+*** mux — column multiplexer ratio
+
+A column mux (multiplexer) lets multiple bitcell columns share one sense amplifier.
+The sense amp is expensive in area, so instead of having one per column, you use
+a mux to select which column gets connected to the sense amp each cycle.
+
+- mux=1: every column has its own sense amp. Fastest (all columns sensed in parallel),
+  but widest layout — the sense amp row dominates the chip width.
+- mux=4: 4 columns share 1 sense amp. The mux selects one of the 4 each cycle.
+  1/4 the sense amps → narrower, smaller area, but slightly slower because
+  the mux adds a small delay and the bit lines are longer (more capacitance).
+- Higher mux (8, 16): even more area savings, even slower access time.
+
+In practice mux factor is chosen based on the aspect ratio target (square array
+is usually optimal for wire length) and the access time spec.
+
+#+BEGIN_EXAMPLE
+  mux=1 (no mux):         mux=4:
+  1 sense amp per column  1 sense amp per 4 columns
+  ┌─┬─┬─┬─┐              ┌─┬─┬─┬─┐
+  │ │ │ │ │              │ │ │ │ │
+ SA SA SA SA            └─┴─┴─┴─┘
+                               SA
+  fast, wide layout       slower, narrower layout
+                          tradeoff: area ↓, speed ↓
+#+END_EXAMPLE
+
+*** corner — PVT (Process, Voltage, Temperature)
+
+#+BEGIN_EXAMPLE
+  Process:  TT (typical), SS (slow), FF (fast)
+  Voltage:  0.72V (low), 0.8V (nom), 0.88V (high)
+  Temp:     -40°C, 25°C, 125°C
+
+  Why multiple corners?
+  SS + high temp + low voltage  -> worst-case timing (setup check)
+  FF + low temp  + high voltage -> best-case timing  (hold check)
+  The .lib file contains one timing table per corner.
+#+END_EXAMPLE
+
+** Outputs:
+| View       | Format               | Used by                              |
+|------------+----------------------+--------------------------------------|
+| Layout     | GDS / OASIS          | Tapeout, sent to fab                 |
+| Abstract   | LEF                  | P&R (exposes pins + blockage only)   |
+| Timing     | .lib (Liberty)       | STA (setup/hold, access time, power) |
+| Behavioral | Verilog / SV         | RTL simulation                       |
+| Netlist    | SPICE / CDL          | SPICE simulation, LVS                |
+| Datasheet  | PDF / txt            | Documentation                        |
+| Power      | .lib / CPF / UPF     | Power analysis                       |
+| Test       | ATPG / MBIST pattern | DFT / manufacturing test             |
+
+** Generation Principle: Tiling
+
+- A set of pre-characterized leaf cells (layout + SPICE model already done)
+- Compiler calculates the required rows, columns, and banks from parameters
+- Tiles leaf cells in layout (GDS tiling) and simultaneously tiles the netlist (netlist tiling)
+- Timing is interpolated from a characterization table (no need to re-run SPICE each time)
+
+* 3. GDS Tiling vs Netlist Tiling
+
+Background: a memory compiler must produce two representations simultaneously, and they must be perfectly aligned (LVS-clean), otherwise tapeout fails.
+
+LVS-clean (Layout vs Schematic) means the layout (GDS) and the schematic (netlist) describe exactly the same circuit — every transistor, every net, every connection matches 1-to-1.
+
+#+BEGIN_EXAMPLE
+GDS  --[extraction]--> netlist A --+
+                                   +--> [LVS tool] --> PASS or FAIL
+CDL / SPICE netlist B -------------+
+#+END_EXAMPLE
+
+The EDA tool (e.g. Calibre) extracts a netlist from GDS by reading polygons and inferring transistors and connections, then compares it against the schematic netlist. If they match exactly -> LVS clean -> tapeout proceeds.
+
+Common LVS failures in a memory compiler:
+- A net named BL_0 in the netlist is connected to BL_1 in the GDS abutment
+- GDS tiling added one extra row of bitcells but the netlist was not updated
+- A missing via in GDS leaves two nets floating that should be connected
+
+** GDS Tiling (layout layer)
+
+- Operates on geometry (polygons, vias, metal layers)
+- Places GDS sub-cells on a grid with abutment-aligned boundaries (power rails, BL, WL must connect)
+- Boundary handling (abutment) is the hardest part: the bitcell array must connect to row decoder, column mux, sense amp, and control logic
+- Output: .gds / .oas file
+
+** Netlist Tiling (schematic / electrical layer)
+
+- Operates on instances + nets
+- Follows the same tiling pattern to instantiate and wire SPICE/CDL sub-circuits
+- Output: .sp / .cdl / Verilog netlist
+
+** Key Constraint: Both sides must match
+
+- LVS (Layout vs Schematic) compares the netlist extracted from GDS against the schematic netlist you generated
+- One wrong net name or one missing transistor -> LVS fails -> tapeout blocked
+- This is why memory compilers must be written with extreme rigor and comprehensive tests
+
+** Your Role as a Compiler / Software Engineer
+
+- Write and maintain the tiling engine
+- Ensure GDS and netlist tiling logic share a single source of truth (typically one data structure drives both emitters)
+- Adding new features (new mux ratio, new port combinations) must not break LVS
+- Automated regression tests (pytest) — the more the better
+
+* 4. Verilog / SystemVerilog / VHDL
+
+** Comparison
+
+| Aspect       | Verilog       | SystemVerilog    | VHDL              |
+|--------------+---------------+------------------+-------------------|
+| Year         | 1984          | 2005 (IEEE 1800) | 1987 (IEEE 1076)  |
+| Flavor       | C-like, loose | C++/OOP, strong  | Ada/Pascal, rigid |
+| Primary use  | Design        | Design + UVM     | Design (EU, mil)  |
+| Type system  | Weak          | Strong (struct)  | Strongest         |
+
+** My angle (the differentiator)
+
+- At Synopsys I work on a VHDL compiler — parser, elaboration, IR, optimization
+- I do not merely "use" VHDL; I implement its semantics
+- When a memory compiler emits a Verilog behavioral model, I understand
+  how it unfolds in a simulator, where race conditions hide, and why
+  ~always @*~ differs from ~always_comb~
+- This frontend-language perspective is rare in a hardware team
+
+** Must-know Verilog points (in case of drive-by questions)
+
+- ~reg~ vs ~wire~
+- ~always @(posedge clk)~ vs ~always @*~
+- Non-blocking ~<=~ vs blocking ~=~ in synthesis
+- ~generate~ block — heavily used in memory compiler output
+
+* 5. Cell Flipping / Mirrored Abutment
+
+This is an advanced VLSI layout design technique. When the compiler automatically tiles millions of SRAM bitcells to form the memory array, it does not simply place every cell in the exact same orientation. Instead, adjacent rows (e.g., WL0 and WL1) are vertically mirrored (flipped upside down) and placed back-to-back, creating an alternating "normal, flipped, normal, flipped" pattern.
+
+The primary purpose of this technique is *extreme area minimization*.
+
+In physical layout, the elements that consume the most silicon space are often not the transistors themselves, but the metal routing, contact/via structures, and the minimum isolation spacing required between N-Well and P-Well regions (dictated by DRC rules).
+
+By mirroring and abutting adjacent cells, we gain enormous physical design advantages:
+
+- *Vdd & GND Rail Sharing*: If the top of WL0 is Vdd and the bottom is GND, flipping WL1 upside down forces its top to be GND. As a result, the bottom of WL0 and the top of WL1 can perfectly share a single GND metal rail and its contacts. This completely eliminates the minimum DRC spacing required between two separate GND rails.
+- *Bitline Contact Sharing*: In the vertical direction, the access transistors of adjacent rows can share the exact same physical metallic contacts connecting to the BL and BLB lines. This effectively cuts the total number of required bitline contacts in half!
+- *N-Well / P-Well Continuity*: PMOS transistors must reside in an N-Well, and NMOS in a P-Well. The alternating mirrored placement ensures that the N-Wells of adjacent rows abut and merge together seamlessly (and similarly for P-Wells). This avoids the massive area penalty associated with Well-to-Well isolation spacing rules.
+* 6. Advanced Production Concepts: EMA, Low Power, and Redundancy
+
+In a production-grade Memory Compiler, simply generating a functional SRAM is not enough. The compiler must also incorporate hooks for yield optimization, power management, and post-silicon defect repair. 
+
+** 6.1 Extra Margin Adjustment (EMA) and Self-Timing
+
+*Asynchronous Internal Timing*: While typical memory macros receive a synchronous external clock, the internal read/write operations are largely asynchronous and self-timed. The memory uses internal dummy bitlines and delay cells (tracking paths) to determine exactly when to trigger the Sense Amplifiers. 
+
+*Margin Tuning (EMA)*: If the silicon process shifts and causes read failures or insufficient voltage differentials (violating Read SNM), the memory macro provides *EMA (Extra Margin Adjustment)* pins. 
+- *EMA* adjusts the Wordline (WL) pulse width and the Sense Amplifier enable delay during a Read.
+- *EMAW* adjusts the timing margin for Write operations.
+Hardware designers use these pins post-fabrication to trade off access time for reliability. Increasing EMA gives the bitcell more time to pull down the bitline, increasing the differential voltage and improving yield, but slightly degrading the access speed.
+
+** 6.2 Low Power Modes (Dual Rail: VDDC vs VDDP)
+
+SRAM arrays consume massive amounts of silicon area and leakage power, so Memory Compilers must support dual-rail power gating logic (and generate appropriate UPF/CPF power intent files):
+- *VDDC (Core Logic Voltage)*: Powers the standard 6T bitcell array itself. To retain stored data without corruption, VDDC cannot be fully shut off.
+- *VDDP (Peripheral Voltage)*: Powers the address decoders, sense amps, and standard logic.
+
+*Standard Power States*:
+1. *Light Sleep*: Power-gates specific peripheral clocks, reducing dynamic switching power.
+2. *Deep Sleep (Retention)*: Shuts down the PMOS headers for the VDDP (turning off the periphery completely) but leaves VDDC on at a lowered voltage simply to keep the cross-coupled inverters actively locked (data retention).
+3. *Shutdown*: Completely power-gates both VDDC and VDDP. All data is lost.
+
+** 6.3 Yield and Redundancy (MBIST / eFuse)
+
+Because memory compilers tightly tile millions of deeply sub-micron transistors (often deliberately violating some conservative DRC boundaries to maximize density), manufacturing defects are mathematically inevitable. If a single bitcell dies, tossing the entire SoC would be economically disastrous.
+
+*Row/Column Redundancy*: The compiler automatically generates additional backup lines (e.g., 2 extra redundant columns) alongside the main array. 
+*Post-Silicon Repair*: During manufacturing test, the Memory Built-In Self-Test (MBIST) engine detects failing addresses. An eFuse is then blown permanently. On silicon boot, identical MUX logic physically redirects the bad column's I/O to the redundant backup column. The memory thus appears physically perfect and fully contiguous to the outside world.
