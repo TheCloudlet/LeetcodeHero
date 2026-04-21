@@ -2,6 +2,7 @@
 // @tag: tree, depth-first search, recursion, neetcode150
 // @difficulty: hard
 
+#if defined(FUNCTIONAL_PROGRAMMING)
 #include <algorithm>
 #include <limits>
 #include <utility>
@@ -39,3 +40,33 @@ class Solution {
     return {new_global_max, new_contrib};
   }
 };
+#endif
+
+#if defined(LAMBDA)
+#include <algorithm>
+#include <climits>
+#include <utility>
+
+class Solution {
+ public:
+  int maxPathSum(TreeNode* root) {
+    int max_sum = INT_MIN;
+
+    // Return is the max path height from node
+    auto helper = [&](auto& self, const TreeNode* node) -> int {
+      if (!node) return 0;
+
+      const int left = std::max(0, self(self, node->left));
+      const int right = std::max(0, self(self, node->right));
+
+      max_sum = std::max(max_sum, node->val + left + right);
+
+      return node->val + std::max(left, right);
+    };
+
+    (void)helper(helper, root);
+
+    return max_sum;
+  }
+};
+#endif
