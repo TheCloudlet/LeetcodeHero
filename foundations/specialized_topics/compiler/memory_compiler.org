@@ -358,6 +358,7 @@ By mirroring and abutting adjacent cells, we gain enormous physical design advan
 - *Vdd & GND Rail Sharing*: If the top of WL0 is Vdd and the bottom is GND, flipping WL1 upside down forces its top to be GND. As a result, the bottom of WL0 and the top of WL1 can perfectly share a single GND metal rail and its contacts. This completely eliminates the minimum DRC spacing required between two separate GND rails.
 - *Bitline Contact Sharing*: In the vertical direction, the access transistors of adjacent rows can share the exact same physical metallic contacts connecting to the BL and BLB lines. This effectively cuts the total number of required bitline contacts in half!
 - *N-Well / P-Well Continuity*: PMOS transistors must reside in an N-Well, and NMOS in a P-Well. The alternating mirrored placement ensures that the N-Wells of adjacent rows abut and merge together seamlessly (and similarly for P-Wells). This avoids the massive area penalty associated with Well-to-Well isolation spacing rules.
+
 * 6. Advanced Production Concepts: EMA, Low Power, and Redundancy
 
 In a production-grade Memory Compiler, simply generating a functional SRAM is not enough. The compiler must also incorporate hooks for yield optimization, power management, and post-silicon defect repair. 

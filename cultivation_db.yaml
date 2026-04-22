@@ -781,12 +781,13 @@ problems:
     link: "./problems/155_min_stack/"
     leetcode-difficulty: medium
     topics: [stack, design, neetcode150]
-    status: L2_STRUGGLE
+    status: L3_MASTERED
     refinement_focus: |
       [2025-12-12]: Don't understand the problem
       [2025-12-12]: I know the key is to maintain two stacks, and I think through the logic, and slowly implement the code correctly. But cannot do it in a flash.
-      [2026-04-14]: 100 10min. One-shot.
-      [2026-04-17]: 100 5min. One-shot.
+      [2026-04-14]: 100% 10min. One-shot.
+      [2026-04-17]: 100% 5min. One-shot.
+      [2026-04-24]: 100% 5min. One-shot and remembered to add const to member function this time.
 
   - id: 162
     title: "Find Peak Element"
@@ -823,9 +824,10 @@ problems:
     link: "./problems/191_number_of_1_bits/"
     leetcode-difficulty: easy
     topics: [bitops, neetcode150]
-    status: L2_STRUGGLE
+    status: L3_MASTERED
     refinement_focus: |
       [2025-12-12]: use __builtin_popcount or Brian Kernighan algorithm
+      [2025-04-22]: 100% 3min.
 
   - id: 198
     title: "House Robber"
@@ -1385,6 +1387,15 @@ problems:
     status: L3_MASTERED
     refinement_focus: |
       [2026-04-17]: 90%. Handled value null, but forget to handle node null.
+
+  - id: 622
+    title: "Design Circular Queue"
+    link: "./problems/622_design_circular_queue/"
+    leetcode-difficulty: medium
+    topics: [design, queue, array]
+    status: L3_MASTERED
+    refinement_focus: |
+      [2026-04-17]: 100%. The helper function can be changed to `getPrev` and `getNext`.
 
   - id: 637
     title: "Average of Levels in Binary Tree"
