@@ -1572,9 +1572,10 @@ problems:
     link: "./problems/1188_design_bounded_blocking_queue/"
     leetcode-difficulty: medium
     topics: [design, concurrency, queue]
-    status: L1_FORGOT
+    status: L2_STRUGGLE
     refinement_focus: |
       [2026-04-20]: Learning. Fun.
+      [2026-04-24]: 95% 10min. Did 2 solutions, basic queue, and circular buffer. Mistake is made in predicate. If !prediate will stuck in while loop.
 
   - id: 1448
     title: "Count Good Nodes in Binary Tree"
