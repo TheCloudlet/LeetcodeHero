@@ -203,6 +203,14 @@ Steps:
         (Shrinks the state space until left == right points to the answer.)
 
 3) Fill in the P where ~if (P) left = mid + 1; else right = mid;~
+
+4) If the situation is following, the ~mid = left + (right - mid + 1) / 2;~ to handle infinty loop.
+
+if (P) {
+  left = mid;
+} else {
+  right = mid - 1;
+}
 #+END_EXAMPLE
 
 * 2. Means of Combination & Abstraction

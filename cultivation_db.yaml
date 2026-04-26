@@ -1510,6 +1510,15 @@ problems:
       [2025-12-12]: I thought I can aced it... AC, but has flaws. I used while (lo <= hi) and use double way check which is not needed.
       [2026-04-05]: 100% 5min. But just read the template. Need more practice.
 
+  - id: 875
+    title: "Koko Eating Bananas"
+    link: "./problems/875_koko_eating_bananas/"
+    leetcode-difficulty: medium
+    topics: [binary-search, neetcode150]
+    status: L2_STRUGGLE
+    refinement_focus: |
+      [2026-04-27]: 70%. Wrong in hi should use `max_element` to piles. Also, get `ceil(a/b)`is `(a+b-1)/b`. Please noted that this is the typical template.
+
   - id: 876
     title: "Middle of the Linked List"
     link: "./problems/876_middle_of_the_linked_list"
