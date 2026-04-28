@@ -1265,6 +1265,15 @@ problems:
 
       [2025-12-12]: Fast implement. Forget to set dp[0] = true. Forget std::accumulate need to add accumulator 0 and include numeric. Should be L2~L3. But I set to L2. Lets practice later.
 
+  - id: 410
+    title: "Split Array Largest Sum"
+    link: "./problems/410_split_array_largest_sum/"
+    leetcode-difficulty: hard
+    topics: [binary-search, greedy]
+    status: L2_STRUGGLE
+    refinement_focus: |
+      [2026-04-28]: 94%. Missing `=` in validate lambda.
+
   - id: 435
     title: "Non-overlapping Intervals"
     link: "./problems/435_non_overlapping_intervals/"
