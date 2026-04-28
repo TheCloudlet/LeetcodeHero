@@ -745,6 +745,7 @@ problems:
       [2026-01-15]: Always practice. Use std::list + std::unordered_map. please understand why use list
       [2026-02-08]: failed the second time, the reason is `iterator usage`, `splice` and reusing the last node.
       [2026-02-08]: failed.
+      [2026-04-28]: Super hard to write vector version. The problem is detach funtion is hard to take care of prev or next is -1.
 
   - id: 150
     title: "Evaluate Reverse Polish Notation"
