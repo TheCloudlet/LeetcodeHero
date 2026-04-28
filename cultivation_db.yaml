@@ -397,6 +397,7 @@ problems:
     status: L2_STRUGGLE
     refinement_focus:
       [2026-01-19]: Copy before insertion, merge overlaps, then append the rest
+      [2026-04-29]: 60%. Using `sel` and `inserted` to handle next insert/merge. Finally correct, but there are really a lot of edge cases to be aware.
 
   - id: 61
     title: "Rotate List"
@@ -746,6 +747,7 @@ problems:
       [2026-02-08]: failed the second time, the reason is `iterator usage`, `splice` and reusing the last node.
       [2026-02-08]: failed.
       [2026-04-28]: Super hard to write vector version. The problem is detach funtion is hard to take care of prev or next is -1.
+      [2026-04-29]: 95% 15min. Forgot to add back to map after splice.
 
   - id: 150
     title: "Evaluate Reverse Polish Notation"
@@ -1092,9 +1094,10 @@ problems:
     link: "./problems/253_meeting_rooms_ii/"
     leetcode-difficulty: medium
     topics: [intervals, greedy, sorting, priority-queue, neetcode150]
-    status: L1_FORGOT
+    status: L2_STRUGGLE
     refinement_focus: |
       [2026-01-19]: Hint: Priority Queue.
+      [2026-04-28]: 100%.
 
   - id: 257
     title: "Binary Tree Paths"
@@ -1237,6 +1240,14 @@ problems:
     refinement_focus: |
       [2025-12-12]: RCA & parallel RCA. (maybe need review)
 
+  - id: 389
+    title: "Find the Difference"
+    link: "./problems/389_find_the_difference"
+    leetcode-difficulty: easy
+    topics: [bitops, hashmap]
+    status: L2_STRUGGLE
+      [2026-04-29]: 100%. Minor mistake using hashmap, but strong should think of xor.
+
   - id: 394
     title: "Decode String"
     link: "./problems/394_decode_string/"
@@ -1245,6 +1256,7 @@ problems:
     status: L1_FORGOT
     refinement_focus: |
       [2026-01-27]: Should not be hard but I froze.
+      [2026-04-28]: 30%. Eventully figured out, using lambda clojure.
 
   - id: 399
     title: "Evaluate Division"
@@ -1284,6 +1296,7 @@ problems:
     refinement_focus: |
       [2025-12-12]: Greedy. Sort by end time. Then iterate and merge overlaps."
       [2026-04-12]: 60% 14min. Should record `prev_end = min(prev_end, curr[1])`.
+      [2026-04-29]: Failed! Should sort by end time.
 
   - id: 438
     title: "Find All Anagrams in a String"
