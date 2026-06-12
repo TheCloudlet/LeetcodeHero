@@ -1248,6 +1248,14 @@ problems:
     status: L2_STRUGGLE
       [2026-04-29]: 100%. Minor mistake using hashmap, but strong should think of xor.
 
+  - id: 392
+    title: "Is Subsequence"
+    link: "./problems/392_is_subsequence"
+    leetcode-difficulty: easy
+    topics: [two-pointer]
+    status: L1_FORGOT
+      [2026-06-12]: 0%. Frustrated.
+
   - id: 394
     title: "Decode String"
     link: "./problems/394_decode_string/"
