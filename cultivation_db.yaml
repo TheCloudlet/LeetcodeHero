@@ -705,6 +705,7 @@ problems:
     refinement_focus: |
       [2026-03-25]: I know the fast/slow pointer idea, but I cannot implement it fluently. The key is to check if fast and fast->next are nullptr directly in the while loop condition.
       [2026-03-25]: One-shot
+      [2026-06-12]: Should check if after moving pointers, or it will be always true.
 
   - id: 143
     title: "Reorder List"
