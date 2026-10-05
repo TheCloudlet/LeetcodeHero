@@ -50,6 +50,7 @@ problems:
       [2025-12-12]: Use hashmap
       [2025-12-12]: I use sorted with pair, and two pointer
       [2026-04-03]: 100%.
+      [2026-10-05]: Still using sorting, but didn't use pair. Wrong index.
 
   - id: 2
     title: "Add Two Numbers"
