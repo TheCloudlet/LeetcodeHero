@@ -1130,6 +1130,19 @@ problems:
     refinement_focus: |
       [2026-10-05]: Divide out 2, 3, 5 repeatedly, then check n == 1. Guard n <= 0 first.
 
+  - id: 264
+    title: "Ugly Number II"
+    link: "./problems/264_ugly_number_ii/"
+    leetcode-difficulty: medium
+    topics: [dp, heap, math-and-geometry]
+    status: L1_FORGOT
+    refinement_focus: |
+      [2026-10-05]: 0%. TLE. Scanned every integer and checked i/2, i/3, i/5 in a hashset.
+        Logic is correct but O(value) not O(n): the 1690th ugly number is 2123366400,
+        so ~2e9 iterations. Fix: generate uglies instead of testing integers.
+        Three pointers p2/p3/p5 into dp[], dp[i] = min(dp[p2]*2, dp[p3]*3, dp[p5]*5),
+        advance EVERY pointer that equals the min (dedup, e.g. 6 = 2*3 = 3*2). O(n).
+
   - id: 268
     title: "Missing Number"
     link: "./problems/268_missing_number/"
