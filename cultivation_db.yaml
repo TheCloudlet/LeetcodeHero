@@ -1121,6 +1121,15 @@ problems:
       [2026-03-29]: almost correct. UB in (-int).
           Should `~static_cast<int>(n) + 1`
 
+  - id: 263
+    title: "Ugly Number"
+    link: "./problems/263_ugly_number/"
+    leetcode-difficulty: easy
+    topics: [math]
+    status: L3_MASTERED
+    refinement_focus: |
+      [2026-10-05]: Divide out 2, 3, 5 repeatedly, then check n == 1. Guard n <= 0 first.
+
   - id: 268
     title: "Missing Number"
     link: "./problems/268_missing_number/"

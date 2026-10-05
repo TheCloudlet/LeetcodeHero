@@ -172,6 +172,12 @@ Callee-Saved: MUST preserve if used (requires prolog/epilog)
 
 ## 3. LLVM Backend Pipeline
 
+branch 0 lab1 lab2
+lab1:
+  vreg_a = add src_1 #1
+lab2:
+  vreg_b = sub src_1 #1
+
 ### The Seven-Stage Pipeline
 
 ```text
